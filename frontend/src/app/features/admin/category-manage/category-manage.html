@@ -1,0 +1,217 @@
+<div class="admin-content-wrapper category-light-theme delay-animation">
+  <header class="bg-white rounded-3 shadow-sm p-4 mb-4 d-flex justify-content-between align-items-center border">
+    <div>
+      <h2 class="fw-bold text-dark mb-1">Quản lý Danh mục</h2>
+      <p class="text-muted mb-0">Hệ thống phân loại sản phẩm của nền tảng.</p>
+    </div>
+    <div class="toolbar">
+      <button class="btn btn-primary shadow-sm px-4 py-2 custom-btn-primary" (click)="openModal()">
+        <i class="bi bi-plus-lg me-2"></i> Thêm Danh mục Mới
+      </button>
+    </div>
+  </header>
+
+  <div class="bg-white rounded-3 shadow-sm border p-4 position-relative">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+      <ul class="nav nav-tabs custom-tabs border-bottom-0 mb-0">
+        <li class="nav-item">
+          <a class="nav-link fw-bold" [class.active]="activeTab === 'active'" (click)="switchTab('active')">
+            <i class="bi bi-tag-fill me-2"></i>Đang hoạt động
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold" [class.active]="activeTab === 'trash'" (click)="switchTab('trash')">
+            <i class="bi bi-trash3 me-2"></i>Thùng rác
+          </a>
+        </li>
+      </ul>
+
+      <div class="search-box position-relative" style="width: 300px;">
+        <i class="bi bi-search position-absolute text-muted" style="left: 15px; top: 50%; transform: translateY(-50%);"></i>
+        <label for="category-manage-searchterm" class="visually-hidden">Tìm theo tên hoặc mô tả...</label>
+        <input id="category-manage-searchterm" type="text" class="form-control bg-light rounded-pill border-0 ps-5" 
+               placeholder="Tìm theo tên hoặc mô tả..." 
+               [(ngModel)]="searchTerm" 
+               (ngModelChange)="onSearchChange()">
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table custom-light-table align-middle mb-0">
+        <thead>
+          <tr>
+            <th width="35%">Danh mục & Chi tiết</th>
+            <th width="25%">Phân loại Parent</th>
+            <th width="20%">Trạng thái</th>
+            <th width="20%" class="text-end">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cat of pagedCategories">
+            <td>
+              <div class="d-flex align-items-center gap-3">
+                <div class="cat-icon" [class.trash-icon]="activeTab === 'trash'">
+                  <i class="bi" [class]="activeTab === 'trash' ? 'bi-trash3' : 'bi-tag-fill'"></i>
+                </div>
+                <div>
+                  <div class="cat-name">{{ cat.name }}</div>
+                  <div class="cat-desc text-truncate" style="max-width: 250px;">
+                    {{ cat.description }}
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span *ngIf="cat.parent_id" class="parent-badge">
+                <i class="bi bi-arrow-return-right text-secondary me-1"></i>{{ getParentName(cat.parent_id) }}
+              </span>
+              <span *ngIf="!cat.parent_id" class="parent-badge primary">
+                <i class="bi bi-diagram-2 me-1"></i> Primary Parent
+              </span>
+            </td>
+            <td>
+              <div class="d-flex align-items-center flex-wrap gap-2">
+                <span *ngIf="cat.is_active" class="custom-badge badge-success">Hiển thị</span>
+                <span *ngIf="!cat.is_active" class="custom-badge badge-secondary">Đã ẩn</span>
+                <span *ngIf="activeTab === 'trash'" class="custom-badge badge-danger">
+                  <i class="bi bi-trash3 me-1"></i>Đã xóa
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button *ngIf="activeTab === 'active'" (click)="openModal(cat)" class="btn btn-action btn-edit" title="Chỉnh sửa">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button *ngIf="activeTab === 'active'" (click)="deleteCategory(cat)" class="btn btn-action btn-del" title="Xóa tạm thời">
+                  <i class="bi bi-trash3"></i>
+                </button>
+                
+                <button *ngIf="activeTab === 'trash'" (click)="restoreCategory(cat.category_id)" class="btn btn-action btn-warn" title="Khôi phục">
+                  <i class="bi bi-arrow-counterclockwise me-1"></i> Khôi phục
+                </button>
+                <button *ngIf="activeTab === 'trash'" (click)="hardDeleteCategory(cat.category_id)" class="btn btn-action btn-del" title="Xóa vĩnh viễn">
+                  <i class="bi bi-x-circle me-1"></i> Xóa
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="filteredCategories.length > limit" class="pagination-controls mt-4 d-flex justify-content-between align-items-center">
+        <div class="pagination-info text-muted">
+          Hiển thị <strong class="text-primary">{{ skip + 1 }} - {{ skip + pagedCategories.length }}</strong> 
+          trên tổng <strong class="text-dark">{{ filteredCategories.length }}</strong> danh mục
+        </div>
+        
+        <ul class="pagination pagination-sm mb-0 custom-pagination">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="prevPage()"><i class="bi bi-chevron-left"></i></button>
+          </li>
+
+          <ng-container *ngIf="visiblePages[0] > 1">
+            <li class="page-item"><button class="page-link" (click)="goToPage(1)">1</button></li>
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+          </ng-container>
+
+          <li class="page-item" *ngFor="let page of visiblePages" [class.active]="page === currentPage">
+            <button class="page-link" (click)="goToPage(page)">{{ page }}</button>
+          </li>
+
+          <ng-container *ngIf="visiblePages[visiblePages.length - 1] < totalPages">
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            <li class="page-item"><button class="page-link" (click)="goToPage(totalPages)">{{ totalPages }}</button></li>
+          </ng-container>
+
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button class="page-link" (click)="nextPage()"><i class="bi bi-chevron-right"></i></button>
+          </li>
+        </ul>
+      </div>
+
+      <div *ngIf="filteredCategories.length === 0 && !isLoading" class="text-center py-5 text-muted">
+        <i class="bi bi-search fs-1 mb-3 d-block text-black-50"></i>
+        <h5>Không tìm thấy danh mục nào</h5>
+        <p>Vui lòng thử lại với từ khóa khác.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1" style="background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg modal-light-override">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-bold text-dark">{{ editingCategory ? 'Chỉnh sửa Danh mục' : 'Thêm Danh mục Mới' }}</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <label for="category-manage-name" class="form-label text-muted fw-bold text-uppercase" style="font-size: 0.8rem;">Tên Danh Mục</label>
+              <input id="category-manage-name" type="text" class="form-control" [(ngModel)]="categoryForm.name" placeholder="Ví dụ: Điện thoại">
+            </div>
+            <div class="col-md-6">
+              <label for="category-manage-parent-id" class="form-label text-muted fw-bold text-uppercase" style="font-size: 0.8rem;">Thuộc Danh Mục (Parent)</label>
+              <select id="category-manage-parent-id" class="form-select" [(ngModel)]="categoryForm.parent_id">
+                <option [ngValue]="null">--- Danh Mục Cấp 1 ---</option>
+                <ng-container *ngFor="let c of allCategories">
+                  <option *ngIf="!c.is_deleted && (!editingCategory || c.category_id !== editingCategory.category_id)" [ngValue]="c.category_id">{{ c.name }}</option>
+                </ng-container>
+              </select>
+            </div>
+            <div class="col-12">
+              <label for="category-manage-description" class="form-label text-muted fw-bold text-uppercase" style="font-size: 0.8rem;">Mô tả chi tiết</label>
+              <textarea id="category-manage-description" class="form-control" [(ngModel)]="categoryForm.description" rows="4" placeholder="Nhập mô tả..."></textarea>
+            </div>
+            <div class="col-12" *ngIf="editingCategory">
+              <div class="form-check form-switch p-3 rounded-3 border bg-light-soft">
+                <input class="form-check-input ms-0 me-3" type="checkbox" id="isActiveCat" [(ngModel)]="categoryForm.is_active">
+                <label class="form-check-label text-dark fw-bold" for="isActiveCat">Cho phép hiển thị danh mục này trên cửa hàng</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top pt-3 pb-3 px-4">
+          <button type="button" class="btn btn-outline-secondary px-4 fw-bold" (click)="closeModal()">Hủy bỏ</button>
+          <button type="button" class="btn btn-primary px-4 shadow-sm fw-bold custom-btn-primary" (click)="saveCategory()">Lưu Thay Đổi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" [class.show]="showConfirmModal" [style.display]="showConfirmModal ? 'block' : 'none'" tabindex="-1" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg modal-light-override">
+        <div class="modal-header border-0 pb-0 pt-4 px-4">
+          <h5 class="modal-title fw-bold text-dark d-flex align-items-center">
+            <i class="bi" [class]="confirmActionType === 'hardDelete' ? 'bi-exclamation-triangle-fill text-danger' : (confirmActionType === 'warning' ? 'bi-info-circle-fill text-primary' : 'bi-question-circle-fill text-warning')" style="font-size: 1.8rem; margin-right: 12px;"></i>
+            {{ confirmTitle }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeConfirmModal()"></button>
+        </div>
+        <div class="modal-body px-4 py-3">
+          <p class="mb-0 text-dark fw-medium" style="font-size: 1.1rem;">{{ confirmMessage }}</p>
+          
+          <div *ngIf="confirmActionType === 'hardDelete'" class="alert alert-danger mt-3 mb-0 border-0 fw-bold" style="background: rgba(220, 53, 69, 0.1); color: #dc3545;">
+            <i class="bi bi-shield-exclamation me-2"></i> Thao tác này sẽ xóa mọi dữ liệu liên quan vĩnh viễn!
+          </div>
+        </div>
+        <div class="modal-footer border-0 p-4 pt-2">
+          <button *ngIf="confirmActionType !== 'warning'" type="button" class="btn btn-outline-secondary px-4 fw-bold" (click)="closeConfirmModal()">Hủy bỏ</button>
+          <button *ngIf="confirmActionType !== 'warning'" type="button" class="btn px-4 text-white shadow-sm fw-bold" [style.background]="confirmActionType === 'hardDelete' ? '#dc3545' : (confirmActionType === 'restore' ? '#ffc107' : '#0d6efd')" (click)="onConfirm()">
+            {{ confirmActionType === 'hardDelete' ? 'Xóa Vĩnh Viễn' : 'Xác nhận' }}
+          </button>
+          <button *ngIf="confirmActionType === 'warning'" type="button" class="btn btn-primary px-5 fw-bold" (click)="closeConfirmModal()">Đã hiểu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

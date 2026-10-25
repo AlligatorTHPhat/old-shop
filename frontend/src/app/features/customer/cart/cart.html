@@ -1,0 +1,133 @@
+<div class="cart-wrapper py-5 min-vh-100 bg-light-soft">
+  <div class="container">
+    <div class="row mb-5 align-items-center">
+      <div class="col-md-6">
+        <h1 class="display-6 fw-bold text-dark mb-1">Giỏ hàng của bạn</h1>
+        <p class="text-muted fs-5 mb-0">Hãy hoàn tất đơn hàng của bạn</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <span class="badge rounded-pill bg-white text-dark shadow-sm px-3 py-2 border">
+          <i class="bi bi-cart3 me-1"></i> {{ cartItems.length }} sản phẩm
+        </span>
+      </div>
+    </div>
+
+    <div *ngIf="cartItems.length === 0" class="text-center py-5">
+      <i class="bi bi-cart-x text-muted display-1 opacity-25"></i>
+      <h2 class="fw-bold text-dark mt-3">Giỏ hàng đang trống!</h2>
+      <button routerLink="/shop" class="btn btn-primary btn-lg rounded-pill px-5 mt-4">Khám phá ngay</button>
+    </div>
+
+    <div *ngIf="cartItems.length > 0" class="row g-4 cart-layout">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0 border-0" style="table-layout: fixed; width: 100%;">
+                <thead class="bg-light-soft text-muted x-small text-uppercase fw-bold">
+                  <tr>
+                    <th class="ps-4 py-3" style="width: 40%;">Sản phẩm</th>
+                    <th class="text-center py-3" style="width: 20%;">Số lượng</th>
+                    <th class="text-end py-3" style="width: 20%;">Đơn giá</th>
+                    <th class="text-end py-3 pe-4" style="width: 20%;">Tổng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of pagedItems; trackBy: trackByFn" class="cart-row border-bottom border-light">
+                    <td class="ps-4 py-4">
+                      <div class="d-flex align-items-center">
+                        <div class="product-thumb rounded-3 shadow-sm border overflow-hidden me-3" style="width: 60px; height: 60px; flex-shrink: 0;">
+                          <img [src]="getFullImageUrl(item.product.product_images[0]?.image_url || '')" class="w-100 h-100 object-fit-cover">
+                        </div>
+                        <div class="product-info min-width-0">
+                          <h6 class="fw-bold text-dark mb-0 small text-truncate">{{ item.product.title }}</h6>
+                          <button class="btn btn-link btn-sm text-danger p-0 text-decoration-none x-small fw-bold" (click)="removeItem(item.product.product_id)">Xoá</button>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td class="py-4 text-center">
+                      <div class="quantity-control mx-auto bg-white rounded-pill shadow-sm d-flex align-items-center p-1" style="width: 120px; border: 1px solid #dee2e6;">
+                        <button class="btn btn-icon btn-sm rounded-circle border-0 bg-transparent" 
+                                (click)="updateQuantity(item.product.product_id, item.quantity - 1)" 
+                                [disabled]="item.quantity <= 1">
+                          <i class="bi bi-dash-lg"></i>
+                        </button>
+                        
+                        <label style="display: contents;">
+                        <span class="visually-hidden">Số lượng</span>
+                        <input type="number" 
+                              class="form-control form-control-sm border-0 text-center fw-bold p-0 bg-transparent hide-arrows" 
+                              [(ngModel)]="item.quantity"
+                              (change)="onManualQuantityChange(item)"
+                              style="box-shadow: none; font-size: 0.9rem;">
+                        </label>
+
+                        <button class="btn btn-icon btn-sm rounded-circle border-0 bg-transparent" 
+                                (click)="updateQuantity(item.product.product_id, item.quantity + 1)" 
+                                [disabled]="item.quantity >= item.product.quantity">
+                          <i class="bi bi-plus-lg"></i>
+                        </button>
+                      </div>
+                      <div class="x-small text-muted mt-1">Kho: {{ item.product.quantity }}</div>
+                    </td>
+
+                    <td class="text-end py-4 small text-muted">
+                      {{ item.product.price | currency:'VND':'symbol':'1.0-0' }}
+                    </td>
+
+                    <td class="text-end py-4 pe-4 fw-bold text-primary text-nowrap">
+                      {{ (item.product.price * item.quantity) | currency:'VND':'symbol':'1.0-0' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <nav *ngIf="totalPages > 1" class="mt-4">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link rounded-circle mx-1 shadow-sm" (click)="setPage(currentPage - 1)" style="cursor: pointer;"><i class="bi bi-chevron-left"></i></a>
+            </li>
+            <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index">
+              <a class="page-link rounded-circle mx-1 shadow-sm" [class.active]="currentPage === i + 1" (click)="setPage(i + 1)" style="cursor: pointer;">{{ i + 1 }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link rounded-circle mx-1 shadow-sm" (click)="setPage(currentPage + 1)" style="cursor: pointer;"><i class="bi bi-chevron-right"></i></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden summary-card">
+          <div class="card-header bg-dark text-white border-0 py-4 px-4 text-center">
+            <h5 class="fw-bold mb-0 text-uppercase">Tổng kết đơn hàng</h5>
+          </div>
+          <div class="card-body p-4">
+            <div class="price-breakdown mb-4">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Tạm tính</span>
+                <span class="text-dark fw-bold">{{ getSubtotal() | currency:'VND':'symbol':'1.0-0' }}</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Phí giao hàng</span>
+                <span class="text-dark fw-bold">{{ getShippingFee() | currency:'VND':'symbol':'1.0-0' }}</span>
+              </div>
+              <hr class="my-4">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="h5 fw-bold mb-0">Tổng tiền:</span>
+                <span class="h4 fw-bold text-primary mb-0">{{ getTotal() | currency:'VND':'symbol':'1.0-0' }}</span>
+              </div>
+            </div>
+            <button routerLink="/customer/checkout" class="btn btn-primary btn-lg w-100 rounded-pill py-3 fw-bold shadow-lg transition-all hover-lift">
+              TIẾN HÀNH THANH TOÁN
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

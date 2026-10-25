@@ -1,0 +1,54 @@
+# Local quick start: `docker compose up --build`, then open http://localhost:8080
+# (API docs: http://localhost:8000/api/docs). Production lives in deploy/.
+# Credentials default to throwaway local values; override them with environment variables or a .env file.
+name: oldshop-local
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${LOCAL_DB_PASSWORD:-postgres}
+      POSTGRES_DB: oldshop
+    ports:
+      - "5433:5432"   # 5433 to avoid clashing with a locally installed PostgreSQL
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d oldshop"]
+      interval: 5s
+      retries: 20
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: development
+      DEBUG: "true"
+      LOG_FORMAT: text
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASSWORD: ${LOCAL_DB_PASSWORD:-postgres}
+      DB_NAME: oldshop
+      SECRET_KEY: ${LOCAL_SECRET_KEY:-local-dev-secret-change-me}
+      CORS_ORIGINS: http://localhost:8080,http://localhost:4200
+      WEB_CONCURRENCY: 1
+    ports:
+      - "8000:8000"
+    volumes:
+      - media:/data/media
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on: [backend]
+    ports:
+      - "8080:8080"
+
+volumes:
+  pg_data:
+  media:

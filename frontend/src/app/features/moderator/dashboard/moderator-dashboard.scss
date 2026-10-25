@@ -1,0 +1,124 @@
+/* BỌC TOÀN BỘ COMPONENT ĐỂ CHỐNG LẠI GLOBAL DARK MODE */
+.mod-light-theme {
+  padding: 1.5rem;
+  background-color: #f4f7f6; /* Nền xám nhạt */
+  min-height: 100vh;
+  
+  /* Ép màu cho Typography */
+  color: #212529 !important;
+  .text-dark { color: #212529 !important; }
+  .text-muted { color: #6c757d !important; }
+  .extra-small { font-size: 0.8rem; }
+  .bg-white { background-color: #ffffff !important; }
+
+  /* BADGE TRẠNG THÁI HEADER */
+  .status-badge {
+    background: #d1e7dd;
+    color: #0f5132;
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 1px solid #badbcc;
+    display: flex;
+    align-items: center;
+  }
+
+  /* NÚT REFRESH */
+  .btn-refresh {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    color: #495057;
+    background: #fff;
+    
+    &:hover { 
+      transform: rotate(180deg);
+      background: #f8f9fa;
+      color: #0d6efd;
+    }
+  }
+
+  /* STAT CARDS (Thẻ thông kê) */
+  .stat-card {
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border: 1px solid rgba(0,0,0,0.05) !important;
+    border-radius: 16px;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 1rem 3rem rgba(0,0,0,0.1) !important;
+    }
+
+    .icon-box {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-size: 1.5rem;
+    }
+  }
+
+  /* TONE MÀU NỀN MỀM (SOFT COLORS) */
+  .bg-primary-light { background: rgba(13, 110, 253, 0.1); }
+  .bg-success-light { background: rgba(25, 135, 84, 0.1); }
+  .bg-warning-light { background: rgba(255, 193, 7, 0.15); } /* Cam vàng cho Mod */
+  
+  .text-primary { color: #0d6efd !important; }
+  .text-success { color: #198754 !important; }
+  .text-warning { color: #d39e00 !important; }
+
+  /* QUICK LINK CARDS (Thao tác nhanh) */
+  .quick-link-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    .icon-wrapper {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      background-color: #ffffff !important;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+      transform: translateY(-3px);
+
+      .icon-wrapper {
+        transform: scale(1.1);
+      }
+      
+      span.fw-bold { color: #0d6efd !important; }
+    }
+  }
+
+  /* LIST GROUP TRẠNG THÁI */
+  .list-group-item {
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Responsive fixes */
+  @media (max-width: 768px) {
+    .dashboard-header {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 1rem;
+    }
+  }
+}

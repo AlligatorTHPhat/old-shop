@@ -1,0 +1,137 @@
+// Layout & Global
+.product-view {
+  font-family: 'Inter', sans-serif;
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Gallery
+.main-image-wrapper {
+  height: 510px;
+  background: #fdfdfd;
+  img { transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+  &:hover img { transform: scale(1.05); }
+}
+
+.thumb-container {
+  min-width: 80px; height: 80px;
+  opacity: 0.7; transition: 0.3s;
+  &.active { opacity: 1; border: 2px solid #F39C12 !important; }
+}
+
+// VIDEO PROMO CARD
+.video-promo-card {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  border: none;
+  .video-bg-overlay {
+    position: absolute; top: -50%; right: -20%; width: 200px; height: 200px;
+    background: rgba(255,255,255,0.1); border-radius: 50%;
+  }
+}
+
+// Price & Tags
+.price-card {
+  border-left: 5px solid var(--bs-primary) !important;
+}
+
+.status-pill {
+  font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+}
+
+// VOUCHER TAG (Kiểu răng cưa)
+.voucher-tag {
+  background: #fff5e6; color: #e67e22; padding: 6px 15px;
+  border: 1px solid #ffcc80; border-radius: 4px; font-weight: 700;
+  cursor: pointer; position: relative; transition: 0.3s;
+  &:hover { background: #e67e22; color: white; }
+  &.voucher-info { background: #e3f2fd; color: #1976d2; border-color: #bbdefb; }
+}
+
+// Button "THÊM VÀO GIỎ HÀNG"
+.btn-buy-now {
+  background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%);
+  color: white; border: none;
+  box-shadow: 0 10px 20px rgba(230, 126, 34, 0.2);
+  &:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(230, 126, 34, 0.3); }
+}
+
+// Seller
+.seller-avatar {
+  width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+}
+
+// Tabs
+.custom-tabs-container {
+  .nav-pills .nav-link {
+    color: #6c757d;
+    &.active { background-color: var(--bs-primary); color: white; }
+  }
+}
+
+.report-badge {
+  position: absolute; top: 15px; right: 15px;
+  background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);
+  &:hover { background: #dc3545; color: white; }
+}
+
+.video-promo-full {
+  // Nền xanh đen sâu thẳm để làm nổi icon
+  background: linear-gradient(135deg, #1a1a1b 0%, #2d3436 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  min-width: 100%;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+
+  // Hiệu ứng bao quanh Icon Drive
+  .drive-icon-wrapper {
+    font-size: 1.8rem;
+    // Đổ bóng màu đặc trưng của Drive
+    filter: drop-shadow(0 0 8px rgba(66, 133, 244, 0.6));
+    display: flex;
+    align-items: center;
+    
+    .bi-google-drive {
+      background: linear-gradient(45deg, #4285F4, #34A853, #FBBC05);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  // Nút bấm kiểu Google hiện đại
+  .btn-drive-action {
+    background: #ffffff;
+    color: #202124;
+    border: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:hover {
+      background: #4285F4; // Màu xanh Google
+      color: white;
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(66, 133, 244, 0.4);
+    }
+  }
+
+  // Hiệu ứng vết loang màu Drive dưới nền
+  .bg-shape-drive {
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(52, 168, 83, 0.1) 0%, transparent 70%);
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+// Thêm hiệu ứng slide nhẹ khi hover vào card
+.video-promo-full:hover {
+  border-color: rgba(66, 133, 244, 0.3);
+}

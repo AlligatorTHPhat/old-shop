@@ -1,0 +1,159 @@
+<div class="user-manage-container user-light-theme delay-animation">
+  
+  <!-- Header -->
+  <div class="header-section">
+    <div class="header-info">
+      <h2 class="fw-bold text-dark">Quản lý Moderator / Người dùng</h2>
+      <p class="text-muted mb-0">Hệ thống quản lý tài khoản và kiểm duyệt viên của nền tảng.</p>
+    </div>
+    <div class="header-actions">
+      <div class="search-box shadow-sm">
+        <i class="bi bi-search"></i>
+        <label for="user-manage-searchterm" class="visually-hidden">Tìm kiếm người dùng...</label>
+        <input id="user-manage-searchterm" type="text" placeholder="Tìm kiếm người dùng..." [(ngModel)]="searchTerm" (ngModelChange)="filterUsers()" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Bảng dữ liệu -->
+  <div class="table-container shadow-sm">
+    <!-- Tabs -->
+    <div class="tabs-navigation">
+      <button class="tab-btn" [class.active]="currentTab === 'active'" (click)="selectTab('active')">
+        <i class="bi bi-person-check me-2"></i> Đang hoạt động
+      </button>
+      <button class="tab-btn" [class.active]="currentTab === 'locked'" (click)="selectTab('locked')">
+        <i class="bi bi-person-x me-2"></i> Bị khóa
+      </button>
+    </div>
+
+    <div class="custom-table-wrapper">
+      <div class="loading-overlay" *ngIf="isLoading">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-primary fw-medium">Đang xử lý...</p>
+      </div>
+
+      <table class="custom-table" *ngIf="filteredUsers.length > 0; else emptyOrLoading">
+        <thead>
+          <tr>
+            <th width="35%">Moderator & Chi tiết</th>
+            <th width="30%">Thông tin liên hệ</th>
+            <th width="15%">Trạng thái</th>
+            <th width="20%" class="text-end">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of paginatedUsers">
+            <td>
+              <div class="user-info-cell">
+                <div class="avatar-circle" [class.locked]="!user.is_active">
+                  <i class="bi" [class.bi-person-fill]="user.is_active" [class.bi-lock-fill]="!user.is_active"></i>
+                </div>
+                <div class="details">
+                  <span class="name">{{ user.username }}</span>
+                  <span class="role">{{ user.full_name || 'Hợp tác viên' }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="contact-info-cell">
+                <span class="email"><i class="bi bi-envelope me-2 text-muted"></i>{{ user.email }}</span>
+                <span class="phone"><i class="bi bi-telephone me-2 text-muted"></i>{{ user.phone_number || 'Chưa cập nhật' }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="badge" [class.status-active]="user.is_active" [class.status-locked]="!user.is_active">
+                <i class="bi" [class.bi-check-circle-fill]="user.is_active" [class.bi-x-circle-fill]="!user.is_active" style="margin-right: 4px;"></i>
+                {{ user.is_active ? 'Hoạt động' : 'Đã khóa' }}
+              </span>
+            </td>
+            <td class="text-end">
+              <!-- Căn phải nút hành động cho gọn -->
+              <div class="d-flex justify-content-end">
+                <button class="btn-action" [class.btn-lock]="user.is_active" [class.btn-unlock]="!user.is_active" [disabled]="actionLoading" (click)="openStatusModal(user)">
+                  <i class="bi" [class.bi-lock-fill]="user.is_active" [class.bi-unlock-fill]="!user.is_active"></i>
+                  {{ user.is_active ? 'Khóa tài khoản' : 'Mở khóa' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Phân trang -->
+      <div class="table-footer" *ngIf="!isLoading && filteredUsers.length > 0">
+        <div class="info-text">
+          Hiển thị <strong class="text-primary">{{ paginatedUsers.length }}</strong> trên tổng <strong class="text-dark">{{ filteredUsers.length }}</strong> người dùng.
+        </div>
+        <div class="pagination">
+          <button class="page-btn" [disabled]="currentPage === 1" (click)="currentPage = currentPage - 1">
+            <i class="bi bi-chevron-left me-1"></i> Trước
+          </button>
+          <button class="page-btn active">
+            Trang {{ currentPage }} / {{ totalPages }}
+          </button>
+          <button class="page-btn" [disabled]="currentPage >= totalPages" (click)="currentPage = currentPage + 1">
+            Sau <i class="bi bi-chevron-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Trạng thái rỗng -->
+      <ng-template #emptyOrLoading>
+        <div class="empty-state" *ngIf="!isLoading">
+          <i class="bi bi-search d-block mb-3" style="font-size: 3rem; color: #dee2e6;"></i>
+          <h5 class="fw-bold text-dark">Không có dữ liệu</h5>
+          <p class="text-muted">Không tìm thấy người dùng nào trong mục này.</p>
+        </div>
+        <div class="empty-state" *ngIf="isLoading && filteredUsers.length === 0">
+          <div class="spinner-border text-primary mb-3" role="status"></div>
+          <p class="text-primary fw-medium">Đang khởi tạo dữ liệu...</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Status Modal (Đã chuyển nền sáng) -->
+  <div class="modal fade" [class.show]="showStatusModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg modal-light-override">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-bold text-dark d-flex align-items-center">
+            <i class="bi me-2" [class.bi-shield-lock-fill]="isBanAction" [class.bi-shield-check-fill]="!isBanAction" [class.text-danger]="isBanAction" [class.text-success]="!isBanAction" style="font-size: 1.5rem;"></i>
+            {{ isBanAction ? 'Khóa Tài Khoản' : 'Khôi phục Quyền Truy cập' }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeStatusModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="status-preview bg-light border rounded-3 p-3 mb-4 d-flex align-items-center gap-3">
+            <div class="avatar-circle" [class.locked]="isBanAction">
+              <i class="bi" [class.bi-person-fill]="!isBanAction" [class.bi-lock-fill]="isBanAction"></i>
+            </div>
+            <div>
+              <div class="target-user fw-bold text-dark fs-5">{{ selectedUser?.username }}</div>
+              <span class="action-badge" [class.ban]="isBanAction" [class.unban]="!isBanAction">
+                {{ isBanAction ? 'Sẽ bị vô hiệu hóa' : 'Sẽ được kích hoạt' }}
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="user-manage-statusreason" class="form-label text-muted fw-bold text-uppercase small mb-2">Lý do thực hiện *</label>
+            <textarea id="user-manage-statusreason" class="form-control" rows="3" [(ngModel)]="statusReason" placeholder="Vui lòng ghi rõ lý do để lưu vào Log hệ thống..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-top pt-3 pb-3 px-4 bg-light">
+          <button type="button" class="btn btn-secondary-custom px-4 fw-bold" (click)="closeStatusModal()">Hủy bỏ</button>
+          <button type="button" class="btn btn-primary-custom px-4 fw-bold shadow-sm" [class.btn-danger]="isBanAction" [disabled]="!statusReason.trim() || actionLoading" (click)="confirmStatusChange()">
+            {{ actionLoading ? 'Đang xử lý...' : 'Xác nhận' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert -->
+  <div class="alert alert-success mt-4 shadow-sm border-0 d-flex align-items-center" *ngIf="message" style="background-color: #d1e7dd; color: #0f5132;">
+    <i class="bi bi-check-circle-fill me-2 fs-5"></i> 
+    <span class="fw-medium">{{ message }}</span>
+  </div>
+</div>

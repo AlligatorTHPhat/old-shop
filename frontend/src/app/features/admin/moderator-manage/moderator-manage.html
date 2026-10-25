@@ -1,0 +1,228 @@
+<div class="admin-content-wrapper moderator-light-theme delay-animation">
+  <!-- Header Card -->
+  <header class="bg-white rounded-3 shadow-sm p-4 mb-4 d-flex justify-content-between align-items-center border">
+    <div>
+      <h2 class="fw-bold text-dark mb-1">Quản lý Moderator</h2>
+      <p class="text-muted mb-0">Hệ thống quản trị viên và kiểm duyệt viên.</p>
+    </div>
+    <div class="toolbar">
+      <button class="btn btn-primary shadow-sm px-4 py-2 custom-btn-primary" (click)="openModal()">
+        <i class="bi bi-person-plus-fill me-2"></i> Thêm Moderator Mới
+      </button>
+    </div>
+  </header>
+
+  <!-- Table Container -->
+  <div class="bg-white rounded-3 shadow-sm border p-4 position-relative">
+    
+    <!-- Tabs & Search Bar -->
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+      <ul class="nav nav-tabs custom-tabs border-bottom-0 mb-0">
+        <li class="nav-item">
+          <a class="nav-link fw-bold" [class.active]="activeTab === 'active'" (click)="switchTab('active')">
+            <i class="bi bi-person-check me-2"></i>Đang hoạt động
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold" [class.active]="activeTab === 'locked'" (click)="switchTab('locked')">
+            <i class="bi bi-person-x me-2"></i>Bị khóa
+          </a>
+        </li>
+      </ul>
+
+      <!-- Thanh Search -->
+      <div class="search-box position-relative" style="width: 300px;">
+        <i class="bi bi-search position-absolute text-muted" style="left: 15px; top: 50%; transform: translateY(-50%);"></i>
+        <label for="moderator-manage-searchterm" class="visually-hidden">Tìm theo tên, email...</label>
+        <input id="moderator-manage-searchterm" type="text" class="form-control bg-light rounded-pill border-0 ps-5" 
+               placeholder="Tìm theo tên, email..." 
+               [(ngModel)]="searchTerm" 
+               (ngModelChange)="onSearchChange()">
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table custom-light-table align-middle mb-0">
+        <thead>
+          <tr>
+            <th width="35%">Moderator & Chi tiết</th>
+            <th width="30%">Thông tin liên hệ</th>
+            <th width="15%">Trạng thái</th>
+            <th width="20%" class="text-end">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let mod of pagedModerators; trackBy: trackByUserId">
+            <td>
+              <div class="d-flex align-items-center gap-3">
+                <div class="cat-icon" [class.trash-icon]="activeTab === 'locked'">
+                  <i class="bi" [class]="activeTab === 'locked' ? 'bi-lock-fill' : 'bi-shield-fill-check'"></i>
+                </div>
+                <div>
+                  <div class="cat-name">{{ mod.username }}</div>
+                  <div class="cat-desc text-truncate" style="max-width: 250px;">
+                    {{ mod.full_name || 'Quản trị viên' }}
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="text-dark fw-medium mb-1"><i class="bi bi-envelope me-2 text-muted"></i>{{ mod.email }}</div>
+              <div class="cat-desc"><i class="bi bi-telephone me-2 text-muted"></i>{{ mod.phone_number || 'Chưa cập nhật' }}</div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <span *ngIf="mod.is_active" class="custom-badge badge-success">Hoạt động</span>
+                <span *ngIf="!mod.is_active" class="custom-badge badge-danger">
+                  <i class="bi bi-lock-fill me-1"></i>Đã khóa
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button *ngIf="activeTab === 'active'" (click)="openStatusModal(mod)" class="btn btn-action btn-del" title="Khóa tài khoản">
+                  <i class="bi bi-lock-fill me-1"></i> Khóa
+                </button>
+                <button *ngIf="activeTab === 'locked'" (click)="openStatusModal(mod)" class="btn btn-action btn-edit" title="Mở khóa tài khoản">
+                  <i class="bi bi-unlock-fill me-1"></i> Mở khóa
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div *ngIf="filteredModerators.length === 0 && !isLoading" class="text-center py-5 text-muted">
+        <i class="bi bi-search fs-1 mb-3 d-block text-black-50"></i>
+        <h5>Không tìm thấy dữ liệu</h5>
+        <p>Vui lòng thử lại với từ khóa khác.</p>
+      </div>
+
+      <!-- Phân trang thông minh -->
+      <div *ngIf="filteredModerators.length > limit" class="pagination-controls mt-4 d-flex justify-content-between align-items-center">
+        <div class="pagination-info text-muted">
+          Hiển thị <strong class="text-primary">{{ skip + 1 }} - {{ skip + pagedModerators.length }}</strong> 
+          trên tổng <strong class="text-dark">{{ filteredModerators.length }}</strong> nhân sự
+        </div>
+        
+        <ul class="pagination pagination-sm mb-0 custom-pagination">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="prevPage()"><i class="bi bi-chevron-left"></i></button>
+          </li>
+          <ng-container *ngIf="visiblePages[0] > 1">
+            <li class="page-item"><button class="page-link" (click)="goToPage(1)">1</button></li>
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+          </ng-container>
+          <li class="page-item" *ngFor="let page of visiblePages" [class.active]="page === currentPage">
+            <button class="page-link" (click)="goToPage(page)">{{ page }}</button>
+          </li>
+          <ng-container *ngIf="visiblePages[visiblePages.length - 1] < totalPages">
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            <li class="page-item"><button class="page-link" (click)="goToPage(totalPages)">{{ totalPages }}</button></li>
+          </ng-container>
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button class="page-link" (click)="nextPage()"><i class="bi bi-chevron-right"></i></button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Thêm/Sửa (Ép Light Mode) -->
+  <div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1" style="background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg modal-light-override">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-bold text-dark">{{ editingModerator ? 'Chỉnh sửa Moderator' : 'Thêm Moderator Mới' }}</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <label for="moderator-manage-username" class="form-label text-muted fw-bold text-uppercase" style="font-size: 0.8rem;">Tên đăng nhập *</label>
+              <input id="moderator-manage-username" type="text" class="form-control" [(ngModel)]="moderatorForm.username" placeholder="Nhập username">
+            </div>
+            <div class="col-md-6">
+              <label for="moderator-manage-email" class="form-label text-muted fw-bold text-uppercase" style="font-size: 0.8rem;">Email *</label>
+              <input id="moderator-manage-email" type="email" class="form-control" [(ngModel)]="moderatorForm.email" placeholder="example@email.com">
+            </div>
+            <div class="col-md-6" *ngIf="!editingModerator">
+              <label for="moderator-manage-password" class="form-label text-muted fw-bold text-uppercase" style="font-size: 0.8rem;">Mật khẩu *</label>
+              <input id="moderator-manage-password" type="password" class="form-control" [(ngModel)]="moderatorForm.password" placeholder="Nhập mật khẩu an toàn">
+            </div>
+            <div class="col-md-6">
+              <label for="moderator-manage-full-name" class="form-label text-muted fw-bold text-uppercase" style="font-size: 0.8rem;">Họ và tên *</label>
+              <input id="moderator-manage-full-name" type="text" class="form-control" [(ngModel)]="moderatorForm.full_name" placeholder="Nguyễn Văn A">
+            </div>
+            <div class="col-md-6">
+              <label for="moderator-manage-phone-number" class="form-label text-muted fw-bold text-uppercase" style="font-size: 0.8rem;">Số điện thoại</label>
+              <input id="moderator-manage-phone-number" type="text" class="form-control" [(ngModel)]="moderatorForm.phone_number" placeholder="0987654321">
+            </div>
+            <div class="col-md-6">
+              <label for="moderator-manage-address" class="form-label text-muted fw-bold text-uppercase" style="font-size: 0.8rem;">Địa chỉ</label>
+              <input id="moderator-manage-address" type="text" class="form-control" [(ngModel)]="moderatorForm.address" placeholder="Nhập địa chỉ">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top pt-3 pb-3 px-4">
+          <button type="button" class="btn btn-outline-secondary px-4 fw-bold" (click)="closeModal()">Hủy bỏ</button>
+          <button type="button" class="btn btn-primary px-4 shadow-sm fw-bold custom-btn-primary" (click)="saveModerator()">Lưu Thay Đổi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Khóa/Mở Khóa -->
+  <div class="modal fade" [class.show]="showStatusModal" [style.display]="showStatusModal ? 'block' : 'none'" tabindex="-1" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg modal-light-override">
+        <div class="modal-header border-0 pb-0 pt-4 px-4">
+          <h5 class="modal-title fw-bold text-dark d-flex align-items-center">
+            <i class="bi" [class]="statusAction === 'lock' ? 'bi-shield-lock-fill text-danger' : 'bi-shield-check-fill text-success'" style="font-size: 1.8rem; margin-right: 12px;"></i>
+            {{ statusAction === 'lock' ? 'Khóa Tài Khoản' : 'Mở Khóa Tài Khoản' }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeStatusModal()"></button>
+        </div>
+        <div class="modal-body px-4 py-3">
+          <p class="mb-3 text-dark" style="font-size: 1.05rem;">
+            Bạn có chắc chắn muốn {{ statusAction === 'lock' ? 'khóa' : 'mở khóa' }} moderator <strong class="text-primary">{{ statusModalModerator?.username }}</strong>?
+          </p>
+          <div class="text-start">
+            <label for="moderator-manage-statusreason" class="form-label text-muted fw-bold text-uppercase" style="font-size: 0.8rem;">Lý do thực hiện *</label>
+            <textarea id="moderator-manage-statusreason" class="form-control bg-light" rows="3" [(ngModel)]="statusReason" placeholder="Ghi chú bắt buộc..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-0 p-4 pt-2">
+          <button type="button" class="btn btn-outline-secondary px-4 fw-bold" (click)="closeStatusModal()">Hủy bỏ</button>
+          <button type="button" class="btn px-4 text-white shadow-sm fw-bold" [style.background]="statusAction === 'lock' ? '#dc3545' : '#198754'" (click)="saveStatusChange()">
+            Xác nhận {{ statusAction === 'lock' ? 'Khóa' : 'Mở Khóa' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Cảnh báo Trùng (Đã chuyển sang phong cách Light/Premium) -->
+  <div class="modal fade" [class.show]="showDuplicateModal" [style.display]="showDuplicateModal ? 'block' : 'none'" tabindex="-1" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content duplicate-modal bg-white border-0">
+        <div class="modal-body text-center p-5">
+          <div class="warning-icon-wrapper mb-4">
+            <div class="pulse-ring"></div>
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+          <h3 class="fw-bold text-dark mb-3">{{ duplicateErrorTitle }}</h3>
+          <p class="text-muted mb-4 px-3">
+            Tên đăng nhập hoặc Email này đã tồn tại trong hệ thống. Vui lòng sử dụng thông tin khác.
+          </p>
+          <button type="button" class="btn btn-warning-custom px-5 py-2" (click)="closeDuplicateModal()">Đã hiểu, Quay lại</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

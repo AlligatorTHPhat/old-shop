@@ -1,0 +1,161 @@
+.violation-light-theme {
+  padding: 1.5rem;
+  background-color: #f4f7f6;
+  min-height: 100vh;
+
+  .bg-white { background-color: #ffffff !important; }
+  .text-dark { color: #212529 !important; }
+  .text-muted { color: #6c757d !important; }
+  .text-secondary { color: #495057 !important; }
+  
+  .text-warning-custom { color: #d39e00 !important; } /* Chữ vàng đậm hơn để dễ đọc trên nền sáng */
+
+  /* Button Refresh */
+  .custom-btn-outline {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    &:hover {
+      background-color: #0d6efd;
+      color: white;
+    }
+  }
+
+  /* Table Styles */
+  .custom-light-table {
+    --bs-table-bg: transparent;
+    --bs-table-color: #212529;
+    
+    th {
+      background-color: #f8f9fa !important;
+      color: #495057 !important;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #dee2e6 !important;
+      padding: 1.2rem 1rem;
+    }
+    
+    td {
+      padding: 1.2rem 1rem;
+      color: #212529 !important;
+      border-bottom: 1px solid #f1f3f5 !important;
+      background-color: #ffffff !important;
+    }
+
+    tbody tr {
+      transition: background-color 0.2s ease;
+      &:hover td {
+        background-color: #f8f9fa !important;
+      }
+    }
+  }
+
+  /* Avatar nhỏ */
+  .user-avatar-sm {
+    width: 36px;
+    height: 36px;
+    background: rgba(13, 110, 253, 0.1);
+    border: 1px solid rgba(13, 110, 253, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #0d6efd;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  /* Badge Trạng Thái (Light Mode Edition) */
+  .badge-pill {
+    display: inline-block;
+    padding: 0.4rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+
+  .badge-danger {
+    background: #f8d7da; color: #dc3545; border: 1px solid #f5c2c7;
+  }
+  .badge-success {
+    background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc;
+  }
+  .badge-orange {
+    background: #fff3cd; color: #fd7e14; border: 1px solid #ffeeba;
+  }
+  .badge-warning {
+    background: #fff3cd; color: #856404; border: 1px solid #ffeeba;
+  }
+  .badge-info {
+    background: #cff4fc; color: #055160; border: 1px solid #b6effb;
+  }
+
+  /* Phân trang (Advanced Pagination) */
+  .pagination-advanced {
+    .btn-nav {
+      background: #ffffff;
+      border: 1px solid #dee2e6;
+      color: #495057;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+
+      &:hover:not(:disabled) {
+        background: #f8f9fa;
+        color: #0d6efd;
+        border-color: #0d6efd;
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f8f9fa;
+      }
+    }
+
+    .page-input-wrapper {
+      .page-input {
+        width: 65px;
+        text-align: center;
+        background: #ffffff;
+        border: 1px solid #dee2e6;
+        color: #212529;
+        padding: 0.3rem;
+        border-radius: 8px;
+        font-weight: 700;
+        transition: all 0.2s;
+
+        &:focus {
+          border-color: #0d6efd;
+          box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+          outline: none;
+        }
+
+        &::-webkit-inner-spin-button, 
+        &::-webkit-outer-spin-button { 
+          -webkit-appearance: none; 
+          margin: 0; 
+        }
+      }
+    }
+  }
+
+  .italic { font-style: italic; }
+
+  /* Animation xoay nút refresh */
+  .spin {
+    animation: fa-spin 1s infinite linear;
+  }
+  @keyframes fa-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+}

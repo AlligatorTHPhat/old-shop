@@ -1,0 +1,150 @@
+<div class="admin-dashboard-wrapper delay-animation">
+  <header class="dashboard-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="fw-bold text-dark mb-1">Trung tâm Quản trị Hệ thống</h1>
+      <p class="text-muted mb-0">Giám sát hoạt động, người dùng và doanh thu thời gian thực.</p>
+    </div>
+    <div class="header-meta d-flex gap-3">
+      <div class="status-badge shadow-sm">
+        <i class="bi bi-cpu-fill me-2"></i>Hệ thống: Ổn định
+      </div>
+      <button class="btn btn-light border shadow-sm rounded-circle btn-refresh" (click)="loadStats()">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm stat-card users-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-uppercase fw-bold text-muted small mb-0">Người dùng Active</h6>
+            <div class="icon-box bg-primary-light"><i class="bi bi-people text-primary"></i></div>
+          </div>
+          <h2 class="fw-bold mb-0 text-dark">{{ stats.total_users | number }}</h2>
+          <span class="text-success small fw-medium"><i class="bi bi-arrow-up me-1"></i>+12% tháng này</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm stat-card revenue-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-uppercase fw-bold text-muted small mb-0">Doanh thu Thuần</h6>
+            <div class="icon-box bg-success-light"><i class="bi bi-currency-dollar text-success"></i></div>
+          </div>
+          <h2 class="fw-bold mb-0 text-dark">{{ stats.total_revenue | currency:'VND':'symbol':'1.0-0' }}</h2>
+          <span class="text-success small fw-medium"><i class="bi bi-graph-up me-1"></i>Tăng trưởng ổn định</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm stat-card orders-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-uppercase fw-bold text-muted small mb-0">Tổng Giao dịch</h6>
+            <div class="icon-box bg-purple-light"><i class="bi bi-cart-check text-purple"></i></div>
+          </div>
+          <h2 class="fw-bold mb-0 text-dark">{{ stats.total_orders | number }}</h2>
+          <span class="text-muted small">Cập nhật 1 phút trước</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h5 class="fw-bold text-dark mb-1"><i class="bi bi-bar-chart-line me-2 text-primary"></i>Phân tích Doanh thu</h5>
+          <p class="text-muted small mb-0">Theo dõi biến động dòng tiền hệ thống</p>
+        </div>
+        <div class="btn-group btn-group-sm p-1 bg-light rounded-pill">
+          <button
+            class="btn rounded-pill px-3 fw-bold transition-all"
+            [ngClass]="chartView === 'year' ? 'btn-white shadow-sm text-dark' : 'btn-transparent text-muted'"
+            (click)="switchChartView('year')">
+            Năm
+          </button>
+          <button
+            class="btn rounded-pill px-5 fw-bold transition-all"
+            [ngClass]="chartView === 'month' ? 'btn-white shadow-sm text-dark' : 'btn-transparent text-muted'"
+            (click)="switchChartView('month')">
+            Tháng này
+          </button>
+        </div>
+      </div>
+      <div style="height: 350px; position: relative;">
+        <canvas #adminChart></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h5 class="fw-bold text-dark mb-4 border-bottom pb-3">
+            <i class="bi bi-shield-lock me-2 text-success"></i>Trạng thái Bảo mật
+          </h5>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item px-0 border-0 d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-3 fs-5"></i>
+              <div>
+                <p class="mb-0 fw-bold text-dark small">Database Backup</p>
+                <span class="text-muted extra-small">Hoàn thành lúc 02:00 AM hôm nay</span>
+              </div>
+            </div>
+            <div class="list-group-item px-0 border-0 d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-3 fs-5"></i>
+              <div>
+                <p class="mb-0 fw-bold text-dark small">SSL Certificate</p>
+                <span class="text-muted extra-small">Hợp lệ - Còn hạn 365 ngày</span>
+              </div>
+            </div>
+            <div class="list-group-item px-0 border-0 d-flex align-items-center">
+              <i class="bi bi-exclamation-triangle-fill text-warning me-3 fs-5"></i>
+              <div>
+                <p class="mb-0 fw-bold text-dark small">Báo cáo vi phạm</p>
+                <span class="text-danger fw-bold extra-small">12 báo cáo mới chưa xử lý</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h5 class="fw-bold text-dark mb-4 border-bottom pb-3">
+            <i class="bi bi-lightning-charge me-2 text-warning"></i>Thao tác Nhanh
+          </h5>
+          <div class="row g-3">
+            <div class="col-6">
+              <a [routerLink]="['/admin', 'moderator-manage']" class="quick-link-card">
+                <i class="bi bi-person-badge mb-2"></i>
+                <span>Nhân sự</span>
+              </a>
+            </div>
+            <div class="col-6">
+              <a [routerLink]="['/admin', 'category-manage']" class="quick-link-card">
+                <i class="bi bi-grid mb-2"></i>
+                <span>Danh mục</span>
+              </a>
+            </div>
+            <div class="col-12">
+              <a [routerLink]="['/admin', 'violation-log']" class="quick-link-card bg-light-danger">
+                <i class="bi bi-journal-text text-danger mb-2"></i>
+                <span class="text-danger">Nhật ký Hệ thống & Logs vi phạm</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,226 @@
+<div class="container py-5">
+  <div *ngIf="!product" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2 text-muted">Đang tải siêu phẩm...</p>
+  </div>
+
+  <div class="product-view" *ngIf="product">
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/home" class="text-decoration-none transition-link">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a routerLink="/shop" class="text-decoration-none transition-link">Sàn đồ cũ</a></li>
+        <li class="breadcrumb-item active text-truncate" style="max-width: 200px;">{{ product.title }}</li>
+      </ol>
+    </nav>
+
+    <div class="row g-5">
+      <div class="col-lg-6">
+        <div class="sticky-top" style="top: 20px;">
+          <div class="product-gallery">
+            <div class="main-image-wrapper mb-3 shadow-sm rounded-4 overflow-hidden border bg-white position-relative">
+              <img [src]="getFullImageUrl(primaryImage?.image_url || '')" class="img-fluid w-100 main-image">
+              <button class="btn report-badge" (click)="reportProduct()"><i class="bi bi-flag-fill"></i></button>
+            </div>
+            
+            <div class="thumbnail-list d-flex gap-2 mb-4 justify-content-start overflow-auto pb-2">
+              <div *ngFor="let image of product.product_images" 
+                   class="thumb-container rounded-3 border" 
+                   [class.active]="image === primaryImage" (click)="setPrimaryImage(image)" tabindex="0" role="button" aria-label="Xem ảnh này" (keydown)="$event.key === 'Enter' && setPrimaryImage(image)">
+                <img [src]="getFullImageUrl(image.image_url)" class="w-100 h-100 object-fit-cover">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="product-main-info">
+          <div class="d-flex gap-2 mb-3">
+            <span class="badge status-pill bg-success-subtle text-success border border-success-subtle px-3 py-2">
+              <i class="bi bi-check2-circle me-1"></i>Đã kiểm duyệt
+            </span>
+          </div>
+
+          <h1 class="product-title fw-bold text-dark mb-3">{{ product.title }}</h1>
+          
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <div class="text-warning fs-5">
+              <i *ngFor="let s of [1,2,3,4,5]" class="bi" [class.bi-star-fill]="s <= 4" [class.bi-star-half]="s === 5"></i>
+              <span class="ms-2 text-dark fw-bold">4.5</span>
+            </div>
+            <div class="text-muted small border-start ps-3">
+              <span class="me-3">{{ product.view_count }} lượt xem</span>
+              <span>{{ getValidReviews().length || 0 }} đánh giá</span>
+            </div>
+          </div>
+
+          <div class="price-card p-4 rounded-4 border-0 shadow-sm bg-primary bg-opacity-10 mb-4">
+            <div class="text-primary small fw-bold text-uppercase mb-2">Giá bán đồ cũ</div>
+            <h2 class="display-5 fw-bold text-primary mb-0">{{ product.price | currency:'VND':'symbol':'1.0-0' }}</h2>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+              <div class="spec-item p-3 border rounded-3 bg-white shadow-xs">
+                <div class="text-muted x-small text-uppercase fw-bold mb-1">Độ mới</div>
+                <div class="fw-bold text-success"><i class="bi bi-shield-check me-1"></i>{{ product.condition_rating || 9 }}/10</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="spec-item p-3 border rounded-3 bg-white shadow-xs">
+                <div class="text-muted x-small text-uppercase fw-bold mb-1">Bảo hành</div>
+                <div class="fw-bold text-primary"><i class="bi bi-clock-history me-1"></i>{{ product.warranty_months || 0 }} tháng</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="coupon-box-advanced p-4 rounded-4 border bg-white mb-4 shadow-sm">
+            <h6 class="fw-bold mb-3"><i class="bi bi-ticket-perforated text-primary me-2"></i>Ưu đãi cho bạn</h6>
+            <div class="input-group gap-2">
+              <select class="form-select border-primary-subtle rounded-3" style="max-width: 140px;" [(ngModel)]="selectedVoucher" (change)="onVoucherSelect()">
+                <option value="">Chọn mã...</option>
+                <option value="OLDSHOP50">Giảm 50k</option>
+                <option value="FREESHIP">Free Ship</option>
+                <option value="GIFT20">Giảm 20%</option>
+              </select>
+              <input type="text" class="form-control border-primary-subtle rounded-3" placeholder="Nhập mã khác..." [(ngModel)]="couponCode">
+              <button class="btn btn-primary px-3 rounded-3 fw-bold" (click)="applyCoupon()">ÁP DỤNG</button>
+            </div>
+          </div> -->
+
+          <!-- <div class="seller-card-new p-3 rounded-4 border mb-4 bg-white shadow-xs d-flex align-items-center">
+            <div class="seller-avatar bg-warning bg-opacity-10 text-warning rounded-circle me-3"><i class="bi bi-shop fs-4"></i></div>
+            <div class="flex-grow-1">
+              <div class="fw-bold text-dark">{{ product.seller?.full_name }}</div>
+              <div class="small text-muted text-truncate" style="max-width: 200px;">{{ product.seller?.address }}</div>
+            </div>
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">Ghé Shop</button>
+          </div> -->
+
+          <div class="action-buttons d-flex gap-3 mt-4">
+            <a *ngIf="product.video_url" [href]="product.video_url" target="_blank" class="btn btn-outline-primary btn-lg rounded-4 py-3 fw-bold flex-grow-1 d-flex align-items-center justify-content-center" style="border-width: 2px;">
+              <i class="bi bi-google-drive me-2 fs-5"></i> XEM VIDEO THỰC TẾ
+            </a>
+            <button class="btn btn-buy-now btn-lg rounded-4 py-3 fw-bold flex-grow-1 d-flex align-items-center justify-content-center" [disabled]="!canAddToCart()" (click)="addToCart()">
+              <i class="bi bi-cart-plus-fill me-2 fs-5"></i> THÊM VÀO GIỎ HÀNG
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <div class="custom-tabs-container bg-white rounded-4 shadow-sm border overflow-hidden">
+        <ul class="nav nav-pills p-3 bg-light border-bottom">
+          <li class="nav-item">
+            <button class="nav-link active fw-bold px-4 rounded-pill" data-bs-toggle="pill" data-bs-target="#desc">Mô tả</button>
+          </li>
+          <li class="nav-item ms-2">
+            <button class="nav-link fw-bold px-4 rounded-pill" data-bs-toggle="pill" data-bs-target="#rev">Đánh giá ({{ getValidReviews().length || 0 }})</button>
+          </li>
+        </ul>
+        <div class="tab-content p-4">
+          <div class="tab-pane fade show active" id="desc">
+            <div class="lh-lg text-muted" style="white-space: pre-wrap;">{{ product.description }}</div>
+          </div>
+          
+          <div class="tab-pane fade" id="rev">
+            <div class="row g-4">
+              <div class="col-md-5 border-end border-light pe-md-4">
+                <div class="p-4 bg-light rounded-4 shadow-sm border-0 h-100">
+                  <h5 class="fw-bold mb-4 text-dark"><i class="bi bi-pencil-square me-2 text-primary"></i>Viết đánh giá</h5>
+                  <div class="rating-picker mb-4 text-center p-3 bg-white rounded-3 shadow-sm border">
+                    <div class="small text-muted mb-2 fw-bold text-uppercase">Bạn chấm mấy sao?</div>
+                    <div class="stars fs-2 text-warning cursor-pointer d-flex justify-content-center gap-2">
+                      <i *ngFor="let s of [1,2,3,4,5]" class="bi" 
+                         [class.bi-star-fill]="s <= userRating" 
+                         [class.bi-star]="s > userRating" 
+                         (click)="userRating = s" tabindex="0" role="button" [attr.aria-label]="s + ' sao'" (keydown)="$event.key === 'Enter' && userRating = s" style="transition: transform 0.2s;"></i>
+                    </div>
+                  </div>
+                  <div class="form-floating mb-4">
+                    <textarea class="form-control border-0 shadow-sm" id="reviewContent" style="height: 120px; resize: none;" placeholder="Chia sẻ trải nghiệm của bạn..." [(ngModel)]="commentText"></textarea>
+                    <label for="reviewContent" class="text-muted"><i class="bi bi-chat-text me-2"></i>Chia sẻ trải nghiệm...</label>
+                  </div>
+                  <button class="btn btn-primary w-100 rounded-pill fw-bold py-3 shadow-sm" (click)="submitReview()">GỬI ĐÁNH GIÁ</button>
+                </div>
+              </div>
+
+              <div class="col-md-7 ps-md-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <h5 class="fw-bold text-dark mb-0">Đánh giá từ cộng đồng</h5>
+                  <span class="badge bg-primary rounded-pill px-3 py-2">{{ getValidReviews().length }} đánh giá</span>
+                </div>
+                <div class="review-list custom-scrollbar pe-2" style="max-height: 550px; overflow-y: auto;">
+                  <div *ngFor="let r of getValidReviews() | slice:0:visibleReviewCount" class="review-card p-4 mb-3 border-0 bg-light rounded-4 position-relative shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="avatar-circle bg-primary bg-gradient text-white d-flex align-items-center justify-content-center rounded-circle shadow-sm" style="width: 42px; height: 42px; font-weight: bold; font-size: 1.2rem;">
+                          {{ (r.reviewer?.full_name || 'N').charAt(0).toUpperCase() }}
+                        </div>
+                        <div>
+                          <div class="fw-bold text-dark mb-0">{{ r.reviewer?.full_name || 'Người dùng ẩn danh' }}</div>
+                          <div class="text-muted" style="font-size: 0.75rem;">{{ r.created_at | date:'dd/MM/yyyy HH:mm' }}</div>
+                        </div>
+                      </div>
+                      <div class="d-flex flex-column align-items-end gap-1">
+                        <div class="text-warning small d-flex gap-1">
+                          <i *ngFor="let s of [1,2,3,4,5]" class="bi" [class.bi-star-fill]="s <= r.rating" [class.bi-star]="s > r.rating"></i>
+                        </div>
+                        <button class="btn btn-sm btn-link text-muted p-0 border-0" style="font-size: 0.8rem;" (click)="reportReview(r.review_id)" title="Báo cáo vi phạm">
+                          <i class="bi bi-flag"></i> Báo cáo
+                        </button>
+                      </div>
+                    </div>
+                    <p class="text-dark mb-0 lh-base" style="font-size: 0.95rem;">{{ r.content }}</p>
+                  </div>
+
+                  <!-- Pagination Button -->
+                  <div *ngIf="getValidReviews().length > visibleReviewCount" class="text-center py-4">
+                    <button class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm" (click)="loadMoreReviews()">
+                      Xem thêm {{ getValidReviews().length - visibleReviewCount }} đánh giá <i class="bi bi-chevron-down ms-1"></i>
+                    </button>
+                  </div>
+
+                  <div *ngIf="!getValidReviews().length" class="text-center py-5 opacity-50">
+                    <i class="bi bi-chat-quote display-1 text-primary mb-3 d-block"></i>
+                    <h6 class="fw-bold">Chưa có đánh giá nào</h6>
+                    <p class="small text-muted">Hãy là người đầu tiên đánh giá sản phẩm này!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="modal-header bg-danger text-white border-0 py-3">
+          <h5 class="modal-title fw-bold"><i class="bi bi-exclamation-octagon me-2"></i>Báo cáo vi phạm</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="mb-3">
+            <label for="product-detail-reportcategory" class="form-label fw-bold small">Lý do</label>
+            <select id="product-detail-reportcategory" class="form-select rounded-3" [(ngModel)]="reportCategory">
+              <option value="">Chọn lý do...</option>
+              <option value="fake">Hàng giả, hàng nhái</option>
+              <option value="scam">Lừa đảo</option>
+              <option value="other">Khác...</option>
+            </select>
+          </div>
+          <label for="product-detail-reportreason" class="visually-hidden">Chi tiết thêm...</label>
+          <textarea id="product-detail-reportreason" class="form-control rounded-3" rows="3" placeholder="Chi tiết thêm..." [(ngModel)]="reportReason"></textarea>
+        </div>
+        <div class="modal-footer border-0">
+          <button class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+          <button class="btn btn-danger rounded-pill px-4" [disabled]="!reportCategory" (click)="confirmReport()">Gửi báo cáo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

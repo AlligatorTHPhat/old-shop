@@ -1,0 +1,41 @@
+.admin-content-wrapper {
+  padding: 1.5rem;
+  background-color: #f4f7f6;
+  min-height: 100vh;
+}
+
+.custom-light-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: #212529;
+  
+  th {
+    background-color: #f8f9fa !important;
+    color: #495057 !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    border-bottom: 2px solid #dee2e6 !important;
+    padding: 1.2rem 1rem;
+  }
+  
+  td {
+    padding: 1.2rem 1rem;
+    color: #212529 !important;
+    border-bottom: 1px solid #f1f3f5 !important;
+    background-color: #ffffff !important;
+  }
+
+  tbody tr:hover td {
+    background-color: #f8f9fa !important;
+  }
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.8) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}

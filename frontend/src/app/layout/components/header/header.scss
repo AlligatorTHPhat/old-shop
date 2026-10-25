@@ -1,0 +1,95 @@
+.navbar-brand { font-weight: bold; font-size: 1.5rem; color: #fff !important; }
+
+.bg-primary-gradient {
+  background: linear-gradient(90deg, #0d6efd, #0b5ed7);
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  &:hover { transform: scale(1.05); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content { border-radius: 20px; }
+.form-control { border-radius: 10px; padding: 0.75rem; }
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #fff !important;
+}
+.nav-link {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95) !important;
+    transition: all 0.2s ease-in-out;
+}
+.nav-link:hover {
+    color: #fff !important;
+    transform: translateY(-1px);
+}
+.nav-link i {
+    font-size: 1.1rem;
+}
+.bg-gradient-danger {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+.status-icon-wrapper {
+    display: flex;
+    justify-content: center;
+}
+.status-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fdf2f2;
+}
+.glass-effect {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+}
+.shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.dropdown-menu {
+    min-width: 250px;
+    animation: fadeIn 0.15s ease-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.dropdown-item:active {
+    background-color: #F39C12;
+}
+.icon-box {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.smaller {
+    font-size: 0.75rem;
+}
+.logout-btn {
+    background: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.logout-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+    filter: brightness(1.1);
+}
+.logout-btn:active {
+    transform: translateY(0) scale(0.98);
+}

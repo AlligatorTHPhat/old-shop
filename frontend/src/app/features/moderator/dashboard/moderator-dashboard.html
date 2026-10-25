@@ -1,0 +1,135 @@
+<div class="moderator-dashboard-wrapper mod-light-theme delay-animation">
+  <!-- Header -->
+  <header class="bg-white rounded-3 shadow-sm p-4 mb-4 d-flex justify-content-between align-items-center border">
+    <div>
+      <h2 class="fw-bold text-dark mb-1">Trung tâm Moderator</h2>
+      <p class="text-muted mb-0">Giao diện điều khiển cho Kiểm duyệt viên (Duyệt sản phẩm & Quản lý User).</p>
+    </div>
+    
+    <div class="header-meta d-flex gap-3">
+      <div class="status-badge shadow-sm">
+        <i class="bi bi-shield-check-fill me-2 fs-5"></i>Moderator Ready
+      </div>
+      <button class="btn btn-light border shadow-sm rounded-circle btn-refresh" (click)="loadDashboard()" title="Làm mới dữ liệu">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Stats Grid -->
+  <div class="row g-4 mb-4">
+    <!-- Stat 1: Sản phẩm chờ -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm stat-card pending-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-uppercase fw-bold text-muted small mb-0">Sản phẩm chờ duyệt</h6>
+            <div class="icon-box bg-warning-light"><i class="bi bi-hourglass-split text-warning"></i></div>
+          </div>
+          <h2 class="fw-bold mb-0 text-dark">{{ pendingProducts.length }}</h2>
+          <span class="text-warning small fw-medium"><i class="bi bi-clock-history me-1"></i>Cần xử lý ngay</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat 2: Quản lý Users -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm stat-card users-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-uppercase fw-bold text-muted small mb-0">Người dùng quản lý</h6>
+            <div class="icon-box bg-primary-light"><i class="bi bi-people-fill text-primary"></i></div>
+          </div>
+          <h2 class="fw-bold mb-0 text-dark">{{ users.length }}</h2>
+          <span class="text-primary small fw-medium"><i class="bi bi-person-badge me-1"></i>Tài khoản khách</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat 3: Tổng tác vụ -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm stat-card total-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-uppercase fw-bold text-muted small mb-0">Tổng tác vụ</h6>
+            <div class="icon-box bg-success-light"><i class="bi bi-clipboard-data-fill text-success"></i></div>
+          </div>
+          <h2 class="fw-bold mb-0 text-dark">{{ totalTasks }}</h2>
+          <span class="text-success small fw-medium"><i class="bi bi-check2-all me-1"></i>Tác vụ khả dụng</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Sections -->
+  <div class="row g-4">
+    <!-- Cột 1: Thông tin trạng thái -->
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h5 class="fw-bold text-dark mb-4 border-bottom pb-3">
+            <i class="bi bi-activity me-2 text-info"></i>Trạng thái Kiểm duyệt
+          </h5>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item px-0 border-0 d-flex align-items-center mb-2">
+              <i class="bi bi-box-seam-fill text-warning me-3 fs-5"></i>
+              <div>
+                <p class="mb-0 fw-bold text-dark small">Hàng chờ Duyệt</p>
+                <span class="text-muted extra-small">Đang có <strong class="text-warning">{{ pendingProducts.length }}</strong> sản phẩm đợi phê duyệt</span>
+              </div>
+            </div>
+            <div class="list-group-item px-0 border-0 d-flex align-items-center mb-2">
+              <i class="bi bi-people-fill text-primary me-3 fs-5"></i>
+              <div>
+                <p class="mb-0 fw-bold text-dark small">Kiểm soát Người dùng</p>
+                <span class="text-muted extra-small">Quản lý <strong class="text-primary">{{ users.length }}</strong> tài khoản Seller / Buyer</span>
+              </div>
+            </div>
+            <div class="list-group-item px-0 border-0 d-flex align-items-center">
+              <i class="bi bi-shield-lock-fill text-success me-3 fs-5"></i>
+              <div>
+                <p class="mb-0 fw-bold text-dark small">Quyền hạn API</p>
+                <span class="text-success fw-bold extra-small">Hoạt động thông qua Moderator API</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cột 2: Thao tác nhanh -->
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h5 class="fw-bold text-dark mb-4 border-bottom pb-3">
+            <i class="bi bi-lightning-charge-fill me-2 text-warning"></i>Thao tác Nhanh
+          </h5>
+          
+          <div class="row g-3 h-100 align-items-center pb-3">
+            <!-- Nút Duyệt SP -->
+            <div class="col-6">
+              <a href="./moderator/product-manage" class="quick-link-card h-100 py-4 shadow-sm border-0" style="background-color: #f8f9fa;">
+                <div class="icon-wrapper mb-3 bg-warning-light">
+                  <i class="bi bi-check2-square text-warning fs-1"></i>
+                </div>
+                <span class="fw-bold text-dark">Duyệt Sản phẩm</span>
+                <span class="text-muted extra-small mt-1 text-center">Kiểm tra & Phê duyệt nội dung đăng bán</span>
+              </a>
+            </div>
+
+            <!-- Nút Quản lý User -->
+            <div class="col-6">
+              <a href="./moderator/user-manage" class="quick-link-card h-100 py-4 shadow-sm border-0" style="background-color: #f8f9fa;">
+                <div class="icon-wrapper mb-3 bg-primary-light">
+                  <i class="bi bi-person-lines-fill text-primary fs-1"></i>
+                </div>
+                <span class="fw-bold text-dark">Quản lý Users</span>
+                <span class="text-muted extra-small mt-1 text-center">Khóa / Mở khóa tài khoản Role 3</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

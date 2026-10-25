@@ -1,0 +1,15 @@
+{
+  "name": "oldshop-contact-relay",
+  "private": true,
+  "description": "Google Apps Script web app: contact form -> Google Sheet helpdesk + email notifications",
+  "scripts": {
+    "login": "clasp login",
+    "push": "clasp push",
+    "deploy": "clasp deploy --description \"$(git rev-parse --short HEAD)\"",
+    "logs": "clasp logs --watch"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.4.2",
+    "@types/google-apps-script": "^1.0.83"
+  }
+}

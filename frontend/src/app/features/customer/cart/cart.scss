@@ -1,0 +1,244 @@
+.cart-wrapper {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.bg-light-soft {
+  background-color: rgba(248, 249, 250, 0.5);
+}
+
+.bg-white-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+.border-glass {
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.shadow-xs {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05) !important;
+}
+
+.shadow-text-xs {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.letter-spacing-1 {
+  letter-spacing: 1px;
+}
+
+.x-small {
+  font-size: 0.75rem;
+}
+
+.group-card {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
+  }
+}
+
+.group-card .card-header {
+  &.method-pickup {
+    border-left: 5px solid #ffc107;
+  }
+  &.method-shipping {
+    border-left: 5px solid #0d6efd;
+  }
+}
+
+.product-info {
+    min-width: 0; 
+}
+
+.quantity-control {
+  height: 38px;
+  transition: border-color 0.2s;
+  
+  &:focus-within {
+    border-color: #0d6efd !important;
+  }
+
+  .btn-icon {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #495057;
+    
+    &:hover:not(:disabled) {
+      background-color: #f8f9fa !important;
+      color: #0d6efd;
+    }
+    
+    i { font-size: 1rem; }
+  }
+
+  input[type="number"] {
+    width: 40px;
+    color: #212529;
+    
+    /* Ẩn mũi tên tăng giảm mặc định của trình duyệt */
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    appearance: textfield; // Cho Firefox
+  }
+}
+
+/* Đảm bảo chữ số lượng không bị lệch */
+.hide-arrows {
+  -moz-appearance: textfield;
+}
+
+.product-thumb {
+  transition: all 0.4s ease;
+  img {
+    transition: transform 0.6s ease;
+  }
+}
+
+.cart-row {
+  &:hover {
+    background-color: rgba(13, 110, 253, 0.02) !important;
+    .product-thumb {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      img {
+        transform: scale(1.1);
+      }
+    }
+    .hover-text-primary {
+      color: #0d6efd !important;
+    }
+  }
+}
+
+.quantity-control {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  .btn-white {
+    background-color: white;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transition: all 0.2s ease;
+    &:hover:not(:disabled) {
+      background-color: #0d6efd;
+      color: white;
+      transform: scale(1.1);
+    }
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.summary-card {
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  .card-header {
+    background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+  }
+}
+
+.btn-checkout {
+  position: relative;
+  overflow: hidden;
+  .reflection {
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: rotate(25deg);
+    transition: all 0.8s ease;
+  }
+  &:hover {
+    .reflection {
+      left: 150%;
+    }
+  }
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+.hover-lift {
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+.hover-lift-lg {
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(13, 110, 253, 0.3) !important;
+  }
+}
+
+.hover-shake {
+  &:hover {
+    animation: shake 0.5s ease;
+  }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+
+.text-price {
+  font-family: 'Outfit', 'Inter', sans-serif;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.empty-cart-content {
+  .empty-cart-icon {
+    animation: float 3s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Custom Scrollbar for group cards */
+table {
+    table-layout: fixed; 
+    width: 100%;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #dee2e6;
+  border-radius: 10px;
+}
+.table-responsive::-webkit-scrollbar-track {
+  background: transparent;
+}

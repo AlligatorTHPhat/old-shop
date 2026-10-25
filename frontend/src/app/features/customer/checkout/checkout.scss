@@ -1,0 +1,144 @@
+.checkout-wrapper {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.bg-light-soft {
+  background-color: rgba(248, 249, 250, 0.5);
+}
+
+.shadow-xs {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05) !important;
+}
+
+.shadow-text-xs {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.letter-spacing-1 {
+  letter-spacing: 1px;
+}
+
+.x-small {
+  font-size: 0.75rem;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.address-item, .payment-item {
+  border: 1px solid #dee2e6;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  
+  &:hover {
+    border-color: #0d6efd;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  &.border-primary {
+    border-width: 2px !important;
+  }
+  
+  &.border-warning {
+    border-width: 2px !important;
+  }
+}
+
+.summary-card {
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  .card-header {
+    background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+  }
+}
+
+.btn-checkout {
+  position: relative;
+  overflow: hidden;
+  .reflection {
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: rotate(25deg);
+    transition: all 0.8s ease;
+  }
+  &:hover {
+    .reflection {
+      left: 150%;
+    }
+  }
+}
+
+.hover-lift-lg {
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(13, 110, 253, 0.3) !important;
+  }
+}
+
+.text-price {
+  font-family: 'Outfit', 'Inter', sans-serif;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #dee2e6;
+    border-radius: 10px;
+  }
+}
+
+.border-dashed {
+  border-style: dashed !important;
+}
+
+.icon-circle {
+  transition: all 0.3s ease;
+  &:hover {
+    transform: rotate(15deg) scale(1.1);
+  }
+}
+#paypal-button-container {
+  min-height: 150px;
+  margin-top: 15px;
+  z-index: 10;
+}
+
+.fraud-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9); z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(10px);
+}
+.fraud-card {
+  background: white; padding: 40px; border-radius: 15px; text-align: center; max-width: 500px;
+  &.banned { border-top: 10px solid #dc3545; }
+  &.warning { border-top: 10px solid #ffc107; }
+  
+  h1 { font-weight: 800; margin-bottom: 20px; }
+  .icon-danger { font-size: 80px; color: #dc3545; margin-bottom: 20px; }
+  .timer { font-size: 48px; font-weight: bold; color: #ffc107; margin: 20px 0; }
+  .warning-text { color: #666; font-style: italic; margin-top: 10px; }
+}

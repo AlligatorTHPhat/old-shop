@@ -1,0 +1,92 @@
+<div class="container-fluid px-4 py-5">
+  <div class="d-flex align-items-center mb-4">
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center p-4">
+          <div class="position-relative d-inline-block mb-3">
+            <img [src]="getAvatarUrl(userProfile.avatar_url)" (error)="onImageError($event)" 
+                 class="rounded-circle border-4 border-light shadow" 
+                 style="width: 150px; height: 150px; object-fit: cover;">
+            <button class="btn btn-sm btn-primary rounded-circle position-absolute bottom-0 end-0" 
+                    (click)="triggerFileUpload()">
+              <i class="bi bi-camera"></i>
+            </button>
+            <label for="avatarInput" class="visually-hidden">Ảnh đại diện</label>
+            <input type="file" id="avatarInput" hidden (change)="onFileSelected($event)">
+          </div>
+          <h4 class="fw-bold mb-1">{{ userProfile.full_name }}</h4>
+          <p class="text-muted small mb-3">Quyền hạn: Quản trị viên</p>
+          
+          <div class="row g-2 mt-3 text-start">
+             <h5 class="card-title mb-3 fw-bold"><i class="bi bi-shield-lock me-2"></i>Bảo mật tài khoản</h5>
+          <p class="text-muted small mb-3">Bạn nên thay đổi mật khẩu định kỳ để đảm bảo an toàn cho quyền quản trị.</p>
+          
+          <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#passForm">
+            <i class="bi bi-key me-2"></i>Đổi mật khẩu truy cập
+          </button>
+
+          <div class="collapse mt-3" id="passForm">
+            <form (ngSubmit)="changePassword()" class="bg-light p-3 rounded">
+               <div class="row g-2">
+                 <label for="profile-currentpassword" class="visually-hidden">Mật khẩu cũ</label>
+                 <div class="col-md-12"> <input id="profile-currentpassword" type="password" class="form-control" placeholder="Mật khẩu cũ" [(ngModel)]="currentPassword" name="cp"></div>
+                 <label for="profile-newpassword" class="visually-hidden">Mật khẩu mới</label>
+                 <div class="col-md-6"> <input id="profile-newpassword" type="password" class="form-control" placeholder="Mật khẩu mới" [(ngModel)]="newPassword" name="np"></div>
+                 <label for="profile-confirmpassword" class="visually-hidden">Xác nhận</label>
+                 <div class="col-md-6"> <input id="profile-confirmpassword" type="password" class="form-control" placeholder="Xác nhận" [(ngModel)]="confirmPassword" name="conf"></div>
+               </div>
+               <button type="submit" class="btn btn-sm btn-primary mt-2">Xác nhận</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+          <h5 class="card-title mb-4 fw-bold"><i class="bi bi-person me-2"></i>Thông tin cơ bản</h5>
+          <form (ngSubmit)="saveChanges()">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="profile-username" class="form-label small text-muted">Tên tài khoản</label>
+                <input id="profile-username" type="text" class="form-control bg-light" [value]="userProfile.username" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="profile-full-name" class="form-label small text-muted">Họ và tên</label>
+                <input id="profile-full-name" type="text" class="form-control" [(ngModel)]="userProfile.full_name" name="fullName">
+              </div>
+              <div class="col-md-6">
+                <label for="profile-email" class="form-label small text-muted">Email liên lạc</label>
+                <input id="profile-email" type="email" class="form-control" [(ngModel)]="userProfile.email" name="email">
+              </div>
+              <div class="col-md-6">
+                <label for="profile-phone-number" class="form-label small text-muted">Số điện thoại</label>
+                <input id="profile-phone-number" type="text" class="form-control" [(ngModel)]="userProfile.phone_number" name="phone">
+              </div>
+              <div class="col-12">
+                <label for="profile-address" class="form-label small text-muted">Địa chỉ hiện tại</label>
+                <textarea id="profile-address" class="form-control" [(ngModel)]="userProfile.address" name="address" rows="2"></textarea>
+              </div>
+            </div>
+            <div class="mt-4 text-end">
+              <button type="submit" class="btn btn-primary px-4">Lưu thay đổi</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="alert alert-info mt-3 small">
+            <i class="bi bi-info-circle me-2"></i> Mọi hành động của Quản trị viên đều được lưu log hệ thống để đảm bảo tính minh bạch.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,114 @@
+/* BỌC TOÀN BỘ COMPONENT ĐỂ ÉP SÁNG */
+.prod-light-theme {
+  padding: 1.5rem;
+  background-color: #f4f7f6;
+  min-height: 100vh;
+  
+  color: #212529 !important;
+  .bg-white { background-color: #ffffff !important; }
+  .text-dark { color: #212529 !important; }
+  .text-muted { color: #6c757d !important; }
+  
+  /* Cứu cánh cho hàm Math.min trong template */
+  ::ng-deep .math-min { display: inline; }
+
+  /* TABS */
+  .custom-tabs {
+    border-bottom: 2px solid #e9ecef;
+    .nav-link {
+      color: #6c757d !important;
+      border: none !important;
+      background: transparent !important;
+      padding: 1rem 1.5rem;
+      font-size: 1.05rem;
+      border-bottom: 3px solid transparent !important;
+
+      &:hover:not(.active) {
+        color: #0d6efd !important;
+        background: rgba(13, 110, 253, 0.05) !important;
+      }
+
+      &.active {
+        color: #0d6efd !important;
+        border-bottom: 3px solid #0d6efd !important;
+      }
+    }
+  }
+
+  /* BẢNG */
+  .custom-light-table {
+    --bs-table-bg: transparent;
+    --bs-table-color: #212529;
+    
+    th {
+      background-color: #f8f9fa !important;
+      color: #495057 !important;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #dee2e6 !important;
+      padding: 1.2rem 1rem;
+    }
+    
+    td {
+      padding: 1.2rem 1rem;
+      color: #212529 !important;
+      border-bottom: 1px solid #f1f3f5 !important;
+      background-color: #ffffff !important;
+    }
+
+    tbody tr:hover td {
+      background-color: #f8f9fa !important;
+    }
+  }
+
+  /* NÚT THAO TÁC */
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+
+    .btn-action {
+      height: 34px;
+      width: 34px; /* Icon vuông vức đẹp */
+      padding: 0;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+
+      &.btn-view { background: #e0f2fe !important; color: #0284c7 !important; &:hover { background: #0ea5e9 !important; color: white !important; } }
+      &.btn-approve { background: #d1e7dd !important; color: #0f5132 !important; &:hover { background: #198754 !important; color: white !important; } }
+      &.btn-reject { background: #f8d7da !important; color: #dc3545 !important; &:hover { background: #dc3545 !important; color: white !important; } }
+      &.btn-warn { background: #fff3cd !important; color: #856404 !important; &:hover { background: #ffc107 !important; color: #000 !important; } }
+    }
+  }
+
+  /* PHÂN TRANG SỐ */
+  .custom-pagination {
+    gap: 0.25rem;
+    .page-item {
+      .page-link {
+        border: 1px solid transparent; color: #495057; background-color: #f8f9fa;
+        border-radius: 8px; font-weight: 600; padding: 0.4rem 0.8rem; cursor: pointer;
+        &:hover { background-color: #e9ecef; color: #0d6efd; }
+      }
+      &.active .page-link { background-color: #0d6efd; color: white; box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2); }
+      &.disabled .page-link { background-color: transparent; color: #adb5bd; cursor: not-allowed; }
+    }
+  }
+}
+
+/* MODAL ÉP SÁNG */
+.modal-light-override {
+  background-color: #ffffff !important; border-radius: 16px !important;
+  .modal-header, .modal-footer { background-color: #ffffff !important; border-color: #dee2e6 !important; }
+  .form-control {
+    background-color: #ffffff !important; color: #212529 !important; border: 1px solid #ced4da !important; font-weight: 500;
+    &:focus { border-color: #86b7fe !important; box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important; }
+  }
+}

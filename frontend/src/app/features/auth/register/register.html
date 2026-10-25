@@ -1,0 +1,80 @@
+<div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg border-0">
+      
+      <div class="modal-header text-white" style="background: linear-gradient(90deg, #0d6efd, #0b5ed7);">
+        <h5 class="modal-title fw-bold">
+            <i class="bi bi-person-plus-fill me-2"></i> Đăng ký tài khoản
+        </h5>
+        <button type="button" #closeButton class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="modal-body p-4">
+          
+          <div *ngIf="message" class="alert d-flex align-items-center shadow-sm mb-4" 
+               [ngClass]="message.type === 'success' ? 'alert-success' : 'alert-danger'" role="alert">
+            <i class="bi me-2" [ngClass]="message.type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'"></i>
+            <div>{{ message.text }}</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="register-username" class="form-label">Tên đăng nhập</label>
+                <input id="register-username" type="text" class="form-control" formControlName="username" placeholder="vd: dattran9x">
+                <div class="text-danger small mt-1" *ngIf="registerForm.get('username')?.touched && registerForm.get('username')?.errors?.['required']">
+                  Tên đăng nhập không được để trống.
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="register-full-name" class="form-label">Họ và tên</label>
+                <input id="register-full-name" type="text" class="form-control" formControlName="full_name" placeholder="vd: Trần Hoàng Đạt">
+              </div>
+
+              <div class="mb-3">
+                <label for="register-email" class="form-label">Email</label>
+                <input id="register-email" type="email" class="form-control" formControlName="email" placeholder="vd: example@gmail.com">
+                <div class="text-danger small mt-1" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']">
+                  Email không đúng định dạng.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="register-password" class="form-label">Mật khẩu</label>
+                <input id="register-password" type="password" class="form-control" formControlName="password" placeholder="Tối thiểu 6 ký tự">
+              </div>
+
+              <div class="mb-3">
+                <label for="register-confirmpassword" class="form-label">Nhập lại mật khẩu</label>
+                <input id="register-confirmpassword" type="password" class="form-control" formControlName="confirmPassword" placeholder="Nhập lại mật khẩu">
+                <small class="text-danger mt-1" *ngIf="registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.dirty">
+                  Mật khẩu không khớp!
+                </small>
+              </div>
+
+              <div class="mb-3">
+                <label for="register-phone-number" class="form-label">Số điện thoại</label>
+                <input id="register-phone-number" type="tel" class="form-control" formControlName="phone_number" placeholder="0901234567">
+                <div class="text-danger small mt-1" *ngIf="registerForm.get('phone_number')?.touched && registerForm.get('phone_number')?.invalid">
+                  Vui lòng nhập từ 9-10 chữ số.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer border-0 pb-4 px-4">
+            <button type="submit" class="btn btn-primary px-4" [disabled]="registerForm.invalid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ isLoading ? 'Đang xử lý...' : 'Đăng ký ngay' }}
+            </button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

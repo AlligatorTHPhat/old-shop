@@ -1,0 +1,18 @@
+<div style="font-family:Arial,sans-serif;font-size:14px;color:#202124;max-width:720px">
+  <h2 style="margin:0 0 12px"><?= tickets.length ?> yêu cầu đang chờ quá 24 giờ</h2>
+  <table cellpadding="6" style="border-collapse:collapse;width:100%;border:1px solid #dadce0">
+    <tr style="background:#f1f3f4;text-align:left">
+      <th>Mã</th><th>Nhận lúc</th><th>Khách hàng</th><th>Chủ đề</th>
+    </tr>
+    <? tickets.forEach(function (t) { ?>
+    <tr style="border-top:1px solid #dadce0">
+      <td><b><?= t.ticketId ?></b></td>
+      <td><?= Utilities.formatDate(new Date(t.receivedAt), Session.getScriptTimeZone(), 'dd/MM HH:mm') ?></td>
+      <td><?= t.name ?><br><span style="color:#5f6368"><?= t.email ?></span></td>
+      <td><?= t.subject ?></td>
+    </tr>
+    <? }); ?>
+  </table>
+  <p><a href="<?= sheetUrl ?>">Mở bảng theo dõi</a> và chuyển trạng thái sang IN_PROGRESS khi bắt đầu xử lý.</p>
+  <p style="color:#5f6368;font-size:12px"><?= shopName ?> Helpdesk</p>
+</div>

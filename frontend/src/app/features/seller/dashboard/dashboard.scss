@@ -1,0 +1,105 @@
+.seller-dashboard-wrapper {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 2rem;
+
+  h1 { color: #212529 !important; }
+  .text-muted { color: #6c757d !important; }
+
+  /* BADGE & NÚT REFRESH TRÊN HEADER */
+  .status-badge {
+    background: #d1e7dd;
+    color: #0f5132;
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid #badbcc;
+  }
+
+  .btn-refresh {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s ease;
+    background: white;
+    color: #495057;
+    &:hover { transform: rotate(180deg); color: #0d6efd; border-color: #0d6efd; }
+  }
+
+  /* THẺ THỐNG KÊ (STAT CARDS) */
+  .stat-card {
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border: 1px solid rgba(0,0,0,0.05) !important;
+    border-radius: 16px;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 1rem 3rem rgba(0,0,0,0.1) !important;
+    }
+
+    .icon-box {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-size: 1.5rem;
+    }
+  }
+
+  /* MÀU NỀN ICON */
+  .bg-primary-light { background: #e8f0fe; }
+  .bg-success-light { background: #e6f4ea; }
+  .bg-warning-light { background: #fef7e0; }
+  .bg-danger-light { background: #fce8e6; }
+  
+  .text-primary { color: #4285F4 !important; }
+  .text-success { color: #34A853 !important; }
+  .text-warning { color: #FBBC05 !important; }
+  .text-danger { color: #EA4335 !important; }
+
+  /* TOGGLE BIỂU ĐỒ */
+  .btn-group {
+    .btn-white { background: white; color: #4285F4; }
+    .btn-transparent { background: transparent; color: #6c757d; }
+    .transition-all { transition: all 0.3s ease; }
+  }
+
+  /* TRUY CẬP NHANH (QUICK LINKS) */
+  .quick-link-item {
+    background: #ffffff;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    
+    .quick-icon-sm {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      transition: 0.3s;
+    }
+
+    &:hover {
+      border-color: #4285F4 !important;
+      box-shadow: 0 4px 15px rgba(66, 133, 244, 0.1);
+      transform: translateY(-2px);
+      
+      .quick-icon-sm {
+        transform: scale(1.1);
+      }
+      h6 { color: #4285F4 !important; }
+    }
+  }
+
+  /* BỎ NỀN TRONG SUỐT CHO LIST GROUP */
+  .list-group-item {
+    background: transparent;
+  }
+}

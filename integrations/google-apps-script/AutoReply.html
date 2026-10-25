@@ -1,0 +1,15 @@
+<div style="font-family:Arial,sans-serif;font-size:14px;color:#202124;max-width:600px">
+  <p>Chào <?= m.fullName ?>,</p>
+  <p>
+    Cảm ơn bạn đã liên hệ với <b><?= shopName ?></b>. Chúng tôi đã nhận được yêu cầu của bạn với mã
+    <b style="color:#1a73e8"><?= ticketId ?></b> và sẽ phản hồi trong vòng 24 giờ làm việc.
+  </p>
+  <p style="color:#5f6368">Nội dung bạn đã gửi:</p>
+  <blockquote style="white-space:pre-wrap;border-left:3px solid #dadce0;margin:0;padding:8px 12px;color:#3c4043"><?= m.message ?></blockquote>
+  <p>Vui lòng giữ mã yêu cầu khi trao đổi thêm để chúng tôi hỗ trợ nhanh hơn.</p>
+  <p>
+    Trân trọng,<br>
+    Đội ngũ <?= shopName ?><? if (shopUrl) { ?><br><a href="<?= shopUrl ?>"><?= shopUrl ?></a><? } ?>
+  </p>
+  <p style="color:#9aa0a6;font-size:12px">Đây là email tự động, vui lòng không trả lời trực tiếp.</p>
+</div>

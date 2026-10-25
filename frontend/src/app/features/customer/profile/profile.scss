@@ -1,0 +1,10 @@
+.card {
+  transition: transform 0.2s;
+  &:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;
+  }
+}
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}

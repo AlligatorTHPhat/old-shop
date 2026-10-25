@@ -1,0 +1,54 @@
+# Secrets & local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.clasp.json
+.clasprc.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Node / Angular
+node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+
+# Runtime data
+backend/media/
+backend/ml_artifacts/
+*.joblib
+*.log
+*.db
+*.sqlite3
+*.dump
+*.sql.gz
+deploy/backups/
+deploy/ml/
+deploy/.log-stack
+deploy/.deploy-history
+
+# Office documents, reports and local notes never belong in the repo
+*.docx
+*.doc
+*.pptx
+*.xlsx
+*.pdf
+*.local.md
+
+# IDE / OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

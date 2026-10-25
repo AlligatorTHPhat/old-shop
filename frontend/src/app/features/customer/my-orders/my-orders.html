@@ -1,0 +1,92 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold"><i class="bi bi-box-seam me-2"></i>Lịch sử mua hàng</h2>
+    <span class="badge bg-secondary">Tổng số: {{ orders().length }} đơn hàng</span>
+  </div>
+
+  <div class="order-list">
+    <div *ngFor="let order of paginatedOrders()" class="card mb-3 shadow-sm border-0 overflow-hidden">
+      <div class="card-header bg-light d-flex justify-content-between align-items-center py-3">
+        <div>
+          <span class="fw-bold text-primary">Hóa đơn #{{ order.order_id }}</span>
+          <small class="text-muted ms-3">Ngày đặt: {{ order.order_date | date:'dd/MM/yyyy' }}</small>
+        </div>
+        <span [class]="getStatusInfo(order.order_status).class + ' badge p-2'">
+          {{ getStatusInfo(order.order_status).label }}
+        </span>
+      </div>
+      
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <p class="mb-1"><i class="bi bi-geo-alt me-2"></i>Địa chỉ: {{ order.shipping_address }}</p>
+            <p class="mb-0 fw-bold text-danger">Tổng tiền: {{ order.final_amount | currency:'VND':'symbol':'1.0-0' }}</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <button class="btn btn-outline-primary btn-sm me-2" (click)="viewDetail(order.order_id)">
+              Chi tiết
+            </button>
+            <button *ngIf="order.order_status === 0" class="btn btn-danger btn-sm" (click)="cancelOrder(order.order_id)">
+              Hủy đơn
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav *ngIf="totalPages() > 1" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage() === 1">
+        <a class="page-link" (click)="setPage(currentPage() - 1)" style="cursor: pointer;">Trước</a>
+      </li>
+      <li *ngFor="let p of [].constructor(totalPages()); let i = index" 
+          class="page-item" [class.active]="currentPage() === i + 1">
+        <a class="page-link" (click)="setPage(i + 1)" style="cursor: pointer;">{{ i + 1 }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+        <a class="page-link" (click)="setPage(currentPage() + 1)" style="cursor: pointer;">Sau</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div *ngIf="orders().length === 0" class="text-center py-5">
+    <i class="bi bi-cart-x fs-1 text-muted"></i>
+    <p class="mt-3">Ông chưa mua gì cả. Qua <a routerLink="/shop">Cửa hàng</a> ủng hộ đi ný!</p>
+  </div>
+</div>
+
+<div class="modal fade" [class.show]="showDetailModal()" [style.display]="showDetailModal() ? 'block' : 'none'" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title fw-bold">Chi tiết đơn hàng #{{ selectedOrder()?.order_id }}</h5>
+        <button type="button" class="btn-close" (click)="showDetailModal.set(false)"></button>
+      </div>
+      <div class="modal-body p-4" *ngIf="selectedOrder()">
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Sản phẩm</th>
+              <th class="text-center">Đơn giá</th>
+              <th class="text-center">Số lượng</th>
+              <th class="text-end">Thành tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of selectedOrder().order_details">
+              <td>{{ item.product.title }}</td>
+              <td class="text-center">{{ item.price_at_purchase | currency:'VND':'':'1.0-0' }}</td>
+              <td class="text-center">{{ item.quantity }}</td>
+              <td class="text-end fw-bold">{{ item.subtotal | currency:'VND':'':'1.0-0' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-end mt-3">
+          <h5>Tổng cộng: <span class="text-danger fw-bold">{{ selectedOrder().final_amount | currency:'VND':'symbol':'1.0-0' }}</span></h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="showDetailModal()"></div>

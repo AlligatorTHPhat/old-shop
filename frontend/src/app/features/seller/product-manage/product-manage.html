@@ -1,0 +1,297 @@
+<div class="seller-content-wrapper seller-light-theme delay-animation">
+  <!-- Header -->
+  <div class="header-section shadow-sm border">
+    <div class="header-info">
+      <h2 class="fw-bold text-dark">Quản lý Sản phẩm</h2>
+      <p class="text-muted mb-0">Theo dõi, chỉnh sửa và đăng bán sản phẩm của bạn. Hiện có <strong class="text-primary">{{ totalItems }}</strong> sản phẩm trong mục này.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn custom-btn-primary shadow-sm px-4 py-2" (click)="openModal()">
+        <i class="bi bi-plus-lg me-2"></i> Đăng sản phẩm mới
+      </button>
+    </div>
+  </div>
+
+  <!-- Bảng Dữ Liệu -->
+  <div class="table-container shadow-sm border bg-white position-relative">
+    
+    <ul class="nav nav-tabs custom-tabs">
+      <li class="nav-item">
+        <a class="nav-link fw-bold text-uppercase" [class.active]="currentStatus === 0" (click)="switchTab(0)">
+          <i class="bi bi-clock-history me-1"></i> Chờ duyệt
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fw-bold text-uppercase" [class.active]="currentStatus === 1" (click)="switchTab(1)">
+          <i class="bi bi-check-circle me-1"></i> Đang bán
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fw-bold text-uppercase" [class.active]="currentStatus === 2" (click)="switchTab(2)">
+          <i class="bi bi-x-circle me-1"></i> Bị từ chối
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fw-bold text-uppercase" [class.active]="currentStatus === 3" (click)="switchTab(3)">
+          <i class="bi bi-archive me-1"></i> Đã thu hồi
+        </a>
+      </li>
+    </ul>
+
+    <div class="table-responsive">
+      <!-- BỎ ĐI table-layout: fixed ĐỂ CHỮ KHÔNG BỊ ÉP -->
+      <table class="table custom-light-table align-middle mb-0">
+        <thead>
+          <tr>
+            <th width="40%">Sản phẩm</th>
+            <th width="15%">Giá bán</th>
+            <th width="20%">Trạng thái</th>
+            <th width="25%" class="text-end">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of pagedProducts">
+            <td>
+              <div class="d-flex align-items-center gap-3">
+                <img [src]="getPrimaryImage(p)" class="rounded shadow-sm border flex-shrink-0" style="width: 55px; height: 55px; object-fit: cover;" onerror="this.src='assets/placeholder.jpg'" />
+                <div class="overflow-hidden">
+                  <div class="fw-bold text-dark fs-6 text-wrap" style="word-break: break-word;">
+                    {{ p.title }}
+                  </div>
+                  <div class="text-muted small">Kho: {{ p.quantity || 0 }} SP</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="fw-bold text-success fs-6 text-nowrap">{{ p.price | number:'1.0-0' }} đ</span>
+            </td>
+            <td>
+              <span [class]="getStatusBadge(p.status).class">
+                {{ getStatusBadge(p.status).label }}
+              </span>
+              <!-- Thêm rớt dòng an toàn cho Lý do từ chối -->
+              <div *ngIf="p.status === 2" class="text-danger small mt-2 fw-medium text-wrap" style="word-break: break-word; line-height: 1.4;">
+                <i class="bi bi-exclamation-triangle-fill me-1"></i>Lý do: {{ p.reject_reason || 'Không rõ' }}
+              </div>
+            </td>
+            <td class="text-end">
+              <div class="action-buttons">
+                <!-- Nút Lý Do Đỏ (Sáng tạo từ chối) -->
+                <button *ngIf="p.status === 2" class="btn btn-action btn-danger-custom" (click)="viewRejectReason(p)">
+                  <i class="bi bi-chat-left-text me-1"></i> Lý do
+                </button>
+
+                <button class="btn btn-action btn-edit" (click)="openModal(p)" title="Chỉnh sửa">
+                  <i class="bi bi-pencil-square me-1"></i> Sửa
+                </button>
+                <button *ngIf="p.status === 0 || p.status === 1" class="btn btn-action btn-warn" (click)="openConfirmModal(p, 3)">
+                  <i class="bi bi-arrow-down-circle me-1"></i> Thu hồi
+                </button>
+                <button *ngIf="p.status === 3" class="btn btn-action btn-success-custom" (click)="openConfirmModal(p, 0)">
+                  <i class="bi bi-arrow-up-circle me-1"></i> Đăng lại
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="filteredProducts.length === 0">
+            <td colspan="4" class="text-center py-5 text-muted">
+              <i class="bi bi-box-seam fs-1 d-block mb-3 opacity-25"></i>
+              <h6 class="fw-bold text-dark">Chưa có sản phẩm</h6>
+              <p>Không có sản phẩm nào thuộc trạng thái này.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phân trang -->
+    <div class="table-footer" *ngIf="filteredProducts.length > pageSize">
+      <div class="info-text">
+        Hiển thị <strong class="text-primary">{{ (currentPage - 1) * pageSize + 1 }} - {{ Math.min(currentPage * pageSize, filteredProducts.length) }}</strong> 
+        trên tổng <strong class="text-dark">{{ filteredProducts.length }}</strong> sản phẩm
+      </div>
+      
+      <ul class="pagination pagination-sm mb-0 custom-pagination">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="goToPage(currentPage - 1)"><i class="bi bi-chevron-left"></i></button>
+        </li>
+        <ng-container *ngIf="visiblePages[0] > 1">
+          <li class="page-item"><button class="page-link" (click)="goToPage(1)">1</button></li>
+          <li class="page-item disabled"><span class="page-link">...</span></li>
+        </ng-container>
+        <li class="page-item" *ngFor="let page of visiblePages" [class.active]="page === currentPage">
+          <button class="page-link" (click)="goToPage(page)">{{ page }}</button>
+        </li>
+        <ng-container *ngIf="visiblePages[visiblePages.length - 1] < totalPages">
+          <li class="page-item disabled"><span class="page-link">...</span></li>
+          <li class="page-item"><button class="page-link" (click)="goToPage(totalPages)">{{ totalPages }}</button></li>
+        </ng-container>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="goToPage(currentPage + 1)"><i class="bi bi-chevron-right"></i></button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Modal Đăng / Sửa Sản phẩm -->
+  <div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1" style="background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content shadow-lg border-0 modal-light-override">
+        <div class="modal-header border-bottom bg-white">
+          <h5 class="modal-title fw-bold text-dark">
+            <i class="bi" [class.bi-pencil-square]="isEditMode" [class.bi-plus-circle]="!isEditMode" class="text-primary me-2"></i>
+            {{ isEditMode ? 'Cập nhật sản phẩm' : 'Đăng sản phẩm mới' }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        
+        <div class="modal-body p-4 bg-light">
+          <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            
+            <div class="card mb-4 border-0 shadow-sm bg-white">
+              <div class="card-body p-4">
+                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-1-circle-fill me-2"></i>Thông tin cơ bản</h6>
+                <div class="row g-4">
+                  <div class="col-12">
+                    <label for="product-manage-title" class="form-label text-muted fw-bold small text-uppercase">Tên Sản Phẩm *</label>
+                    <input id="product-manage-title" class="form-control" formControlName="title" placeholder="Ví dụ: Áo thun nam...">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="product-manage-category-id" class="form-label text-muted fw-bold small text-uppercase">Danh mục *</label>
+                    <select id="product-manage-category-id" class="form-select" formControlName="category_id">
+                      <option value="" disabled selected>--- Chọn danh mục ---</option>
+                      <option *ngFor="let cat of (categories || [])" [value]="cat.category_id">{{cat.name}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="fileUpload" class="form-label text-muted fw-bold small text-uppercase">Hình ảnh (Nhiều ảnh) *</label>
+                    <input type="file" id="fileUpload" class="form-control" (change)="onFileSelected($event)" multiple accept="image/*">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card mb-4 border-0 shadow-sm bg-white">
+              <div class="card-body p-4">
+                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-2-circle-fill me-2"></i>Chi tiết bán hàng</h6>
+                <div class="row g-4">
+                  <div class="col-12">
+                    <label for="product-manage-description" class="form-label text-muted fw-bold small text-uppercase">Mô tả sản phẩm</label>
+                    <textarea id="product-manage-description" class="form-control" rows="4" formControlName="description" placeholder="Mô tả chất liệu, xuất xứ, tính năng..."></textarea>
+                  </div>
+                  <div class="col-12">
+                    <label for="product-manage-video-url" class="form-label text-muted fw-bold small text-uppercase">Video URL (Tùy chọn)</label>
+                    <input id="product-manage-video-url" type="text" class="form-control" formControlName="video_url" placeholder="Nhập link Youtube nếu có">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="product-manage-price" class="form-label text-muted fw-bold small text-uppercase">Giá bán (VNĐ) *</label>
+                    <div class="input-group">
+                      <input id="product-manage-price" type="text" class="form-control" [value]="displayPrice" (input)="onPriceInput($event)" placeholder="0">
+                      <span class="input-group-text bg-light fw-bold text-muted">₫</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="product-manage-quantity" class="form-label text-muted fw-bold small text-uppercase">Số lượng kho *</label>
+                    <input id="product-manage-quantity" type="text" class="form-control" formControlName="quantity" (input)="onNumericInput($event, 'quantity')" placeholder="0">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card border-0 shadow-sm bg-white">
+              <div class="card-body p-4">
+                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-3-circle-fill me-2"></i>Thông số vận chuyển</h6>
+                <div class="row g-4">
+                  <div class="col-md-4">
+                    <label for="product-manage-weight-grams" class="form-label text-muted fw-bold small text-uppercase">Trọng lượng (Gram)</label>
+                    <input id="product-manage-weight-grams" type="text" class="form-control" formControlName="weight_grams" (input)="onNumericInput($event, 'weight_grams')" placeholder="VD: 500">
+                  </div>
+                  <div class="col-md-8">
+                    <label for="product-manage-length" class="form-label text-muted fw-bold small text-uppercase">Kích thước Đóng gói (Dài x Rộng x Cao)</label>
+                    <div class="input-group">
+                      <input id="product-manage-length" type="text" class="form-control text-center" formControlName="d" (input)="onNumericInput($event, 'd')" placeholder="D">
+                      <span class="input-group-text bg-light text-muted">x</span>
+                      <label for="product-manage-width" class="visually-hidden">Chiều rộng (cm)</label>
+                      <input id="product-manage-width" type="text" class="form-control text-center" formControlName="r" (input)="onNumericInput($event, 'r')" placeholder="R">
+                      <span class="input-group-text bg-light text-muted">x</span>
+                      <label for="product-manage-height" class="visually-hidden">Chiều cao (cm)</label>
+                      <input id="product-manage-height" type="text" class="form-control text-center" formControlName="c" (input)="onNumericInput($event, 'c')" placeholder="C">
+                      <span class="input-group-text bg-light fw-bold text-muted">cm</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer border-top bg-white pt-3 pb-3 px-4">
+          <button class="btn btn-outline-secondary px-4 fw-bold" (click)="closeModal()">Hủy bỏ</button>
+          <button class="btn custom-btn-primary px-5 shadow-sm fw-bold" (click)="onSubmit()" [disabled]="isSubmitting">
+            <i class="bi" [class.bi-cloud-arrow-up]="!isSubmitting" [class.spinner-border]="isSubmitting" [class.spinner-border-sm]="isSubmitting"></i> 
+            {{ isSubmitting ? 'Đang lưu...' : 'Lưu Sản Phẩm' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Xác Nhận Thu Hồi / Đăng Lại -->
+  <div class="modal fade" [class.show]="showConfirmModal" [style.display]="showConfirmModal ? 'block' : 'none'" tabindex="-1" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg modal-light-override">
+        <div class="modal-header border-0 pb-0 pt-4 px-4">
+          <h5 class="modal-title fw-bold text-dark d-flex align-items-center">
+            <i class="bi" [class]="confirmTargetStatus === 3 ? 'bi-exclamation-triangle-fill text-warning' : 'bi-info-circle-fill text-primary'" style="font-size: 1.8rem; margin-right: 12px;"></i>
+            {{ confirmTargetStatus === 3 ? 'Xác nhận Thu hồi' : 'Xác nhận Đăng lại' }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeConfirmModal()"></button>
+        </div>
+        <div class="modal-body px-4 py-3">
+          <p class="mb-0 text-dark fw-medium" style="font-size: 1.1rem;">
+            Bạn có chắc chắn muốn {{ confirmTargetStatus === 3 ? 'thu hồi' : 'đăng bán lại' }} sản phẩm <strong class="text-primary">{{ confirmProduct?.title }}</strong> không?
+          </p>
+          <p class="text-muted small mt-2 mb-0" *ngIf="confirmTargetStatus === 3">Sản phẩm thu hồi sẽ bị gỡ khỏi trang bán hàng và chuyển vào tab "Đã thu hồi".</p>
+          <p class="text-muted small mt-2 mb-0" *ngIf="confirmTargetStatus === 0">Sản phẩm sẽ được gửi lại cho đội ngũ kiểm duyệt trước khi hiển thị trên chợ.</p>
+        </div>
+        <div class="modal-footer border-0 p-4 pt-2">
+          <button type="button" class="btn btn-outline-secondary px-4 fw-bold" (click)="closeConfirmModal()">Hủy bỏ</button>
+          <button type="button" class="btn px-4 text-white shadow-sm fw-bold" 
+                  [style.background]="confirmTargetStatus === 3 ? '#ffc107' : '#0d6efd'" 
+                  [disabled]="isUpdatingStatus"
+                  (click)="confirmUpdateStatus()">
+            <i class="bi" [class.spinner-border]="isUpdatingStatus" [class.spinner-border-sm]="isUpdatingStatus"></i>
+            {{ isUpdatingStatus ? 'Đang xử lý...' : 'Xác nhận' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Xem Lý Do Từ Chối (Với word-break) -->
+  <div class="modal fade" [class.show]="showRejectModal" [style.display]="showRejectModal ? 'block' : 'none'" tabindex="-1" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg modal-light-override">
+        <div class="modal-header border-bottom bg-white">
+          <h5 class="modal-title fw-bold text-danger d-flex align-items-center">
+            <i class="bi bi-shield-x me-2 fs-4"></i>
+            Lý do từ chối kiểm duyệt
+          </h5>
+          <button type="button" class="btn-close" (click)="closeRejectModal()"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="p-3 bg-light border rounded-3 text-dark fw-medium text-wrap" style="line-height: 1.6; word-break: break-word; white-space: pre-wrap;">
+            {{ currentRejectReason }}
+          </div>
+          <p class="text-muted small mt-3 mb-0">
+            <i class="bi bi-info-circle me-1"></i>Vui lòng nhấp vào nút <strong>"Sửa"</strong> để điều chỉnh lại thông tin cho phù hợp với quy định của sàn.
+          </p>
+        </div>
+        <div class="modal-footer border-0 pt-2 pb-3 px-4 bg-white">
+          <button type="button" class="btn btn-outline-secondary px-4 fw-bold w-100" (click)="closeRejectModal()">Đã hiểu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

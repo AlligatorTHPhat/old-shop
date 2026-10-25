@@ -1,0 +1,98 @@
+
+<section class="contact-section">
+  <div class="header">
+    <h2>Liên Hệ Với Chúng Tôi</h2>
+    <p>Chúng tôi luôn sẵn sàng hỗ trợ bạn! Hãy cho chúng tôi biết bạn đang cần gì?</p>
+  </div>
+
+  <div class="contact-container">
+    <!-- FORM -->
+    <div class="contact-form">
+      <span class="small-title">Kết Nối Ngay</span>
+
+      <h3>Gửi Tin Nhắn Cho Chợ Cũ</h3>
+
+      <p class="desc">
+        Nếu bạn có thắc mắc về tình trạng sản phẩm, chính sách ký gửi hoặc cần hỗ trợ về đơn hàng,
+        hãy để lại thông tin. Đội ngũ sẽ hỗ trợ phản hồi bạn trong vòng 24 giờ làm việc.
+      </p>
+
+      <section class="contact-section">
+        <div class="contact-container">
+          <div class="contact-form">
+            <form (ngSubmit)="sendMessage()">
+              <div class="input-group">
+                <label for="contact-fullname" class="visually-hidden">Họ và tên</label>
+                <input id="contact-fullname" type="text" placeholder="Họ và tên" name="fullName" [(ngModel)]="formData.fullName" required />
+                <label for="contact-email" class="visually-hidden">Email</label>
+                <input id="contact-email" type="email" placeholder="Email" name="email" [(ngModel)]="formData.email" required />
+              </div>
+              
+              <div class="input-group">
+                <label for="contact-phone" class="visually-hidden">Số điện thoại</label>
+                <input id="contact-phone" type="text" placeholder="Số điện thoại" name="phone" [(ngModel)]="formData.phone" />
+                <label for="contact-subject" class="visually-hidden">Chủ đề</label>
+                <input id="contact-subject" type="text" placeholder="Chủ đề" name="subject" [(ngModel)]="formData.subject" />
+              </div>
+
+              <label for="contact-message" class="visually-hidden">Nội dung</label>
+              <textarea id="contact-message" placeholder="Nội dung" name="message" [(ngModel)]="formData.message" required></textarea>
+
+              <button type="submit" [disabled]="isLoading">
+                <span *ngIf="!isLoading">Gửi Tin Nhắn</span>
+                <span *ngIf="isLoading">Đang xử lý...</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- MAP -->
+    <div class="map-container">
+      <iframe
+        src="https://www.google.com/maps?q=10.761625872616632, 106.68290222740983&output=embed"
+        loading="lazy"
+        allowfullscreen=""
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Bản đồ OldShop"
+      >
+      </iframe>
+    </div>
+  </div>
+
+  <!-- CONTACT INFO -->
+  <div class="contact-info">
+    <div class="info-card">
+      <div class="icon">
+        <i class="fa-solid fa-location-dot"></i>
+      </div>
+      <h4>Văn Phòng</h4>
+      <p>{{ contactInfo.office }}</p>
+    </div>
+
+    <div class="info-card">
+      <div class="icon">
+        <i class="fa-solid fa-envelope"></i>
+      </div>
+      <h4>Gửi Mail</h4>
+      <p>{{ contactInfo.email }}</p>
+    </div>
+
+    <div class="info-card">
+      <div class="icon">
+        <i class="fa-solid fa-phone"></i>
+      </div>
+      <h4>Điện Thoại</h4>
+      <p>{{ contactInfo.phone }}</p>
+    </div>
+
+    <div class="info-card">
+      <div class="icon">
+        <i class="fa-brands fa-facebook-messenger"></i>
+      </div>
+      <h4>Hỗ Trợ Online</h4>
+      <p>{{ contactInfo.messenger }}</p>
+    </div>
+  </div>
+</section>

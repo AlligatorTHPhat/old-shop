@@ -1,0 +1,39 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+#globalNotificationModal .modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+#globalNotificationModal .modal-header {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.modal-content {
+  border-radius: 1rem !important;
+  border: none !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.modal-header {
+  border-bottom: 1px solid #f0f0f0 !important;
+  padding: 1.5rem !important;
+}
+
+.modal-body {
+  padding: 1.5rem !important;
+  font-size: 1rem;
+  color: #4a4a4a;
+}
+
+.modal-footer {
+  border-top: none !important;
+  padding: 1.5rem !important;
+}
+
+.modal.fade .modal-dialog {
+  transition: transform 0.2s ease-out;
+}

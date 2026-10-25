@@ -1,0 +1,48 @@
+# Ships the stdout of every container in the `oldshop` compose project to Elasticsearch.
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      templates:
+        - condition:
+            equals:
+              docker.container.labels.com_docker_compose_project: oldshop
+          config:
+            - type: container
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+
+processors:
+  - add_docker_metadata: ~
+  - rename:
+      fields:
+        - from: container.labels.com_docker_compose_service
+          to: service.name
+      ignore_missing: true
+  # Backend and Caddy log JSON: lift their fields (level, request_id, status, duration_ms...) to the top level.
+  - decode_json_fields:
+      when:
+        or:
+          - equals: { service.name: backend }
+          - equals: { service.name: caddy }
+      fields: ["message"]
+      target: ""
+      overwrite_keys: true
+      add_error_key: true
+  - drop_event:
+      when:
+        and:
+          - equals: { service.name: frontend }
+          - contains: { message: "/healthz" }
+  - drop_fields:
+      fields: ["agent.ephemeral_id", "ecs.version", "input.type", "log.offset", "stream"]
+      ignore_missing: true
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: elastic
+  password: ${ELASTIC_PASSWORD}
+
+setup.ilm.enabled: true
+setup.template.enabled: true
+
+logging.level: warning

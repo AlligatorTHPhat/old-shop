@@ -1,0 +1,203 @@
+<!-- ===== HERO SECTION ===== -->
+<header class="hero-header">
+  <div class="hero-background"></div>
+  <div class="hero-overlay"></div>
+
+  <!-- <nav class="navbar navbar-expand-lg navbar-custom w-100">
+    <div class="container"> <a class="navbar-brand" routerLink="/">
+        <i class="fas fa-shopping-bag"></i> <span>Oldshop</span>
+      </a>
+      </div>
+  </nav> -->
+
+  <div class="hero-content">
+    <div class="container text-center"> <div class="row justify-content-center">
+        <div class="col-lg-8 hero-text-box">
+          @if (isLoggedIn()) {
+            <h1 class="hero-title">Chào mừng trở lại,<br> {{ currentUser()?.full_name || currentUser()?.username }}!</h1>
+            <p class="hero-subtitle">Hệ thống đang có 500+ sản phẩm mới phù hợp với bạn.</p>
+            <div class="hero-actions justify-content-center">
+              <a routerLink="/customer/cart" class="btn btn-primary btn-lg">Xem giỏ hàng</a>
+            </div>
+          } @else {
+            <h1 class="hero-title">NÂNG TẦM TRẢI NGHIỆM MUA BÁN ĐỒ CŨ</h1>
+            <p class="hero-subtitle">Chất lượng đảm bảo • Thanh toán an toàn • Giao hàng toàn quốc</p>
+            <div class="hero-actions justify-content-center" *ngIf="!isLoggedIn()">
+              <a routerLink="/shop" class="btn btn-primary btn-lg">Khám phá ngay</a>
+              <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn btn-outline-light btn-lg">Đăng nhập</a>
+            </div>
+            <div class="hero-actions justify-content-center" *ngIf="isLoggedIn()">
+              <a routerLink="/shop" class="btn btn-primary btn-lg">Khám phá ngay</a>
+              <button class="btn btn-outline-light btn-lg" (click)="logoutHero()">Đăng xuất</button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== PRODUCT SHOWCASE SECTION ===== -->
+<section class="showcase-section" id="showcase">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <!-- Product Carousel - Left Column (wider for better visuals) -->
+      <div class="col-lg-8">
+        <div class="carousel-wrapper">
+          <div class="carousel-container">
+            <!-- Product Slides -->
+            @for (image of carouselImages; track image.src; let i = $index) {
+              <div class="carousel-slide" [class.active]="i === currentSlide()">
+                <img 
+                  [src]="image.src" 
+                  [alt]="image.alt" 
+                  class="carousel-image"
+                  loading="lazy">
+              </div>
+            }
+          </div>
+
+          <!-- Navigation Buttons -->
+          <button 
+            class="carousel-btn prev" 
+            (click)="prevSlide()" 
+            aria-label="Sản phẩm trước">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button 
+            class="carousel-btn next" 
+            (click)="nextSlide()" 
+            aria-label="Sản phẩm tiếp theo">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+
+          <!-- Slide Indicators -->
+          <div class="carousel-indicators">
+            @for (image of carouselImages; track image.src; let i = $index) {
+              <button
+                class="indicator-dot"
+                [class.active]="i === currentSlide()"
+                (click)="goToSlide(i)"
+                [attr.aria-label]="'Xem sản phẩm ' + (i + 1)">
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Agent - Right Column (narrower to let carousel breathe) -->
+      <div class="col-lg-4">
+        <div class="agent-container">
+          <!-- Status Indicator -->
+          <div class="online-indicator" [class.online]="isAgentOnline()">
+            <span class="status-dot"></span>
+            <span class="status-text">{{ isAgentOnline() ? 'Đang hoạt động' : 'Offline' }}</span>
+          </div>
+
+          <!-- Agent Avatar -->
+          <div class="agent-avatar-wrapper">
+            <img 
+              src="/assets/images/header-img.png" 
+              alt="Hỗ trợ khách hàng" 
+              class="agent-avatar">
+            <div class="avatar-glow"></div>
+          </div>
+
+          <!-- Chat Message -->
+          <div class="message-bubble">
+            @if (isLoggedIn()) {
+              <p>Xin chào <strong>{{ currentUser()?.full_name || currentUser()?.username }}</strong>, hệ thống đang có <strong>500+ sản phẩm mới</strong> phù hợp với sở thích của bạn. Bạn muốn tìm gì?</p>
+            } @else {
+              <p>Chào mừng bạn đến với <strong>Oldshop</strong>! Đăng nhập để nhận ưu đãi riêng cho bạn và khám phá hàng ngàn sản phẩm chất lượng.</p>
+            }
+            <div class="message-actions">
+              <button routerLink="/shop" class="action-btn">Cửa hàng</button>
+              <button routerLink="/contact" class="action-btn">Hỗ trợ</button>
+            </div>
+          </div>
+
+          <!-- Agent Info -->
+          <div class="agent-info">
+            <h3 class="agent-name">Hỗ trợ Khách hàng</h3>
+            <p class="agent-role">Trợ lý mua sắm thông minh 24/7</p>
+          </div>
+
+          <!-- CTA Section -->
+          <div class="cta-actions">
+            @if (isLoggedIn()) {
+              <button class="btn btn-primary btn-cart" routerLink="/customer/cart">
+                <i class="fas fa-shopping-cart me-2"></i>Giỏ hàng
+              </button>
+              <button class="btn btn-secondary btn-shop" routerLink="/shop">
+                <i class="fas fa-shopping-bag me-2"></i>Mua sắm
+              </button>
+            } @else {
+              <button type="button" class="btn btn-primary btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập
+              </button>
+              <button type="button" class="btn btn-secondary btn-register" data-bs-toggle="modal" data-bs-target="#registerModal">
+                <i class="fas fa-user-plus me-2"></i>Đăng ký
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY CHOOSE US SECTION ===== -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Tại sao chọn Oldshop?</h2>
+      <p class="section-subtitle">Nền tảng thương mại điện tử tin cậy nhất cho hàng đã qua sử dụng</p>
+    </div>
+
+    <div class="row g-5">
+      <!-- Feature 1: Quality Guarantee -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-certificate"></i>
+          </div>
+          <h3 class="feature-title">Chất lượng Đảm bảo</h3>
+          <p class="feature-text">
+            Mỗi sản phẩm được kiểm tra kỹ lưỡng trước khi đưa lên sàn. 
+            Hoàn tiền 100% nếu không như mô tả.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature 2: Safe Payment -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-lock"></i>
+          </div>
+          <h3 class="feature-title">Thanh toán An toàn</h3>
+          <p class="feature-text">
+            Hỗ trợ nhiều phương thức thanh toán. Tiền được giữ an toàn 
+            cho đến khi bạn nhận hàng.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature 3: Fast Shipping -->
+      <div class="col-lg-4 col-md-6">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-truck"></i>
+          </div>
+          <h3 class="feature-title">Giao hàng Toàn quốc</h3>
+          <p class="feature-text">
+            Giao hàng nhanh chóng trên khắp nước. Phí ship hợp lý, 
+            có bảo hiểm đơn hàng.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+

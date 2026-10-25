@@ -1,0 +1,31 @@
+# Direct runtime dependencies. Edit this file, then regenerate the hash-locked file used by Docker/CI:
+#   uv pip compile requirements.txt --universal --python-version 3.13 --generate-hashes -o requirements.lock
+#   uv pip compile requirements-dev.txt --universal --python-version 3.13 --generate-hashes -o requirements-dev.lock
+
+# Web
+fastapi==0.143.0
+uvicorn[standard]==0.54.0
+python-multipart==0.0.32
+httpx==0.28.1
+
+# Settings & validation
+pydantic==2.14.0
+pydantic-settings==2.15.0
+email-validator==2.3.0
+
+# Database
+SQLAlchemy==2.1.4
+psycopg2-binary==2.9.13
+
+# Auth
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1  # passlib 1.7 breaks with bcrypt>=4.1
+
+# Fraud detection (model artifacts are mounted at runtime, see app/services/fraud_detection.py)
+scikit-learn==1.7.1  # must match the version the model was pickled with
+joblib==1.6.0
+numpy==2.5.4
+
+# Observability
+prometheus-fastapi-instrumentator==8.1.0

@@ -1,0 +1,101 @@
+# Production application stack.
+# Always started through deploy/scripts/*.sh, which add the monitoring and log-stack files:
+#   docker compose -p oldshop -f docker-compose.yml -f docker-compose.monitoring.yml -f docker-compose.<loki|elk>.yml
+name: oldshop
+
+x-logging: &default-logging
+  driver: json-file          # read by Promtail / Filebeat from /var/lib/docker/containers
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      TZ: Asia/Ho_Chi_Minh
+    # Server tuning lives here, not in the SQL init scripts. Sized for a 2-4 GB VPS.
+    command: >
+      postgres
+      -c shared_buffers=256MB
+      -c effective_cache_size=768MB
+      -c maintenance_work_mem=64MB
+      -c max_connections=100
+      -c log_min_duration_statement=500
+      -c log_line_prefix='%t [%p] user=%u,db=%d '
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [backend]
+    logging: *default-logging
+
+  backend:
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_NAMESPACE:-local}/oldshop-backend:${IMAGE_TAG:-latest}
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      ENVIRONMENT: production
+      LOG_FORMAT: json
+    volumes:
+      - media_data:/data/media
+      - ./ml:/data/ml:ro       # optional fraud model artifacts (fraud_model.joblib, scaler.joblib)
+    networks: [backend, frontend]
+    logging: *default-logging
+
+  frontend:
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_NAMESPACE:-local}/oldshop-frontend:${IMAGE_TAG:-latest}
+    build:
+      context: ../frontend
+    restart: unless-stopped
+    depends_on: [backend]
+    networks: [frontend]
+    logging: *default-logging
+
+  caddy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    depends_on: [frontend]
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN}
+      GRAFANA_DOMAIN: ${GRAFANA_DOMAIN}
+      KIBANA_DOMAIN: ${KIBANA_DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+      KIBANA_BASIC_AUTH_USER: ${KIBANA_BASIC_AUTH_USER:-admin}
+      KIBANA_BASIC_AUTH_HASH: ${KIBANA_BASIC_AUTH_HASH:-}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [frontend, observability]
+    logging: *default-logging
+
+networks:
+  frontend:
+  backend:
+  observability:
+
+volumes:
+  postgres_data:
+  media_data:
+  caddy_data:
+  caddy_config:

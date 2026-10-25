@@ -1,0 +1,190 @@
+<ng-container *ngIf="!isLoading; else loadingTemplate">
+  
+  <!-- Overlay Banned (ML Fraud Detection) -->
+  <div *ngIf="isBanned" class="fraud-overlay d-flex flex-column align-items-center justify-content-center text-center p-4">
+    <div class="card border-0 shadow-lg p-5 rounded-4 animate__animated animate__zoomIn" style="max-width: 500px; background: #fff;">
+      <div class="icon-box mb-4">
+        <i class="bi bi-shield-slash-fill text-danger" style="font-size: 6rem;"></i>
+      </div>
+      <h1 class="fw-bold text-danger">GIAO DỊCH BỊ TỪ CHỐI</h1>
+      <p class="text-muted fs-5">
+        Hệ thống phát hiện hành vi bất thường. <br>
+        <span class="fw-bold text-dark">Lệnh thanh toán đã bị khóa vĩnh viễn.</span>
+      </p>
+      <div class="alert alert-dark mt-3 small">
+        Đừng cố thử lại, Model ML của tôi biết ông định làm gì đấy! 🤫
+      </div>
+      <button class="btn btn-outline-secondary mt-4 rounded-pill px-5" (click)="isBanned = false">
+        Quay lại chỉnh sửa giỏ hàng
+      </button>
+    </div>
+  </div>
+
+  <div class="container py-5" *ngIf="!isWaitingFraud">
+    <div class="row g-4">
+      <div class="col-lg-8">
+        
+        <!-- Địa Chỉ -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0"><i class="bi bi-geo-alt-fill me-2 text-primary"></i>Địa chỉ nhận hàng</h5>
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" (click)="isEditingContact = !isEditingContact">
+              {{ isEditingContact ? 'Lưu thông tin' : 'Chỉnh sửa nhanh' }}
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6" *ngFor="let addr of addresses">
+                <div class="address-card p-3 border rounded-4 cursor-pointer transition-all h-100" 
+                     [class.border-primary]="selectedAddressId === addr.contact_id" 
+                     [class.bg-primary-subtle]="selectedAddressId === addr.contact_id"
+                     (click)="selectAddress(addr)" tabindex="0" role="button" (keydown)="$event.key === 'Enter' && selectAddress(addr)">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <span class="fw-bold d-block">{{ addr.full_name }}</span>
+                      <div class="small text-muted mt-1">{{ addr.phone_number }}</div>
+                    </div>
+                    <i *ngIf="selectedAddressId === addr.contact_id" class="bi bi-check-circle-fill text-primary"></i>
+                  </div>
+                  <div class="small text-muted mt-2 text-truncate-2">{{ addr.address }}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="edit-contact-box p-3 bg-light rounded-4 border" *ngIf="isEditingContact">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="checkout-customphone" class="small fw-bold mb-1">Số điện thoại</label>
+                  <input id="checkout-customphone" type="text" class="form-control border-0 shadow-sm" [(ngModel)]="customPhone">
+                </div>
+                <div class="col-md-12">
+                  <label for="checkout-customaddress" class="small fw-bold mb-1">Địa chỉ chi tiết</label>
+                  <textarea id="checkout-customaddress" class="form-control border-0 shadow-sm" rows="2" [(ngModel)]="customAddress"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phương Thức Thanh Toán -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-header bg-white py-3"><h5 class="fw-bold mb-0">Thanh toán</h5></div>
+          <div class="card-body">
+            <div class="payment-grid d-flex flex-column gap-3">
+              <div class="payment-item p-3 border rounded-4 d-flex align-items-center cursor-pointer transition-all" 
+                   [class.active]="selectedPaymentMethodId === PAYMENT.COD" 
+                   (click)="selectPaymentMethod(PAYMENT.COD)" tabindex="0" role="button" (keydown)="$event.key === 'Enter' && selectPaymentMethod(PAYMENT.COD)">
+                <i class="bi bi-truck fs-4 me-3 text-warning"></i>
+                <div class="grow"><b>COD</b></div>
+                <label for="checkout-pay-cod" class="visually-hidden">Thanh toán khi nhận hàng (COD)</label>
+                <input id="checkout-pay-cod" class="form-check-input" type="radio" [checked]="selectedPaymentMethodId === PAYMENT.COD">
+              </div>
+              <div class="payment-item p-3 border rounded-4 d-flex align-items-center cursor-pointer transition-all" 
+                   [class.active]="selectedPaymentMethodId === PAYMENT.PAYPAL" 
+                   (click)="selectPaymentMethod(PAYMENT.PAYPAL)" tabindex="0" role="button" (keydown)="$event.key === 'Enter' && selectPaymentMethod(PAYMENT.PAYPAL)">
+                <i class="bi bi-paypal fs-4 me-3 text-info"></i>
+                <div class="grow"><b>PayPal</b></div>
+                <label for="checkout-pay-paypal" class="visually-hidden">Thanh toán qua PayPal</label>
+                <input id="checkout-pay-paypal" class="form-check-input" type="radio" [checked]="selectedPaymentMethodId === PAYMENT.PAYPAL">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-lg rounded-4 sticky-top" style="top: 20px;">
+          <div class="card-body p-4">
+            <h5 class="fw-bold mb-4 text-center">TÓM TẮT ĐƠN HÀNG</h5>
+            
+            <div class="cart-items-preview mb-4 custom-scrollbar" style="max-height: 250px; overflow-y: auto;">
+              <div *ngFor="let item of cartItems" class="d-flex align-items-center mb-3">
+                <img [src]="getFullImageUrl(item.product.product_images[0]?.image_url)" class="rounded-3 me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                <div class="grow">
+                  <div class="small fw-bold text-truncate" style="max-width: 150px;">{{ item.product.title }}</div>
+                  <div class="small text-muted text-nowrap">SL: {{ item.quantity }}</div>
+                </div>
+                <div class="small fw-bold">{{ item.product.price * item.quantity | currency:'VND':'symbol':'1.0-0' }}</div>
+              </div>
+            </div>
+            
+            <hr>
+
+            <!-- VOUCHER MỚI LẮP VÀO ĐÂY -->
+            <div class="voucher-section mb-4 p-3 bg-light rounded-4 border">
+              <label for="checkout-voucherinput" class="fw-bold mb-2 small text-uppercase text-muted"><i class="bi bi-ticket-perforated me-2"></i>Mã giảm giá</label>
+              
+              <div class="input-group" *ngIf="!appliedVoucher">
+                <input id="checkout-voucherinput" type="text" class="form-control text-uppercase" placeholder="Nhập mã..." [(ngModel)]="voucherInput" [disabled]="isCheckingVoucher">
+                <button class="btn btn-dark fw-bold px-3" (click)="applyVoucher()" [disabled]="isCheckingVoucher || !voucherInput">
+                  <i class="bi" [class.bi-check2]="!isCheckingVoucher" [class.spinner-border]="isCheckingVoucher" [class.spinner-border-sm]="isCheckingVoucher"></i> Áp dụng
+                </button>
+              </div>
+              
+              <!-- Hiện báo lỗi -->
+              <div *ngIf="voucherError" class="text-danger small mt-2 fw-medium">
+                <i class="bi bi-exclamation-triangle-fill me-1"></i>{{ voucherError }}
+              </div>
+
+              <!-- Đã áp dụng -->
+              <div class="applied-voucher d-flex justify-content-between align-items-center p-2 mt-2 bg-success bg-opacity-10 border border-success rounded-3" *ngIf="appliedVoucher">
+                <div>
+                  <span class="badge bg-success shadow-sm me-2">{{ appliedVoucher.code }}</span>
+                  <span class="text-success small fw-medium text-wrap">{{ appliedVoucher.description }}</span>
+                </div>
+                <button class="btn btn-sm text-danger border-0 p-0" (click)="removeVoucher()" title="Gỡ mã">
+                  <i class="bi bi-x-circle-fill fs-5"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- TỔNG KẾT TIỀN TỆ ĐƯỢC CHIA CHI TIẾT -->
+            <ul class="list-group list-group-flush mb-4 bg-transparent">
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-muted small border-0 pb-1">
+                Tạm tính
+                <span class="text-dark">{{ getSubtotal() | number:'1.0-0' }} đ</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-muted small border-0 py-1">
+                Phí vận chuyển
+                <span class="text-dark">{{ shippingFee | number:'1.0-0' }} đ</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-success small fw-bold border-0 py-1" *ngIf="discountAmount > 0">
+                Mã giảm giá
+                <span>- {{ discountAmount | number:'1.0-0' }} đ</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0 fw-bold fs-5 border-top mt-2 pt-3 bg-transparent">
+                Tổng cộng
+                <span class="text-primary">{{ getTotal() | currency:'VND':'symbol':'1.0-0' }}</span>
+              </li>
+            </ul>
+
+            <div class="action-buttons">
+              <!-- Nút COD -->
+              <button *ngIf="selectedPaymentMethodId !== 2" (click)="placeOrder()" [disabled]="isSubmitting || !selectedAddressId" class="btn btn-warning btn-lg w-100 rounded-pill fw-bold shadow-sm">
+                <span *ngIf="!isSubmitting">XÁC NHẬN ĐẶT HÀNG</span>
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm"></span>
+              </button>
+              
+              <!-- Nút PayPal -->
+              <div [style.display]="selectedPaymentMethodId === PAYMENT.PAYPAL ? 'block' : 'none'" class="paypal-render-area">
+                <div id="paypal-button-container"></div>
+              </div>
+            </div>
+            
+            <a routerLink="/cart" class="btn btn-link w-100 text-muted mt-2 text-decoration-none small">
+              Quay lại giỏ hàng
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #loadingTemplate>
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+    <p>Đang tải...</p>
+  </div>
+</ng-template>

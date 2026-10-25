@@ -1,0 +1,41 @@
+<div class="moderator-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-title">Moderator Panel</div>
+      <p>Quản lý nội dung và kiểm duyệt</p>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <div class="nav-section" *ngFor="let section of navSections">
+        <h4 class="section-title">
+          <i [class]="section.icon"></i>
+          {{ section.title }}
+        </h4>
+        <ul class="nav-list">
+          <li class="nav-item" *ngFor="let item of section.items">
+            <a [routerLink]="['/moderator', item.path]" routerLinkActive="active" class="nav-link">
+              <i [class]="item.icon"></i>
+              <span>{{ item.label }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    
+    <!-- Khối Logout -->
+    <div class="nav-section mt-4">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <button type="button" class="nav-link logout-link" (click)="logout()">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Đăng xuất</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

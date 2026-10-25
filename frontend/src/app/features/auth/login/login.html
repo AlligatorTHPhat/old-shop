@@ -1,0 +1,77 @@
+<div class="modal fade" id="loginModal" tabindex="-1" #loginModalElement>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      
+      <div class="modal-header text-white" style="background: linear-gradient(90deg, #0d6efd, #0b5ed7);">
+        <h5 class="modal-title fw-bold">
+            <i class="bi bi-box-arrow-in-right me-2"></i> Đăng nhập
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <form *ngIf="authStep === 'login'" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="login-email" class="form-label">Email</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input id="login-email" type="email" 
+                    class="form-control" 
+                    formControlName="email" 
+                    name="email"
+                    autocomplete="username" 
+                    placeholder="example@gmail.com">
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="login-password" class="form-label">Mật khẩu</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input id="login-password" type="password" 
+                    class="form-control" 
+                    formControlName="password" 
+                    name="password"
+                    autocomplete="current-password"
+                    placeholder="••••••••">
+            </div>
+            <div class="mt-2 text-end">
+              <button type="button" (click)="authStep = 'forgot'" class="btn btn-link p-0 small text-muted text-decoration-none border-0">
+                Quên mật khẩu?
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="loginForm.invalid || isLoading">
+            {{ isLoading ? 'Đang xác thực...' : 'Đăng nhập' }}
+          </button>
+        </form>
+
+        <div *ngIf="authStep === 'forgot'" class="fade-in">
+          <h5 class="fw-bold mb-3">Quên mật khẩu?</h5>
+          <p class="text-muted small">Nhập email để nhận mã xác thực.</p>
+          <div class="mb-3">
+            <label for="login-forgotemail" class="visually-hidden">Email</label>
+            <input id="login-forgotemail" type="email" class="form-control" [(ngModel)]="forgotEmail" name="forgotEmail" placeholder="Email của ông">
+          </div>
+          <button class="btn btn-primary w-100 mb-2" (click)="sendOTP()">Gửi mã OTP</button>
+          <button class="btn btn-link w-100 btn-sm text-secondary" (click)="authStep = 'login'">Quay lại đăng nhập</button>
+        </div>
+
+        <div *ngIf="authStep === 'reset'" class="fade-in">
+          <h5 class="fw-bold mb-3">Xác thực OTP</h5>
+          <div class="mb-3">
+            <label for="login-otp" class="visually-hidden">Mã 6 số</label>
+            <input id="login-otp" type="text" class="form-control text-center fw-bold" [(ngModel)]="resetData.otp" name="otp" placeholder="Mã 6 số">
+          </div>
+          <div class="mb-3">
+            <label for="login-new-password" class="visually-hidden">Mật khẩu mới</label>
+            <input id="login-new-password" type="password" class="form-control" [(ngModel)]="resetData.new_password" name="new_password" placeholder="Mật khẩu mới">
+          </div>
+          <button class="btn btn-success w-100 mb-2" (click)="resetPassword()">Đổi mật khẩu</button>
+          <button class="btn btn-link w-100 btn-sm text-secondary" (click)="authStep = 'forgot'">Gửi lại mã</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

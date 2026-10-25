@@ -1,0 +1,78 @@
+# Log stack B (full-text search, ~2.5 GB RAM): Filebeat -> Elasticsearch -> Kibana.
+# Switch with: deploy/scripts/switch-logging.sh elk   (needs vm.max_map_count >= 262144)
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "true"
+      xpack.security.http.ssl.enabled: "false"   # only reachable on the internal Docker network
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      ES_JAVA_OPTS: -Xms${ES_HEAP:-1g} -Xmx${ES_HEAP:-1g}
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs -u elastic:$${ELASTIC_PASSWORD} http://localhost:9200/_cluster/health | grep -qv '\"status\":\"red\"'"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+    networks: [observability]
+
+  # One-shot: give the built-in kibana_system user a password so Kibana can log in.
+  es-setup:
+    image: curlimages/curl:8.10.1
+    restart: "no"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
+    entrypoint: ["/bin/sh", "/setup/es-setup.sh"]
+    volumes:
+      - ./elk/es-setup.sh:/setup/es-setup.sh:ro
+    networks: [observability]
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.1
+    restart: unless-stopped
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
+      SERVER_PUBLICBASEURL: https://${KIBANA_DOMAIN}
+      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: ${KIBANA_ENCRYPTION_KEY}
+    depends_on:
+      es-setup:
+        condition: service_completed_successfully
+    networks: [observability]
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.15.1
+    restart: unless-stopped
+    user: root   # needs to read other containers' log files and the Docker socket
+    command: ["filebeat", "-e", "--strict.perms=false"]
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+    volumes:
+      - ./elk/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - filebeat_data:/usr/share/filebeat/data
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks: [observability]
+
+  grafana:
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+    volumes:
+      - ./grafana/provisioning/datasources/elasticsearch.yml:/etc/grafana/provisioning/datasources/elasticsearch.yml:ro
+
+volumes:
+  es_data:
+  filebeat_data:

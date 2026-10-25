@@ -1,0 +1,55 @@
+<div *ngIf="!authService.isInitialized()" class="initial-loading">
+  <div class="loading-content">
+    <div class="spinner"></div>
+    <p>Đang đồng bộ hệ thống...</p>
+  </div>
+</div>
+
+<ng-container *ngIf="authService.isInitialized()">
+  <ng-container *ngIf="showShell()">
+    <app-header></app-header>
+  </ng-container>
+
+  <main [class.fullscreen]="!showShell()">
+    <router-outlet></router-outlet>
+  </main>
+
+  <ng-container *ngIf="showShell()">
+    <app-footer></app-footer>
+  </ng-container>
+</ng-container>
+
+<!-- Global Notification Modal -->
+
+<div class="modal fade" id="globalNotificationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="modal-body p-4 text-center">
+        <div class="mb-4 d-flex justify-content-center">
+          <div *ngIf="modalConfig?.type === 'success'" class="icon-circle bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; font-size: 40px;">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <div *ngIf="modalConfig?.type === 'error'" class="icon-circle bg-danger-subtle text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; font-size: 40px;">
+            <i class="bi bi-x-circle-fill"></i>
+          </div>
+          <div *ngIf="modalConfig?.type === 'warning'" class="icon-circle bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; font-size: 40px;">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+        </div>
+        <h4 class="fw-bold text-dark mb-2">{{ modalConfig?.title }}</h4>
+        <p class="text-muted mb-4">{{ modalConfig?.message }}</p>
+        <button type="button" class="btn w-100 rounded-pill py-2 fw-bold shadow-sm transition-all hover-lift" 
+                [ngClass]="{'btn-success': modalConfig?.type === 'success', 'btn-danger': modalConfig?.type === 'error', 'btn-warning': modalConfig?.type === 'warning'}"
+                data-bs-dismiss="modal">
+          {{ modalConfig?.confirmText || 'Đã hiểu' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<app-login></app-login>
+
+<!-- Register Modal -->
+<app-register></app-register>

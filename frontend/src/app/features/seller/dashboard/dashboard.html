@@ -1,0 +1,153 @@
+<div class="seller-dashboard-wrapper delay-animation">
+  <!-- Header -->
+  <header class="dashboard-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="fw-bold text-dark mb-1">Trung tâm Bán hàng</h1>
+      <p class="text-muted mb-0">Theo dõi hiệu suất kinh doanh và quản lý cửa hàng của bạn.</p>
+    </div>
+    <div class="header-meta d-flex gap-3">
+      <div class="status-badge shadow-sm">
+        <i class="bi bi-shop window me-2"></i>Cửa hàng Hoạt động
+      </div>
+      <button class="btn btn-light border shadow-sm rounded-circle btn-refresh" (click)="loadDashboardData()" title="Làm mới">
+        <i class="bi bi-arrow-clockwise" [class.fa-spin]="isLoading"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Thẻ Thống kê -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm stat-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-uppercase fw-bold text-muted small mb-0">Sản phẩm</h6>
+            <div class="icon-box bg-primary-light"><i class="bi bi-box-seam text-primary"></i></div>
+          </div>
+          <h2 class="fw-bold mb-0 text-dark">{{ stats.totalProducts }}</h2>
+          <span class="text-muted small fw-medium">Đang hiển thị trên sàn</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm stat-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-uppercase fw-bold text-muted small mb-0">Đơn mới</h6>
+            <div class="icon-box bg-success-light"><i class="bi bi-cart-check text-success"></i></div>
+          </div>
+          <h2 class="fw-bold mb-0 text-dark">{{ stats.newOrders }}</h2>
+          <span class="text-danger small fw-bold"><i class="bi bi-exclamation-circle me-1"></i>Chờ xác nhận</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm stat-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-uppercase fw-bold text-muted small mb-0">Doanh thu</h6>
+            <div class="icon-box bg-warning-light"><i class="bi bi-wallet2 text-warning"></i></div>
+          </div>
+          <h2 class="fw-bold mb-0 text-dark">{{ stats.revenue | currency:'VND':'symbol':'1.0-0' }}</h2>
+          <span class="text-success small fw-medium"><i class="bi bi-graph-up me-1"></i>Đã thanh toán</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm stat-card h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-uppercase fw-bold text-muted small mb-0">Đánh giá</h6>
+            <div class="icon-box bg-danger-light"><i class="bi bi-star-fill text-danger"></i></div>
+          </div>
+          <h2 class="fw-bold mb-0 text-dark">{{ stats.rating }} / 5.0</h2>
+          <span class="text-muted small fw-medium">Điểm trung bình</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Biểu đồ -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h5 class="fw-bold text-dark mb-1"><i class="bi bi-bar-chart-line me-2 text-primary"></i>Biểu đồ Doanh thu</h5>
+          <p class="text-muted small mb-0">Phân tích dòng tiền của cửa hàng</p>
+        </div>
+        <div class="btn-group btn-group-sm p-1 bg-light rounded-pill border">
+          <button class="btn rounded-pill px-3 fw-bold transition-all" [ngClass]="chartView === 'year' ? 'btn-white shadow-sm text-dark border' : 'btn-transparent text-muted'" (click)="switchChartView('year')">Năm</button>
+          <button class="btn rounded-pill px-4 fw-bold transition-all" [ngClass]="chartView === 'month' ? 'btn-white shadow-sm text-dark border' : 'btn-transparent text-muted'" (click)="switchChartView('month')">Tháng này</button>
+        </div>
+      </div>
+      <div class="chart-container" style="height: 350px; position: relative;">
+        <canvas #revenueChart></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thao tác nhanh & Thông báo -->
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+            <h5 class="fw-bold text-dark mb-0"><i class="bi bi-lightning-charge me-2 text-warning"></i>Truy cập nhanh</h5>
+            <button class="btn btn-primary btn-sm rounded-pill px-3 fw-bold shadow-sm" routerLink="/seller/product-manage">
+              <i class="bi bi-plus-lg me-1"></i>Đăng sản phẩm
+            </button>
+          </div>
+          
+          <div class="quick-links d-flex flex-column gap-3">
+            <a *ngFor="let item of quickActions" [routerLink]="item.path" class="quick-link-item d-flex align-items-center p-3 rounded-4 border text-decoration-none">
+              <div class="quick-icon-sm me-3" [ngClass]="item.bg">
+                <i class="bi" [ngClass]="item.icon + ' ' + item.color"></i>
+              </div>
+              <div class="flex-grow-1">
+                <h6 class="mb-0 text-dark fw-bold">{{ item.label }}</h6>
+                <small class="text-muted">{{ item.desc }}</small>
+              </div>
+              <i class="bi bi-chevron-right text-secondary"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h5 class="fw-bold text-dark mb-4 border-bottom pb-3">
+            <i class="bi bi-info-circle me-2 text-info"></i>Trạng thái Cửa hàng
+          </h5>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item px-0 border-0 d-flex align-items-center mb-2">
+              <i class="bi bi-check-circle-fill text-success me-3 fs-5"></i>
+              <div>
+                <p class="mb-0 fw-bold text-dark small">Tài khoản hợp lệ</p>
+                <span class="text-muted" style="font-size: 0.8rem;">Bạn có thể đăng bán và thực hiện giao dịch.</span>
+              </div>
+            </div>
+            <div class="list-group-item px-0 border-0 d-flex align-items-center mb-2">
+              <i class="bi bi-cash-coin text-primary me-3 fs-5"></i>
+              <div>
+                <p class="mb-0 fw-bold text-dark small">Kỳ đối soát kế tiếp</p>
+                <span class="text-muted" style="font-size: 0.8rem;">Dự kiến vào ngày 15 tháng tới.</span>
+              </div>
+            </div>
+            <div class="list-group-item px-0 border-0 d-flex align-items-center">
+              <i class="bi bi-bell-fill text-warning me-3 fs-5"></i>
+              <div>
+                <p class="mb-0 fw-bold text-dark small">Nhắc nhở đơn hàng</p>
+                <span class="text-danger fw-bold" style="font-size: 0.8rem;">Bạn có {{ stats.newOrders }} đơn mới cần chuẩn bị.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
