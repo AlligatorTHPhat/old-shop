@@ -6,15 +6,16 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
 from prometheus_fastapi_instrumentator import Instrumentator
+from starlette.concurrency import run_in_threadpool
 
 from app.api.router import api_router
 from app.core.config import settings
 from app.core.database import ping_database
 from app.core.exceptions import AppError
 from app.core.logging import request_id_ctx, setup_logging
-from app.services.storage import ensure_media_dirs, media_root
+from app.services.mongo import ping_mongo
+from app.services.storage import ensure_media_dirs, get_storage, ping_minio, validate_path
 
 setup_logging(settings.LOG_LEVEL, settings.LOG_FORMAT)
 logger = logging.getLogger("app")
@@ -101,14 +102,23 @@ def create_app() -> FastAPI:
 
     @app.get("/health/ready", tags=["system"], summary="Readiness probe (checks the database)")
     async def ready():
-        if not ping_database():
-            return JSONResponse(status_code=503, content={"status": "unavailable", "database": "down"})
-        return {"status": "ok", "database": "up"}
+        checks = {"database": "up" if await run_in_threadpool(ping_database) else "down"}
+        if settings.MONGO_URI:
+            checks["mongo"] = "up" if await run_in_threadpool(ping_mongo) else "down"
+        if settings.STORAGE_BACKEND == "minio":
+            checks["minio"] = "up" if await run_in_threadpool(ping_minio) else "down"
+        available = all(value == "up" for value in checks.values())
+        return JSONResponse(
+            status_code=200 if available else 503, content={"status": "ok" if available else "unavailable", **checks}
+        )
 
     app.include_router(api_router, prefix=settings.API_V1_STR)
 
     ensure_media_dirs()
-    app.mount("/media", StaticFiles(directory=media_root()), name="media")
+
+    @app.api_route("/media/{path:path}", methods=["GET", "HEAD"], include_in_schema=False)
+    def media(path: str, request: Request):
+        return get_storage().response(validate_path(path), head=request.method == "HEAD")
 
     Instrumentator(excluded_handlers=["/health.*", "/metrics", "/media.*"]).instrument(app).expose(
         app, include_in_schema=False

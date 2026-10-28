@@ -2,6 +2,7 @@ import logging
 
 from fastapi import APIRouter, Body, Depends, File, Form, HTTPException, Query, UploadFile, status
 from sqlalchemy.orm import Session
+from starlette.concurrency import run_in_threadpool
 
 from app.api.deps import any_user, customer, get_current_moderator, get_current_user, get_current_user_optional, get_db
 from app.core.constants import ProductStatus, RoleId
@@ -154,7 +155,7 @@ async def create_product(
     except Exception:
         db.rollback()
         for url in saved:
-            delete_media(url)
+            await run_in_threadpool(delete_media, url)
         raise
 
     db.refresh(product)

@@ -122,3 +122,10 @@ Production runs on a single VPS with Docker Compose; see **[docs/deployment.md](
   to the hard business rule so dev and CI need no binary files.
 - **The Apps Script URL never reaches the browser.** The backend signs each relay with HMAC-SHA256 and a timestamp,
   since Apps Script web apps cannot read request headers.
+
+**Day 3 MongoDB / media:** six strict document contracts, idempotent schema/index provisioning,
+private MinIO buckets and LocalStorage/MinioStorage behind existing `/media/...` URLs.
+See [JSON and storage design](docs/design/03_json_design.md) and
+[Day 3 findings](docs/DAY3_FINDINGS_LOG.md). Run `bash deploy/scripts/test-day3.sh`
+after building/provisioning the data stack; it creates a separate PostgreSQL test database.
+Mongo data synchronization is scheduled for Day 5.

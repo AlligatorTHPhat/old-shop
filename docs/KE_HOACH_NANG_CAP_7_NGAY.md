@@ -204,24 +204,32 @@ Nếu bật profile dự phòng, thêm bằng chứng pg_stat_replication và Mo
 
 ### ✅ Checklist
 **JSON / MongoDB**
-- [ ] Định nghĩa JSON cho tối thiểu 5 collection: `product_details`, `reviews`, `order_snapshots`, `system_logs`/`violation_logs`, `contact_messages`
-- [ ] Với mỗi collection: danh sách field, kiểu, bắt buộc/tùy chọn, ví dụ minh họa, **embedding vs referencing** và lý do
-- [ ] Tạo **JSON Schema validator** (`$jsonSchema`) cho từng collection
-- [ ] Viết script `backend/scripts/init_mongo.py` (tạo collection, validator, index)
-- [ ] Service `backend/app/services/mongo.py` (client, `get_collection`, ping) + `ping_mongo()` cho readiness
-- [ ] Pydantic schema tương ứng ở `backend/app/schemas/` (ví dụ `product_details.py`)
+- [x] Định nghĩa JSON cho tối thiểu 5 collection: `product_details`, `reviews`, `order_snapshots`, `system_logs`/`violation_logs`, `contact_messages`
+- [x] Với mỗi collection: danh sách field, kiểu, bắt buộc/tùy chọn, ví dụ minh họa, **embedding vs referencing** và lý do
+- [x] Tạo **JSON Schema validator** (`$jsonSchema`) cho từng collection
+- [x] Viết script `backend/scripts/init_mongo.py` (tạo collection, validator, index)
+- [x] Service `backend/app/services/mongo.py` (client, `get_collection`, ping) + `ping_mongo()` cho readiness
+- [x] Pydantic schema tương ứng ở `backend/app/schemas/` (ví dụ `product_details.py`)
 **MinIO**
-- [ ] Tạo bucket: `product-images`, `user-avatars`, `attachments` (+ policy đọc công khai cho ảnh sản phẩm hoặc dùng presigned URL)
-- [ ] Quy ước object key: `products/{product_id}/{uuid}.{ext}`, `users/{user_id}/avatar.{ext}`
-- [ ] Refactor `services/storage.py` thành **storage backend trừu tượng** (`LocalStorage` / `MinioStorage`) chọn bằng cấu hình `STORAGE_BACKEND` — giữ nguyên validate (đuôi ảnh, `MAX_UPLOAD_BYTES` 2 MiB)
-- [ ] Script đẩy `database/03_seeds/media/**` lên MinIO (idempotent: chỉ upload khi chưa tồn tại)
-- [ ] Quyết định cách trả URL ảnh cho frontend: giữ `/media/...` và để Nginx proxy sang MinIO (**khuyến nghị, ít sửa FE**) hoặc presigned URL
-- [ ] Cập nhật `frontend/nginx.conf` + `media-url.ts` nếu đổi đường dẫn
+- [x] Tạo bucket: `product-images`, `user-avatars`, `attachments` (private; backend SDK ký S3 request và stream ảnh qua `/media/`)
+- [x] Quy ước object key: `products/{product_id}/{uuid}.{ext}`, `users/{user_id}/avatar-{uuid}.{ext}` (key bất biến; alias seed `avatar.ext`)
+- [x] Refactor `services/storage.py` thành **storage backend trừu tượng** (`LocalStorage` / `MinioStorage`) chọn bằng cấu hình `STORAGE_BACKEND` — giữ nguyên validate (đuôi ảnh, `MAX_UPLOAD_BYTES` 2 MiB)
+- [x] Script đẩy `database/03_seeds/media/**` lên MinIO (idempotent: chỉ upload khi chưa tồn tại)
+- [x] Quyết định cách trả URL ảnh cho frontend: giữ `/media/...`, Nginx proxy backend, backend SDK đọc MinIO private
+- [x] Cập nhật `frontend/nginx.conf` + `media-url.ts` nếu đổi đường dẫn
 
 ### 📦 Sản phẩm đầu ra
 `docs/design/03_json_design.md` (kèm ví dụ), `backend/scripts/init_mongo.py`, `services/mongo.py`, `services/storage.py` (đa backend)
 
-### Ví dụ JSON minh họa (đưa vào báo cáo)
+**Kết quả:** 81/81 test PASS (24 test Ngày 3), seed lại bỏ qua 95/95 object;
+readiness PG/Mongo/MinIO đều up. Xem [DAY3_FINDINGS_LOG.md](DAY3_FINDINGS_LOG.md)
+và [03_json_design.md](design/03_json_design.md).
+
+### Ví dụ JSON minh họa ban đầu
+
+> Ví dụ bên dưới là phác thảo kế hoạch. Hợp đồng triển khai chính thức, tên field và kiểu
+> đã hiệu chỉnh theo nguồn PG nằm trong `design/03_json_design.md` và
+> `design/03_document_examples.json`; không dùng các phác thảo này để insert trực tiếp.
 
 **`product_details`** (bán cấu trúc — thuộc tính khác nhau theo danh mục)
 ```json

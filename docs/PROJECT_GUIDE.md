@@ -26,7 +26,7 @@ Caddy (TLS, production)
   ▼
 Nginx + Angular SPA
   ├── /api/*   ───────────────► FastAPI / Uvicorn
-  └── /media/* ───────────────► FastAPI static media
+  └── /media/* ───────────────► FastAPI media gateway (LocalStorage / MinioStorage)
                                    ├── PostgreSQL
                                    ├── PayPal Orders API
                                    ├── SMTP (tùy chọn)
@@ -375,3 +375,12 @@ CI/deploy workflow build image và gắn tag theo commit SHA (cùng `latest`); r
 ---
 
 **Nguyên tắc chung cho tác vụ tiếp theo:** lần theo luồng xuyên tầng thay vì sửa một file riêng lẻ; giữ contract frontend/API/DB đồng nhất; ưu tiên test trên PostgreSQL test có schema/seed đúng; không giả định rằng khởi động lại app sẽ cập nhật schema hiện hữu.
+
+### Cập nhật Ngày 3 — MongoDB và media
+
+Hợp đồng sáu collection, validator BSON, index, ví dụ JSON và lựa chọn private bucket được mô tả trong
+[03_json_design.md](design/03_json_design.md). `mongo-schema-init` dùng quyền quản trị để create/collMod;
+backend dùng Mongo readWrite. `minio-init` tạo ba bucket private và user giới hạn bucket;
+backend đọc/ghi S3 qua SDK, route media phục vụ ảnh sản phẩm/avatar với URL hiện hữu.
+Readiness kiểm tra cả Mongo/MinIO khi cấu hình sử dụng. ETL chưa chạy trước Ngày 5.
+Xem [DAY3_FINDINGS_LOG.md](DAY3_FINDINGS_LOG.md) để biết môi trường và bằng chứng kiểm thử.

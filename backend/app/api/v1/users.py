@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+from starlette.concurrency import run_in_threadpool
 
 from app.api.deps import get_current_admin, get_current_user, get_db
 from app.core.constants import OrderStatus, RoleId
@@ -15,7 +16,7 @@ from app.schemas import (
     UserResponse,
     UserUpdate,
 )
-from app.services.storage import save_image
+from app.services.storage import delete_media, save_image
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -57,9 +58,15 @@ def change_my_password(
 async def upload_avatar(
     file: UploadFile = File(...), current_user: User = Depends(get_current_user), db: Session = Depends(get_db)
 ):
-    """Saved as user_{role}_{id}_{name}.ext under media/users."""
-    current_user.avatar_url = await save_image(file, "users", f"user_{current_user.role_id}_{current_user.user_id}")
-    db.commit()
+    """Save an immutable image, then commit its URL; retain the old avatar until commit succeeds."""
+    saved = await save_image(file, "users", f"user_{current_user.role_id}_{current_user.user_id}")
+    try:
+        current_user.avatar_url = saved
+        db.commit()
+    except Exception:
+        db.rollback()
+        await run_in_threadpool(delete_media, saved)
+        raise
     db.refresh(current_user)
     return current_user
 

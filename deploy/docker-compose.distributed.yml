@@ -159,8 +159,42 @@ services:
       timeout: 3s
       retries: 30
 
+  minio-init:
+    image: ${MINIO_IMAGE:-quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e}
+    entrypoint: ["sh", "/opt/oldshop/init-minio.sh"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-oldshop_minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_APP_ACCESS_KEY: ${MINIO_APP_ACCESS_KEY:?Run prepare-media-env.py first}
+      MINIO_APP_SECRET_KEY: ${MINIO_APP_SECRET_KEY:?Run prepare-media-env.py first}
+    volumes:
+      - ./data/minio/init.sh:/opt/oldshop/init-minio.sh:ro
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks: [data]
+    mem_limit: 128m
+    restart: "no"
+
+  mongo-schema-init:
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day3}
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    entrypoint: ["python", "-m", "scripts.init_mongo"]
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      MONGO_DB: ${MONGO_DB:-oldshop}
+      MONGO_URI: mongodb://${MONGO_ROOT_USER:-oldshop_admin}:${MONGO_ROOT_PASSWORD}@mongo1:27017/${MONGO_DB:-oldshop}?replicaSet=oldshop-rs&authSource=admin
+    depends_on:
+      mongo-init:
+        condition: service_completed_successfully
+    networks: [data]
+    mem_limit: 256m
+    restart: "no"
+
   backend:
-    image: ${BACKEND_IMAGE:-oldshop-data-backend:day2}
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day3}
     build:
       context: ..
       dockerfile: backend/Dockerfile
@@ -181,7 +215,7 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_APP_ACCESS_KEY:-}
       MINIO_SECRET_KEY: ${MINIO_APP_SECRET_KEY:-}
       MINIO_SECURE: "false"
-      STORAGE_BACKEND: local
+      STORAGE_BACKEND: ${STORAGE_BACKEND:-local}
     volumes:
       - data_media:/data/media
     ports:
@@ -196,6 +230,10 @@ services:
       mongo-expand:
         condition: service_completed_successfully
         required: false
+      mongo-schema-init:
+        condition: service_completed_successfully
+      minio-init:
+        condition: service_completed_successfully
     networks: [data, web]
     mem_limit: 768m
     cpus: 1.0

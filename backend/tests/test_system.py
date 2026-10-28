@@ -15,7 +15,8 @@ def test_health_and_readiness(client):
 
 
 def test_metrics_endpoint(client):
-    client.get("/health")
+    # Health probes are intentionally excluded from instrumentation.
+    client.get("/api/v1/categories")
     response = client.get("/metrics")
     assert response.status_code == 200
     assert "http_requests_total" in response.text
