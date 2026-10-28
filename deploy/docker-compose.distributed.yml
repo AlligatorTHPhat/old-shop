@@ -1,0 +1,233 @@
+# Day 2 data infrastructure. Run from the repository root; see docs/design/02_distribution_strategy.md.
+name: oldshop-data
+
+x-mongo: &mongo
+  image: ${MONGO_IMAGE:-mongo:8.0.32}
+  entrypoint: ["bash", "/opt/oldshop/mongo/start.sh"]
+  command: ["mongod", "--replSet", "oldshop-rs", "--bind_ip_all", "--keyFile", "/run/oldshop-mongo/keyfile", "--wiredTigerCacheSizeGB", "0.25"]
+  environment: &mongo-env
+    MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-oldshop_admin}
+    MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?Run prepare-data-env.py first}
+    MONGO_APP_USER: ${MONGO_APP_USER:-oldshop_app}
+    MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Run prepare-data-env.py first}
+    MONGO_DB: ${MONGO_DB:-oldshop}
+    MONGO_KEYFILE: ${MONGO_KEYFILE:?Run prepare-data-env.py first}
+  volumes:
+    - ./data/mongo:/opt/oldshop/mongo:ro
+  networks: [data]
+  mem_limit: 768m
+  cpus: 1.0
+  restart: unless-stopped
+  healthcheck:
+    test: ["CMD", "mongosh", "--quiet", "--eval", "if (db.adminCommand({ping:1}).ok !== 1) quit(1)"]
+    interval: 5s
+    timeout: 5s
+    retries: 30
+    start_period: 20s
+
+services:
+  pg-primary:
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
+    environment:
+      POSTGRES_USER: ${DB_USER:-oldshop}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Run prepare-data-env.py first}
+      POSTGRES_DB: ${DB_NAME:-oldshop}
+      REPLICATION_PASSWORD: ${PG_REPLICATION_PASSWORD:?Run prepare-data-env.py first}
+      TZ: Asia/Ho_Chi_Minh
+    command: ["postgres", "-c", "wal_level=replica", "-c", "max_wal_senders=5", "-c", "wal_keep_size=256MB", "-c", "shared_buffers=128MB", "-c", "max_connections=60"]
+    volumes:
+      - data_pg_primary:/var/lib/postgresql/data
+      - ./data/postgres/init-replication.sh:/docker-entrypoint-initdb.d/00-replication.sh:ro
+    ports:
+      - "127.0.0.1:${PG_PRIMARY_PORT:-55432}:5432"
+    networks: [data]
+    mem_limit: 512m
+    cpus: 1.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  pg-replica:
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
+    profiles: [resilience]
+    entrypoint: ["sh", "/opt/oldshop/start-replica.sh"]
+    environment:
+      POSTGRES_USER: ${DB_USER:-oldshop}
+      POSTGRES_DB: ${DB_NAME:-oldshop}
+      REPLICATION_PASSWORD: ${PG_REPLICATION_PASSWORD:?Run prepare-data-env.py first}
+      PGDATA: /var/lib/postgresql/data
+      TZ: Asia/Ho_Chi_Minh
+    volumes:
+      - data_pg_replica:/var/lib/postgresql/data
+      - ./data/postgres/start-replica.sh:/opt/oldshop/start-replica.sh:ro
+    ports:
+      - "127.0.0.1:${PG_REPLICA_PORT:-55433}:5432"
+    depends_on:
+      pg-primary:
+        condition: service_healthy
+    networks: [data]
+    mem_limit: 512m
+    cpus: 1.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "test \"$$(psql -U \"$$POSTGRES_USER\" -d postgres -Atqc 'SELECT pg_is_in_recovery()')\" = t"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+
+  mongo1:
+    <<: *mongo
+    volumes:
+      - data_mongo1:/data/db
+      - data_mongo1_config:/data/configdb
+      - ./data/mongo:/opt/oldshop/mongo:ro
+
+  mongo2:
+    <<: *mongo
+    profiles: [resilience]
+    volumes:
+      - data_mongo2:/data/db
+      - data_mongo2_config:/data/configdb
+      - ./data/mongo:/opt/oldshop/mongo:ro
+
+  mongo3:
+    <<: *mongo
+    profiles: [resilience]
+    volumes:
+      - data_mongo3:/data/db
+      - data_mongo3_config:/data/configdb
+      - ./data/mongo:/opt/oldshop/mongo:ro
+
+  mongo-init:
+    image: ${MONGO_IMAGE:-mongo:8.0.32}
+    entrypoint: ["mongosh", "--nodb", "--quiet", "/opt/oldshop/mongo/init.js"]
+    environment:
+      <<: *mongo-env
+      MONGO_MEMBERS: "1"
+    volumes:
+      - ./data/mongo:/opt/oldshop/mongo:ro
+    depends_on:
+      mongo1:
+        condition: service_healthy
+    networks: [data]
+    mem_limit: 256m
+    restart: "no"
+
+  mongo-expand:
+    image: ${MONGO_IMAGE:-mongo:8.0.32}
+    profiles: [resilience]
+    entrypoint: ["mongosh", "--nodb", "--quiet", "/opt/oldshop/mongo/init.js"]
+    environment:
+      <<: *mongo-env
+      MONGO_MEMBERS: "3"
+    volumes:
+      - ./data/mongo:/opt/oldshop/mongo:ro
+    depends_on:
+      mongo-init:
+        condition: service_completed_successfully
+      mongo2:
+        condition: service_healthy
+      mongo3:
+        condition: service_healthy
+    networks: [data]
+    mem_limit: 256m
+    restart: "no"
+
+  minio:
+    # Exact digest of the user-provided RELEASE.2025-09-07T16-13-09Z.
+    image: ${MINIO_IMAGE:-quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e}
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-oldshop_minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Run prepare-data-env.py first}
+    volumes:
+      - data_minio:/data
+    ports:
+      - "127.0.0.1:${MINIO_API_PORT:-59000}:9000"
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-59001}:9001"
+    networks: [data]
+    mem_limit: 512m
+    cpus: 1.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:9000/minio/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  backend:
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day2}
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    environment:
+      ENVIRONMENT: development
+      DEBUG: "false"
+      DB_HOST: pg-primary
+      DB_PORT: "5432"
+      DB_USER: ${DB_USER:-oldshop}
+      DB_PASSWORD: ${DB_PASSWORD:?Run prepare-data-env.py first}
+      DB_NAME: ${DB_NAME:-oldshop}
+      SECRET_KEY: ${SECRET_KEY:?Run prepare-data-env.py first}
+      CORS_ORIGINS: http://localhost:${FRONTEND_PORT:-58080},http://127.0.0.1:${FRONTEND_PORT:-58080}
+      WEB_CONCURRENCY: "1"
+      MONGO_URI: mongodb://${MONGO_APP_USER:-oldshop_app}:${MONGO_APP_PASSWORD}@mongo1:27017/${MONGO_DB:-oldshop}?replicaSet=oldshop-rs&authSource=${MONGO_DB:-oldshop}
+      MONGO_DB: ${MONGO_DB:-oldshop}
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_APP_ACCESS_KEY:-}
+      MINIO_SECRET_KEY: ${MINIO_APP_SECRET_KEY:-}
+      MINIO_SECURE: "false"
+      STORAGE_BACKEND: local
+    volumes:
+      - data_media:/data/media
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-58000}:8000"
+    depends_on:
+      pg-primary:
+        condition: service_healthy
+      mongo-init:
+        condition: service_completed_successfully
+      minio:
+        condition: service_healthy
+      mongo-expand:
+        condition: service_completed_successfully
+        required: false
+    networks: [data, web]
+    mem_limit: 768m
+    cpus: 1.0
+    restart: unless-stopped
+
+  frontend:
+    image: ${FRONTEND_IMAGE:-oldshop-data-frontend:day2}
+    build:
+      context: ../frontend
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-58080}:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks: [web]
+    mem_limit: 128m
+    cpus: 0.5
+    restart: unless-stopped
+
+# ETL is implemented on Day 5; no fake idle worker is marked healthy on Day 2.
+networks:
+  data:
+  web:
+
+volumes:
+  data_pg_primary:
+  data_pg_replica:
+  data_mongo1:
+  data_mongo1_config:
+  data_mongo2:
+  data_mongo2_config:
+  data_mongo3:
+  data_mongo3_config:
+  data_minio:
+  data_media:

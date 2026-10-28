@@ -7,27 +7,30 @@
 > xem [DAY1_REVIEW.md](DAY1_REVIEW.md). Tần suất R/W vẫn là **đánh giá định tính**, chưa đo tải thực.
 > Ký hiệu B/P thể hiện nội dung và mô hình đích đề xuất. Các cột int/varchar hiện tại
 > vẫn là scalar có cấu trúc; lưu vào Mongo hoặc là văn bản tự do không tự biến kiểu SQL thành JSON.
+> **D1–D6 đã chốt:** bảng đích dưới được đồng bộ với decisions.md; phần chi tiết product cũ
+> vẫn PG ghi/Mongo nhận bản đọc trong MVP, chưa bỏ cột PG. Dung lượng chưa tính các bảng
+> outbox/phân mảnh đích mới, cần đo lại sau migration.
 
 ## 1. Kiểm kê mức bảng
 
 | Bảng | Dòng seed | Dòng mục tiêu | B/dòng | Ước lượng (MB) | Đọc/Ghi | Loại chủ đạo | Nhà đích |
 |---|---:|---:|---:|---:|---|---|---|
-| `user` | 15 | 50,000 | 700 | 35.0 | R cao / W thấp (last_login W vừa) | CP | PG (tách dọc: core + profile + secrets) |
+| `user` | 15 | 50,000 | 700 | 35.0 | R cao / W thấp (last_login W vừa) | CP | PG (core + profile + secret + wallet) |
 | `role` | 3 | 3 | 150 | 0.0 | R rất cao (cache) / W ~0 | C | PG |
-| `user_role` | 15 | 50,000 | 8 | 0.4 | R cao / W thấp | C | PG (có thể nhúng role_id vào users_core) |
+| `user_role` | 15 | 50,000 | 8 | 0.4 | R cao / W thấp | C | PG, giữ nhiều role/user; FK về user_core |
 | `category` | 8 | 50 | 200 | 0.0 | R rất cao / W ~0 | C | PG |
 | `product` | 16 | 50,000 | 900 | 45.0 | R rất cao / W vừa (view_count, quantity) | BCP | PG lõi + Mongo product_details |
 | `product_image` | 32 | 150,000 | 300 | 45.0 | R cao / W thấp | CP | PG (metadata + key) ; file -> MinIO |
 | `voucher` | 4 | 100 | 150 | 0.0 | R vừa / W thấp | C | PG |
 | `payment_method` | 5 | 5 | 60 | 0.0 | R cao / W ~0 | C | PG |
 | `contact_info` | 15 | 100,000 | 350 | 35.0 | R vừa / W thấp | C | PG (nhóm PII, không sang Mongo) |
-| `order` | 30 | 100,000 | 350 | 35.0 | W cao (tạo) + W vừa (đổi status) / R cao | BC | PG (phân mảnh ngang) ; bản denormalize -> Mongo order_snapshots |
-| `order_detail` | 30 | 200,000 | 50 | 10.0 | W cao / R cao | C | PG (cùng khóa phân mảnh với order) |
-| `transaction` | 30 | 120,000 | 300 | 36.0 | W vừa / R vừa | C | PG (phân mảnh ngang) ; tóm tắt -> snapshot |
+| `order` | 30 | 100,000 | 350 | 35.0 | W cao (tạo) + W vừa (đổi status) / R cao | BC | PG HASH(order_id), 4 partition; bản đọc -> Mongo order_snapshots |
+| `order_detail` | 30 | 200,000 | 50 | 10.0 | W cao / R cao | C | PG chưa partition, giữ FK order_id |
+| `transaction` | 30 | 120,000 | 300 | 36.0 | W vừa / R vừa | C | PG chưa partition, giữ UNIQUE reference_number; tóm tắt -> snapshot |
 | `shopping_cart` | 11 | 50,000 | 24 | 1.2 | W rất cao / R cao | C | PG (reserve tồn kho -> không rời PG) |
 | `shopping_cart_item` | 0 | 100,000 | 40 | 4.0 | W rất cao / R cao | C | PG |
 | `review` | 0 | 150,000 | 400 | 60.0 | R cao / W vừa | BC | PG + Mongo reviews (bản đọc, thêm type/evidence) |
-| `system_log` | 0 | 2,000,000 | 200 | 400.0 | W rất cao / R thấp | BC | Mongo (TTL) ; PG giữ cửa sổ ngắn |
+| `system_log` | 0 | 2,000,000 | 200 | 400.0 | W rất cao / R thấp | BC | PG RANGE(created_at)/tháng + Mongo bản sao TTL; chưa dọn PG trước khi xác minh đồng bộ |
 | `violation_log` | 11 | 20,000 | 200 | 4.0 | W thấp / R vừa | C | PG (bản gốc) + Mongo (thêm actor/payload) |
 | `system_feedback` | 0 | 20,000 | 500 | 10.0 | W thấp / R thấp | BC | PG + Mongo contact_messages (có file đính kèm -> MinIO) |
 | **Tổng** | | | | **721** | | | |
@@ -57,9 +60,10 @@ Nhận xét: bảng lớn nhất khi scale là `system_log` (ghi liên tục, nh
 
 | Nhóm | Cột | Mức | Xử lý đề xuất |
 |---|---|---|---|
-| **Bí mật xác thực (SEC)** | `user.password_hash`, `user.random_key`, `user.email_verification_token`, `user.password_reset_token/expires`, `transaction.provider_transaction_id` | Rất cao | Bảng riêng `user_secret` (quyền truy cập tối thiểu); **tuyệt đối không** sang Mongo/log/ETL |
+| **Bí mật xác thực (SEC)** | `user.password_hash`, `user.random_key`, `user.email_verification_token`, `user.password_reset_token/expires` | Rất cao | Bảng riêng user_secret; không sang Mongo/log/ETL |
+| **Định danh nhà cung cấp thanh toán** | `transaction.provider_transaction_id` | Cao | Giữ ở transaction/PG; không phải cột user_secret, không đưa vào bản đọc phân tích mặc định |
 | **Tài chính (FIN)** | `user.balance`, `transaction.amount/balance_before/balance_after`, `order.*_amount`, `product.price`, `voucher.*` | Cao | Ở PG (ACID). `user.balance` tách `user_wallet`; Mongo chỉ nhận số tiền tổng hợp (integer VND) |
-| **PII liên lạc** | `user.email/phone_number/address/full_name`, `contact_info.*`, `order.shipping_address`, `transaction.address`, `system_feedback.guest_email` | Cao | `user_profile`; snapshot Mongo chỉ giữ `region` (suy ra), không giữ địa chỉ/SĐT/email |
+| **PII liên lạc** | `user.email/phone_number/address/full_name`, `contact_info.*`, `order.shipping_address`, `transaction.address`, `system_feedback.guest_email` | Cao | Email giữ user_core phục vụ login; hồ sơ user_profile; sổ địa chỉ/giao dịch giữ PG. Snapshot chỉ giữ vùng đã chuẩn hóa khi có, không suy ra tùy tiện hay đưa địa chỉ/SĐT/email vào Mongo |
 | **PII kỹ thuật** | `system_log.ip_address` | Trung bình | Hash/cắt octet cuối khi ETL; lưu ý đây là IP của client DB, không phải end-user |
 | **Định danh nội bộ** | `username`, `trust_score`, `is_active` | Thấp–TB | `user_core` |
 
@@ -73,16 +77,16 @@ Nhận xét: bảng lớn nhất khi scale là `system_log` (ghi liên tục, nh
 
 | Dữ liệu | Hiện tại | Đích | Hiệu chỉnh sau audit |
 |---|---|---|---|
-| user, role, user_role | PG | PG (tách `user_core` / `user_profile` / `user_secret` / `user_wallet`) | Thêm `user_secret`, `user_wallet`; mỗi user đúng 1 role (ORM) nhưng giữ `user_role` |
+| user, role, user_role | PG | PG (user_core / user_profile / user_secret / user_wallet) | Ánh xạ đủ 20 cột; giữ user_role, không giới hạn mỗi user chỉ một role |
 | category | PG | PG | 8 dòng, không có cây thực tế |
-| product (id, seller, category, title, price, quantity, status…) | PG | PG `product_core` | Nguồn sự thật tồn kho; `view_count` → xem D10 |
+| product (id, seller, category, title, price, quantity, status…) | PG | PG, giữ tên bảng product | Nguồn sự thật tồn kho; chưa partition category; view_count giữ PG |
 | mô tả dài, kích thước, tình trạng, bảo hành, **thuộc tính động (mới)** | PG (cột có sẵn) | **Mongo `product_details`** | Giai đoạn chuyển tiếp: giữ cột cũ (expand/contract) |
 | product_image | PG + đĩa | PG (metadata + `object_key`) ; file → **MinIO** | Tên file ≠ product_id; key sinh từ DB |
 | avatar | đĩa | **MinIO** | 11/15 avatar tham chiếu file không tồn tại trong seed |
-| order, order_detail, transaction | PG | PG (phân mảnh ngang) | Vướng PK/FK khi partition – xem D3 |
+| order, order_detail, transaction | PG | Order HASH(order_id); hai bảng con chưa partition | Giữ PK/FK và UNIQUE tài chính; xem D3 |
 | order snapshot | — | **Mongo `order_snapshots`** | `order` thiếu `updated_at`/`seller_id` → xem D2 |
 | review / report (rating=0) | PG | PG + **Mongo `reviews`** | `type` suy ra từ `rating=0`; thêm status/evidence ở Mongo |
-| system_log | PG | **Mongo (TTL)** | Log còn do hàm/trigger PG ghi → cần ETL, không chỉ dual-write |
+| system_log | PG | PG RANGE theo tháng + Mongo bản sao TTL | Danh tính nguồn sau partition là (log_id,created_at); ETL outbox |
 | violation_log | PG | PG + Mongo | Thiếu actor → Mongo bổ sung `actor_id` từ ngữ cảnh API |
 | **contact_info** | PG | **PG (không sang Mongo)** | **Là sổ địa chỉ**, PII → chỉ PG (user_profile nhóm địa chỉ) |
 | system_feedback (form liên hệ) | PG | PG + Mongo `contact_messages` (+ `attachments` MinIO) | Đây mới là “contact form” |

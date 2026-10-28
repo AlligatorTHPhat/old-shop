@@ -1,0 +1,54 @@
+{
+  "checked_at": "2026-10-28T20:29:46.786359+07:00",
+  "profile": "resilience",
+  "checks": {
+    "docker": "CPUs=8 MemoryBytes=8053366784 Version=29.7.2",
+    "healthy_services": [
+      "backend",
+      "frontend",
+      "minio",
+      "mongo1",
+      "mongo2",
+      "mongo3",
+      "pg-primary",
+      "pg-replica"
+    ],
+    "postgres_version": "16.15",
+    "baseline": "18",
+    "orders": "30",
+    "mongo": {
+      "set": "oldshop-rs",
+      "version": "7.0.43",
+      "members": [
+        {
+          "host": "mongo1:27017",
+          "state": "PRIMARY"
+        },
+        {
+          "host": "mongo2:27017",
+          "state": "SECONDARY"
+        },
+        {
+          "host": "mongo3:27017",
+          "state": "SECONDARY"
+        }
+      ]
+    },
+    "mongo_app_auth": {
+      "authenticated": true,
+      "database": "oldshop"
+    },
+    "http": {
+      "http://127.0.0.1:8000/health/ready": 200,
+      "http://127.0.0.1:8000/api/v1/categories": 200,
+      "http://minio:9000/minio/health/ready": 200,
+      "http://frontend:8080/healthz": 200,
+      "http://frontend:8080/api/v1/categories": 200
+    },
+    "minio_version": "minio version RELEASE.2025-09-07T16-13-09Z (commit-id=07c3a429bfed433e49018cb0f78a52145d4bedeb)",
+    "pg_stat_replication": "oldshop-data-replica:streaming:async",
+    "replica_orders": "30",
+    "resources": "oldshop-data-backend-1 74.65MiB / 768MiB 0.26%\noldshop-data-frontend-1 7.715MiB / 128MiB 0.02%\noldshop-data-minio-1 87.29MiB / 512MiB 0.00%\noldshop-data-mongo1-1 40.66MiB / 768MiB 1.24%\noldshop-data-mongo2-1 27.86MiB / 768MiB 1.06%\noldshop-data-mongo3-1 29.84MiB / 768MiB 41.46%\noldshop-data-pg-primary-1 27.01MiB / 512MiB 9.10%\noldshop-data-pg-replica-1 22.45MiB / 512MiB 0.00%"
+  },
+  "result": "PASS"
+}

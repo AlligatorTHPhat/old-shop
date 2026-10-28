@@ -35,6 +35,20 @@ class Settings(BaseSettings):
     DB_POOL_SIZE: int = 10
     DB_MAX_OVERFLOW: int = 20
 
+    # Day 2 infrastructure contracts; clients/read routing are implemented on Days 3-6.
+    PG_REPLICA_URL: str = ""
+    PG_NODE_B_URL: str = ""  # future FDW site, intentionally unused in the one-host MVP
+    MONGO_URI: str = ""
+    MONGO_DB: str = "oldshop"
+    STORAGE_BACKEND: Literal["local", "minio"] = "local"
+    MINIO_ENDPOINT: str = "localhost:9000"
+    MINIO_ACCESS_KEY: str = ""
+    MINIO_SECRET_KEY: str = ""
+    MINIO_SECURE: bool = False
+    MINIO_BUCKET_PRODUCT_IMAGES: str = "product-images"
+    MINIO_BUCKET_USER_AVATARS: str = "user-avatars"
+    MINIO_BUCKET_ATTACHMENTS: str = "attachments"
+
     # Auth
     SECRET_KEY: str
     ALGORITHM: str = "HS256"

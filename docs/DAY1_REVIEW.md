@@ -7,6 +7,11 @@ sửa ERD theo catalog PostgreSQL thật, chạy bootstrap và kiểm tra SQL tr
 Các thay đổi thiết kế D1–D11 là đầu vào cho Ngày 2; chưa có migration hoặc thay đổi hành vi ứng dụng.
 Việc nhóm phê duyệt thiết kế không được suy ra từ kết quả kiểm tra kỹ thuật này.
 
+**Cập nhật sau câu trả lời của người dùng:** đã chốt D1–D6 cho đồ án một máy trong
+[decisions.md](decisions.md), gồm D2 outbox, D3 order HASH/log RANGE, D4 user 4 bảng,
+D5 base stack + profile tùy chọn và D6 maintenance giữ dữ liệu.
+D7–D11 chưa chốt trong lượt này; PNG vẫn là bản trước review, cần đồng bộ sau.
+
 ## Môi trường và bằng chứng
 
 - Ngày kiểm tra: 28/10/2026, Asia/Ho_Chi_Minh.
@@ -157,6 +162,6 @@ Các thay đổi schema sau này vẫn phải đi qua migration, không chạy l
 ## Bàn giao
 
 - Hoàn tất audit và kiểm chứng baseline Ngày 1; nhật ký cũ là lịch sử, các đính chính tại đây được ưu tiên.
-- Ngày 2: chốt D3 dựa trên toàn bộ PK/FK/unique; thiết kế hạ tầng và tính chất tái tạo phân mảnh.
+- Ngày 2: triển khai thiết kế D3–D5 đã chốt, chứng minh tính chất phân mảnh và đo tài nguyên stack một máy.
 - Trước ETL/partition: xử lý D7 thời gian, D8 enum, D6 migration và D2 đồng bộ thay đổi.
 - Trước tuyên bố ứng dụng tương thích schema mới: chạy bộ integration tests trên DB test sạch.

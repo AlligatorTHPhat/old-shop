@@ -1,0 +1,48 @@
+@startuml
+title OldShop Day 2 - one physical host; optional resilience profile
+left to right direction
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+actor "Browser" as browser
+node "One Docker host\n8 vCPU / ~7.5 GiB observed" as host {
+  frame "web network" {
+    component "frontend\nAngular + Nginx\n127.0.0.1:58080" as frontend
+    component "backend\nFastAPI\n127.0.0.1:58000" as api
+  }
+  frame "data network" {
+    database "pg-primary\nPostgreSQL 16\n127.0.0.1:55432" as pg
+    database "mongo1\noldshop-rs\ninternal only" as m1
+    storage "MinIO single-node\nS3 :59000 / console :59001\nloopback only" as minio
+    component "mongo-init\none-shot\nreplica set + app user" as init
+    frame "resilience profile (optional)" {
+      database "pg-replica\nasync / read-only\n127.0.0.1:55433" as replica
+      database "mongo2" as m2
+      database "mongo3" as m3
+      component "mongo-expand\none-shot, one voter at a time" as expand
+    }
+    component "ETL outbox worker\nPLANNED Day 5\nnot an idle container" as etl #FFF2CC
+  }
+  artifact "Separate named volumes\nper PG/Mongo member, MinIO, media" as volumes
+}
+
+browser --> frontend : HTTP
+frontend --> api : /api and /media
+api --> pg : baseline API + local media on Day 2
+init --> m1 : authenticated init
+pg --> replica : streaming WAL (optional)
+m1 <--> m2 : replication (optional)
+m1 <--> m3 : replication (optional)
+expand --> m1 : reconfigure after secondaries ready
+api ..> m1 : direct metadata client, Day 3-6
+api ..> minio : object client, Day 3-6
+pg ..> etl : outbox, Day 5
+etl ..> m1 : idempotent upsert, Day 5
+
+note bottom of host
+  Solid: Day 2 infrastructure/current API.
+  Dashed: later application/ETL integration.
+  Replicas on one host do not survive loss of that host.
+  Partition/user-split DDL is Day 4, not applied by this Compose.
+end note
+@enduml

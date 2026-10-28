@@ -99,6 +99,11 @@ CI runs the same steps on every push, builds the Angular app, and builds both Do
 
 ## Deployment
 
+**Day 2 data stack (local, separate volumes/ports):** PostgreSQL + MongoDB + MinIO,
+with optional replication profile. See [distribution strategy and commands](docs/design/02_distribution_strategy.md)
+and [Day 2 findings](docs/DAY2_FINDINGS_LOG.md), including the MongoDB 8/kernel compatibility exception.
+This stack retains the baseline schema; partitioning and ETL are later milestones.
+
 Production runs on a single VPS with Docker Compose; see **[docs/deployment.md](docs/deployment.md)**.
 
 - `git push` to `main` → CI → images pushed to GHCR → SSH deploy with the commit tag (rollback = redeploy an older tag)

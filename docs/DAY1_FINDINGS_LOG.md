@@ -6,6 +6,10 @@
 > pgAdmin4 cài sẵn là 9.18, SQL thuần được kiểm tra bằng driver đi kèm (chưa tự động thao tác GUI).
 > Đọc [DAY1_REVIEW.md](DAY1_REVIEW.md) và [day1/verification.txt](day1/verification.txt)
 > để xem kết quả mới nhất; các mục lịch sử bên dưới được hiệu chỉnh bởi bản review này.
+> **Chốt thiết kế sau trả lời của người dùng:** D1–D6 đã chốt cho đồ án một máy.
+> D2: Mongo ghi trực tiếp metadata mới + ETL outbox cho bản đọc; D3: order HASH/order_id,
+> log RANGE/tháng; D4: user 4 bảng và product expand/contract; D5: một máy, dự phòng tùy chọn;
+> D6: maintenance migration giữ dữ liệu. Xem decisions.md; D7–D11 chưa tự chốt cùng lượt này.
 
 ## A. TRẠNG THÁI TIẾN ĐỘ
 | Hạng mục | Trạng thái |
@@ -18,7 +22,7 @@
 | Đọc seeds (11 file) | ✅ |
 | Đọc models/*.py (6 file), constants.py, init_db.py | ✅ |
 | `docs/01_data_inventory.md` | ✅; đã sửa số dòng violation_log theo DB thật |
-| `docs/decisions.md` (D1–D11) | ✅ ĐỀ XUẤT; đã cập nhật căn cứ review, nhóm chưa phê duyệt |
+| `docs/decisions.md` (D1–D11) | D1–D6 đã chốt thiết kế; D7–D11 còn đề xuất/phụ thuộc |
 | ERD (.png/.dot/.dbml/.mmd), conceptual model PNG, application model PNG | ✅ |
 | Đọc CRUD/API/services/config/Compose/Nginx từng thiếu | ✅ 28/10; xem DAY1_REVIEW.md |
 | Chạy init.sql trên PostgreSQL 16 | ✅ 16.15; hai database thử nghiệm riêng |
@@ -175,13 +179,14 @@ cạnh tranh/API mới ghi nhận từ đọc code chưa được coi là đã k
 2. Tồn kho/voucher KHÔNG nằm trong trigger (chỉ trigger đổi status khi quantity=0 và chặn tự mua).
 3. `contact_info` ≠ form liên hệ.
 4. `"order"` không có seller_id/created_at/updated_at.
-5. Partition `"order"` phá FK đơn cột (order_detail, transaction) → chọn A/B/C ở D3.
+5. RANGE theo order_date vướng FK đơn cột; D3 đã chọn HASH(order_id) để giữ PK/FK.
 6. Audit ban đầu chưa chạy PG. **Review 28/10 đã chạy init và verify_day1.sql**;
    số dòng seed/schema đã đo thật, còn kích thước và tần suất R/W vẫn là ước lượng.
 
 ## G. VIỆC CÒN LẠI CHO NGÀY 1 / HANDOFF
-- [ ] Nhóm review ERD + bảng kiểm kê + chốt D1–D11 (đặc biệt D3 phương án A/B/C, D7, D8).
+- [x] Chốt D1–D6 theo phạm vi người dùng xác nhận; đã sửa phương án mặc định và ghi lý do trong decisions.md.
+- [ ] Chốt D7–D11 theo phụ thuộc trước migration/ETL (đặc biệt nguồn múi giờ D7 và enum D8).
 - [x] Đọc các file từng thiếu, xác minh enum/stock/voucher/truy vấn/ảnh/config/Compose/Nginx; kết quả tại DAY1_REVIEW.md.
 - [x] Chạy init.sql trên PG16.15; đối chiếu ERD với pg_catalog và sửa DBML.
 - [x] Kiểm tra SQL thuần bằng driver pgAdmin4 9.18; lưu script sinh và script kiểm chứng.
-- [ ] Ngày 2 bắt đầu từ D3/D4/D5; dùng mục C6, C10 làm đầu vào.
+- [ ] Ngày 2 hiện thực thiết kế D3/D4/D5 đã chốt; đo tài nguyên trước khi bật profile dự phòng.

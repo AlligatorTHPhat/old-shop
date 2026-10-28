@@ -3,6 +3,9 @@
 > **Thời gian:** Thứ Ba 27/10/2026 → Thứ Hai 02/11/2026 (7 ngày)
 > **Căn cứ:** `PROJECT_GUIDE.md` + cấu trúc thư mục dự án OldShop (FastAPI + Angular + PostgreSQL SQL-first).
 > **Cách dùng:** mỗi ngày gồm *Mục tiêu → File cần đọc trước → Việc cần làm (checklist) → Sản phẩm đầu ra → Tiêu chí hoàn thành*. Tick `[x]` khi xong.
+> **D1–D6 đã chốt sau audit và trả lời của người dùng:** ưu tiên đồ án một máy;
+> [decisions.md](decisions.md) là đặc tả thiết kế hiện hành. D7–D11 vẫn cần chốt theo phụ thuộc.
+> Số thứ tự/tên migration minh họa bên dưới được xếp lại khi triển khai D6, không ghi đè version đã áp dụng.
 
 ---
 
@@ -19,40 +22,40 @@ Nâng hệ thống từ **một CSDL quan hệ duy nhất (PostgreSQL)** thành 
 | **Phi cấu trúc** | MinIO (S3) | ảnh sản phẩm, avatar user, file seed media, (tùy chọn) file đính kèm khiếu nại |
 | **ETL** | Python (script + scheduler) | PG → Mongo (read model/analytics), seed media → MinIO, tổng hợp thống kê |
 | **Indexing** | PG + Mongo (+ quy ước key MinIO) | B-tree, partial, composite, GIN/trgm, Mongo compound/text/TTL |
-| **Phân mảnh ngang** | PG partitioning + FDW (+ shard key Mongo) | orders/transactions theo thời gian hoặc vùng; products theo category |
+| **Phân mảnh ngang** | PG partitioning | Order HASH(order_id); system_log RANGE(created_at)/tháng; FDW/sharding để mở rộng |
 | **Phân mảnh dọc** | PG tách bảng + Mongo | users lõi vs hồ sơ/nhạy cảm; products lõi vs mô tả/thuộc tính/ảnh |
-| **Phân tán** | Docker Compose nhiều node | PG primary + replica (+ node vùng qua `postgres_fdw`), Mongo replica set 3 node, MinIO distributed |
+| **Phân tán** | Compose một máy, profile dự phòng tùy chọn | PG primary, Mongo replica set một member, MinIO single-node; profile thêm PG replica + hai Mongo member |
 
 > **Lưu ý thuật ngữ:** *pgAdmin4 chỉ là công cụ GUI quản trị*, không phải CSDL. Trong báo cáo, ghi "PostgreSQL (quản trị bằng pgAdmin4)". Nên thêm container pgAdmin4 vào Compose để demo.
 
-### 0.2 Quyết định thiết kế cần chốt ở Ngày 1 (đề xuất mặc định)
+### 0.2 Quyết định thiết kế đã chốt ở Ngày 1
 
-| # | Quyết định | Đề xuất mặc định | Lý do |
+| # | Quyết định | Phương án hiện hành | Lý do |
 |---|---|---|---|
-| D1 | Nguồn sự thật (source of truth) | **PostgreSQL** cho giao dịch (order/cart/stock); Mongo là *read model + dữ liệu linh hoạt* | Giữ nguyên ACID và trigger tồn kho hiện có, giảm rủi ro |
-| D2 | Cách đồng bộ PG → Mongo | **ETL batch theo lịch + cập nhật tăng dần theo `updated_at`** (MVP); CDC/Debezium là hướng mở rộng | 7 ngày không đủ cho CDC ổn định |
-| D3 | Phân mảnh ngang | `orders`, `transactions`: **RANGE theo `created_at` (quý/tháng)**; `products`: **LIST/HASH theo `category_id`**; phân tán vùng bằng **FDW** | Giải thích dễ, demo được bằng `EXPLAIN` (partition pruning) |
-| D4 | Phân mảnh dọc | `users` → `users_core` + `users_profile`; `products` → lõi (PG) + chi tiết (Mongo) | Tách dữ liệu nóng/nguội, nhạy cảm/không nhạy cảm |
-| D5 | Phân tán | PG: primary + 1 replica streaming + 1 node "vùng Bắc" (FDW); Mongo: replica set 3 node; MinIO: 4 drive | Đủ minh chứng HA, replication, location transparency |
-| D6 | Migration | Thêm `database/04_migrations/` (SQL đánh số) | `init_db.py` bỏ qua `init.sql` khi bảng `user` đã tồn tại → không tự migrate |
+| D1 | Nguồn sự thật | PG cho giao dịch/PII; Mongo cho bản đọc + metadata/thuộc tính mới; MinIO cho file | Giữ ACID của app + PG; phân biệt nguồn ghi từng field |
+| D2 | Đồng bộ | Full load + ETL transactional outbox; poll 60s, mục tiêu dưới 5 phút; metadata mới ghi Mongo trực tiếp | Không mất thay đổi vì watermark cũ thiếu; retry idempotent |
+| D3 | Phân mảnh ngang | order HASH(order_id), 4 partition; system_log RANGE(created_at)/tháng; transaction/product chưa partition ngang | Giữ PK/FK/UNIQUE tài chính, demo hai kiểu pruning có giới hạn rõ |
+| D4 | Phân mảnh dọc | user_core/profile/secret/wallet + user_role; product PG + Mongo expand/contract | Đủ 20 cột user; view tái tạo chỉ đọc; giữ cột product cũ trong MVP |
+| D5 | Phân tán | Base stack một máy; profile thêm PG replica/Mongo3; MinIO single-node | Chạy trước với tài nguyên thực; chưa cam kết chịu mất máy |
+| D6 | Migration | SQL đánh số + checksum + advisory lock + transaction; maintenance window và giữ dữ liệu phát sinh | Không reseed DB đã dùng; backup/đối soát trước–sau |
 
-> Nếu nhóm thiếu thời gian, thứ tự **cắt giảm** (từ ưu tiên thấp nhất): CDC → node FDW thứ hai → Mongo sharding thật (chỉ trình bày thiết kế) → MinIO distributed (dùng single node + giải thích).
+> Ngoài MVP: CDC/Debezium, FDW theo vùng, Mongo sharding và MinIO distributed.
+> Profile dự phòng bật sau khi base stack/test xanh và đo đủ tài nguyên; nhiều máy là giai đoạn sau.
 
-### 0.3 Kiến trúc đích
+### 0.3 Kiến trúc MVP một máy đã chốt
 
 ```text
 Angular SPA ──► Nginx ──► FastAPI
-                           ├── PostgreSQL PRIMARY ──streaming──► PG REPLICA (đọc/báo cáo)
-                           │        │  └─ postgres_fdw ─► PG NODE-B (phân mảnh theo vùng)
-                           │        └─ partitions: orders_2026q4 ... products_cat_*
-                           ├── MongoDB Replica Set (mongo1, mongo2, mongo3)
+                           ├── PostgreSQL PRIMARY ──► PG REPLICA (profile tùy chọn)
+                           │        └─ order HASH + system_log RANGE + user tách dọc
+                           ├── MongoDB (1 member; profile mở rộng thành 3)
                            │        └─ product_details, reviews, logs, audit, order_snapshots
-                           ├── MinIO (S3 API) buckets: product-images, user-avatars, attachments
+                           ├── MinIO single-node: product-images, user-avatars, attachments
                            └── ETL worker (Python)
-                                    PG ──► Mongo (incremental)
+                                    PG outbox ──► Mongo (at-least-once, idempotent)
                                     seed/media ──► MinIO
                                     PG ──► bảng tổng hợp (daily_sales...)
-pgAdmin4 ──► PG primary / replica / node-B   |   mongo-express/Compass ──► Mongo
+pgAdmin4 ──► PG primary / replica tùy chọn  |  Compass ──► Mongo
 ```
 
 ---
@@ -108,7 +111,7 @@ pgAdmin4 ──► PG primary / replica / node-B   |   mongo-express/Compass ─
 - [x] Vẽ **ERD hiện tại** → đã có PNG + DBML; DBML đã sửa theo DB thật 28/10, PNG cần tái xuất
 - [x] Vẽ **mô hình quan niệm (conceptual)** và **mô hình ứng dụng**: đã có bản PNG; cần đồng bộ khi chốt kiến trúc đích
 - [x] Phân chia thành phần: *PG lõi / Mongo / MinIO* (inventory đã có bảng ánh xạ hiệu chỉnh)
-- [ ] Chốt quyết định D1–D6, ghi vào `docs/design/decisions.md`
+- [x] Chốt D1–D6 sau audit và câu trả lời người dùng; đặc tả tại `docs/decisions.md`
 - [x] Xác định **dữ liệu nhạy cảm** (password hash, địa chỉ, SĐT, email) để phục vụ phân mảnh dọc
 - [x] Ghi lại các rủi ro đã biết trong guide (bootstrap `DATABASE_URL` vs `DB_*`, ngưỡng fraud 0.9, enum PaymentMethod chưa triển khai đủ)
 - [x] Chạy init.sql và smoke SQL trên PG16; đối chiếu DBML với catalog thật; kiểm tra SQL thuần cho pgAdmin4 9.18
@@ -139,7 +142,12 @@ ERD + bảng kiểm kê được cả nhóm review và chốt; mỗi bảng đ�
 
 ## NGÀY 2 — Thứ Tư 28/10: Chiến lược phân tán & phân mảnh + hạ tầng (Yêu cầu #2)
 
-**Mục tiêu:** thiết kế chiến lược phân mảnh ngang/dọc + phân tán dữ liệu, dựng bộ hạ tầng nhiều node chạy được.
+**Mục tiêu:** thiết kế chiến lược phân mảnh ngang/dọc + phân tán dữ liệu, dựng base stack một máy và profile replication tùy chọn.
+
+> **Hoàn tất Ngày 2 trên môi trường kiểm thử:** thiết kế/ma trận/sơ đồ nguồn `.puml` và
+> Compose/profile đã kiểm chứng. Ngoại lệ được người dùng đồng ý: Mongo7.0.43 thay Mongo8.0.32
+> trên kernel hiện tại; xem [DAY2_FINDINGS_LOG.md](DAY2_FINDINGS_LOG.md).
+> Đây chưa phải migration partition/user split (Ngày 4), client Mongo/MinIO (Ngày 3), hoặc ETL (Ngày 5).
 
 ### 📖 File cần đọc trước
 - `docker-compose.yml`, `deploy/docker-compose.yml`, `deploy/.env.example`
@@ -151,30 +159,33 @@ ERD + bảng kiểm kê được cả nhóm review và chốt; mỗi bảng đ�
 
 ### ✅ Checklist
 **Thiết kế**
-- [ ] **Phân mảnh ngang** (ghi rõ khóa, kiểu, lý do):
-  - `orders`, `transactions`: RANGE theo `created_at` (theo quý) — truy vấn gần đây nhiều, lưu trữ cũ dễ
-  - `products`: LIST theo `category_id` (hoặc HASH `seller_id` nếu phân bố lệch)
-  - (Mongo) shard key `product_details`: `{category_id: 1, product_id: 1}`; `logs`: hashed `_id`/`created_at`
-  - Phân vùng địa lý (tùy chọn): `users`/`orders` theo vùng (Nam/Bắc) → Node A/Node B
-- [ ] **Phân mảnh dọc**:
-  - `users_core(id, email, password_hash, role, status)` + `users_profile(user_id, full_name, phone, address, avatar_key)`
-  - `products_core` (PG) + `product_details` (Mongo) + ảnh (MinIO)
-- [ ] Kiểm tra **3 tính chất phân mảnh**: đầy đủ, tái tạo được (join/union), không chồng lặp
-- [ ] Chiến lược **sao chép (replication)**: PG streaming replica (đọc/báo cáo), Mongo replica set, MinIO erasure coding
-- [ ] Chiến lược **truy vấn phân tán**: coordinator → partition pruning → FDW; **tính trong suốt** (transparency) với ứng dụng
-- [ ] **Nhất quán**: PG = ACID; Mongo = eventual (qua ETL); xử lý lỗi một node (failover)
-- [ ] Vẽ **sơ đồ phân tán** (site, fragment, allocation matrix)
+- [x] **Phân mảnh ngang** (ghi rõ khóa, kiểu, lý do trong docs/design/02_fragmentation_matrix.md):
+  - `order`: HASH(order_id), 4 partition; giữ FK/PK đơn cột
+  - `system_log`: RANGE(created_at)/tháng, PK(log_id,created_at), DEFAULT và quản lý vòng đời partition
+  - `transaction`, `product`, `order_detail`: chưa partition ngang; bảo toàn UNIQUE/FK, index theo truy vấn
+  - Mongo sharding/FDW theo vùng: chỉ ghi hướng mở rộng, không thuộc checklist triển khai MVP
+- [x] **Phân mảnh dọc** (mô hình đích, chưa áp DDL):
+  - user_core/user_profile/user_secret/user_wallet đúng ánh xạ 20 cột D4; giữ user_role
+  - product (PG giữ tên/cột hiện có) + product_details (Mongo) + ảnh (MinIO), expand/contract
+- [x] Kiểm tra **3 tính chất trên mô hình**: đầy đủ/tái tạo/không chồng lặp user và order/log; product hiện là expand/contract có sao chép, không tuyên bố phân rã vật lý hoàn toàn
+- [x] Chiến lược **sao chép**: PG replica/Mongo3 thuộc profile tùy chọn; MinIO single-node trong MVP
+- [x] Truy vấn qua bảng cha/partition pruning; thiết kế mở rộng FDW riêng, không tuyên bố đã có phân tán nhiều máy
+- [x] Nhất quán: PG giao dịch; metadata Mongo mới ghi trực tiếp; read model eventual qua outbox; mô tả lỗi từng dịch vụ theo D5
+- [x] Sơ đồ phân tán/fragment bằng `.puml` và allocation matrix Markdown theo yêu cầu người dùng, không xuất PNG
 **Hạ tầng**
-- [ ] Tạo `deploy/docker-compose.distributed.yml` (hoặc `docker-compose.data.yml`) gồm: `pg-primary`, `pg-replica`, `pg-node-b`, `mongo1-3` (+ init replica set), `minio` (4 volume), `pgadmin`, `mongo-express`
-- [ ] Script khởi tạo replication PG (`pg_basebackup`, `primary_conninfo`) và `rs.initiate()` cho Mongo
-- [ ] Healthcheck cho từng service; `docker compose up` chạy sạch
-- [ ] Thêm biến môi trường mới vào `backend/.env.example` (`MONGO_URI`, `MINIO_ENDPOINT/ACCESS_KEY/SECRET_KEY/BUCKET_*`, `PG_REPLICA_URL`, `PG_NODE_B_URL`)
+- [x] Tạo Compose base: pg-primary, mongo1 (replica set một member), MinIO single-node và app; worker thực hiện Ngày 5, chưa tạo idle container
+- [x] Tạo profile dự phòng pg-replica/mongo2-3; script replication/reconfigure và resource sample, đã chạy trên máy hiện tại
+- [x] Healthcheck và Compose startup/wait PASS với Mongo7 theo ngoại lệ; init job dùng service_completed_successfully; Mongo8 trên máy tương thích chưa được kiểm chứng
+- [x] Thêm biến vào backend/.env.example và Settings; client/read routing được triển khai ở Ngày 3–6
 
 ### 📦 Sản phẩm đầu ra
-`docs/design/02_distribution_strategy.md`, `02_distribution_diagram.png`, `02_fragmentation_matrix.md`, compose phân tán chạy được
+`docs/design/02_distribution_strategy.md`, `docs/design/02_fragmentation_matrix.md`,
+`docs/diagram/02_distribution_diagram.puml`, `docs/diagram/02_fragmentation_model.puml`,
+`deploy/docker-compose.distributed.yml`, scripts, `docs/DAY2_FINDINGS_LOG.md` và `docs/day2/*verification.json`.
 
 ### 🎯 Tiêu chí hoàn thành
-Có sơ đồ + giải thích từng chiến lược; stack nhiều node lên được, `pg_stat_replication` và `rs.status()` cho thấy replication hoạt động.
+Có sơ đồ/giải thích và base stack chạy được; rs.status() xác nhận topology đang bật.
+Nếu bật profile dự phòng, thêm bằng chứng pg_stat_replication và Mongo quorum; không tuyên bố chịu mất máy.
 
 ---
 
@@ -327,9 +338,9 @@ Collection + validator được tạo bằng script; upload/đọc ảnh qua Min
   - `transactions (order_id)`, `reviews (product_id, created_at)`; partial `reviews WHERE rating = 0` cho moderator
   - BRIN trên `created_at` của bảng partition lớn (tùy chọn)
 - [ ] Viết `database/04_migrations/001_indexes.sql`
-- [ ] Hiện thực **partitioning** `orders/transactions` (RANGE) và `products` (LIST) trong `database/04_migrations/002_partitioning.sql` — kiểm tra PK/FK/unique phải chứa khóa phân mảnh, trigger hoạt động
-- [ ] Hiện thực **phân mảnh dọc** `users_core`/`users_profile` + **view tái tạo** `users_full` để backend/ORM ít thay đổi
-- [ ] Cấu hình `postgres_fdw` tới `pg-node-b` + foreign table cho phân mảnh vùng (nếu đủ thời gian)
+- [ ] Hiện thực order HASH/order_id và system_log RANGE/created_at theo D3; kiểm tra FK/PK/trigger và mọi nơi dùng khóa log
+- [ ] Hiện thực user_core/profile/secret/wallet + view users_full chỉ đọc; ghi bằng ORM/service vào bảng vật lý, đối soát đủ 20 cột
+- [ ] Ghi FDW theo vùng vào hướng mở rộng, chưa cấu hình node-b trong MVP
 - [ ] Chạy `EXPLAIN (ANALYZE, BUFFERS)` **trước/sau** cho ≥ 5 truy vấn; chụp kết quả (Seq Scan → Index Scan, partition pruning)
 - [ ] Sinh dữ liệu giả lớn (≥ 100k orders, 50k products) bằng script để benchmark có ý nghĩa
 **MongoDB**
@@ -371,10 +382,10 @@ Mỗi chỉ mục có lý do + minh chứng đo; partition pruning được ch�
 - [ ] **Pipeline 4 — Logs/Audit:** `system_logs`, `violation_logs` → Mongo (TTL), đánh dấu đã chuyển
 - [ ] **Pipeline 5 — Media:** `database/03_seeds/media/**` + ảnh trong volume `media` → MinIO; cập nhật key
 - [ ] **Pipeline 6 — Aggregate:** doanh thu theo ngày/danh mục/seller → bảng `report_daily_sales` (PG replica/Mongo) phục vụ dashboard admin
-- [ ] **Incremental**: dùng watermark `updated_at` lưu ở collection `etl_state`; chạy lại không tạo trùng (upsert theo `_id`)
+- [ ] Incremental qua transactional outbox theo D2; ACK từng event sau Mongo thành công, không dùng MAX(id)/updated_at làm cursor duy nhất; upsert idempotent, giữ attributes/tags do Mongo quản lý
 - [ ] **Transform & làm sạch**: chuẩn hóa kiểu tiền (VND integer), thời gian UTC, loại bản ghi mồ côi, che dữ liệu nhạy cảm (không đưa password hash/PII thừa sang Mongo)
 - [ ] **Data quality check**: đối chiếu số lượng PG ↔ Mongo ↔ MinIO sau mỗi lần chạy; ghi báo cáo `etl_runs` (start, end, rows_in/out, errors)
-- [ ] **Lập lịch**: service `etl-worker` trong Compose (APScheduler/cron) — full lần đầu, incremental mỗi N phút; CLI `python -m etl.run --pipeline orders --mode full`
+- [ ] Lập lịch: etl-worker full lần đầu sau bật outbox, incremental poll 60 giây; mục tiêu dưới 5 phút khi tải bình thường, theo dõi backlog; CLI full và đối soát hằng ngày
 - [ ] **Xử lý lỗi**: retry, dead-letter (collection `etl_errors`), log có `run_id`
 - [ ] Test ETL: unit (transform) + integration (PG test DB → Mongo test)
 - [ ] Vẽ **sơ đồ luồng ETL** (Extract → Transform → Load, nguồn/đích)
@@ -404,7 +415,7 @@ Package ETL + `docs/design/05_etl.md` + sơ đồ + log một lần chạy mẫu
 - [ ] Tìm kiếm/lọc theo thuộc tính động (Mongo) kết hợp phân trang
 - [ ] Upload ảnh/avatar đi qua `MinioStorage`; xóa ảnh đồng bộ
 - [ ] Ghi log/violation sang Mongo (hoặc dual-write có kiểm soát); thống kê admin đọc từ replica/bảng tổng hợp
-- [ ] Routing đọc/ghi: ghi → primary, báo cáo → replica (`get_read_db()` dependency)
+- [ ] Ghi/giao dịch đọc primary; báo cáo dùng primary hoặc bản đọc Mongo, chỉ dùng replica nếu profile được bật và chấp nhận trễ
 - [ ] Mở rộng `/ready` kiểm tra PG, Mongo, MinIO
 - [ ] **Giữ nguyên contract API** (path, method, field, enum); nếu thêm field → cập nhật Pydantic + Angular model
 **Frontend**

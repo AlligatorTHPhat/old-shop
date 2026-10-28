@@ -1,0 +1,92 @@
+@startuml
+allowmixing
+title Target fragmentation - design only on Day 2; DDL on Day 4
+left to right direction
+skinparam shadowing false
+
+package "PostgreSQL primary (same site)" {
+  entity "order (parent)" as orders {
+    * order_id : integer <<PK, HASH key>>
+    --
+    buyer_id
+    order_date
+    order_status
+  }
+  entity "order_h0" as h0
+  entity "order_h1" as h1
+  entity "order_h2" as h2
+  entity "order_h3" as h3
+  orders --> h0 : HASH modulus 4 / remainder 0
+  orders --> h1 : remainder 1
+  orders --> h2 : remainder 2
+  orders --> h3 : remainder 3
+
+  entity "system_log (parent)" as logs {
+    * log_id : bigint <<PK part>>
+    * created_at : timestamptz <<PK part, RANGE key>>
+    --
+    action
+    details
+  }
+  entity "system_log_YYYYMM" as month
+  entity "system_log_default" as fallback
+  logs --> month : [month start UTC, next start UTC)
+  logs --> fallback : outside declared ranges
+
+  entity "user_core" as core {
+    * user_id <<PK>>
+    --
+    username, email
+    is_active, is_deleted, email_verified
+    trust_score
+    created_at, updated_at, last_login
+  }
+  entity "user_profile" as profile {
+    * user_id <<PK, FK>>
+    --
+    full_name, phone_number, address, avatar_url
+  }
+  entity "user_secret" as secret {
+    * user_id <<PK, FK>>
+    --
+    password_hash, random_key
+    email_verification_token
+    password_reset_token, password_reset_expires
+  }
+  entity "user_wallet" as wallet {
+    * user_id <<PK, FK>>
+    --
+    balance
+  }
+  entity "user_role (retained)" as roles {
+    * user_id <<PK part, FK>>
+    * role_id <<PK part, FK>>
+  }
+  core ||--|| profile
+  core ||--|| secret
+  core ||--|| wallet
+  core ||--o{ roles
+  entity "users_full\nread-only reconstruction view" as full
+  full ..> core
+  full ..> profile
+  full ..> secret
+  full ..> wallet
+  entity "product\ncore + old detail columns retained" as product
+  entity "product_image\nrelational metadata" as images
+  product ||--o{ images
+}
+database "Mongo product_details\ndynamic attributes/tags = authoritative\nold PG details = ETL read copy" as details
+storage "MinIO\nproduct images / avatars / attachments" as minio
+product ..> details : product_id; expand/contract
+images ..> minio : object key (Day 3+)
+
+note bottom of full
+  Four fragments cover all 20 source user columns.
+  Only user_id overlaps; JOIN is lossless when all child rows exist.
+  1:1 totality requires service transactions and reconciliation.
+end note
+note bottom of details
+  Transitional product copies overlap with PG.
+  Do not claim a disjoint physical decomposition yet.
+end note
+@enduml

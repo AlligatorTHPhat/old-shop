@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+!deploy/.env.data.example
 *.pem
 *.key
 .clasp.json

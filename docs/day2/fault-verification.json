@@ -1,0 +1,9 @@
+{
+  "mongo_secondary_outage": {
+    "writablePrimary": true,
+    "majorityInsertAndDelete": true
+  },
+  "pg_replica_outage_primary_available": true,
+  "result": "PASS",
+  "limits": "No primary failure or host-loss test. Only containers of oldshop-data were stopped/restarted."
+}

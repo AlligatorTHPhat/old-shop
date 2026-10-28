@@ -316,6 +316,14 @@ CI (`.github/workflows/ci.yml`) chạy backend lint/test với PostgreSQL 16, bu
 
 ## 10. Deployment và vận hành
 
+**Hạ tầng dữ liệu Ngày 2 (local):** `deploy/docker-compose.distributed.yml` là stack riêng
+project oldshop-data, có PG primary/Mongo/MinIO và profile resilience thêm PG replica/Mongo2-3.
+Hướng dẫn: [design/02_distribution_strategy.md](design/02_distribution_strategy.md);
+trạng thái/ngoại lệ Mongo8 trên kernel hiện tại: [DAY2_FINDINGS_LOG.md](DAY2_FINDINGS_LOG.md).
+Stack này vẫn nạp baseline 18 bảng; chưa áp partition/user split, chưa dùng Mongo/MinIO trong API.
+Các biến client trong core/config.py là hợp đồng cấu hình cho bước tích hợp tiếp theo,
+STORAGE_BACKEND vẫn local; ETL worker được thực hiện Ngày 5.
+
 - `deploy/docker-compose.yml`: production compose.
 - `deploy/caddy/Caddyfile`: HTTPS/TLS và domain routing.
 - `deploy/docker-compose.monitoring.yml`, `deploy/prometheus/`, `deploy/grafana/`: metrics, dashboards, alerts.

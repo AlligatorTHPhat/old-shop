@@ -1,5 +1,10 @@
 # Deployment runbook (single VPS)
 
+The separate Day 2 local data stack uses `deploy/docker-compose.distributed.yml` and
+`deploy/.env.data`, not this production stack. See
+[Day 2 strategy/runbook](design/02_distribution_strategy.md) for setup, replication profile,
+ports, preserved volumes and MongoDB kernel compatibility findings.
+
 Target: Ubuntu 22.04/24.04, 2 vCPU / 4 GB RAM recommended (2 GB is enough with the Loki stack).
 
 ## 1. DNS
