@@ -1,0 +1,41 @@
+Day 1 verification: 2026-10-28 (Asia/Ho_Chi_Minh)
+PASS plain SQL via psycopg 3.3.4 from pgAdmin 4 9.18 installation
+PostgreSQL 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)
+PASS psql init.sql and plain SQL produce identical columns/constraints/indexes/triggers/functions/extensions
+PASS seed role = 3
+PASS seed user = 15
+PASS seed user_role = 15
+PASS seed category = 8
+PASS seed product = 16
+PASS seed product_image = 32
+PASS seed voucher = 4
+PASS seed payment_method = 5
+PASS seed contact_info = 15
+PASS seed order = 30
+PASS seed order_detail = 30
+PASS seed transaction = 30
+PASS seed shopping_cart = 11
+PASS seed shopping_cart_item = 0
+PASS seed review = 0
+PASS seed system_log = 0
+PASS seed system_feedback = 0
+PASS seed violation_log = 11
+PASS baseline: 18 tables, 167 columns, 2 triggers
+PASS self-buy blocked; its transactional audit log rolls back
+PASS order_detail insert does not reserve/decrement stock
+PASS quantity=0 marks SOLD_OUT; raw restock does not restore APPROVED
+PASS raw title UPDATE does not refresh product.updated_at
+PASS negative quantity rejected by CHECK
+PASS rating=0 accepted as report
+PASS reference_number is nullable and UNIQUE permits multiple NULLs
+PASS known defect reproduced: apply_voucher_to_order references absent updated_at
+PASS database/verify_day1.sql; changes rolled back
+PASS corrected DBML matches 18 tables, 167 columns/types/nullability/defaults, 18 PK, 9 UNIQUE, 10 CHECK, 25 FK/actions
+Catalog indexes=71; triggers=2; application functions=25
+Seed counts: {"category": 8, "contact_info": 15, "order": 30, "order_detail": 30, "payment_method": 5, "product": 16, "product_image": 32, "review": 0, "role": 3, "shopping_cart": 11, "shopping_cart_item": 0, "system_feedback": 0, "system_log": 0, "transaction": 30, "user": 15, "user_role": 15, "violation_log": 11, "voucher": 4}
+Source hashes (SHA-256):
+956faa78c02b84030462f0da08a8d5e483bd50febd8144564476a019cd4fc46d  database/init.sql
+a6ae3a7c2979e464a582eea1e6e1ed0b3db54c9376a36f82fbda3a35b3d10aba  docs/diagram/01_erd_current.dbml
+a0f6f6d234d90cfb14135ce55f8a3f7f3a4003fca3fc807a8ffbe194b6bd3387  database/verify_day1.sql
+9a2cb57bdad6817e7746c612391ce9bdf483fccb2aeecfe20444e724666e1090  /tmp/oldshop-day1-pg-V5CDut/init.pgadmin.sql
+Limits: no GUI automation; no backend pytest, Docker runtime, replication or ETL tests in this audit.
