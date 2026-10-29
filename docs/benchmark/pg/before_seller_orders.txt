@@ -1,0 +1,32 @@
+SELECT DISTINCT o.* FROM "order" o JOIN order_detail d USING(order_id) JOIN product p USING(product_id) WHERE p.seller_id=1000001 AND NOT o.is_deleted ORDER BY o.order_date DESC LIMIT 20
+
+Limit  (cost=4705.63..4706.43 rows=20 width=365) (actual time=98.555..98.631 rows=20 loops=1)
+  Buffers: shared hit=3337
+  ->  Unique  (cost=4705.63..4713.55 rows=198 width=365) (actual time=98.550..98.620 rows=20 loops=1)
+        Buffers: shared hit=3337
+        ->  Sort  (cost=4705.63..4706.12 rows=198 width=365) (actual time=98.547..98.559 rows=20 loops=1)
+              Sort Key: o.order_date DESC, o.order_id, o.buyer_id, o.contact_id, o.payment_method_id, o.voucher_id, o.total_amount, o.shipping_fee, o.discount_amount, o.final_amount, o.order_status, o.shipping_address, o.tracking_number, o.notes, o.is_deleted
+              Sort Method: quicksort  Memory: 40kB
+              Buffers: shared hit=3337
+              ->  Nested Loop  (cost=2627.73..4698.07 rows=198 width=365) (actual time=10.385..98.289 rows=200 loops=1)
+                    Buffers: shared hit=3337
+                    ->  Hash Join  (cost=2627.44..4626.34 rows=198 width=4) (actual time=10.326..96.848 rows=200 loops=1)
+                          Hash Cond: (d.product_id = p.product_id)
+                          Buffers: shared hit=2737
+                          ->  Seq Scan on order_detail d  (cost=0.00..1736.30 rows=100030 width=8) (actual time=0.020..15.755 rows=100030 loops=1)
+                                Buffers: shared hit=736
+                          ->  Hash  (cost=2626.20..2626.20 rows=99 width=4) (actual time=10.102..10.104 rows=100 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 12kB
+                                Buffers: shared hit=2001
+                                ->  Seq Scan on product p  (cost=0.00..2626.20 rows=99 width=4) (actual time=0.203..10.008 rows=100 loops=1)
+                                      Filter: (seller_id = 1000001)
+                                      Rows Removed by Filter: 49916
+                                      Buffers: shared hit=2001
+                    ->  Index Scan using order_pkey on "order" o  (cost=0.29..0.36 rows=1 width=365) (actual time=0.006..0.006 rows=1 loops=200)
+                          Index Cond: (order_id = d.order_id)
+                          Filter: (NOT is_deleted)
+                          Buffers: shared hit=600
+Planning:
+  Buffers: shared hit=18
+Planning Time: 1.657 ms
+Execution Time: 98.953 ms

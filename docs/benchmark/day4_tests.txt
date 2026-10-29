@@ -1,0 +1,37 @@
+ Container oldshop-data-backend-run-6ffef2e59949 Creating 
+ Container oldshop-data-backend-run-6ffef2e59949 Created 
+{"ts": "2026-10-29T11:36:59.228+00:00", "level": "info", "logger": "init_db", "msg": "Creating database day4_test_20261029183655_31302", "request_id": "-"}
+{"ts": "2026-10-29T11:36:59.457+00:00", "level": "info", "logger": "init_db", "msg": "Loading schema and seed data from /opt/database/init.sql", "request_id": "-"}
+psql:02_functions/order_detail/triggers.sql:48: NOTICE:  trigger "trg_no_self_buying" for relation "order_detail" does not exist, skipping
+psql:init.sql:68: NOTICE:  ================================================
+psql:init.sql:68: NOTICE:  OldShop Database Setup Completed Successfully!
+psql:init.sql:68: NOTICE:  ================================================
+psql:init.sql:68: NOTICE:  Version: 2.0.0
+psql:init.sql:68: NOTICE:  Features: Security, Performance, Monitoring
+psql:init.sql:68: NOTICE:  Default admin: admin@oldshop.com / admin123
+psql:init.sql:68: NOTICE:  ================================================
+{"ts": "2026-10-29T11:37:02.031+00:00", "level": "info", "logger": "init_db", "msg": "Migrations applied: ['001', '002', '003', '004']", "request_id": "-"}
+{"ts": "2026-10-29T11:37:02.067+00:00", "level": "info", "logger": "init_db", "msg": "Copied 37 seed media files into /tmp/day4-test-media", "request_id": "-"}
+ Container oldshop-data-backend-run-c0ef815d744b Creating 
+ Container oldshop-data-backend-run-c0ef815d744b Created 
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 96 items
+
+tests/test_day3_data.py ........................                         [ 25%]
+tests/test_day4_migrations.py ...............                            [ 40%]
+tests/test_system.py ...........                                         [ 52%]
+tests/test_v1_admin.py ....                                              [ 56%]
+tests/test_v1_auth.py ..........                                         [ 66%]
+tests/test_v1_cart.py .....                                              [ 71%]
+tests/test_v1_category.py ....                                           [ 76%]
+tests/test_v1_moderator.py .....                                         [ 81%]
+tests/test_v1_order.py ......                                            [ 87%]
+tests/test_v1_product.py ......                                          [ 93%]
+tests/test_v1_user.py ......                                             [100%]
+
+============================= 96 passed in 13.69s ==============================
+Test database retained for inspection: day4_test_20261029183655_31302

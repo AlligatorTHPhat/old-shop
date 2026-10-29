@@ -3,7 +3,8 @@
 1. wait until PostgreSQL accepts connections
 2. create the database if it does not exist
 3. if the schema is missing, run database/init.sql (schema, functions, seed data) with psql
-4. copy seed images into MEDIA_DIR without overwriting user uploads
+4. apply versioned SQL migrations (also on existing databases)
+5. copy seed images into MEDIA_DIR without overwriting user uploads
 
 Usage: python -m scripts.init_db   (from backend/, or the container WORKDIR)
 """
@@ -13,6 +14,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -23,21 +25,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from app.core.config import settings  # noqa: E402
 from app.core.logging import setup_logging  # noqa: E402
+from scripts.migrate import connect, run_migrations  # noqa: E402
 
 logger = logging.getLogger("init_db")
 
 DATABASE_DIR = Path(os.getenv("DATABASE_SRC", Path(__file__).resolve().parents[2] / "database"))
 SEED_MEDIA_DIR = DATABASE_DIR / "03_seeds" / "media"
-
-
-def connect(dbname: str):
-    return psycopg2.connect(
-        host=settings.DB_HOST,
-        port=settings.DB_PORT,
-        user=settings.DB_USER,
-        password=settings.DB_PASSWORD,
-        dbname=dbname,
-    )
 
 
 def wait_for_server(retries: int = 30, delay: float = 2.0) -> None:
@@ -64,33 +57,28 @@ def ensure_database() -> None:
 
 def schema_exists() -> bool:
     with connect(settings.DB_NAME) as conn, conn.cursor() as cur:
-        cur.execute("SELECT to_regclass('public.\"user\"') IS NOT NULL")
+        cur.execute("SELECT to_regclass('public.\"user\"') IS NOT NULL OR to_regclass('public.user_core') IS NOT NULL")
         return cur.fetchone()[0]
 
 
 def load_schema() -> None:
     logger.info("Loading schema and seed data from %s", DATABASE_DIR / "init.sql")
-    subprocess.run(
-        [
-            "psql",
-            "-v",
-            "ON_ERROR_STOP=1",
-            "-q",
-            "-h",
-            settings.DB_HOST,
-            "-p",
-            str(settings.DB_PORT),
-            "-U",
-            settings.DB_USER,
-            "-d",
-            settings.DB_NAME,
-            "-f",
-            "init.sql",
-        ],
-        cwd=DATABASE_DIR,  # init.sql uses \i with paths relative to this folder
-        env={**os.environ, "PGPASSWORD": settings.DB_PASSWORD},
-        check=True,
-    )
+    # A temporary libpq service file preserves URL query options without credentials in argv.
+    parameters = settings.database_connect_args
+    password = parameters.pop("password", "")
+    with tempfile.NamedTemporaryFile(mode="w", prefix="oldshop-pg-", suffix=".conf") as service:
+        service.write("[bootstrap]\n")
+        for key, value in parameters.items():
+            if any(char in str(value) for char in ("\r", "\n")):
+                raise ValueError("Multiline PostgreSQL connection parameters are not supported")
+            service.write(f"{key}={value}\n")
+        service.flush()
+        subprocess.run(
+            ["psql", "-v", "ON_ERROR_STOP=1", "-q", "-f", "init.sql"],
+            cwd=DATABASE_DIR,
+            env={**os.environ, "PGSERVICEFILE": service.name, "PGSERVICE": "bootstrap", "PGPASSWORD": password},
+            check=True,
+        )
 
 
 def sync_seed_media() -> None:
@@ -116,6 +104,7 @@ def main() -> None:
         logger.info("Schema already present, skipping init.sql")
     else:
         load_schema()
+    logger.info("Migrations applied: %s", run_migrations())
     sync_seed_media()
 
 

@@ -1,0 +1,122 @@
+{
+  "explainVersion": "1",
+  "queryPlanner": {
+    "namespace": "oldshop.day4_bench_order_snapshots_b968bb846127452397b427a1fe05cd61",
+    "indexFilterSet": false,
+    "parsedQuery": {
+      "buyer.id": {
+        "$eq": 42
+      }
+    },
+    "queryHash": "27FB2DA0",
+    "planCacheKey": "27FB2DA0",
+    "optimizationTimeMillis": 0,
+    "maxIndexedOrSolutionsReached": false,
+    "maxIndexedAndSolutionsReached": false,
+    "maxScansToExplodeReached": false,
+    "winningPlan": {
+      "stage": "SORT",
+      "sortPattern": {
+        "order_date": -1
+      },
+      "memLimit": 104857600,
+      "limitAmount": 20,
+      "type": "simple",
+      "inputStage": {
+        "stage": "COLLSCAN",
+        "filter": {
+          "buyer.id": {
+            "$eq": 42
+          }
+        },
+        "direction": "forward"
+      }
+    },
+    "rejectedPlans": []
+  },
+  "executionStats": {
+    "executionSuccess": true,
+    "nReturned": 10,
+    "executionTimeMillis": 20,
+    "totalKeysExamined": 0,
+    "totalDocsExamined": 10000,
+    "executionStages": {
+      "stage": "SORT",
+      "nReturned": 10,
+      "executionTimeMillisEstimate": 12,
+      "works": 10012,
+      "advanced": 10,
+      "needTime": 10001,
+      "needYield": 0,
+      "saveState": 10,
+      "restoreState": 10,
+      "isEOF": 1,
+      "sortPattern": {
+        "order_date": -1
+      },
+      "memLimit": 104857600,
+      "limitAmount": 20,
+      "type": "simple",
+      "totalDataSizeSorted": 3578,
+      "usedDisk": false,
+      "spills": 0,
+      "spilledDataStorageSize": 0,
+      "inputStage": {
+        "stage": "COLLSCAN",
+        "filter": {
+          "buyer.id": {
+            "$eq": 42
+          }
+        },
+        "nReturned": 10,
+        "executionTimeMillisEstimate": 12,
+        "works": 10001,
+        "advanced": 10,
+        "needTime": 9990,
+        "needYield": 0,
+        "saveState": 10,
+        "restoreState": 10,
+        "isEOF": 1,
+        "direction": "forward",
+        "docsExamined": 10000
+      }
+    }
+  },
+  "command": {
+    "find": "day4_bench_order_snapshots_b968bb846127452397b427a1fe05cd61",
+    "filter": {
+      "buyer.id": 42
+    },
+    "limit": 20,
+    "sort": {
+      "order_date": -1
+    },
+    "$db": "oldshop"
+  },
+  "serverInfo": {
+    "host": "8f9a734f9531",
+    "port": 27017,
+    "version": "7.0.43",
+    "gitVersion": "ef5a7d3480b59feae13d564376129fc4ceee6177"
+  },
+  "serverParameters": {
+    "internalQueryFacetBufferSizeBytes": 104857600,
+    "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+    "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+    "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+    "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+    "internalQueryProhibitBlockingMergeOnMongoS": 0,
+    "internalQueryMaxAddToSetBytes": 104857600,
+    "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+    "internalQueryFrameworkControl": "forceClassicEngine"
+  },
+  "ok": 1.0,
+  "$clusterTime": {
+    "clusterTime": "Timestamp(1793273317, 8592)",
+    "signature": {
+      "hash": "b'\\x80\\x84\\x978k\\xee$6\\xb8~\\xd0Zn|\\x92U\\xb3\\xa6Vb'",
+      "keyId": 7701708331252973572
+    }
+  },
+  "operationTime": "Timestamp(1793273317, 8592)"
+}

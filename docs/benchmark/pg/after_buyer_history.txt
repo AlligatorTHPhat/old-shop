@@ -1,0 +1,21 @@
+SELECT * FROM "order" WHERE buyer_id=1000542 AND NOT is_deleted ORDER BY order_date DESC LIMIT 20
+
+Limit  (cost=1.19..77.63 rows=20 width=362) (actual time=0.202..0.272 rows=20 loops=1)
+  Buffers: shared hit=31
+  ->  Merge Append  (cost=1.19..727.34 rows=190 width=362) (actual time=0.200..0.263 rows=20 loops=1)
+        Sort Key: "order".order_date DESC
+        Buffers: shared hit=31
+        ->  Index Scan using order_h0_buyer_id_order_date_idx on order_h0 order_1  (cost=0.29..181.10 rows=47 width=363) (actual time=0.074..0.090 rows=7 loops=1)
+              Index Cond: (buyer_id = 1000542)
+              Buffers: shared hit=9
+        ->  Index Scan using order_h1_buyer_id_order_date_idx on order_h1 order_2  (cost=0.29..181.12 rows=48 width=362) (actual time=0.035..0.040 rows=3 loops=1)
+              Index Cond: (buyer_id = 1000542)
+              Buffers: shared hit=5
+        ->  Index Scan using order_h2_buyer_id_order_date_idx on order_h2 order_3  (cost=0.29..181.13 rows=48 width=358) (actual time=0.034..0.047 rows=6 loops=1)
+              Index Cond: (buyer_id = 1000542)
+              Buffers: shared hit=8
+        ->  Index Scan using order_h3_buyer_id_order_date_idx on order_h3 order_4  (cost=0.29..181.10 rows=47 width=367) (actual time=0.052..0.068 rows=7 loops=1)
+              Index Cond: (buyer_id = 1000542)
+              Buffers: shared hit=9
+Planning Time: 1.110 ms
+Execution Time: 0.455 ms

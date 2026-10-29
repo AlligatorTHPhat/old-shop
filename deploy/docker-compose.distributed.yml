@@ -177,7 +177,7 @@ services:
     restart: "no"
 
   mongo-schema-init:
-    image: ${BACKEND_IMAGE:-oldshop-data-backend:day3}
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day4}
     build:
       context: ..
       dockerfile: backend/Dockerfile
@@ -194,7 +194,7 @@ services:
     restart: "no"
 
   backend:
-    image: ${BACKEND_IMAGE:-oldshop-data-backend:day3}
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day4}
     build:
       context: ..
       dockerfile: backend/Dockerfile

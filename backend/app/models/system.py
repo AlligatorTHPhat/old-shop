@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime, ForeignKey, Index, Integer, SmallInteger, String, Text
+from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, Index, Integer, SmallInteger, String, Text
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -11,14 +11,14 @@ class SystemLog(Base):
 
     __tablename__ = "system_log"
 
-    log_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user.user_id"))
+    log_id = Column(BigInteger, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("user_core.user_id"))
     action = Column(String(100), nullable=False)
     resource_type = Column(String(50))
     resource_id = Column(Integer)
     details = Column(Text)
     ip_address = Column(String(45))
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, primary_key=True, nullable=False)
 
     __table_args__ = (
         Index("idx_system_log_user", "user_id"),
@@ -31,7 +31,7 @@ class ViolationLog(Base):
     __tablename__ = "violation_log"
 
     log_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user.user_id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("user_core.user_id"), nullable=False, index=True)
     reason = Column(String(500), nullable=False)
     action_taken = Column(String(50), nullable=False)  # BAN, DEACTIVATE, PRODUCT_REMOVAL...
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
@@ -50,7 +50,7 @@ class SystemFeedback(Base):
     __tablename__ = "system_feedback"
 
     feedback_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user.user_id"), nullable=True, index=True)
+    user_id = Column(Integer, ForeignKey("user_core.user_id"), nullable=True, index=True)
     guest_email = Column(String(255), nullable=True)
     subject = Column(String(200), nullable=False)
     content = Column(Text, nullable=False)

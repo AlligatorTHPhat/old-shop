@@ -1,0 +1,1570 @@
+{
+  "columns": [
+    [
+      "category",
+      "category_id",
+      "integer",
+      true,
+      "nextval('category_category_id_seq'::regclass)"
+    ],
+    [
+      "category",
+      "name",
+      "character varying(100)",
+      true,
+      null
+    ],
+    [
+      "category",
+      "description",
+      "text",
+      false,
+      null
+    ],
+    [
+      "category",
+      "parent_id",
+      "integer",
+      false,
+      null
+    ],
+    [
+      "category",
+      "is_active",
+      "boolean",
+      true,
+      "true"
+    ],
+    [
+      "category",
+      "is_deleted",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "category",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "category",
+      "updated_at",
+      "timestamp without time zone",
+      false,
+      null
+    ],
+    [
+      "contact_info",
+      "contact_id",
+      "integer",
+      true,
+      "nextval('contact_info_contact_id_seq'::regclass)"
+    ],
+    [
+      "contact_info",
+      "user_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "contact_info",
+      "full_name",
+      "character varying(100)",
+      true,
+      null
+    ],
+    [
+      "contact_info",
+      "phone_number",
+      "character varying(15)",
+      true,
+      null
+    ],
+    [
+      "contact_info",
+      "address",
+      "character varying(255)",
+      true,
+      null
+    ],
+    [
+      "contact_info",
+      "province",
+      "character varying(100)",
+      false,
+      null
+    ],
+    [
+      "contact_info",
+      "district",
+      "character varying(100)",
+      false,
+      null
+    ],
+    [
+      "contact_info",
+      "ward",
+      "character varying(100)",
+      false,
+      null
+    ],
+    [
+      "contact_info",
+      "is_default",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "contact_info",
+      "is_deleted",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "contact_info",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "contact_info",
+      "updated_at",
+      "timestamp without time zone",
+      false,
+      null
+    ],
+    [
+      "order",
+      "order_id",
+      "integer",
+      true,
+      "nextval('order_order_id_seq'::regclass)"
+    ],
+    [
+      "order",
+      "buyer_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "order",
+      "contact_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "order",
+      "payment_method_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "order",
+      "voucher_id",
+      "integer",
+      false,
+      null
+    ],
+    [
+      "order",
+      "order_date",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "order",
+      "total_amount",
+      "numeric(18,2)",
+      true,
+      null
+    ],
+    [
+      "order",
+      "shipping_fee",
+      "numeric(18,2)",
+      false,
+      "0"
+    ],
+    [
+      "order",
+      "discount_amount",
+      "numeric(18,2)",
+      false,
+      "0"
+    ],
+    [
+      "order",
+      "final_amount",
+      "numeric(18,2)",
+      true,
+      null
+    ],
+    [
+      "order",
+      "order_status",
+      "smallint",
+      true,
+      "0"
+    ],
+    [
+      "order",
+      "shipping_address",
+      "text",
+      false,
+      null
+    ],
+    [
+      "order",
+      "tracking_number",
+      "character varying(100)",
+      false,
+      null
+    ],
+    [
+      "order",
+      "notes",
+      "text",
+      false,
+      null
+    ],
+    [
+      "order",
+      "is_deleted",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "order_detail",
+      "order_detail_id",
+      "integer",
+      true,
+      "nextval('order_detail_order_detail_id_seq'::regclass)"
+    ],
+    [
+      "order_detail",
+      "order_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "order_detail",
+      "product_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "order_detail",
+      "quantity",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "order_detail",
+      "price_at_purchase",
+      "numeric(18,2)",
+      true,
+      null
+    ],
+    [
+      "order_detail",
+      "subtotal",
+      "numeric(18,2)",
+      true,
+      null
+    ],
+    [
+      "payment_method",
+      "payment_method_id",
+      "integer",
+      true,
+      "nextval('payment_method_payment_method_id_seq'::regclass)"
+    ],
+    [
+      "payment_method",
+      "method_name",
+      "character varying(50)",
+      true,
+      null
+    ],
+    [
+      "payment_method",
+      "is_online",
+      "boolean",
+      true,
+      null
+    ],
+    [
+      "payment_method",
+      "is_deleted",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "product",
+      "product_id",
+      "integer",
+      true,
+      "nextval('product_product_id_seq'::regclass)"
+    ],
+    [
+      "product",
+      "seller_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "product",
+      "category_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "product",
+      "title",
+      "character varying(255)",
+      true,
+      null
+    ],
+    [
+      "product",
+      "description",
+      "text",
+      false,
+      null
+    ],
+    [
+      "product",
+      "price",
+      "numeric(18,2)",
+      true,
+      null
+    ],
+    [
+      "product",
+      "quantity",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "product",
+      "view_count",
+      "integer",
+      true,
+      "0"
+    ],
+    [
+      "product",
+      "video_url",
+      "character varying(500)",
+      false,
+      null
+    ],
+    [
+      "product",
+      "status",
+      "smallint",
+      true,
+      "0"
+    ],
+    [
+      "product",
+      "reject_reason",
+      "character varying(500)",
+      false,
+      null
+    ],
+    [
+      "product",
+      "approved_by",
+      "integer",
+      false,
+      null
+    ],
+    [
+      "product",
+      "is_deleted",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "product",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "product",
+      "updated_at",
+      "timestamp without time zone",
+      false,
+      null
+    ],
+    [
+      "product",
+      "sold_at",
+      "timestamp without time zone",
+      false,
+      null
+    ],
+    [
+      "product",
+      "weight_grams",
+      "integer",
+      false,
+      null
+    ],
+    [
+      "product",
+      "dimensions",
+      "character varying(50)",
+      false,
+      null
+    ],
+    [
+      "product",
+      "condition_rating",
+      "smallint",
+      false,
+      null
+    ],
+    [
+      "product",
+      "warranty_months",
+      "integer",
+      false,
+      "0"
+    ],
+    [
+      "product",
+      "transfer_method",
+      "smallint",
+      true,
+      "1"
+    ],
+    [
+      "product_image",
+      "image_id",
+      "integer",
+      true,
+      "nextval('product_image_image_id_seq'::regclass)"
+    ],
+    [
+      "product_image",
+      "product_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "product_image",
+      "image_url",
+      "character varying(500)",
+      true,
+      null
+    ],
+    [
+      "product_image",
+      "alt_text",
+      "character varying(255)",
+      false,
+      null
+    ],
+    [
+      "product_image",
+      "is_primary",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "product_image",
+      "display_order",
+      "integer",
+      true,
+      "0"
+    ],
+    [
+      "product_image",
+      "uploaded_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "review",
+      "review_id",
+      "integer",
+      true,
+      "nextval('review_review_id_seq'::regclass)"
+    ],
+    [
+      "review",
+      "product_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "review",
+      "buyer_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "review",
+      "rating",
+      "smallint",
+      true,
+      null
+    ],
+    [
+      "review",
+      "title",
+      "character varying(255)",
+      false,
+      null
+    ],
+    [
+      "review",
+      "content",
+      "text",
+      false,
+      null
+    ],
+    [
+      "review",
+      "is_verified_purchase",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "review",
+      "helpful_count",
+      "integer",
+      true,
+      "0"
+    ],
+    [
+      "review",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "review",
+      "updated_at",
+      "timestamp without time zone",
+      false,
+      null
+    ],
+    [
+      "review",
+      "is_deleted",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "role",
+      "role_id",
+      "integer",
+      true,
+      "nextval('role_role_id_seq'::regclass)"
+    ],
+    [
+      "role",
+      "role_name",
+      "character varying(50)",
+      true,
+      null
+    ],
+    [
+      "role",
+      "description",
+      "character varying(255)",
+      false,
+      null
+    ],
+    [
+      "role",
+      "is_deleted",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "role",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "role",
+      "updated_at",
+      "timestamp without time zone",
+      false,
+      null
+    ],
+    [
+      "shopping_cart",
+      "cart_id",
+      "integer",
+      true,
+      "nextval('shopping_cart_cart_id_seq'::regclass)"
+    ],
+    [
+      "shopping_cart",
+      "user_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "shopping_cart",
+      "last_updated",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "shopping_cart_item",
+      "cart_item_id",
+      "integer",
+      true,
+      "nextval('shopping_cart_item_cart_item_id_seq'::regclass)"
+    ],
+    [
+      "shopping_cart_item",
+      "cart_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "shopping_cart_item",
+      "product_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "shopping_cart_item",
+      "quantity",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "shopping_cart_item",
+      "added_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "system_feedback",
+      "feedback_id",
+      "integer",
+      true,
+      "nextval('system_feedback_feedback_id_seq'::regclass)"
+    ],
+    [
+      "system_feedback",
+      "user_id",
+      "integer",
+      false,
+      null
+    ],
+    [
+      "system_feedback",
+      "guest_email",
+      "character varying(255)",
+      false,
+      null
+    ],
+    [
+      "system_feedback",
+      "subject",
+      "character varying(200)",
+      true,
+      null
+    ],
+    [
+      "system_feedback",
+      "content",
+      "text",
+      true,
+      null
+    ],
+    [
+      "system_feedback",
+      "status",
+      "smallint",
+      false,
+      "0"
+    ],
+    [
+      "system_feedback",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "system_log",
+      "log_id",
+      "bigint",
+      true,
+      "nextval('system_log_log_id_seq'::regclass)"
+    ],
+    [
+      "system_log",
+      "user_id",
+      "integer",
+      false,
+      null
+    ],
+    [
+      "system_log",
+      "action",
+      "character varying(100)",
+      true,
+      null
+    ],
+    [
+      "system_log",
+      "resource_type",
+      "character varying(50)",
+      false,
+      null
+    ],
+    [
+      "system_log",
+      "resource_id",
+      "integer",
+      false,
+      null
+    ],
+    [
+      "system_log",
+      "details",
+      "text",
+      false,
+      null
+    ],
+    [
+      "system_log",
+      "ip_address",
+      "character varying(45)",
+      false,
+      null
+    ],
+    [
+      "system_log",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "transaction",
+      "transaction_id",
+      "integer",
+      true,
+      "nextval('transaction_transaction_id_seq'::regclass)"
+    ],
+    [
+      "transaction",
+      "order_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "transaction",
+      "user_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "transaction",
+      "payment_method_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "transaction",
+      "amount",
+      "numeric(18,4)",
+      true,
+      null
+    ],
+    [
+      "transaction",
+      "balance_before",
+      "numeric(18,4)",
+      false,
+      "0.0000"
+    ],
+    [
+      "transaction",
+      "balance_after",
+      "numeric(18,4)",
+      false,
+      "0.0000"
+    ],
+    [
+      "transaction",
+      "transaction_status",
+      "smallint",
+      true,
+      "0"
+    ],
+    [
+      "transaction",
+      "fraud_score",
+      "numeric(5,2)",
+      false,
+      "0.00"
+    ],
+    [
+      "transaction",
+      "reference_number",
+      "character varying(100)",
+      false,
+      null
+    ],
+    [
+      "transaction",
+      "provider_transaction_id",
+      "character varying(100)",
+      false,
+      null
+    ],
+    [
+      "transaction",
+      "address",
+      "text",
+      false,
+      null
+    ],
+    [
+      "transaction",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "transaction",
+      "updated_at",
+      "timestamp without time zone",
+      false,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "user",
+      "user_id",
+      "integer",
+      true,
+      "nextval('user_user_id_seq'::regclass)"
+    ],
+    [
+      "user",
+      "username",
+      "character varying(50)",
+      true,
+      null
+    ],
+    [
+      "user",
+      "email",
+      "character varying(100)",
+      true,
+      null
+    ],
+    [
+      "user",
+      "password_hash",
+      "character varying(255)",
+      true,
+      null
+    ],
+    [
+      "user",
+      "random_key",
+      "character varying(64)",
+      true,
+      null
+    ],
+    [
+      "user",
+      "full_name",
+      "character varying(100)",
+      true,
+      null
+    ],
+    [
+      "user",
+      "phone_number",
+      "character varying(15)",
+      false,
+      null
+    ],
+    [
+      "user",
+      "address",
+      "character varying(255)",
+      false,
+      null
+    ],
+    [
+      "user",
+      "balance",
+      "numeric(18,4)",
+      true,
+      "10000000.00"
+    ],
+    [
+      "user",
+      "is_active",
+      "boolean",
+      true,
+      "true"
+    ],
+    [
+      "user",
+      "is_deleted",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "user",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "user",
+      "updated_at",
+      "timestamp without time zone",
+      false,
+      null
+    ],
+    [
+      "user",
+      "last_login",
+      "timestamp without time zone",
+      false,
+      null
+    ],
+    [
+      "user",
+      "email_verified",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "user",
+      "email_verification_token",
+      "character varying(255)",
+      false,
+      null
+    ],
+    [
+      "user",
+      "password_reset_token",
+      "character varying(255)",
+      false,
+      null
+    ],
+    [
+      "user",
+      "password_reset_expires",
+      "timestamp without time zone",
+      false,
+      null
+    ],
+    [
+      "user",
+      "trust_score",
+      "numeric(5,2)",
+      false,
+      "0.0"
+    ],
+    [
+      "user",
+      "avatar_url",
+      "character varying(500)",
+      false,
+      null
+    ],
+    [
+      "user_role",
+      "user_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "user_role",
+      "role_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "violation_log",
+      "log_id",
+      "integer",
+      true,
+      "nextval('violation_log_log_id_seq'::regclass)"
+    ],
+    [
+      "violation_log",
+      "user_id",
+      "integer",
+      true,
+      null
+    ],
+    [
+      "violation_log",
+      "reason",
+      "character varying(500)",
+      true,
+      null
+    ],
+    [
+      "violation_log",
+      "action_taken",
+      "character varying(50)",
+      true,
+      null
+    ],
+    [
+      "violation_log",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ],
+    [
+      "voucher",
+      "voucher_id",
+      "integer",
+      true,
+      "nextval('voucher_voucher_id_seq'::regclass)"
+    ],
+    [
+      "voucher",
+      "code",
+      "character varying(50)",
+      true,
+      null
+    ],
+    [
+      "voucher",
+      "description",
+      "character varying(255)",
+      false,
+      null
+    ],
+    [
+      "voucher",
+      "discount_type",
+      "smallint",
+      true,
+      "0"
+    ],
+    [
+      "voucher",
+      "discount_value",
+      "numeric(18,2)",
+      true,
+      null
+    ],
+    [
+      "voucher",
+      "max_usage",
+      "integer",
+      false,
+      null
+    ],
+    [
+      "voucher",
+      "usage_count",
+      "integer",
+      true,
+      "0"
+    ],
+    [
+      "voucher",
+      "min_order_amount",
+      "numeric(18,2)",
+      false,
+      null
+    ],
+    [
+      "voucher",
+      "valid_from",
+      "timestamp without time zone",
+      true,
+      null
+    ],
+    [
+      "voucher",
+      "valid_to",
+      "timestamp without time zone",
+      true,
+      null
+    ],
+    [
+      "voucher",
+      "is_active",
+      "boolean",
+      true,
+      "true"
+    ],
+    [
+      "voucher",
+      "is_deleted",
+      "boolean",
+      true,
+      "false"
+    ],
+    [
+      "voucher",
+      "created_at",
+      "timestamp without time zone",
+      true,
+      "CURRENT_TIMESTAMP"
+    ]
+  ],
+  "constraints": [
+    [
+      "category",
+      "f",
+      "FOREIGN KEY (parent_id) REFERENCES category(category_id)"
+    ],
+    [
+      "category",
+      "p",
+      "PRIMARY KEY (category_id)"
+    ],
+    [
+      "category",
+      "u",
+      "UNIQUE (name)"
+    ],
+    [
+      "contact_info",
+      "f",
+      "FOREIGN KEY (user_id) REFERENCES \"user\"(user_id)"
+    ],
+    [
+      "contact_info",
+      "p",
+      "PRIMARY KEY (contact_id)"
+    ],
+    [
+      "order",
+      "c",
+      "CHECK ((order_status = ANY (ARRAY[0, 1, 2, 3, 4])))"
+    ],
+    [
+      "order",
+      "f",
+      "FOREIGN KEY (buyer_id) REFERENCES \"user\"(user_id)"
+    ],
+    [
+      "order",
+      "f",
+      "FOREIGN KEY (contact_id) REFERENCES contact_info(contact_id)"
+    ],
+    [
+      "order",
+      "f",
+      "FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id)"
+    ],
+    [
+      "order",
+      "f",
+      "FOREIGN KEY (voucher_id) REFERENCES voucher(voucher_id)"
+    ],
+    [
+      "order",
+      "p",
+      "PRIMARY KEY (order_id)"
+    ],
+    [
+      "order_detail",
+      "c",
+      "CHECK ((quantity > 0))"
+    ],
+    [
+      "order_detail",
+      "f",
+      "FOREIGN KEY (order_id) REFERENCES \"order\"(order_id)"
+    ],
+    [
+      "order_detail",
+      "f",
+      "FOREIGN KEY (product_id) REFERENCES product(product_id)"
+    ],
+    [
+      "order_detail",
+      "p",
+      "PRIMARY KEY (order_detail_id)"
+    ],
+    [
+      "payment_method",
+      "p",
+      "PRIMARY KEY (payment_method_id)"
+    ],
+    [
+      "payment_method",
+      "u",
+      "UNIQUE (method_name)"
+    ],
+    [
+      "product",
+      "c",
+      "CHECK (((condition_rating >= 1) AND (condition_rating <= 10)))"
+    ],
+    [
+      "product",
+      "c",
+      "CHECK ((price >= (0)::numeric))"
+    ],
+    [
+      "product",
+      "c",
+      "CHECK ((quantity >= 0))"
+    ],
+    [
+      "product",
+      "c",
+      "CHECK ((status = ANY (ARRAY[0, 1, 2, 3])))"
+    ],
+    [
+      "product",
+      "c",
+      "CHECK ((transfer_method = ANY (ARRAY[1, 2])))"
+    ],
+    [
+      "product",
+      "f",
+      "FOREIGN KEY (approved_by) REFERENCES \"user\"(user_id)"
+    ],
+    [
+      "product",
+      "f",
+      "FOREIGN KEY (category_id) REFERENCES category(category_id)"
+    ],
+    [
+      "product",
+      "f",
+      "FOREIGN KEY (seller_id) REFERENCES \"user\"(user_id)"
+    ],
+    [
+      "product",
+      "p",
+      "PRIMARY KEY (product_id)"
+    ],
+    [
+      "product_image",
+      "f",
+      "FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE"
+    ],
+    [
+      "product_image",
+      "p",
+      "PRIMARY KEY (image_id)"
+    ],
+    [
+      "review",
+      "c",
+      "CHECK (((rating >= 0) AND (rating <= 5)))"
+    ],
+    [
+      "review",
+      "f",
+      "FOREIGN KEY (buyer_id) REFERENCES \"user\"(user_id)"
+    ],
+    [
+      "review",
+      "f",
+      "FOREIGN KEY (product_id) REFERENCES product(product_id)"
+    ],
+    [
+      "review",
+      "p",
+      "PRIMARY KEY (review_id)"
+    ],
+    [
+      "role",
+      "p",
+      "PRIMARY KEY (role_id)"
+    ],
+    [
+      "role",
+      "u",
+      "UNIQUE (role_name)"
+    ],
+    [
+      "shopping_cart",
+      "f",
+      "FOREIGN KEY (user_id) REFERENCES \"user\"(user_id)"
+    ],
+    [
+      "shopping_cart",
+      "p",
+      "PRIMARY KEY (cart_id)"
+    ],
+    [
+      "shopping_cart",
+      "u",
+      "UNIQUE (user_id)"
+    ],
+    [
+      "shopping_cart_item",
+      "c",
+      "CHECK ((quantity > 0))"
+    ],
+    [
+      "shopping_cart_item",
+      "f",
+      "FOREIGN KEY (cart_id) REFERENCES shopping_cart(cart_id)"
+    ],
+    [
+      "shopping_cart_item",
+      "f",
+      "FOREIGN KEY (product_id) REFERENCES product(product_id)"
+    ],
+    [
+      "shopping_cart_item",
+      "p",
+      "PRIMARY KEY (cart_item_id)"
+    ],
+    [
+      "system_feedback",
+      "f",
+      "FOREIGN KEY (user_id) REFERENCES \"user\"(user_id) ON DELETE SET NULL"
+    ],
+    [
+      "system_feedback",
+      "p",
+      "PRIMARY KEY (feedback_id)"
+    ],
+    [
+      "system_log",
+      "f",
+      "FOREIGN KEY (user_id) REFERENCES \"user\"(user_id)"
+    ],
+    [
+      "system_log",
+      "p",
+      "PRIMARY KEY (log_id)"
+    ],
+    [
+      "transaction",
+      "c",
+      "CHECK ((amount >= (0)::numeric))"
+    ],
+    [
+      "transaction",
+      "f",
+      "FOREIGN KEY (order_id) REFERENCES \"order\"(order_id) ON DELETE CASCADE"
+    ],
+    [
+      "transaction",
+      "f",
+      "FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id)"
+    ],
+    [
+      "transaction",
+      "f",
+      "FOREIGN KEY (user_id) REFERENCES \"user\"(user_id)"
+    ],
+    [
+      "transaction",
+      "p",
+      "PRIMARY KEY (transaction_id)"
+    ],
+    [
+      "transaction",
+      "u",
+      "UNIQUE (reference_number)"
+    ],
+    [
+      "user",
+      "p",
+      "PRIMARY KEY (user_id)"
+    ],
+    [
+      "user",
+      "u",
+      "UNIQUE (email)"
+    ],
+    [
+      "user",
+      "u",
+      "UNIQUE (random_key)"
+    ],
+    [
+      "user",
+      "u",
+      "UNIQUE (username)"
+    ],
+    [
+      "user_role",
+      "f",
+      "FOREIGN KEY (role_id) REFERENCES role(role_id)"
+    ],
+    [
+      "user_role",
+      "f",
+      "FOREIGN KEY (user_id) REFERENCES \"user\"(user_id)"
+    ],
+    [
+      "user_role",
+      "p",
+      "PRIMARY KEY (user_id, role_id)"
+    ],
+    [
+      "violation_log",
+      "f",
+      "FOREIGN KEY (user_id) REFERENCES \"user\"(user_id)"
+    ],
+    [
+      "violation_log",
+      "p",
+      "PRIMARY KEY (log_id)"
+    ],
+    [
+      "voucher",
+      "p",
+      "PRIMARY KEY (voucher_id)"
+    ],
+    [
+      "voucher",
+      "u",
+      "UNIQUE (code)"
+    ]
+  ],
+  "indexes": [
+    "CREATE INDEX idx_category_created_at ON public.category USING btree (created_at)",
+    "CREATE INDEX idx_category_is_active ON public.category USING btree (is_active) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_category_parent ON public.category USING btree (parent_id) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_contact_info_default ON public.contact_info USING btree (is_default) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_contact_info_user ON public.contact_info USING btree (user_id)",
+    "CREATE INDEX idx_order_buyer ON public.\"order\" USING btree (buyer_id) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_order_date ON public.\"order\" USING btree (order_date) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_order_detail_order ON public.order_detail USING btree (order_id)",
+    "CREATE INDEX idx_order_status ON public.\"order\" USING btree (order_status) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_product_category ON public.product USING btree (category_id) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_product_created_at ON public.product USING btree (created_at) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_product_image_product ON public.product_image USING btree (product_id)",
+    "CREATE INDEX idx_product_price ON public.product USING btree (price) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_product_seller ON public.product USING btree (seller_id) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_product_status ON public.product USING btree (status) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_product_title ON public.product USING gin (to_tsvector('english'::regconfig, (title)::text)) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_review_buyer ON public.review USING btree (buyer_id)",
+    "CREATE INDEX idx_review_product ON public.review USING btree (product_id)",
+    "CREATE INDEX idx_review_rating ON public.review USING btree (rating)",
+    "CREATE INDEX idx_role_created_at ON public.role USING btree (created_at)",
+    "CREATE INDEX idx_role_name ON public.role USING btree (role_name) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_shopping_cart_item_cart ON public.shopping_cart_item USING btree (cart_id)",
+    "CREATE INDEX idx_shopping_cart_item_product ON public.shopping_cart_item USING btree (product_id)",
+    "CREATE INDEX idx_system_feedback_created_at ON public.system_feedback USING btree (created_at)",
+    "CREATE INDEX idx_system_feedback_status ON public.system_feedback USING btree (status)",
+    "CREATE INDEX idx_system_feedback_user ON public.system_feedback USING btree (user_id)",
+    "CREATE INDEX idx_system_log_action ON public.system_log USING btree (action)",
+    "CREATE INDEX idx_system_log_created_at ON public.system_log USING btree (created_at)",
+    "CREATE INDEX idx_system_log_user ON public.system_log USING btree (user_id)",
+    "CREATE INDEX idx_transaction_fraud_score ON public.transaction USING btree (fraud_score)",
+    "CREATE INDEX idx_transaction_order ON public.transaction USING btree (order_id)",
+    "CREATE INDEX idx_transaction_status ON public.transaction USING btree (transaction_status)",
+    "CREATE INDEX idx_transaction_user ON public.transaction USING btree (user_id)",
+    "CREATE INDEX idx_user_created_at ON public.\"user\" USING btree (created_at)",
+    "CREATE INDEX idx_user_email_verified ON public.\"user\" USING btree (email_verified) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_user_is_active ON public.\"user\" USING btree (is_active) WHERE (is_deleted = false)",
+    "CREATE INDEX idx_violation_log_created_at ON public.violation_log USING btree (created_at)",
+    "CREATE INDEX idx_violation_log_user ON public.violation_log USING btree (user_id)",
+    "CREATE INDEX idx_voucher_created_at ON public.voucher USING btree (created_at)",
+    "CREATE INDEX idx_voucher_valid_to ON public.voucher USING btree (valid_to) WHERE (is_active = true)",
+    "CREATE UNIQUE INDEX category_name_key ON public.category USING btree (name)",
+    "CREATE UNIQUE INDEX category_pkey ON public.category USING btree (category_id)",
+    "CREATE UNIQUE INDEX contact_info_pkey ON public.contact_info USING btree (contact_id)",
+    "CREATE UNIQUE INDEX idx_category_name_active ON public.category USING btree (name) WHERE (is_deleted = false)",
+    "CREATE UNIQUE INDEX idx_user_email_active ON public.\"user\" USING btree (email) WHERE (is_deleted = false)",
+    "CREATE UNIQUE INDEX idx_user_username_active ON public.\"user\" USING btree (username) WHERE (is_deleted = false)",
+    "CREATE UNIQUE INDEX idx_voucher_code_active ON public.voucher USING btree (code) WHERE (is_active = true)",
+    "CREATE UNIQUE INDEX order_detail_pkey ON public.order_detail USING btree (order_detail_id)",
+    "CREATE UNIQUE INDEX order_pkey ON public.\"order\" USING btree (order_id)",
+    "CREATE UNIQUE INDEX payment_method_method_name_key ON public.payment_method USING btree (method_name)",
+    "CREATE UNIQUE INDEX payment_method_pkey ON public.payment_method USING btree (payment_method_id)",
+    "CREATE UNIQUE INDEX product_image_pkey ON public.product_image USING btree (image_id)",
+    "CREATE UNIQUE INDEX product_pkey ON public.product USING btree (product_id)",
+    "CREATE UNIQUE INDEX review_pkey ON public.review USING btree (review_id)",
+    "CREATE UNIQUE INDEX role_pkey ON public.role USING btree (role_id)",
+    "CREATE UNIQUE INDEX role_role_name_key ON public.role USING btree (role_name)",
+    "CREATE UNIQUE INDEX shopping_cart_item_pkey ON public.shopping_cart_item USING btree (cart_item_id)",
+    "CREATE UNIQUE INDEX shopping_cart_pkey ON public.shopping_cart USING btree (cart_id)",
+    "CREATE UNIQUE INDEX shopping_cart_user_id_key ON public.shopping_cart USING btree (user_id)",
+    "CREATE UNIQUE INDEX system_feedback_pkey ON public.system_feedback USING btree (feedback_id)",
+    "CREATE UNIQUE INDEX system_log_pkey ON public.system_log USING btree (log_id)",
+    "CREATE UNIQUE INDEX transaction_pkey ON public.transaction USING btree (transaction_id)",
+    "CREATE UNIQUE INDEX transaction_reference_number_key ON public.transaction USING btree (reference_number)",
+    "CREATE UNIQUE INDEX user_email_key ON public.\"user\" USING btree (email)",
+    "CREATE UNIQUE INDEX user_pkey ON public.\"user\" USING btree (user_id)",
+    "CREATE UNIQUE INDEX user_random_key_key ON public.\"user\" USING btree (random_key)",
+    "CREATE UNIQUE INDEX user_role_pkey ON public.user_role USING btree (user_id, role_id)",
+    "CREATE UNIQUE INDEX user_username_key ON public.\"user\" USING btree (username)",
+    "CREATE UNIQUE INDEX violation_log_pkey ON public.violation_log USING btree (log_id)",
+    "CREATE UNIQUE INDEX voucher_code_key ON public.voucher USING btree (code)",
+    "CREATE UNIQUE INDEX voucher_pkey ON public.voucher USING btree (voucher_id)"
+  ],
+  "triggers": [
+    [
+      "order_detail",
+      "trg_no_self_buying",
+      "CREATE TRIGGER trg_no_self_buying BEFORE INSERT ON public.order_detail FOR EACH ROW EXECUTE FUNCTION check_no_self_buying()"
+    ],
+    [
+      "product",
+      "trg_update_product_status",
+      "CREATE TRIGGER trg_update_product_status BEFORE UPDATE ON public.product FOR EACH ROW WHEN ((old.quantity <> new.quantity)) EXECUTE FUNCTION update_product_status_on_quantity()"
+    ]
+  ]
+}

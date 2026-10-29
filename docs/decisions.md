@@ -8,6 +8,14 @@
 > và SQL thuần qua driver pgAdmin4 9.18; xem [DAY1_REVIEW.md](DAY1_REVIEW.md).
 > D7–D11 vẫn là đề xuất/phụ thuộc cần xử lý, không được tự đánh dấu đã chốt cùng D1–D6.
 
+## Trạng thái triển khai cập nhật 29/10/2026
+
+D3/D4 phần PostgreSQL và runner D6 đã hiện thực trong migrations 001–004, áp vào stack
+local sau backup/restore và đối soát dữ liệu; 96 test đạt. Chi tiết bằng chứng:
+[DAY4_FINDINGS_LOG.md](DAY4_FINDINGS_LOG.md), [04_indexing.md](design/04_indexing.md).
+Những đoạn “chưa có/sắp triển khai” dưới đây ghi bối cảnh lúc chốt Ngày 1; trạng thái hiện tại
+ưu tiên bản cập nhật này. D2 outbox/ETL còn Ngày 5; D7/D8 chưa tự chốt; FDW ngoài MVP.
+
 ## Bảng chốt D1–D6
 
 | Quyết định | Trạng thái | Kết luận / thông tin còn thiếu |

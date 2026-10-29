@@ -129,3 +129,12 @@ See [JSON and storage design](docs/design/03_json_design.md) and
 [Day 3 findings](docs/DAY3_FINDINGS_LOG.md). Run `bash deploy/scripts/test-day3.sh`
 after building/provisioning the data stack; it creates a separate PostgreSQL test database.
 Mongo data synchronization is scheduled for Day 5.
+
+**Day 4 migrations / benchmarks:** SQL-first bootstrap now applies versioned migrations after
+baseline initialization. Orders use four HASH partitions; system logs use monthly RANGE
+partitions; users are stored in core/profile/secret/wallet tables with a read-only `users_full` view.
+See [indexing and maintenance](docs/design/04_indexing.md), [benchmarks](docs/benchmark/README.md)
+and [Day 4 findings](docs/DAY4_FINDINGS_LOG.md). Build the backend image, then run
+`bash deploy/scripts/test-day4.sh` on a fresh test database. For the existing local data stack,
+`bash deploy/scripts/apply-day4.sh --resilience` handles maintenance, backup/restore verification,
+migration and reconciliation. Changing only the application image does not reverse a schema migration.

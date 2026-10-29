@@ -1,0 +1,8 @@
+SELECT * FROM shopping_cart_item WHERE cart_id=1000042 AND product_id=1000041
+
+Index Scan using idx_shopping_cart_item_product on shopping_cart_item  (cost=0.29..8.31 rows=1 width=24) (actual time=0.025..0.026 rows=1 loops=1)
+  Index Cond: (product_id = 1000041)
+  Filter: (cart_id = 1000042)
+  Buffers: shared hit=3
+Planning Time: 0.053 ms
+Execution Time: 0.047 ms

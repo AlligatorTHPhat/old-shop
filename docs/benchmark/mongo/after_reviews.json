@@ -1,0 +1,162 @@
+{
+  "explainVersion": "1",
+  "queryPlanner": {
+    "namespace": "oldshop.day4_bench_reviews_72f134afb53443bd903b00d1f904dd73",
+    "indexFilterSet": false,
+    "parsedQuery": {
+      "product_id": {
+        "$eq": 42
+      }
+    },
+    "queryHash": "5C93852B",
+    "planCacheKey": "D3EAE311",
+    "optimizationTimeMillis": 0,
+    "maxIndexedOrSolutionsReached": false,
+    "maxIndexedAndSolutionsReached": false,
+    "maxScansToExplodeReached": false,
+    "winningPlan": {
+      "stage": "LIMIT",
+      "limitAmount": 20,
+      "inputStage": {
+        "stage": "FETCH",
+        "inputStage": {
+          "stage": "IXSCAN",
+          "keyPattern": {
+            "product_id": 1,
+            "created_at": -1
+          },
+          "indexName": "product_id_1_created_at_-1",
+          "isMultiKey": false,
+          "multiKeyPaths": {
+            "product_id": [],
+            "created_at": []
+          },
+          "isUnique": false,
+          "isSparse": false,
+          "isPartial": false,
+          "indexVersion": 2,
+          "direction": "forward",
+          "indexBounds": {
+            "product_id": [
+              "[42, 42]"
+            ],
+            "created_at": [
+              "[MaxKey, MinKey]"
+            ]
+          }
+        }
+      }
+    },
+    "rejectedPlans": []
+  },
+  "executionStats": {
+    "executionSuccess": true,
+    "nReturned": 10,
+    "executionTimeMillis": 2,
+    "totalKeysExamined": 10,
+    "totalDocsExamined": 10,
+    "executionStages": {
+      "stage": "LIMIT",
+      "nReturned": 10,
+      "executionTimeMillisEstimate": 0,
+      "works": 11,
+      "advanced": 10,
+      "needTime": 0,
+      "needYield": 0,
+      "saveState": 0,
+      "restoreState": 0,
+      "isEOF": 1,
+      "limitAmount": 20,
+      "inputStage": {
+        "stage": "FETCH",
+        "nReturned": 10,
+        "executionTimeMillisEstimate": 0,
+        "works": 11,
+        "advanced": 10,
+        "needTime": 0,
+        "needYield": 0,
+        "saveState": 0,
+        "restoreState": 0,
+        "isEOF": 1,
+        "docsExamined": 10,
+        "alreadyHasObj": 0,
+        "inputStage": {
+          "stage": "IXSCAN",
+          "nReturned": 10,
+          "executionTimeMillisEstimate": 0,
+          "works": 11,
+          "advanced": 10,
+          "needTime": 0,
+          "needYield": 0,
+          "saveState": 0,
+          "restoreState": 0,
+          "isEOF": 1,
+          "keyPattern": {
+            "product_id": 1,
+            "created_at": -1
+          },
+          "indexName": "product_id_1_created_at_-1",
+          "isMultiKey": false,
+          "multiKeyPaths": {
+            "product_id": [],
+            "created_at": []
+          },
+          "isUnique": false,
+          "isSparse": false,
+          "isPartial": false,
+          "indexVersion": 2,
+          "direction": "forward",
+          "indexBounds": {
+            "product_id": [
+              "[42, 42]"
+            ],
+            "created_at": [
+              "[MaxKey, MinKey]"
+            ]
+          },
+          "keysExamined": 10,
+          "seeks": 1,
+          "dupsTested": 0,
+          "dupsDropped": 0
+        }
+      }
+    }
+  },
+  "command": {
+    "find": "day4_bench_reviews_72f134afb53443bd903b00d1f904dd73",
+    "filter": {
+      "product_id": 42
+    },
+    "limit": 20,
+    "sort": {
+      "created_at": -1
+    },
+    "$db": "oldshop"
+  },
+  "serverInfo": {
+    "host": "8f9a734f9531",
+    "port": 27017,
+    "version": "7.0.43",
+    "gitVersion": "ef5a7d3480b59feae13d564376129fc4ceee6177"
+  },
+  "serverParameters": {
+    "internalQueryFacetBufferSizeBytes": 104857600,
+    "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+    "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+    "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+    "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+    "internalQueryProhibitBlockingMergeOnMongoS": 0,
+    "internalQueryMaxAddToSetBytes": 104857600,
+    "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+    "internalQueryFrameworkControl": "forceClassicEngine"
+  },
+  "ok": 1.0,
+  "$clusterTime": {
+    "clusterTime": "Timestamp(1793273316, 12)",
+    "signature": {
+      "hash": "b'\\x9a3d\\xdc\\x87i\\xc1\\x93\\xee\\x969`\\xb4\\xecI\\x84)`it'",
+      "keyId": 7701708331252973572
+    }
+  },
+  "operationTime": "Timestamp(1793273316, 12)"
+}

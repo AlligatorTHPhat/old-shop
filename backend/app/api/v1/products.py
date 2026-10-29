@@ -55,7 +55,7 @@ def list_products(
     if search:
         products = crud_product.search(db, search, skip=skip, limit=limit)
     elif category_id:
-        products = crud_product.get_by_category(db, category_id, skip=skip, limit=limit)
+        products = crud_product.get_by_category(db, category_id, skip=skip, limit=limit, order_by=sort_by)
     else:
         products = crud_product.get_approved(db, skip=skip, limit=limit, order_by=sort_by)
 
@@ -150,7 +150,7 @@ async def create_product(
     try:
         for index, file in enumerate(files, start=1):
             saved.append(await save_image(file, "products", f"prod_{product.product_id}_{index}"))
-        crud_product.add_images(db, product, saved)
+        await run_in_threadpool(crud_product.add_images, db, product, saved)
         db.commit()
     except Exception:
         db.rollback()

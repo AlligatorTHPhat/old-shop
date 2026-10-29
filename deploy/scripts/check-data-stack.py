@@ -1,4 +1,4 @@
-"""Check Day 2 infrastructure without printing credentials or changing application data."""
+"""Check data infrastructure without printing credentials or changing application data."""
 
 import argparse
 import json
@@ -64,7 +64,13 @@ checks["healthy_services"] = sorted(expected)
 checks["postgres_version"] = pg("pg-primary", "SHOW server_version")
 assert pg("pg-primary", "SELECT pg_is_in_recovery()") == "f"
 checks["baseline"] = pg("pg-primary", "SELECT count(*) FROM pg_tables WHERE schemaname='public'")
-assert checks["baseline"] == "18", "Day 2 should contain baseline, not Day 4 migrations"
+if pg("pg-primary", "SELECT to_regclass('public.schema_migrations') IS NOT NULL") == "t":
+    checks["migrations"] = pg("pg-primary", "SELECT string_agg(version,',' ORDER BY version) FROM schema_migrations")
+    assert checks["migrations"] == "001,002,003,004"
+    assert pg("pg-primary", "SELECT count(*) FROM pg_inherits WHERE inhparent='public.\"order\"'::regclass") == "4"
+    assert pg("pg-primary", "SELECT count(*) FROM information_schema.columns WHERE table_name='users_full' AND table_schema='public'") == "20"
+else:
+    assert checks["baseline"] == "18", "Unrecognized baseline schema"
 checks["orders"] = pg("pg-primary", 'SELECT count(*) FROM "order"')
 checks["mongo"] = mongo("""
 const s = admin.runCommand({replSetGetStatus: 1});

@@ -320,9 +320,12 @@ CI (`.github/workflows/ci.yml`) chạy backend lint/test với PostgreSQL 16, bu
 project oldshop-data, có PG primary/Mongo/MinIO và profile resilience thêm PG replica/Mongo2-3.
 Hướng dẫn: [design/02_distribution_strategy.md](design/02_distribution_strategy.md);
 trạng thái/ngoại lệ Mongo8 trên kernel hiện tại: [DAY2_FINDINGS_LOG.md](DAY2_FINDINGS_LOG.md).
-Stack này vẫn nạp baseline 18 bảng; chưa áp partition/user split, chưa dùng Mongo/MinIO trong API.
-Các biến client trong core/config.py là hợp đồng cấu hình cho bước tích hợp tiếp theo,
-STORAGE_BACKEND vẫn local; ETL worker được thực hiện Ngày 5.
+Cập nhật Ngày 4: stack đã nạp baseline v0 rồi áp migrations 001–004: order HASH,
+system_log RANGE, user_core/profile/secret/wallet và users_full chỉ đọc.
+STORAGE_BACKEND=minio, Mongo client/validator đã dùng từ Ngày 3; ETL vẫn thuộc Ngày 5.
+Xem [thiết kế Ngày 4](design/04_indexing.md), [trạng thái](DAY4_FINDINGS_LOG.md).
+Mô tả SQL/schema baseline ở các mục đầu là nguồn lịch sử; cấu trúc hiện tại dùng thêm
+`database/04_migrations` và [ERD Ngày 4](diagram/04_erd_target.dbml).
 
 - `deploy/docker-compose.yml`: production compose.
 - `deploy/caddy/Caddyfile`: HTTPS/TLS và domain routing.
@@ -384,3 +387,13 @@ backend dùng Mongo readWrite. `minio-init` tạo ba bucket private và user gi�
 backend đọc/ghi S3 qua SDK, route media phục vụ ảnh sản phẩm/avatar với URL hiện hữu.
 Readiness kiểm tra cả Mongo/MinIO khi cấu hình sử dụng. ETL chưa chạy trước Ngày 5.
 Xem [DAY3_FINDINGS_LOG.md](DAY3_FINDINGS_LOG.md) để biết môi trường và bằng chứng kiểm thử.
+
+### Cập nhật Ngày 4 — đường bootstrap và schema hiện tại
+
+`init_db.py` kiểm tra baseline có kiểm soát rồi luôn chạy `scripts.migrate`; DATABASE_URL
+là cấu hình ưu tiên cho engine/bootstrap/runner. SQL v0 không sửa lại; mọi thay đổi qua
+migration có checksum và transaction. CI nạp v0 rồi migrate trước pytest.
+Model User map user_core, proxy vào ba model con để giữ API cũ; không ghi users_full.
+SystemLog có khóa ghép `(log_id,created_at)`. Metadata file product_image có content_type,
+size_bytes; API không cần scan MinIO. Regression chạy bằng `test-day4.sh` tạo DB riêng;
+apply-day4.sh dừng ghi và kiểm thử restore trước khi đổi schema stack hiện hữu.

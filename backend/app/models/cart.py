@@ -10,7 +10,7 @@ class ShoppingCart(Base):
     __tablename__ = "shopping_cart"
 
     cart_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user.user_id"), unique=True, nullable=False)
+    user_id = Column(Integer, ForeignKey("user_core.user_id"), unique=True, nullable=False)
     last_updated = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     user = relationship("User", back_populates="shopping_cart")

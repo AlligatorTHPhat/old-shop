@@ -4,6 +4,7 @@ from typing import Annotated, Literal
 
 from pydantic import model_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
+from sqlalchemy.engine import URL, make_url
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
 
@@ -88,13 +89,34 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def _build_database_url(self) -> "Settings":
         if not self.DATABASE_URL:
-            self.DATABASE_URL = (
-                f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-            )
-        elif self.DATABASE_URL.startswith("postgresql://"):
-            # SQLAlchemy 2.1 maps the bare scheme to psycopg 3; we ship psycopg2.
-            self.DATABASE_URL = self.DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
+            self.DATABASE_URL = URL.create(
+                "postgresql+psycopg2",
+                username=self.DB_USER,
+                password=self.DB_PASSWORD,
+                host=self.DB_HOST,
+                port=self.DB_PORT,
+                database=self.DB_NAME,
+            ).render_as_string(hide_password=False)
+        else:
+            url = make_url(self.DATABASE_URL)
+            if url.drivername == "postgresql":
+                url = url.set(drivername="postgresql+psycopg2")
+            if url.drivername != "postgresql+psycopg2":
+                raise ValueError("DATABASE_URL must use PostgreSQL with psycopg2")
+            self.DATABASE_URL = url.render_as_string(hide_password=False)
+            self.DB_HOST, self.DB_PORT = url.host or "", url.port or 5432
+            self.DB_USER, self.DB_PASSWORD = url.username or "", url.password or ""
+            if not url.database:
+                raise ValueError("DATABASE_URL must identify a database")
+            self.DB_NAME = url.database
         return self
+
+    @property
+    def database_connect_args(self) -> dict:
+        url = make_url(self.DATABASE_URL)
+        args = url.translate_connect_args(username="user", database="dbname")
+        args.update(url.query)
+        return args
 
     @property
     def is_production(self) -> bool:

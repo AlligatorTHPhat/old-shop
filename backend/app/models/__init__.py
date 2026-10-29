@@ -4,7 +4,7 @@ from app.models.cart import ShoppingCart, ShoppingCartItem
 from app.models.catalog import Category, Product, ProductImage, Review
 from app.models.order import ContactInfo, Order, OrderDetail, PaymentMethod, Transaction, Voucher
 from app.models.system import SystemFeedback, SystemLog, ViolationLog
-from app.models.user import Role, User, UserRole
+from app.models.user import Role, User, UserProfile, UserRole, UserSecret, UserWallet
 
 __all__ = [
     "Category",
@@ -23,6 +23,9 @@ __all__ = [
     "Transaction",
     "User",
     "UserRole",
+    "UserProfile",
+    "UserSecret",
+    "UserWallet",
     "ViolationLog",
     "Voucher",
 ]

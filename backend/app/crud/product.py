@@ -5,6 +5,7 @@ from app.core.exceptions import BadRequestError, NotFoundError
 from app.crud.base import CRUDBase
 from app.models import Category, Product, ProductImage, Review
 from app.schemas import ReviewCreate
+from app.services.storage import image_metadata
 
 SORT_COLUMNS = {
     "created_at": Product.created_at.desc(),
@@ -49,8 +50,17 @@ class CRUDProduct(CRUDBase[Product]):
             .all()
         )
 
-    def get_by_category(self, db: Session, category_id: int, skip: int = 0, limit: int = 100) -> list[Product]:
-        return self._visible(db).filter(Product.category_id == category_id).offset(skip).limit(limit).all()
+    def get_by_category(
+        self, db: Session, category_id: int, skip: int = 0, limit: int = 100, order_by: str = "created_at"
+    ) -> list[Product]:
+        return (
+            self._visible(db)
+            .filter(Product.category_id == category_id)
+            .order_by(SORT_COLUMNS.get(order_by, SORT_COLUMNS["created_at"]))
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
 
     def search(self, db: Session, query_str: str, skip: int = 0, limit: int = 100) -> list[Product]:
         pattern = f"%{query_str}%"
@@ -96,6 +106,7 @@ class CRUDProduct(CRUDBase[Product]):
                 ProductImage(
                     product_id=product.product_id,
                     image_url=url,
+                    **image_metadata(url),
                     alt_text=f"{product.title} - Image {order}",
                     is_primary=order == 1,
                     display_order=order,

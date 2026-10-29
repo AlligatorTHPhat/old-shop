@@ -1,0 +1,13 @@
+SELECT count(*) FROM system_log WHERE created_at >= timestamp '2026-03-01' AND created_at < timestamp '2026-04-01'
+
+Aggregate  (cost=2991.55..2991.56 rows=1 width=8) (actual time=4.314..4.315 rows=1 loops=1)
+  Buffers: shared hit=506
+  ->  Bitmap Heap Scan on system_log  (cost=134.51..2969.54 rows=8802 width=0) (actual time=1.030..3.387 rows=8494 loops=1)
+        Recheck Cond: ((created_at >= '2026-03-01 00:00:00'::timestamp without time zone) AND (created_at < '2026-04-01 00:00:00'::timestamp without time zone))
+        Heap Blocks: exact=496
+        Buffers: shared hit=506
+        ->  Bitmap Index Scan on idx_system_log_created_at  (cost=0.00..132.31 rows=8802 width=0) (actual time=0.896..0.896 rows=8494 loops=1)
+              Index Cond: ((created_at >= '2026-03-01 00:00:00'::timestamp without time zone) AND (created_at < '2026-04-01 00:00:00'::timestamp without time zone))
+              Buffers: shared hit=10
+Planning Time: 0.158 ms
+Execution Time: 4.413 ms

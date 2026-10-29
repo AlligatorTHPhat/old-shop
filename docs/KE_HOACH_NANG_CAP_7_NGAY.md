@@ -335,35 +335,41 @@ Collection + validator được tạo bằng script; upload/đọc ảnh qua Min
 
 ### ✅ Checklist
 **PostgreSQL**
-- [ ] Liệt kê **top truy vấn nóng** từ CRUD (catalogue lọc theo category/status/giá, tìm kiếm tên, đơn của user/seller, thống kê admin) → bảng "truy vấn → chỉ mục"
-- [ ] Đề xuất/thêm chỉ mục (chỉ giữ cái có lý do):
-  - `products (status, category_id, created_at DESC)` — composite cho catalogue
-  - `products (name gin_trgm_ops)` — tìm kiếm `ILIKE` (đã có `pg_trgm`)
-  - `products (seller_id)` — partial `WHERE status = 1` nếu phù hợp
-  - `orders (user_id, created_at DESC)`, `orders (seller_id/status, created_at)` — lịch sử đơn
-  - `order_details (order_id)`, `order_details (product_id)` — FK join
-  - `shopping_cart_items (cart_id, product_id)` UNIQUE — chống trùng
-  - `transactions (order_id)`, `reviews (product_id, created_at)`; partial `reviews WHERE rating = 0` cho moderator
-  - BRIN trên `created_at` của bảng partition lớn (tùy chọn)
-- [ ] Viết `database/04_migrations/001_indexes.sql`
-- [ ] Hiện thực order HASH/order_id và system_log RANGE/created_at theo D3; kiểm tra FK/PK/trigger và mọi nơi dùng khóa log
-- [ ] Hiện thực user_core/profile/secret/wallet + view users_full chỉ đọc; ghi bằng ORM/service vào bảng vật lý, đối soát đủ 20 cột
-- [ ] Ghi FDW theo vùng vào hướng mở rộng, chưa cấu hình node-b trong MVP
-- [ ] Chạy `EXPLAIN (ANALYZE, BUFFERS)` **trước/sau** cho ≥ 5 truy vấn; chụp kết quả (Seq Scan → Index Scan, partition pruning)
-- [ ] Sinh dữ liệu giả lớn (≥ 100k orders, 50k products) bằng script để benchmark có ý nghĩa
+- [x] Liệt kê **top truy vấn nóng** từ CRUD (catalogue lọc theo category/status/giá, tìm kiếm tên, đơn của user/seller, thống kê admin) → bảng "truy vấn → chỉ mục"
+- [x] Đề xuất/thêm chỉ mục (chỉ giữ cái có lý do):
+  - `product(category_id, created_at DESC)` partial approved/not deleted cho catalogue
+  - Hai GIN trigram partial `product.title` và `product.description` cho search OR
+  - Giữ index seller/category/status/price/date hiện hữu, không tạo trùng
+  - `"order"(buyer_id, order_date DESC)` partial not deleted; seller join qua product/order_detail
+  - Giữ `order_detail(order_id)`; thêm `(product_id, order_id)` phục vụ seller join
+  - `shopping_cart_item(cart_id, product_id)` UNIQUE
+  - Giữ transaction(order_id), review(product_id/rating); hai index review thử nghiệm không được chọn nên đã loại
+  - Không thêm BRIN khi chưa có bằng chứng lợi ích; partition log vẫn giữ B-tree hiện hữu
+- [x] Viết `database/04_migrations/001_indexes.sql`
+- [x] Hiện thực order HASH/order_id và system_log RANGE/created_at theo D3; kiểm tra FK/PK/trigger và mọi nơi dùng khóa log
+- [x] Hiện thực user_core/profile/secret/wallet + view users_full chỉ đọc; ghi bằng ORM/service vào bảng vật lý, đối soát đủ 20 cột
+- [x] Ghi FDW theo vùng vào hướng mở rộng, chưa cấu hình node-b trong MVP
+- [x] Chạy `EXPLAIN (ANALYZE, BUFFERS)` **trước/sau** cho ≥ 5 truy vấn; chụp kết quả (Seq Scan → Index Scan, partition pruning)
+- [x] Sinh dữ liệu giả lớn (≥ 100k orders, 50k products) bằng script để benchmark có ý nghĩa
 **MongoDB**
-- [ ] `product_details`: unique `{product_id: 1}`; compound `{category_id: 1, "attributes.brand": 1}`; text index `{description, tags}`
-- [ ] `reviews`: `{product_id: 1, created_at: -1}`; partial `{type: "report", status: "pending"}`
-- [ ] `order_snapshots`: `{"buyer.id": 1, created_at: -1}`; `{status: 1, created_at: -1}`
-- [ ] `system_logs`: TTL index `created_at` (vd. 90 ngày); `{type: 1, actor_id: 1, created_at: -1}`
-- [ ] `explain("executionStats")` cho 3 truy vấn chính
+- [x] `product_details`: unique `{product_id: 1}`; compound `{category_id: 1, "attributes.brand": 1}`; text index `{description, tags}`
+- [x] `reviews`: `{product_id: 1, created_at: -1}`; partial `{type: "report", status: "pending"}`
+- [x] `order_snapshots`: `{"buyer.id": 1, order_date: -1}`; `{order_status: 1, order_date: -1}`
+- [x] `system_logs`: TTL index `created_at` (vd. 90 ngày); `{action: 1, actor_id: 1, created_at: -1}`
+- [x] `explain("executionStats")` cho 3 truy vấn chính
 **MinIO**
-- [ ] Quy ước key theo tiền tố (`products/{id}/`) để list nhanh; ghi nhận metadata (content-type, size) vào PG/Mongo thay vì scan bucket
+- [x] Quy ước key theo tiền tố (`products/{id}/`) để list nhanh; ghi nhận metadata (content-type, size) vào PG/Mongo thay vì scan bucket
 **Chung**
-- [ ] Bảng tổng hợp **"trường → chỉ mục → lý do → chi phí ghi"** (cho báo cáo)
+- [x] Bảng tổng hợp **"trường → chỉ mục → lý do → chi phí ghi"** (cho báo cáo)
 
 ### 📦 Sản phẩm đầu ra
-`database/04_migrations/001_indexes.sql`, `002_partitioning.sql`, `003_vertical_split.sql`, `docs/design/04_indexing.md`, `docs/benchmark/` (ảnh/log EXPLAIN trước–sau)
+`database/04_migrations/001_indexes.sql`, `002_partitioning.sql`, `003_vertical_split.sql`, `004_media_metadata.sql`, `backend/scripts/migrate.py`, `docs/design/04_indexing.md`, `docs/benchmark/` (ảnh/log EXPLAIN trước–sau)
+
+**Kết quả thực hiện 29/10:** 96/96 test PASS, 9 truy vấn PG trước/sau trên 100.030 đơn và
+50.016 sản phẩm, 3 Mongo executionStats. Đã áp vào stack local sau backup/restore và đối soát
+đúng 18 bảng nguồn; readiness và replication đều PASS. Xem
+[DAY4_FINDINGS_LOG.md](DAY4_FINDINGS_LOG.md), [04_indexing.md](design/04_indexing.md),
+[benchmark/evidence](benchmark/README.md).
 
 ### 🎯 Tiêu chí hoàn thành
 Mỗi chỉ mục có lý do + minh chứng đo; partition pruning được chứng minh; **toàn bộ test PG hiện có vẫn pass** trên DB test đã áp migration.

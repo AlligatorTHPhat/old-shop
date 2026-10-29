@@ -1,0 +1,5 @@
+After deploying day4, executed inside the running backend:
+python -m scripts.migrate
+{"applied": []}
+python -m scripts.backfill_media_metadata
+{"updated": 0, "unavailable_image_ids": []}

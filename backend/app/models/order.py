@@ -36,7 +36,7 @@ class ContactInfo(Base):
     __tablename__ = "contact_info"
 
     contact_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user.user_id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("user_core.user_id"), nullable=False, index=True)
     full_name = Column(String(100), nullable=False)
     phone_number = Column(String(15), nullable=False)
     address = Column(String(255), nullable=False)
@@ -76,7 +76,7 @@ class Order(Base):
     __tablename__ = "order"
 
     order_id = Column(Integer, primary_key=True, index=True)
-    buyer_id = Column(Integer, ForeignKey("user.user_id"), nullable=False, index=True)
+    buyer_id = Column(Integer, ForeignKey("user_core.user_id"), nullable=False, index=True)
     contact_id = Column(Integer, ForeignKey("contact_info.contact_id"), nullable=False)
     payment_method_id = Column(Integer, ForeignKey("payment_method.payment_method_id"), nullable=False)
     voucher_id = Column(Integer, ForeignKey("voucher.voucher_id"))
@@ -127,7 +127,7 @@ class Transaction(Base):
 
     transaction_id = Column(Integer, primary_key=True, index=True)
     order_id = Column(Integer, ForeignKey("order.order_id"), nullable=False, index=True)
-    user_id = Column(Integer, ForeignKey("user.user_id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("user_core.user_id"), nullable=False, index=True)
     payment_method_id = Column(Integer, ForeignKey("payment_method.payment_method_id"), nullable=False)
     amount = Column(DECIMAL(18, 2), nullable=False)
     balance_before = Column(DECIMAL(18, 2), nullable=True)

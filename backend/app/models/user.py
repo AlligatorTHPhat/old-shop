@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import DECIMAL, Boolean, Column, DateTime, ForeignKey, Index, Integer, String
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relationship
 
 from app.core.constants import RoleId
@@ -26,29 +27,40 @@ class Role(Base):
 
 
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = "user_core"
 
     user_id = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), unique=True, nullable=False, index=True)
     email = Column(String(100), unique=True, nullable=False, index=True)
-    password_hash = Column(String(255), nullable=False)
-    random_key = Column(String(64), unique=True, nullable=False)
-    full_name = Column(String(100), nullable=False)
-    phone_number = Column(String(15))
-    address = Column(String(255))
     is_active = Column(Boolean, default=True, nullable=False)
     is_deleted = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, onupdate=datetime.utcnow)
     last_login = Column(DateTime)
     email_verified = Column(Boolean, default=False, nullable=False)
-    email_verification_token = Column(String(255))
-    # Holds either a reset token or a 6-digit OTP, both short-lived.
-    password_reset_token = Column(String(255))
-    password_reset_expires = Column(DateTime)
     trust_score = Column(DECIMAL(5, 2), default=0.0, nullable=True)
-    avatar_url = Column(String(500), nullable=True)
-    balance = Column(DECIMAL(18, 4), default=10000000.00)
+
+    _profile = relationship("UserProfile", uselist=False, back_populates="user", cascade="all, delete-orphan")
+    _secret = relationship("UserSecret", uselist=False, back_populates="user", cascade="all, delete-orphan")
+    _wallet = relationship("UserWallet", uselist=False, back_populates="user", cascade="all, delete-orphan")
+    full_name = association_proxy("_profile", "full_name")
+    phone_number = association_proxy("_profile", "phone_number")
+    address = association_proxy("_profile", "address")
+    avatar_url = association_proxy("_profile", "avatar_url")
+    password_hash = association_proxy("_secret", "password_hash")
+    random_key = association_proxy("_secret", "random_key")
+    email_verification_token = association_proxy("_secret", "email_verification_token")
+    password_reset_token = association_proxy("_secret", "password_reset_token")
+    password_reset_expires = association_proxy("_secret", "password_reset_expires")
+    balance = association_proxy("_wallet", "balance")
+
+    def __init__(self, **kwargs):
+        # The unit of work inserts all fragments in the SAME transaction, including admins.
+        super().__init__(_profile=UserProfile(), _secret=UserSecret(), _wallet=UserWallet())
+        for key, value in kwargs.items():
+            if not hasattr(type(self), key):
+                raise TypeError(f"Invalid User field: {key}")
+            setattr(self, key, value)
 
     roles = relationship("Role", secondary="user_role", back_populates="users")
     # Association rows, for code that needs the join object itself; `roles` is the usual accessor.
@@ -83,11 +95,52 @@ class User(Base):
         return any(role_id in roles for role_id in self.role_ids)
 
 
+class UserProfile(Base):
+    __tablename__ = "user_profile"
+    user_id = Column(Integer, ForeignKey("user_core.user_id", ondelete="CASCADE"), primary_key=True)
+    full_name = Column(String(100), nullable=False)
+    phone_number = Column(String(15))
+    address = Column(String(255))
+    avatar_url = Column(String(500))
+    user = relationship("User", back_populates="_profile")
+
+
+class UserSecret(Base):
+    __tablename__ = "user_secret"
+    user_id = Column(Integer, ForeignKey("user_core.user_id", ondelete="CASCADE"), primary_key=True)
+    password_hash = Column(String(255), nullable=False)
+    random_key = Column(String(64), unique=True, nullable=False)
+    email_verification_token = Column(String(255))
+    password_reset_token = Column(String(255))
+    password_reset_expires = Column(DateTime)
+    user = relationship("User", back_populates="_secret")
+
+
+class UserWallet(Base):
+    __tablename__ = "user_wallet"
+    user_id = Column(Integer, ForeignKey("user_core.user_id", ondelete="CASCADE"), primary_key=True)
+    balance = Column(DECIMAL(18, 4), default=10000000, nullable=False)
+    user = relationship("User", back_populates="_wallet")
+
+
 class UserRole(Base):
     __tablename__ = "user_role"
 
-    user_id = Column(Integer, ForeignKey("user.user_id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("user_core.user_id"), primary_key=True)
     role_id = Column(Integer, ForeignKey("role.role_id"), primary_key=True)
 
     user = relationship("User", back_populates="user_roles", overlaps="roles,users")
     role = relationship("Role", overlaps="roles,users")
+
+
+# Match the original User.updated_at behavior when a profile/secret/wallet changes.
+# SQLAlchemy events run inside the same transaction, without writing the join view.
+from sqlalchemy import event  # noqa: E402
+from sqlalchemy.orm import Session  # noqa: E402
+
+
+@event.listens_for(Session, "before_flush")
+def _touch_user_fragments(session, flush_context, instances):
+    for fragment in list(session.dirty):
+        if isinstance(fragment, (UserProfile, UserSecret, UserWallet)) and session.is_modified(fragment):
+            fragment.user.updated_at = datetime.utcnow()

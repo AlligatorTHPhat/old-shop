@@ -1,0 +1,8 @@
+SELECT * FROM review WHERE rating=0 AND NOT is_deleted
+
+Index Scan using idx_review_rating on review  (cost=0.29..13.31 rows=117 width=569) (actual time=0.028..0.098 rows=100 loops=1)
+  Index Cond: (rating = 0)
+  Filter: (NOT is_deleted)
+  Buffers: shared hit=102
+Planning Time: 0.055 ms
+Execution Time: 0.129 ms

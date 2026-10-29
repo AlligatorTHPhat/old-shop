@@ -5,6 +5,12 @@ The separate Day 2 local data stack uses `deploy/docker-compose.distributed.yml`
 [Day 2 strategy/runbook](design/02_distribution_strategy.md) for setup, replication profile,
 ports, preserved volumes and MongoDB kernel compatibility findings.
 
+Local data stack Ngày 4: [migration/maintenance runbook](design/04_indexing.md) và
+[trạng thái áp dụng](DAY4_FINDINGS_LOG.md). Chuỗi bootstrap giờ áp SQL migrations;
+rollback chỉ đổi tag image không đảo ngược schema partition/user split. Với dữ liệu đã dùng,
+phải maintenance, backup/restore và đối soát; dùng apply-day4.sh cho local stack, không chạy
+full regression lên DB thật. Backup local diễn tập chưa thay thế bản sao ngoài máy.
+
 Target: Ubuntu 22.04/24.04, 2 vCPU / 4 GB RAM recommended (2 GB is enough with the Loki stack).
 
 ## 1. DNS

@@ -2,6 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import (
     DECIMAL,
+    BigInteger,
     Boolean,
     CheckConstraint,
     Column,
@@ -45,7 +46,7 @@ class Product(Base):
     __tablename__ = "product"
 
     product_id = Column(Integer, primary_key=True, index=True)
-    seller_id = Column(Integer, ForeignKey("user.user_id"), nullable=False, index=True)
+    seller_id = Column(Integer, ForeignKey("user_core.user_id"), nullable=False, index=True)
     category_id = Column(Integer, ForeignKey("category.category_id"), nullable=False, index=True)
     title = Column(String(255), nullable=False)
     description = Column(Text)
@@ -55,7 +56,7 @@ class Product(Base):
     video_url = Column(String(500))
     status = Column(SmallInteger, default=0, nullable=False, index=True)  # see ProductStatus
     reject_reason = Column(String(500))
-    approved_by = Column(Integer, ForeignKey("user.user_id"))
+    approved_by = Column(Integer, ForeignKey("user_core.user_id"))
     is_deleted = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, onupdate=datetime.utcnow)
@@ -95,6 +96,8 @@ class ProductImage(Base):
     product_id = Column(Integer, ForeignKey("product.product_id"), nullable=False, index=True)
     image_url = Column(String(500), nullable=False)
     alt_text = Column(String(255))
+    content_type = Column(String(100))
+    size_bytes = Column(BigInteger)
     is_primary = Column(Boolean, default=False)
     display_order = Column(Integer, default=0)
     uploaded_at = Column(DateTime, default=datetime.utcnow, nullable=False)
@@ -107,7 +110,7 @@ class Review(Base):
 
     review_id = Column(Integer, primary_key=True, index=True)
     product_id = Column(Integer, ForeignKey("product.product_id"), nullable=False, index=True)
-    buyer_id = Column(Integer, ForeignKey("user.user_id"), nullable=False, index=True)
+    buyer_id = Column(Integer, ForeignKey("user_core.user_id"), nullable=False, index=True)
     rating = Column(SmallInteger, nullable=False)  # 1-5, or 0 for a violation report
     title = Column(String(255))
     content = Column(Text)

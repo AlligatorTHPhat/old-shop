@@ -1,0 +1,14 @@
+SELECT * FROM review WHERE product_id=1000042 AND NOT is_deleted ORDER BY created_at DESC LIMIT 20
+
+Limit  (cost=11.33..11.34 rows=2 width=569) (actual time=0.040..0.042 rows=2 loops=1)
+  Buffers: shared hit=4
+  ->  Sort  (cost=11.33..11.34 rows=2 width=569) (actual time=0.040..0.040 rows=2 loops=1)
+        Sort Key: created_at DESC
+        Sort Method: quicksort  Memory: 25kB
+        Buffers: shared hit=4
+        ->  Index Scan using idx_review_product on review  (cost=0.29..11.32 rows=2 width=569) (actual time=0.019..0.022 rows=2 loops=1)
+              Index Cond: (product_id = 1000042)
+              Filter: (NOT is_deleted)
+              Buffers: shared hit=4
+Planning Time: 0.073 ms
+Execution Time: 0.092 ms

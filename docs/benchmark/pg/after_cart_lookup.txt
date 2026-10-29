@@ -1,0 +1,7 @@
+SELECT * FROM shopping_cart_item WHERE cart_id=1000042 AND product_id=1000041
+
+Index Scan using uq_cart_product on shopping_cart_item  (cost=0.29..8.31 rows=1 width=24) (actual time=0.057..0.059 rows=1 loops=1)
+  Index Cond: ((cart_id = 1000042) AND (product_id = 1000041))
+  Buffers: shared hit=3
+Planning Time: 0.123 ms
+Execution Time: 0.104 ms

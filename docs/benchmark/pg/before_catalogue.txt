@@ -1,0 +1,12 @@
+SELECT product_id,title,price FROM product WHERE status=1 AND NOT is_deleted AND category_id=1 ORDER BY created_at DESC LIMIT 20
+
+Limit  (cost=0.29..36.06 rows=20 width=59) (actual time=0.023..0.173 rows=20 loops=1)
+  Buffers: shared hit=187
+  ->  Index Scan Backward using idx_product_created_at on product  (cost=0.29..9811.95 rows=5486 width=59) (actual time=0.022..0.168 rows=20 loops=1)
+        Filter: ((status = 1) AND (category_id = 1))
+        Rows Removed by Filter: 163
+        Buffers: shared hit=187
+Planning:
+  Buffers: shared hit=1
+Planning Time: 0.142 ms
+Execution Time: 0.223 ms

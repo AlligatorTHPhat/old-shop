@@ -1,0 +1,17 @@
+SELECT * FROM "order" WHERE buyer_id=1000542 AND NOT is_deleted ORDER BY order_date DESC LIMIT 20
+
+Limit  (cost=512.33..512.38 rows=20 width=365) (actual time=0.376..0.382 rows=20 loops=1)
+  Buffers: shared hit=202
+  ->  Sort  (cost=512.33..512.82 rows=199 width=365) (actual time=0.375..0.378 rows=20 loops=1)
+        Sort Key: order_date DESC
+        Sort Method: top-N heapsort  Memory: 29kB
+        Buffers: shared hit=202
+        ->  Bitmap Heap Scan on "order"  (cost=5.83..507.03 rows=199 width=365) (actual time=0.114..0.309 rows=200 loops=1)
+              Recheck Cond: ((buyer_id = 1000542) AND (NOT is_deleted))
+              Heap Blocks: exact=200
+              Buffers: shared hit=202
+              ->  Bitmap Index Scan on idx_order_buyer  (cost=0.00..5.79 rows=199 width=0) (actual time=0.071..0.071 rows=200 loops=1)
+                    Index Cond: (buyer_id = 1000542)
+                    Buffers: shared hit=2
+Planning Time: 0.125 ms
+Execution Time: 0.460 ms

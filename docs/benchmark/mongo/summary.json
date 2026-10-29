@@ -1,0 +1,48 @@
+{
+  "generated_per_collection": 10000,
+  "cases": {
+    "product_details": {
+      "before": {
+        "nReturned": 20,
+        "totalKeysExamined": 0,
+        "totalDocsExamined": 192,
+        "executionTimeMillis": 4
+      },
+      "after": {
+        "nReturned": 20,
+        "totalKeysExamined": 20,
+        "totalDocsExamined": 20,
+        "executionTimeMillis": 2
+      }
+    },
+    "reviews": {
+      "before": {
+        "nReturned": 10,
+        "totalKeysExamined": 0,
+        "totalDocsExamined": 10000,
+        "executionTimeMillis": 83
+      },
+      "after": {
+        "nReturned": 10,
+        "totalKeysExamined": 10,
+        "totalDocsExamined": 10,
+        "executionTimeMillis": 2
+      }
+    },
+    "order_snapshots": {
+      "before": {
+        "nReturned": 10,
+        "totalKeysExamined": 0,
+        "totalDocsExamined": 10000,
+        "executionTimeMillis": 20
+      },
+      "after": {
+        "nReturned": 10,
+        "totalKeysExamined": 10,
+        "totalDocsExamined": 10,
+        "executionTimeMillis": 1
+      }
+    }
+  },
+  "version": "7.0.43"
+}

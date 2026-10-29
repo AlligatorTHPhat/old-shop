@@ -1,0 +1,179 @@
+ Image oldshop-data-backend:day4 Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.10kB done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile:
+#2 transferring dockerfile: 1.72kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.9s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/python:3.13-slim
+#5 DONE 0.9s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 359B done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 9.86kB 0.0s done
+#7 DONE 0.0s
+
+#8 [builder 1/4] FROM docker.io/library/python:3.13-slim@sha256:2d44738ebf4ce5f63b9d9ea871e9c7cfdc0426f7b0c97cac915fd88ded1d86bb
+#8 resolve docker.io/library/python:3.13-slim@sha256:2d44738ebf4ce5f63b9d9ea871e9c7cfdc0426f7b0c97cac915fd88ded1d86bb 0.0s done
+#8 DONE 0.0s
+
+#9 [stage-1 3/8] COPY --from=builder /install /usr/local
+#9 CACHED
+
+#10 [stage-1 7/8] COPY --chmod=755 backend/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+#10 CACHED
+
+#11 [stage-1 4/8] WORKDIR /app
+#11 CACHED
+
+#12 [builder 2/4] WORKDIR /build
+#12 CACHED
+
+#13 [stage-1 6/8] COPY backend/scripts ./scripts
+#13 CACHED
+
+#14 [builder 3/4] COPY backend/requirements.lock .
+#14 CACHED
+
+#15 [stage-1 5/8] COPY backend/app ./app
+#15 CACHED
+
+#16 [stage-1 2/8] RUN apt-get update     && apt-get install -y --no-install-recommends postgresql-client curl     && rm -rf /var/lib/apt/lists/*     && useradd --create-home --uid 10001 app     && mkdir -p /data/media /data/ml     && chown -R app:app /data
+#16 CACHED
+
+#17 [builder 4/4] RUN pip install --no-cache-dir --only-binary :all: --require-hashes --prefix=/install -r requirements.lock
+#17 CACHED
+
+#18 [stage-1 8/8] COPY database /opt/database
+#18 CACHED
+
+#19 exporting to image
+#19 exporting layers done
+#19 exporting manifest sha256:77c20945065b028e0456a36c176c2ca761723c16aa4f94cf2e4af345115a670b done
+#19 exporting config sha256:914b6686b18854ed6ba148772211a23c9ec6a772ea7822cdfce5d9fe34d2a57e done
+#19 exporting attestation manifest sha256:50739ead261061646b0ceea9309dccbab6150794c820e27180a3b1401b603030 0.0s done
+#19 exporting manifest list sha256:d9550f07a26b1ddaadfd0c20fe28d423af1fc579e9f3f257ca7c053cf3d55f66 0.0s done
+#19 naming to docker.io/library/oldshop-data-backend:day4 done
+#19 unpacking to docker.io/library/oldshop-data-backend:day4 0.0s done
+#19 DONE 0.1s
+
+#20 resolving provenance for metadata file
+#20 DONE 0.0s
+ Image oldshop-data-backend:day4 Built 
+ Container oldshop-data-frontend-1 Stopping 
+ Container oldshop-data-frontend-1 Stopped 
+ Container oldshop-data-backend-1 Stopping 
+ Container oldshop-data-backend-1 Stopped 
+ Container oldshop-data-backend-run-18655172c05c Creating 
+ Container oldshop-data-backend-run-18655172c05c Created 
+{"result": "PASS", "tables": 18, "rows": {"category": 8, "contact_info": 15, "order": 30, "order_detail": 30, "payment_method": 5, "product": 16, "product_image": 32, "review": 0, "role": 3, "shopping_cart": 11, "shopping_cart_item": 0, "system_feedback": 0, "system_log": 0, "transaction": 30, "user": 15, "user_role": 15, "violation_log": 11, "voucher": 4}}
+ Container oldshop-data-backend-run-25bdd5970adf Creating 
+ Container oldshop-data-backend-run-25bdd5970adf Created 
+{"result": "PASS", "tables": 18, "rows": {"category": 8, "contact_info": 15, "order": 30, "order_detail": 30, "payment_method": 5, "product": 16, "product_image": 32, "review": 0, "role": 3, "shopping_cart": 11, "shopping_cart_item": 0, "system_feedback": 0, "system_log": 0, "transaction": 30, "user": 15, "user_role": 15, "violation_log": 11, "voucher": 4}}
+ Container oldshop-data-backend-run-426e53dba896 Creating 
+ Container oldshop-data-backend-run-426e53dba896 Created 
+{"mongo_collections": 6, "mongo_documents": 0, "minio_objects": 95}
+ Container oldshop-data-backend-run-d51a81ff091f Creating 
+ Container oldshop-data-backend-run-d51a81ff091f Created 
+{"mongo_restored": 6, "minio_restored": 95, "result": "PASS"}
+ Container oldshop-data-backend-run-a917b7cfbc90 Creating 
+ Container oldshop-data-backend-run-a917b7cfbc90 Created 
+{"applied": ["001", "002", "003", "004"]}
+ Container oldshop-data-backend-run-8ac80a25661c Creating 
+ Container oldshop-data-backend-run-8ac80a25661c Created 
+{"updated": 32, "unavailable_image_ids": []}
+ Container oldshop-data-backend-run-b2b640301e0e Creating 
+ Container oldshop-data-backend-run-b2b640301e0e Created 
+{"result": "PASS", "tables": 18, "rows": {"category": 8, "contact_info": 15, "order": 30, "order_detail": 30, "payment_method": 5, "product": 16, "product_image": 32, "review": 0, "role": 3, "shopping_cart": 11, "shopping_cart_item": 0, "system_feedback": 0, "system_log": 0, "transaction": 30, "user": 15, "user_role": 15, "violation_log": 11, "voucher": 4}}
+ Container oldshop-data-pg-replica-1 Running 
+ Container oldshop-data-mongo2-1 Running 
+ Container oldshop-data-pg-primary-1 Running 
+ Container oldshop-data-mongo3-1 Running 
+ Container oldshop-data-mongo1-1 Running 
+ Container oldshop-data-minio-1 Running 
+ Container oldshop-data-mongo-schema-init-1 Recreate 
+ Container oldshop-data-mongo-schema-init-1 Recreated 
+ Container oldshop-data-backend-1 Recreate 
+ Container oldshop-data-backend-1 Recreated 
+ Container oldshop-data-minio-1 Waiting 
+ Container oldshop-data-pg-primary-1 Waiting 
+ Container oldshop-data-mongo1-1 Waiting 
+ Container oldshop-data-minio-1 Healthy 
+ Container oldshop-data-pg-primary-1 Healthy 
+ Container oldshop-data-minio-init-1 Starting 
+ Container oldshop-data-mongo1-1 Healthy 
+ Container oldshop-data-mongo-init-1 Starting 
+ Container oldshop-data-minio-init-1 Started 
+ Container oldshop-data-mongo-init-1 Started 
+ Container oldshop-data-mongo3-1 Waiting 
+ Container oldshop-data-mongo-init-1 Waiting 
+ Container oldshop-data-mongo2-1 Waiting 
+ Container oldshop-data-mongo-init-1 Waiting 
+ Container oldshop-data-mongo3-1 Healthy 
+ Container oldshop-data-mongo2-1 Healthy 
+ Container oldshop-data-mongo-init-1 Exited 
+ Container oldshop-data-mongo-init-1 Exited 
+ Container oldshop-data-mongo-expand-1 Starting 
+ Container oldshop-data-mongo-schema-init-1 Starting 
+ Container oldshop-data-mongo-schema-init-1 Started 
+ Container oldshop-data-mongo-expand-1 Started 
+ Container oldshop-data-pg-primary-1 Waiting 
+ Container oldshop-data-mongo-init-1 Waiting 
+ Container oldshop-data-minio-1 Waiting 
+ Container oldshop-data-mongo-expand-1 Waiting 
+ Container oldshop-data-mongo-schema-init-1 Waiting 
+ Container oldshop-data-minio-init-1 Waiting 
+ Container oldshop-data-mongo-init-1 Exited 
+ Container oldshop-data-minio-init-1 Exited 
+ Container oldshop-data-minio-1 Healthy 
+ Container oldshop-data-pg-primary-1 Healthy 
+ Container oldshop-data-mongo-expand-1 Exited 
+ Container oldshop-data-mongo-schema-init-1 Exited 
+ Container oldshop-data-backend-1 Starting 
+ Container oldshop-data-backend-1 Started 
+ Container oldshop-data-backend-1 Waiting 
+ Container oldshop-data-backend-1 Healthy 
+ Container oldshop-data-frontend-1 Starting 
+ Container oldshop-data-frontend-1 Started 
+ Container oldshop-data-mongo-init-1 Waiting 
+ Container oldshop-data-mongo-schema-init-1 Waiting 
+ Container oldshop-data-pg-primary-1 Waiting 
+ Container oldshop-data-minio-init-1 Waiting 
+ Container oldshop-data-backend-1 Waiting 
+ Container oldshop-data-mongo2-1 Waiting 
+ Container oldshop-data-frontend-1 Waiting 
+ Container oldshop-data-mongo3-1 Waiting 
+ Container oldshop-data-mongo1-1 Waiting 
+ Container oldshop-data-minio-1 Waiting 
+ Container oldshop-data-mongo-expand-1 Waiting 
+ Container oldshop-data-pg-replica-1 Waiting 
+ Container oldshop-data-pg-primary-1 Healthy 
+ Container oldshop-data-pg-replica-1 Healthy 
+ Container oldshop-data-mongo2-1 Healthy 
+ Container oldshop-data-mongo-schema-init-1 Exited 
+ Container oldshop-data-minio-1 Healthy 
+ Container oldshop-data-mongo-expand-1 Exited 
+ Container oldshop-data-mongo1-1 Healthy 
+ Container oldshop-data-mongo-init-1 Exited 
+ Container oldshop-data-backend-1 Healthy 
+ Container oldshop-data-minio-init-1 Exited 
+ Container oldshop-data-mongo3-1 Healthy 
+ Container oldshop-data-frontend-1 Healthy 
+ Container oldshop-data-frontend-1 Restarting 
+ Container oldshop-data-frontend-1 Started 
+{"status": "ok", "database": "up", "mongo": "up", "minio": "up"}
+PASS. Private backup directory: /home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/backups/day4_20261029_183835
+Restore rehearsal database retained: day4_restore_20261029_183835

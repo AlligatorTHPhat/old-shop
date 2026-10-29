@@ -1,0 +1,8 @@
+SELECT * FROM "order" WHERE order_id=1000042 AND NOT is_deleted
+
+Index Scan using order_h3_pkey on order_h3 "order"  (cost=0.29..8.30 rows=1 width=367) (actual time=0.067..0.069 rows=1 loops=1)
+  Index Cond: (order_id = 1000042)
+  Filter: (NOT is_deleted)
+  Buffers: shared hit=3
+Planning Time: 0.198 ms
+Execution Time: 0.107 ms

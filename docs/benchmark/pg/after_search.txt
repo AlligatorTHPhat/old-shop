@@ -1,0 +1,20 @@
+SELECT product_id,title FROM product WHERE status=1 AND NOT is_deleted AND (title ILIKE '%needlexyz%' OR description ILIKE '%needlexyz%') LIMIT 100
+
+Limit  (cost=189.49..223.83 rows=9 width=46) (actual time=0.157..0.315 rows=43 loops=1)
+  Buffers: shared hit=87
+  ->  Bitmap Heap Scan on product  (cost=189.49..223.83 rows=9 width=46) (actual time=0.156..0.307 rows=43 loops=1)
+        Recheck Cond: ((((title)::text ~~* '%needlexyz%'::text) AND (status = 1) AND (NOT is_deleted)) OR ((description ~~* '%needlexyz%'::text) AND (status = 1) AND (NOT is_deleted)))
+        Heap Blocks: exact=43
+        Buffers: shared hit=87
+        ->  BitmapOr  (cost=189.49..189.49 rows=9 width=0) (actual time=0.131..0.132 rows=0 loops=1)
+              Buffers: shared hit=44
+              ->  Bitmap Index Scan on idx_product_title_trgm  (cost=0.00..94.74 rows=4 width=0) (actual time=0.082..0.082 rows=43 loops=1)
+                    Index Cond: ((title)::text ~~* '%needlexyz%'::text)
+                    Buffers: shared hit=22
+              ->  Bitmap Index Scan on idx_product_description_trgm  (cost=0.00..94.74 rows=4 width=0) (actual time=0.049..0.049 rows=22 loops=1)
+                    Index Cond: (description ~~* '%needlexyz%'::text)
+                    Buffers: shared hit=22
+Planning:
+  Buffers: shared hit=5
+Planning Time: 1.077 ms
+Execution Time: 0.385 ms

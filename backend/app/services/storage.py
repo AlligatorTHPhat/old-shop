@@ -193,3 +193,18 @@ async def save_image(file: UploadFile, folder: str, prefix: str) -> str:
 def delete_media(url_path: str) -> None:
     if url_path.startswith("/media/"):
         get_storage().delete(url_path.removeprefix("/media/"))
+
+
+def image_metadata(url: str) -> dict:
+    """Stat one referenced image; never scan a bucket or infer a product from its filename."""
+    path = validate_path(url.removeprefix("/media/"))
+    if settings.STORAGE_BACKEND == "minio":
+        try:
+            info = minio_client().stat_object(bucket_for(path), path)
+            return {"content_type": info.content_type, "size_bytes": info.size}
+        except (S3Error, urllib3.exceptions.HTTPError, ValueError) as exc:
+            raise HTTPException(status_code=503, detail="Image metadata unavailable") from exc
+    try:
+        return {"content_type": content_type(path), "size_bytes": local_path(path).stat().st_size}
+    except OSError as exc:
+        raise HTTPException(status_code=404, detail="Media not found") from exc

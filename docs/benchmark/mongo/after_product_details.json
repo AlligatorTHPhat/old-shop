@@ -1,0 +1,169 @@
+{
+  "explainVersion": "1",
+  "queryPlanner": {
+    "namespace": "oldshop.day4_bench_product_details_5f172585b927475192ecef806a0c6044",
+    "indexFilterSet": false,
+    "parsedQuery": {
+      "$and": [
+        {
+          "attributes.brand": {
+            "$eq": "brand3"
+          }
+        },
+        {
+          "category_id": {
+            "$eq": 3
+          }
+        }
+      ]
+    },
+    "queryHash": "FB542849",
+    "planCacheKey": "A2BA8A9A",
+    "optimizationTimeMillis": 0,
+    "maxIndexedOrSolutionsReached": false,
+    "maxIndexedAndSolutionsReached": false,
+    "maxScansToExplodeReached": false,
+    "winningPlan": {
+      "stage": "LIMIT",
+      "limitAmount": 20,
+      "inputStage": {
+        "stage": "FETCH",
+        "inputStage": {
+          "stage": "IXSCAN",
+          "keyPattern": {
+            "category_id": 1,
+            "attributes.brand": 1
+          },
+          "indexName": "category_id_1_attributes.brand_1",
+          "isMultiKey": false,
+          "multiKeyPaths": {
+            "category_id": [],
+            "attributes.brand": []
+          },
+          "isUnique": false,
+          "isSparse": false,
+          "isPartial": false,
+          "indexVersion": 2,
+          "direction": "forward",
+          "indexBounds": {
+            "category_id": [
+              "[3, 3]"
+            ],
+            "attributes.brand": [
+              "[\"brand3\", \"brand3\"]"
+            ]
+          }
+        }
+      }
+    },
+    "rejectedPlans": []
+  },
+  "executionStats": {
+    "executionSuccess": true,
+    "nReturned": 20,
+    "executionTimeMillis": 2,
+    "totalKeysExamined": 20,
+    "totalDocsExamined": 20,
+    "executionStages": {
+      "stage": "LIMIT",
+      "nReturned": 20,
+      "executionTimeMillisEstimate": 2,
+      "works": 21,
+      "advanced": 20,
+      "needTime": 0,
+      "needYield": 0,
+      "saveState": 0,
+      "restoreState": 0,
+      "isEOF": 1,
+      "limitAmount": 20,
+      "inputStage": {
+        "stage": "FETCH",
+        "nReturned": 20,
+        "executionTimeMillisEstimate": 2,
+        "works": 20,
+        "advanced": 20,
+        "needTime": 0,
+        "needYield": 0,
+        "saveState": 0,
+        "restoreState": 0,
+        "isEOF": 0,
+        "docsExamined": 20,
+        "alreadyHasObj": 0,
+        "inputStage": {
+          "stage": "IXSCAN",
+          "nReturned": 20,
+          "executionTimeMillisEstimate": 2,
+          "works": 20,
+          "advanced": 20,
+          "needTime": 0,
+          "needYield": 0,
+          "saveState": 0,
+          "restoreState": 0,
+          "isEOF": 0,
+          "keyPattern": {
+            "category_id": 1,
+            "attributes.brand": 1
+          },
+          "indexName": "category_id_1_attributes.brand_1",
+          "isMultiKey": false,
+          "multiKeyPaths": {
+            "category_id": [],
+            "attributes.brand": []
+          },
+          "isUnique": false,
+          "isSparse": false,
+          "isPartial": false,
+          "indexVersion": 2,
+          "direction": "forward",
+          "indexBounds": {
+            "category_id": [
+              "[3, 3]"
+            ],
+            "attributes.brand": [
+              "[\"brand3\", \"brand3\"]"
+            ]
+          },
+          "keysExamined": 20,
+          "seeks": 1,
+          "dupsTested": 0,
+          "dupsDropped": 0
+        }
+      }
+    }
+  },
+  "command": {
+    "find": "day4_bench_product_details_5f172585b927475192ecef806a0c6044",
+    "filter": {
+      "category_id": 3,
+      "attributes.brand": "brand3"
+    },
+    "limit": 20,
+    "$db": "oldshop"
+  },
+  "serverInfo": {
+    "host": "8f9a734f9531",
+    "port": 27017,
+    "version": "7.0.43",
+    "gitVersion": "ef5a7d3480b59feae13d564376129fc4ceee6177"
+  },
+  "serverParameters": {
+    "internalQueryFacetBufferSizeBytes": 104857600,
+    "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+    "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+    "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+    "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+    "internalQueryProhibitBlockingMergeOnMongoS": 0,
+    "internalQueryMaxAddToSetBytes": 104857600,
+    "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+    "internalQueryFrameworkControl": "forceClassicEngine"
+  },
+  "ok": 1.0,
+  "$clusterTime": {
+    "clusterTime": "Timestamp(1793273313, 17)",
+    "signature": {
+      "hash": "b'\\x7f\\xc1\\x1a]\\xdc\\xe6\\x8a\\x89\\x90i\\xe6\\x9a\\xbf\\xe3\\xc1\\x88\\xa95\\xc7\\x9a'",
+      "keyId": 7701708331252973572
+    }
+  },
+  "operationTime": "Timestamp(1793273313, 17)"
+}

@@ -54,6 +54,10 @@ jobs:
         working-directory: database
         run: psql -h localhost -U postgres -d oldshop_test -v ON_ERROR_STOP=1 -q -f init.sql
 
+      - name: Apply SQL migrations
+        working-directory: backend
+        run: python -m scripts.migrate
+
       - name: Pytest
         working-directory: backend
         run: pytest
