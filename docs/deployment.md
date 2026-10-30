@@ -1,5 +1,9 @@
 # Deployment runbook (single VPS)
 
+Để cài và chạy stack đồ án PostgreSQL + MongoDB + MinIO trên máy local, xem
+[hướng dẫn cấu hình, khởi tạo dữ liệu và chạy hệ thống](HUONG_DAN_CAU_HINH_VA_CHAY_HE_THONG.md).
+Tài liệu bên dưới dành cho profile VPS riêng.
+
 The separate Day 2 local data stack uses `deploy/docker-compose.distributed.yml` and
 `deploy/.env.data`, not this production stack. See
 [Day 2 strategy/runbook](design/02_distribution_strategy.md) for setup, replication profile,

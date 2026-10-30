@@ -4,6 +4,8 @@ A full-stack marketplace for second-hand goods: buyers browse and check out (COD
 sellers list products that go through moderation, moderators handle reports and bans,
 admins manage staff, vouchers and feedback. Each checkout is risk-scored before payment.
 
+**Hướng dẫn cài và chạy đầy đủ:** [Cấu hình env, tạo DB/seed, MinIO, ETL và chạy ứng dụng](docs/HUONG_DAN_CAU_HINH_VA_CHAY_HE_THONG.md).
+
 **Stack:** FastAPI · SQLAlchemy · PostgreSQL (SQL-first schema, PL/pgSQL) · MongoDB · MinIO · Angular 21 · PayPal Orders API ·
 scikit-learn · Google Apps Script · Docker · Caddy · Nginx · Prometheus · Grafana · Loki/Promtail ⇄ ELK ·
 GitHub Actions · SonarCloud
