@@ -1,8 +1,10 @@
 # Hướng dẫn cấu hình, khởi tạo dữ liệu và chạy OldShop
 
 Tài liệu dành cho phiên bản sau Ngày 7: PostgreSQL + MongoDB + MinIO + FastAPI + Angular
-và ETL. Các lệnh dùng Bash trên Linux hoặc WSL, chạy từ **thư mục gốc dự án**, trừ khi có
-ghi `cd` sang thư mục khác. Cập nhật theo mã nguồn ngày 30/10/2026, migration 001–006.
+và ETL. Mỗi nhóm lệnh có hai bản: **Linux/WSL dùng Bash**, **Windows dùng PowerShell 7.3+**.
+Chỉ chạy bản tương ứng với terminal của bạn, không chạy cả hai bản liên tiếp.
+Các lệnh chạy từ **thư mục gốc dự án**, trừ khi có ghi đổi thư mục.
+Cập nhật theo mã nguồn ngày 30/10/2026, migration 001–006.
 
 ## 1. Chọn đúng cách chạy
 
@@ -22,8 +24,22 @@ Không cần cài PostgreSQL/MongoDB trực tiếp trên host nếu dùng Docker
 ## 2. Chuẩn bị môi trường
 
 Cần Docker Engine hoặc Docker Desktop đang chạy, Compose plugin có hỗ trợ `--wait` và
-`depends_on.required`, Python 3.11+ để chạy script chuẩn bị cấu hình/kiểm tra và Bash.
+`depends_on.required`, Python 3.11+ để chạy script chuẩn bị cấu hình/kiểm tra.
+Bash dùng cho nhánh Linux/WSL; các bước Docker chính trên Windows dùng PowerShell.
+Trên Windows, dùng Docker Desktop ở chế độ **Linux containers**, bật WSL 2 engine.
+Nếu chạy các bước bảo trì/test bằng WSL, bật thêm tích hợp Docker cho distro đang dùng tại
+**Settings → Resources → WSL Integration**. [Hướng dẫn chính thức Docker](https://docs.docker.com/desktop/features/wsl/).
 Docker sẽ build Python 3.13 và Node 20 bên trong image; cách chạy chính không cần pip/npm trên host.
+
+Các khối Windows hướng tới **PowerShell 7.3+ (`pwsh`)**, không phải CMD hay Windows PowerShell 5.1.
+Phiên bản này giữ cách truyền dấu nháy vào native command phù hợp với lệnh Docker/SQL bên dưới;
+đầu ví dụ đặt `$PSNativeCommandArgumentPassing = "Windows"` cho phiên terminal hiện tại.
+[Tài liệu PowerShell về truyền tham số](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-7.5).
+Nếu dùng WSL terminal thì làm theo toàn bộ nhánh Linux; Python cài trong Windows và Python trong
+WSL là hai môi trường riêng. Trên Windows cần Python launcher `py`; nếu máy chỉ có `python`,
+kiểm tra đúng phiên bản rồi thay `py -3` bằng `python` cho các script cấu hình/kiểm tra.
+
+**Linux / WSL — Bash**
 
 ```bash
 cd "/duong-dan-den/Epic-Ecommerce-FastAPI-main"
@@ -32,8 +48,28 @@ docker compose version
 python3 --version
 ```
 
+**Windows — PowerShell 7.3+**
+
+```powershell
+Set-Location "C:\Projects\Epic-Ecommerce-FastAPI-main"
+$PSVersionTable.PSVersion
+if ($PSVersionTable.PSVersion -lt [version]"7.3") {
+    throw "Mo PowerShell 7.3+ (pwsh) hoac dung nhanh Linux trong WSL."
+}
+$PSNativeCommandArgumentPassing = "Windows"
+docker version
+docker compose version
+py -3 --version
+```
+
 Thay đường dẫn mẫu bằng vị trí clone/giải nén thực tế. `docker version` phải có phần Server.
 Nếu Docker cần quyền trên máy, cấu hình quyền truy cập Docker trước khi tiếp tục.
+Ví dụ đường dẫn Windows là `C:\Projects\Epic-Ecommerce-FastAPI-main`; trong WSL cùng thư mục đó
+là `/mnt/c/Projects/Epic-Ecommerce-FastAPI-main`. Thay các đường dẫn mẫu bằng đường dẫn thật.
+Windows dùng dấu `\` trong đường dẫn host; các đường dẫn `/app`, `/opt`, `/data` và lệnh `sh`
+bên trong container vẫn là Linux. Các block INI/YAML/SQL dùng chung cho hai hệ điều hành.
+Sau mỗi lệnh build/init/ETL, chỉ tiếp tục khi lệnh đã thành công; PowerShell không tự dừng toàn bộ
+một nhóm lệnh chỉ vì native executable trả mã lỗi.
 
 Stack từng được kiểm chứng trên Docker có khoảng 7,5 GiB RAM và 8 CPU; đây là cấu hình
 thực nghiệm, không phải kết luận tài nguyên tối thiểu. Profile đầy đủ chạy chín dịch vụ thường trực.
@@ -44,24 +80,45 @@ thực nghiệm, không phải kết luận tài nguyên tối thiểu. Profile 
 
 Từ root dự án:
 
+**Linux / WSL — Bash**
+
 ```bash
 python3 deploy/scripts/prepare-data-env.py
 ```
 
+**Windows — PowerShell 7.3+**
+
+```powershell
+py -3 deploy/scripts/prepare-data-env.py
+```
+
 Script đọc `deploy/.env.data.example`, sinh giá trị ngẫu nhiên cho các dòng `=CHANGE_ME`,
-tạo `deploy/.env.data` với quyền file `0600`. Script **không ghi đè file đã tồn tại**.
+tạo `deploy/.env.data`; trên Linux file có quyền `0600`. Trên Windows, quản lý quyền truy cập
+bằng ACL của NTFS (Properties → Security), không coi mode POSIX là ACL tương đương.
+[Python: os.chmod trên Windows](https://docs.python.org/3/library/os.html#os.chmod).
+Script **không ghi đè file đã tồn tại**.
 Nếu báo `FileExistsError`, giữ file hiện tại và kiểm tra/cấu hình nó; không xóa file để sinh lại
 password của các database đã khởi tạo.
 
 Mở file bằng editor:
 
+**Linux / WSL — Bash**
+
 ```bash
 nano deploy/.env.data
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
+notepad .\deploy\.env.data
 ```
 
 ### 3.2. Phương án thay thế: `cp` từ file mẫu
 
 Chỉ chọn phương án này nếu chưa dùng 3.1 và chưa có `.env.data` cần giữ:
+
+**Linux / WSL — Bash**
 
 ```bash
 cp -n deploy/.env.data.example deploy/.env.data
@@ -69,7 +126,18 @@ chmod 600 deploy/.env.data
 nano deploy/.env.data
 ```
 
-`cp -n` giữ file đích nếu nó đã tồn tại. Bản copy mẫu **chưa chạy được**: phải thay đủ các
+**Windows — PowerShell 7.3+**
+
+```powershell
+if (-not (Test-Path -LiteralPath ".\deploy\.env.data")) {
+    Copy-Item -LiteralPath ".\deploy\.env.data.example" -Destination ".\deploy\.env.data"
+}
+notepad .\deploy\.env.data
+```
+
+`cp -n` trên Linux và điều kiện `Test-Path` trên Windows đều giữ file đích đã tồn tại.
+Windows không có bước `chmod 600`; dùng quyền truy cập thư mục/file của Windows.
+Bản copy mẫu **chưa chạy được**: phải thay đủ các
 giá trị dưới đây bằng secrets riêng trước khi khởi động.
 
 | Biến cần thay `CHANGE_ME` | Ý nghĩa |
@@ -85,14 +153,30 @@ giá trị dưới đây bằng secrets riêng trước khi khởi động.
 
 Sinh một secret hex mới cho một biến thông thường:
 
+**Linux / WSL — Bash**
+
 ```bash
 python3 -c 'import secrets; print(secrets.token_hex(32))'
 ```
 
+**Windows — PowerShell 7.3+**
+
+```powershell
+py -3 -c "import secrets; print(secrets.token_hex(32))"
+```
+
 Sinh riêng `MONGO_KEYFILE` theo đúng cách script dự án đang dùng:
+
+**Linux / WSL — Bash**
 
 ```bash
 python3 -c 'import secrets; print(secrets.token_hex(384))'
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
+py -3 -c "import secrets; print(secrets.token_hex(384))"
 ```
 
 Chạy lệnh sinh riêng cho từng secret, chép kết quả vào editor. Các chuỗi hex thuận tiện cho
@@ -154,6 +238,8 @@ chưa chịu mất cả máy hoặc tự promote PG.
 
 Để tránh gõ thiếu `--env-file`, file Compose hoặc profile, định nghĩa hàm trong terminal hiện tại:
 
+**Linux / WSL — Bash**
+
 ```bash
 dc() {
   docker compose \
@@ -166,7 +252,31 @@ dc config --quiet
 dc build backend frontend
 ```
 
-Các mục 5–11 dùng `dc`. Mỗi terminal mới cần `cd` về root và định nghĩa lại hàm này.
+**Windows — PowerShell 7.3+**
+
+```powershell
+function dc {
+    $composeArgs = @(
+        "compose",
+        "--env-file", "deploy/.env.data",
+        "-f", "deploy/docker-compose.distributed.yml",
+        "--profile", "resilience"
+    )
+    & docker @composeArgs @args
+    if ($LASTEXITCODE -ne 0) {
+        throw "Docker Compose that bai, exit code: $LASTEXITCODE"
+    }
+}
+
+dc config --quiet
+dc build backend frontend
+```
+
+Các mục 5–11 dùng `dc`. Mỗi terminal mới cần về root (`cd` / `Set-Location`) và định nghĩa lại
+đúng phiên bản hàm cho shell đó. Hàm Bash dùng `"$@"`, PowerShell dùng `@args` để truyền
+nguyên danh sách tham số sang Docker. Hàm PowerShell ném lỗi nếu Compose trả exit code khác 0.
+Đây là hàm tạm của terminal, không phải file executable. Bản truyền SQL bằng pipeline ở mục 5.3
+sẽ gọi trực tiếp `docker compose` để đưa stdin đến đúng tiến trình.
 `config --quiet` kiểm cấu hình mà không in secrets đã nội suy. Image mặc định sau build là
 `oldshop-data-backend:day6` và `oldshop-data-frontend:day6`; tên day6 là tag hiện có trong Compose.
 
@@ -174,9 +284,17 @@ Các mục 5–11 dùng `dc`. Mỗi terminal mới cần `cd` về root và đ�
 
 ### 5.1. Khởi động PostgreSQL, MongoDB và MinIO
 
+**Linux / WSL — Bash**
+
 ```bash
 dc up -d --wait --wait-timeout 240 \
   pg-primary pg-replica mongo1 mongo2 mongo3 minio
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
+dc up -d --wait --wait-timeout 240 pg-primary pg-replica mongo1 mongo2 mongo3 minio
 ```
 
 Lần đầu Docker pull image và tạo named volumes của project `oldshop-data`.
@@ -187,7 +305,18 @@ PG replica lấy base backup từ primary; không cần tự `CREATE DATABASE` t
 
 Chạy đúng thứ tự:
 
+**Linux / WSL — Bash**
+
 ```bash
+dc run --rm --no-deps mongo-init
+dc run --rm --no-deps mongo-expand
+dc run --rm --no-deps minio-init
+dc run --rm --no-deps mongo-schema-init
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
 dc run --rm --no-deps mongo-init
 dc run --rm --no-deps mongo-expand
 dc run --rm --no-deps minio-init
@@ -206,7 +335,15 @@ dữ liệu nghiệp vụ được ETL nạp ở mục 7. MinIO không có datab
 
 ### 5.3. Tạo schema và seed PostgreSQL
 
+**Linux / WSL — Bash**
+
 ```bash
+dc run --rm --no-deps --entrypoint python backend -m scripts.init_db
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
 dc run --rm --no-deps --entrypoint python backend -m scripts.init_db
 ```
 
@@ -224,6 +361,8 @@ hoặc tự chạy migration trên dữ liệu đang phục vụ mà bỏ quy tr
 
 Kiểm phiên bản schema và số lượng seed:
 
+**Linux / WSL — Bash**
+
 ```bash
 dc exec -T pg-primary sh -c \
   'exec psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1' <<'SQL'
@@ -236,6 +375,25 @@ UNION ALL SELECT 'transactions', count(*) FROM "transaction";
 SQL
 ```
 
+**Windows — PowerShell 7.3+**
+
+```powershell
+$seedSql = @'
+SELECT version FROM schema_migrations ORDER BY version;
+SELECT 'users' AS entity, count(*) AS total FROM user_core
+UNION ALL SELECT 'products', count(*) FROM product
+UNION ALL SELECT 'product_images', count(*) FROM product_image
+UNION ALL SELECT 'orders', count(*) FROM "order"
+UNION ALL SELECT 'transactions', count(*) FROM "transaction";
+'@
+$seedSql | docker compose --env-file deploy/.env.data -f deploy/docker-compose.distributed.yml --profile resilience exec -T pg-primary sh -c 'exec psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1'
+if ($LASTEXITCODE -ne 0) { throw "Kiem tra seed PostgreSQL that bai." }
+```
+
+Trên Windows, here-string `@' ... '@` giữ nguyên dấu nháy của SQL; dòng đóng `'@` phải đứng
+riêng ở đầu dòng. Chỉ `$POSTGRES_USER`/`$POSTGRES_DB` trong `sh -c` được mở rộng bên trong
+container. Không đổi here-string thành chuỗi double-quote làm PowerShell nội suy trước.
+
 DB mới theo seed hiện có: 15 user, 16 product, 32 product_image, 30 order, 30 transaction;
 migration đủ `001` đến `006`. Các số này sẽ thay đổi sau khi bạn thao tác ứng dụng.
 User sau migration nằm trong `user_core`, `user_profile`, `user_secret`, `user_wallet`;
@@ -245,7 +403,15 @@ User sau migration nằm trong `user_core`, `user_profile`, `user_secret`, `user
 
 Bucket đã tạo ở 5.2, ảnh local đã chép ở 5.3. Bây giờ copy object:
 
+**Linux / WSL — Bash**
+
 ```bash
+dc run --rm --no-deps --entrypoint python backend -m scripts.seed_media
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
 dc run --rm --no-deps --entrypoint python backend -m scripts.seed_media
 ```
 
@@ -255,12 +421,21 @@ Seed có cả alias legacy/canonical và avatar nên tổng số object không b
 
 Sau khi copy thành công:
 
+**Linux / WSL — Bash**
+
 ```bash
 python3 deploy/scripts/prepare-media-env.py --enable-minio
 ```
 
+**Windows — PowerShell 7.3+**
+
+```powershell
+py -3 deploy/scripts/prepare-media-env.py --enable-minio
+```
+
 Script giữ các secrets hiện tại và đặt `STORAGE_BACKEND=minio`. Lệnh `dc` tiếp theo sẽ đọc
-cấu hình mới; không cần `source deploy/.env.data`. Trình tự này tránh bật storage MinIO khi
+cấu hình mới; không cần `source deploy/.env.data` trên Bash hoặc dot-source file env trên PowerShell.
+Trình tự này tránh bật storage MinIO khi
 ảnh còn chỉ nằm trên đĩa local. Với ứng dụng đã có người dùng/upload, chuyển storage phải
 có thời gian bảo trì để không phát sinh file mới giữa lúc copy và đổi cấu hình.
 
@@ -273,7 +448,17 @@ Ba bucket là `product-images`, `user-avatars`, `attachments`. Backend/ETL dùng
 
 Lúc này chưa khởi động worker nên CLI không tranh advisory lock với daemon:
 
+**Linux / WSL — Bash**
+
 ```bash
+dc run --rm --no-deps --entrypoint python backend -m etl.run full
+dc run --rm --no-deps --entrypoint python backend -m etl.run reconcile
+dc run --rm --no-deps --entrypoint python backend -m etl.run status
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
 dc run --rm --no-deps --entrypoint python backend -m etl.run full
 dc run --rm --no-deps --entrypoint python backend -m etl.run reconcile
 dc run --rm --no-deps --entrypoint python backend -m etl.run status
@@ -291,7 +476,16 @@ bộ seed bổ sung vào DB đã ETL.
 
 ### 7.2. Chạy backend, frontend và ETL daemon
 
+**Linux / WSL — Bash**
+
 ```bash
+dc up -d --wait --wait-timeout 240 backend etl-worker frontend
+dc ps --all
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
 dc up -d --wait --wait-timeout 240 backend etl-worker frontend
 dc ps --all
 ```
@@ -333,11 +527,22 @@ Website lấy ảnh qua `/media/...`, không truy cập bucket anonymous.
 
 ### 8.2. Kiểm tra bằng lệnh và Swagger
 
+**Linux / WSL — Bash**
+
 ```bash
 curl -fsS http://localhost:58000/health
 curl -fsS http://localhost:58000/health/ready
 curl -fsS http://localhost:58080/api/v1/categories
 python3 deploy/scripts/check-data-stack.py --resilience --day6
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
+curl.exe -fsS http://localhost:58000/health
+curl.exe -fsS http://localhost:58000/health/ready
+curl.exe -fsS http://localhost:58080/api/v1/categories
+py -3 deploy/scripts/check-data-stack.py --resilience --day6
 ```
 
 Checker cần trả `result: PASS`: chín service khỏe, schema 001–006, PG replica streaming,
@@ -381,11 +586,21 @@ DB Docker đã seed/migrate ở mục 5 thì **không chạy lại init.sql tron
 
 Nếu bạn chọn khởi tạo **một PostgreSQL database rỗng riêng ngoài quy trình Docker chính**:
 
+**Linux / WSL — Bash**
+
 ```bash
 python3 database/build_pgadmin_init.py --output /tmp/oldshop-init-pgadmin.sql
 ```
 
+**Windows — PowerShell 7.3+**
+
+```powershell
+py -3 database/build_pgadmin_init.py --output (Join-Path $env:TEMP "oldshop-init-pgadmin.sql")
+```
+
 Tạo một database rỗng bằng pgAdmin trước, chọn đúng DB rồi mở/chạy SQL vừa sinh trong Query Tool.
+Trên Linux output ở `/tmp/oldshop-init-pgadmin.sql`; trên Windows nằm trong thư mục tạm
+`$env:TEMP`, ví dụ `C:\Users\<user>\AppData\Local\Temp\oldshop-init-pgadmin.sql`.
 File output phải chưa tồn tại; đổi tên nếu sinh lại. `init.sql` gốc có `\i` của psql nên không
 paste trực tiếp vào Query Tool. SQL sinh ra chỉ là baseline + seed Ngày 1, **chưa áp 001–006**.
 Muốn dùng DB đó với backend hiện tại cần cấu hình backend trỏ đúng DB và chạy migration runner
@@ -405,6 +620,8 @@ services:
 
 Định nghĩa lại `dc` để giữ cả file override khi quản lý stack:
 
+**Linux / WSL — Bash**
+
 ```bash
 dc() {
   docker compose \
@@ -412,6 +629,26 @@ dc() {
     -f deploy/docker-compose.distributed.yml \
     -f deploy/docker-compose.gui.yml \
     --profile resilience "$@"
+}
+
+dc up -d --no-deps --wait --wait-timeout 180 mongo1
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
+function dc {
+    $composeArgs = @(
+        "compose",
+        "--env-file", "deploy/.env.data",
+        "-f", "deploy/docker-compose.distributed.yml",
+        "-f", "deploy/docker-compose.gui.yml",
+        "--profile", "resilience"
+    )
+    & docker @composeArgs @args
+    if ($LASTEXITCODE -ne 0) {
+        throw "Docker Compose that bai, exit code: $LASTEXITCODE"
+    }
 }
 
 dc up -d --no-deps --wait --wait-timeout 180 mongo1
@@ -441,11 +678,22 @@ Giữ file override trong các lần gọi `dc` tiếp theo để cấu hình pu
 
 Giữ nguyên `.env.data`, cùng file Compose/profile và volumes:
 
+**Linux / WSL — Bash**
+
 ```bash
 # Định nghĩa lại dc nếu đây là terminal mới.
 dc up -d --wait --wait-timeout 240
 dc ps --all
 python3 deploy/scripts/check-data-stack.py --resilience --day6
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
+# Định nghĩa lại dc nếu đây là terminal mới.
+dc up -d --wait --wait-timeout 240
+dc ps --all
+py -3 deploy/scripts/check-data-stack.py --resilience --day6
 ```
 
 Không cần `cp` env, tạo DB, seed hoặc full ETL lại mỗi lần bật máy. Các init job được thiết kế
@@ -458,7 +706,16 @@ tiếp tục dùng profile `resilience`; không bỏ profile rồi chỉ chạy 
 liên quan schema/storage/secrets, dùng `dc up -d --wait` để Compose áp cấu hình container.
 Nếu backend bị recreate, Nginx có thể giữ IP backend cũ; sau khi backend khỏe, restart frontend:
 
+**Linux / WSL — Bash**
+
 ```bash
+dc restart frontend
+dc up -d --no-deps --wait --wait-timeout 90 frontend
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
 dc restart frontend
 dc up -d --no-deps --wait --wait-timeout 90 frontend
 ```
@@ -466,10 +723,29 @@ dc up -d --no-deps --wait --wait-timeout 90 frontend
 Với DB đã dùng mà cần nâng cấp schema/app lên bộ migration hiện tại, xem
 [quy trình tích hợp](design/06_completion_plan.md), rồi thực hiện trong thời gian bảo trì:
 
+**Linux / WSL — Bash**
+
 ```bash
 bash deploy/scripts/apply-day6.sh --resilience
 python3 deploy/scripts/check-data-stack.py --resilience --day6
 ```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
+# Vi du repo Windows nam o C:\Projects\Epic-Ecommerce-FastAPI-main.
+# Ubuntu la distro WSL da cai va da bat Docker Desktop WSL Integration.
+wsl --distribution Ubuntu --cd "/mnt/c/Projects/Epic-Ecommerce-FastAPI-main" --exec bash deploy/scripts/apply-day6.sh --resilience
+if ($LASTEXITCODE -ne 0) { throw "Apply Day 6 that bai; kiem tra trang thai bao tri." }
+py -3 deploy/scripts/check-data-stack.py --resilience --day6
+```
+
+Trên Windows, `apply-day6.sh` vẫn chạy bằng **Bash trong WSL**, không chạy trực tiếp bằng
+PowerShell. Thay `Ubuntu` và đường dẫn `/mnt/c/...` bằng distro/thư mục thật; xem danh sách distro
+bằng `wsl --list --verbose`. Distro phải có `python3`, Bash, Docker CLI thông qua Docker Desktop
+Integration và truy cập cùng repository/daemon/volumes với phiên PowerShell.
+Giữ `.sh` ở line ending **LF** theo `.gitattributes` của repo; lỗi `\r`/`bad interpreter` thường
+cần đổi line ending trong editor. [Các lệnh WSL](https://learn.microsoft.com/en-us/windows/wsl/basic-commands).
 
 Script build image, dừng frontend/backend/worker, backup và thử restore, chạy migration/index,
 full/reconcile, đối chiếu 18 bảng nguồn và chỉ mở lại khi thành công. Backup nằm trong
@@ -483,7 +759,18 @@ secret, đổi major Mongo hoặc chuyển storage là thao tác riêng cần k�
 
 ## 11. Xem log, dừng hệ thống và chạy ETL thủ công
 
+**Linux / WSL — Bash**
+
 ```bash
+dc logs --tail 100 backend
+dc logs --tail 100 etl-worker
+dc logs --tail 100 mongo-init mongo-expand mongo-schema-init minio-init
+dc logs -f --tail 100 backend etl-worker
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
 dc logs --tail 100 backend
 dc logs --tail 100 etl-worker
 dc logs --tail 100 mongo-init mongo-expand mongo-schema-init minio-init
@@ -494,13 +781,29 @@ dc logs -f --tail 100 backend etl-worker
 
 Dừng tạm, giữ container và dữ liệu:
 
+**Linux / WSL — Bash**
+
 ```bash
+dc stop
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
 dc stop
 ```
 
 Dừng và gỡ container/network, giữ named volumes để lần sau chạy tiếp:
 
+**Linux / WSL — Bash**
+
 ```bash
+dc down
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
 dc down
 ```
 
@@ -509,7 +812,19 @@ MinIO và media của project. Không dùng reset volume làm cách sửa passwo
 
 Nếu cần full ETL/đối soát thủ công khi daemon đang chạy:
 
+**Linux / WSL — Bash**
+
 ```bash
+dc stop etl-worker
+dc run --rm --no-deps --entrypoint python backend -m etl.run full
+dc run --rm --no-deps --entrypoint python backend -m etl.run reconcile
+dc up -d --no-deps --wait --wait-timeout 180 etl-worker
+dc exec -T etl-worker python -m etl.run status
+```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
 dc stop etl-worker
 dc run --rm --no-deps --entrypoint python backend -m etl.run full
 dc run --rm --no-deps --entrypoint python backend -m etl.run reconcile
@@ -530,6 +845,8 @@ PostgreSQL của stack Docker đã có, backend host chạy port 8000, Angular h
 
 Cần Python 3.13 và PostgreSQL client có `psql`. Từ root:
 
+**Linux / WSL — Bash**
+
 ```bash
 cd backend
 python3.13 -m venv .venv
@@ -537,6 +854,21 @@ source .venv/bin/activate
 pip install -r requirements-dev.txt
 cp -n .env.example .env
 ```
+
+**Windows — PowerShell 7.3+**
+
+```powershell
+Set-Location .\backend
+py -3.13 -m venv .venv
+& .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+if (-not (Test-Path -LiteralPath ".env")) {
+    Copy-Item -LiteralPath ".env.example" -Destination ".env"
+}
+```
+
+Trên Linux khối trên activate venv; trên Windows khối trên gọi trực tiếp
+`.venv\Scripts\python.exe`, nên không bắt buộc activate và không cần đổi execution policy
+để chạy `Activate.ps1`. Mở `backend/.env` bằng editor (Linux: `nano .env`, Windows: `notepad .env`).
 
 Mở `backend/.env` và sửa:
 
@@ -575,12 +907,26 @@ Nếu để `MONGO_URI` rỗng thì không coi bản backend host này là bài 
 
 Sau khi cấu hình đúng, trong `backend/` với venv đang active:
 
+**Linux / WSL — Bash**
+
 ```bash
 python -m scripts.init_db
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
+**Windows — PowerShell 7.3+**
+
+```powershell
+& .\.venv\Scripts\python.exe -m scripts.init_db
+if ($LASTEXITCODE -ne 0) { throw "Kiem tra DB that bai; chua khoi dong API." }
+& .\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
 DB Docker ở ví dụ đã seed/migrate nên init_db kiểm lại và chép ảnh seed vào `backend/media`.
+Ví dụ chạy backend trực tiếp trên Windows yêu cầu DB đã bootstrap theo mục 5 trong Linux container.
+Nhánh `load_schema()` của bootstrap dùng file tạm đang mở để gọi `psql`, chưa được xác minh cho
+khởi tạo database rỗng bằng Python Windows; nếu cần cài mới, dùng quy trình Docker ở mục 5.
+Đây không phải khẳng định toàn bộ backend native Windows đã được kiểm thử end-to-end.
 Nếu đổi sang PG cài trực tiếp, sửa `DB_*` đúng role/DB; bootstrap cần quyền tạo DB nếu chưa có,
 tạo schema/extensions và áp migration. Không bootstrap thử trên DB production đang dùng.
 Không chạy thêm `python -m etl.run worker` trỏ cùng DB nếu worker Docker vẫn hoạt động.
@@ -588,6 +934,8 @@ Không chạy thêm `python -m etl.run worker` trỏ cùng DB nếu worker Docke
 ### 12.2. Frontend
 
 Mở terminal khác, từ root:
+
+**Linux / WSL — Bash**
 
 ```bash
 cd frontend
@@ -597,8 +945,19 @@ npm ci --ignore-scripts --no-audit --no-fund
 npm start
 ```
 
+**Windows — PowerShell 7.3+**
+
+```powershell
+Set-Location .\frontend
+node --version
+npm.cmd --version
+npm.cmd ci --ignore-scripts --no-audit --no-fund
+npm.cmd start
+```
+
 Theo `frontend/package-lock.json`, Angular hiện yêu cầu Node `^20.19.0 || ^22.12.0 || >=24.0.0`.
-Mở http://localhost:4200. File `src/environments/environment.ts` trỏ API/media tới
+Windows dùng `npm.cmd` để gọi executable shim của npm, tránh chọn nhầm script `npm.ps1`
+khi execution policy không cho chạy script. Mở http://localhost:4200. File `src/environments/environment.ts` trỏ API/media tới
 `http://localhost:8000`, khớp backend host ở trên. Bản build Docker dùng `environment.prod.ts`,
 API `/api/v1` và media cùng origin Nginx, nên không chỉnh environment dev để sửa bản Docker.
 
@@ -622,16 +981,34 @@ API `/api/v1` và media cùng origin Nginx, nên không chỉnh environment dev 
 | ETL `partial`, `dead > 0`, media missing | Xem log worker/status và dữ liệu nguồn; không coi heartbeat healthy là đối soát thành công |
 | Full ETL báo `etl_worker_busy` | Dừng đúng worker/lượt CLI cạnh tranh rồi chạy lại; không chạy nhiều daemon |
 | Init job `Exited (0)` | Thành công bình thường của job một lần |
+| PowerShell không hiểu `source`, `chmod`, `<<SQL` | Chọn khối Windows thay vì copy khối Bash; hoặc chuyển hẳn sang WSL |
+| `py` không được nhận diện | Kiểm Python launcher/PATH; dùng đúng Python 3.11+ hoặc Python 3.13 cho nhánh dev |
+| PowerShell 5.1 làm mất dấu nháy khi gọi Docker | Dùng PowerShell 7.3+ và thiết lập native argument passing ở mục 2, hoặc dùng nhánh WSL |
+| `npm.ps1`/`Activate.ps1` bị chặn | Dùng `npm.cmd` và `.venv\Scripts\python.exe` như ví dụ Windows |
+| WSL không tìm được repo / distro | Kiểm `wsl --list --verbose`, đổi tên distro và đường dẫn `/mnt/c/...` theo máy |
+| Container báo `bad interpreter` / `\r` | Đổi `.sh` sang LF; giữ quy tắc `.gitattributes` khi clone/edit trên Windows |
 
 ## 14. Kiểm thử và tài liệu tiếp theo
 
 Swagger dùng để kiểm API; DB constraints, Mongo validators, ETL replay và lỗi/phục hồi cần
 runner tích hợp riêng. Runner Ngày 6 tự tạo project/DB/volumes tạm và dọn sau kiểm thử:
 
+**Linux / WSL — Bash**
+
 ```bash
 bash deploy/scripts/test-day6.sh --mongo-image mongo:7.0
 ```
 
+**Windows — PowerShell 7.3+**
+
+```powershell
+# Thay distro va duong dan bang noi luu repo cua ban.
+wsl --distribution Ubuntu --cd "/mnt/c/Projects/Epic-Ecommerce-FastAPI-main" --exec bash deploy/scripts/test-day6.sh --mongo-image mongo:7.0
+if ($LASTEXITCODE -ne 0) { throw "Kiem thu Day 6 that bai; xem log WSL." }
+```
+
+Trên Windows, lệnh test `.sh` ở trên chạy qua WSL giống quy trình bảo trì ở mục 10.2;
+không dùng `bash` từ Git Bash thay cho distro WSL được cấu hình Docker Integration.
 Với host đã xác minh tương thích Mongo8, có thể dùng image mặc định của runner.
 Không chạy `pytest` tùy ý với `DB_NAME=oldshop` đang sử dụng: tests có ghi dữ liệu.
 Xem các điều kiện và cách chạy ở [06_completion_plan.md](design/06_completion_plan.md).
@@ -645,3 +1022,13 @@ Xem các điều kiện và cách chạy ở [06_completion_plan.md](design/06_c
 
 Luồng cài mới cần nhớ: **env → build → hạ tầng → init users/buckets/validators → PG seed và
 migration → copy ảnh → bật MinIO → full ETL/reconcile → backend/frontend/worker → checker**.
+
+## 15. Phạm vi kiểm tra hai nền tảng
+
+Nhánh Linux dựa trên stack local và script đã có bằng chứng các ngày trước. Trong lần bổ sung
+này, **29 khối Bash** đã qua `bash -n`; **29 khối PowerShell** đã qua parser PowerShell 7.6.9
+chạy trên Linux. Hai hàm `dc` và luồng SQL here-string/pipeline còn được kiểm bằng Docker giả lập:
+giữ tham số/dấu nháy, chuyển SQL vào stdin và báo lỗi khi native command trả mã khác 0.
+
+Chưa có lượt cài mới end-to-end trên máy Windows trong tác vụ này. Trước khi kết luận máy
+Windows đã chạy thành công, thực hiện đến checker ở mục 8 trên chính máy đó.
