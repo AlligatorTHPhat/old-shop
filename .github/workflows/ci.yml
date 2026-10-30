@@ -83,6 +83,24 @@ jobs:
       - name: Build
         working-directory: frontend
         run: npm run build -- --configuration production
+      - name: Frontend tests
+        working-directory: frontend
+        run: npm test -- --watch=false
+
+  data-integration:
+    name: PG + Mongo + MinIO integration and service failures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Isolated Compose services and full regression
+        run: bash deploy/scripts/test-day6.sh > day6-tests.txt 2>&1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: day6-data-integration
+          path: |
+            day6-tests.txt
+            docs/evidence/day6_failover.json
 
   docker:
     name: Docker images build

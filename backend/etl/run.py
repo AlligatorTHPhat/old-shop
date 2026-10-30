@@ -16,7 +16,7 @@ from app.core.logging import setup_logging
 from app.services.mongo import get_database
 from etl import errors, load, quality
 from etl.extract import SOURCES, Source
-from etl.pipelines import aggregate, media
+from etl.pipelines import aggregate, media, media_cleanup
 from etl.pipelines.documents import project
 from scripts.migrate import connect
 
@@ -207,6 +207,14 @@ def execute(mode="incremental", database=None):
                 source, database, run_id, deep=mode in ("full", "reconcile"), touched=touched
             )
         details["backlog"] = backlog(connection)
+        # The queue is installed on Day 6; workers remain compatible with Day 5 databases.
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT to_regclass('media_deletions') IS NOT NULL")
+            has_cleanup = cursor.fetchone()[0]
+        connection.commit()
+        if has_cleanup and not details["backlog"]["pending"] and not details["quality"]["mismatches"]:
+            details["media_cleanup"] = media_cleanup.run(connection, database)
+            error_count += details["media_cleanup"]["errors"]
         status = (
             "success"
             if not (error_count or details["quality"]["mismatches"] or details["backlog"]["pending"])
@@ -275,6 +283,14 @@ def status():
             )
             row = cursor.fetchone()
             result["last_run"] = dict(row) if row else None
+            cursor.execute("SELECT to_regclass('media_deletions') IS NOT NULL AS installed")
+            if cursor.fetchone()["installed"]:
+                cursor.execute(
+                    "SELECT count(*) FILTER(WHERE status='pending') AS pending,"
+                    "count(*) FILTER(WHERE status='pending' AND last_error_code IS NOT NULL) AS failed "
+                    "FROM media_deletions"
+                )
+                result["media_cleanup"] = dict(cursor.fetchone())
         return result
     finally:
         connection.close()
@@ -285,14 +301,16 @@ def worker():
     for sig in (signal.SIGTERM, signal.SIGINT):
         signal.signal(sig, lambda *_: stop.set())
     while not stop.is_set():
-        connection = connect()
         try:
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT name,value FROM etl_state WHERE name IN ('full_initialized','last_deep_check')")
-                values = dict(cursor.fetchall())
-        finally:
-            connection.close()
-        try:
+            connection = connect()
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT name,value FROM etl_state WHERE name IN ('full_initialized','last_deep_check')"
+                    )
+                    values = dict(cursor.fetchall())
+            finally:
+                connection.close()
             mode = "full" if not values.get("full_initialized") else "incremental"
             execute(mode)
             if mode != "full" and values.get("last_deep_check") != datetime.now(UTC).date().isoformat():

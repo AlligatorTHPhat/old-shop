@@ -1,0 +1,125 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 688B done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.9s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#3 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/nginxinc/nginx-unprivileged:1.27-alpine
+#4 ...
+
+#5 [internal] load metadata for docker.io/library/node:20-alpine
+#5 DONE 1.3s
+
+#4 [internal] load metadata for docker.io/nginxinc/nginx-unprivileged:1.27-alpine
+#4 DONE 1.4s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 89B done
+#6 DONE 0.0s
+
+#7 [build 1/6] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#7 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#7 DONE 0.1s
+
+#8 [stage-1 1/3] FROM docker.io/nginxinc/nginx-unprivileged:1.27-alpine@sha256:65e3e85dbaed8ba248841d9d58a899b6197106c23cb0ff1a132b7bfe0547e4c0
+#8 resolve docker.io/nginxinc/nginx-unprivileged:1.27-alpine@sha256:65e3e85dbaed8ba248841d9d58a899b6197106c23cb0ff1a132b7bfe0547e4c0 0.1s done
+#8 DONE 0.1s
+
+#9 [internal] load build context
+#9 transferring context: 20.67kB 0.0s done
+#9 DONE 0.1s
+
+#10 [build 2/6] WORKDIR /app
+#10 CACHED
+
+#11 [build 3/6] COPY package.json package-lock.json ./
+#11 DONE 0.1s
+
+#12 [build 4/6] RUN npm ci --ignore-scripts --no-audit --no-fund
+#12 28.24 
+#12 28.24 added 481 packages in 27s
+#12 28.24 npm notice
+#12 28.24 npm notice New major version of npm available! 10.8.2 -> 12.2.1
+#12 28.24 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+#12 28.24 npm notice To update run: npm install -g npm@12.2.1
+#12 28.24 npm notice
+#12 DONE 29.6s
+
+#13 [build 5/6] COPY . .
+#13 DONE 0.8s
+
+#14 [build 6/6] RUN npm run build -- --configuration production
+#14 1.163 
+#14 1.163 > frontend@0.0.0 build
+#14 1.163 > ng build --configuration production
+#14 1.163 
+#14 3.866 ❯ Building...
+#14 46.92 ✔ Building...
+#14 46.93 Initial chunk files | Names                    |  Raw size | Estimated transfer size
+#14 46.93 styles-QLB63RVZ.css | styles                   | 316.18 kB |                33.19 kB
+#14 46.93 chunk-GXVBDRLR.js   | -                        | 193.09 kB |                55.20 kB
+#14 46.93 chunk-VR6CJQOE.js   | -                        |  83.23 kB |                20.63 kB
+#14 46.93 chunk-CWEWLMB5.js   | -                        |  48.36 kB |                13.73 kB
+#14 46.93 chunk-VPDCTZ25.js   | -                        |  47.34 kB |                 9.45 kB
+#14 46.93 main-PTRQYYSO.js    | main                     |  24.84 kB |                 6.52 kB
+#14 46.93 chunk-3X5HC5BW.js   | -                        |  12.85 kB |                 4.02 kB
+#14 46.93 chunk-HQWZONNW.js   | -                        |   7.97 kB |                 2.59 kB
+#14 46.93 chunk-USKMAMWI.js   | -                        |   7.37 kB |                 2.33 kB
+#14 46.93 chunk-NLBHI2LX.js   | -                        |   3.96 kB |                 1.25 kB
+#14 46.93 chunk-MGBQP65W.js   | -                        |   2.56 kB |               886 bytes
+#14 46.93 chunk-5OXG3M4M.js   | -                        |   1.38 kB |               467 bytes
+#14 46.93 chunk-HAOMQEZ3.js   | -                        | 858 bytes |               858 bytes
+#14 46.93 chunk-2NFLSA4Y.js   | -                        | 449 bytes |               449 bytes
+#14 46.93 
+#14 46.93                     | Initial total            | 750.45 kB |               151.57 kB
+#14 46.93 
+#14 46.93 Lazy chunk files    | Names                    |  Raw size | Estimated transfer size
+#14 46.93 chunk-NCGIBXIK.js   | -                        | 204.43 kB |                61.09 kB
+#14 46.93 chunk-PIXQXLCR.js   | product-manage           |  33.85 kB |                 7.89 kB
+#14 46.93 chunk-ZIENT6GL.js   | voucher-manage           |  29.35 kB |                 6.57 kB
+#14 46.93 chunk-Z53KFWBE.js   | category-manage          |  29.00 kB |                 6.57 kB
+#14 46.93 chunk-ZB6IQ72W.js   | moderator-manage         |  27.91 kB |                 6.40 kB
+#14 46.93 chunk-VX2D54WM.js   | product-manage           |  26.85 kB |                 6.71 kB
+#14 46.93 chunk-3MYSON2V.js   | home                     |  26.01 kB |                 5.55 kB
+#14 46.93 chunk-PPBSO3WH.js   | order-manage             |  25.68 kB |                 6.24 kB
+#14 46.93 chunk-KFBKN34F.js   | product-detail-component |  24.91 kB |                 7.12 kB
+#14 46.93 chunk-WTTOY7TD.js   | checkout                 |  24.77 kB |                 6.94 kB
+#14 46.93 chunk-K64WO6UX.js   | user-manage              |  23.24 kB |                 5.17 kB
+#14 46.93 chunk-ZJCP77V3.js   | shop                     |  17.49 kB |                 5.04 kB
+#14 46.93 chunk-ZN7NJZDX.js   | cart                     |  14.99 kB |                 4.41 kB
+#14 46.93 chunk-2MNFFL5W.js   | dashboard                |  13.79 kB |                 3.98 kB
+#14 46.93 chunk-W5YHOF73.js   | dashboard                |  13.62 kB |                 4.31 kB
+#14 46.93 ...and 24 more lazy chunks files. Use "--verbose" to show all the files.
+#14 46.93 
+#14 46.93 Application bundle generation complete. [43.052 seconds] - 2026-10-30T06:37:55.026Z
+#14 46.93 
+#14 46.94 ▲ [WARNING] bundle initial exceeded maximum budget. Budget 500.00 kB was not met by 250.45 kB with a total of 750.45 kB.
+#14 46.94 
+#14 46.94 
+#14 46.95 Output location: /app/dist/frontend
+#14 46.95 
+#14 DONE 47.2s
+
+#15 [stage-1 2/3] COPY nginx.conf /etc/nginx/conf.d/default.conf
+#15 CACHED
+
+#16 [stage-1 3/3] COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers 0.0s done
+#17 exporting manifest sha256:b382d78b93497aaece1ffecfe77ef2913c3c72cebcc08ece53d01cb6f4286f6d done
+#17 exporting config sha256:bf57fcea5a39c756e75ec091c6cd4b18b3e80c638a1ca70b8d1f7cb2b8a64431 done
+#17 exporting attestation manifest sha256:12f51b851e66f53d641eb6d900c9c943d7d47f57bc8b1b80425b6c81f0a7562c
+#17 exporting attestation manifest sha256:12f51b851e66f53d641eb6d900c9c943d7d47f57bc8b1b80425b6c81f0a7562c 0.0s done
+#17 exporting manifest list sha256:8c6714dcf41dd97f999e39b4baed830f545a0bfa77a96ffb25d9053257b5b954 0.0s done
+#17 naming to docker.io/library/oldshop-data-frontend:day6 done
+#17 unpacking to docker.io/library/oldshop-data-frontend:day6 0.0s done
+#17 DONE 0.3s

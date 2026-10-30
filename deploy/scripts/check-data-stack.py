@@ -1,4 +1,4 @@
-"""Check data infrastructure without printing credentials or changing application data."""
+"""Check infrastructure without printing credentials; Day 6 HTTP detail probes increment view counts."""
 
 import argparse
 import json
@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--resilience", action="store_true")
+parser.add_argument("--day6", action="store_true", help="Require integrated Day 6 schema and API")
 parser.add_argument("--day5", action="store_true", help="Require migration 005 and an ETL worker")
 parser.add_argument("--output", type=Path)
 args = parser.parse_args()
@@ -67,7 +68,7 @@ assert pg("pg-primary", "SELECT pg_is_in_recovery()") == "f"
 checks["baseline"] = pg("pg-primary", "SELECT count(*) FROM pg_tables WHERE schemaname='public'")
 if pg("pg-primary", "SELECT to_regclass('public.schema_migrations') IS NOT NULL") == "t":
     checks["migrations"] = pg("pg-primary", "SELECT string_agg(version,',' ORDER BY version) FROM schema_migrations")
-    assert checks["migrations"] in ("001,002,003,004", "001,002,003,004,005")
+    assert checks["migrations"] in ("001,002,003,004", "001,002,003,004,005", "001,002,003,004,005,006")
     assert pg("pg-primary", "SELECT count(*) FROM pg_inherits WHERE inhparent='public.\"order\"'::regclass") == "4"
     assert pg("pg-primary", "SELECT count(*) FROM information_schema.columns WHERE table_name='users_full' AND table_schema='public'") == "20"
 else:
@@ -105,14 +106,24 @@ for url in urls:
         result[url] = response.status
 print(json.dumps(result))
 """))
-has_etl = checks.get("migrations") == "001,002,003,004,005"
+has_etl = checks.get("migrations") in ("001,002,003,004,005", "001,002,003,004,005,006")
+if args.day6:
+    assert checks.get("migrations") == "001,002,003,004,005,006", "Day 6 migration 006 is required"
+    checks["day6_api"] = json.loads(run(*compose, "exec", "-T", "backend", "python", "-m", "scripts.verify_day6"))
 if args.day5:
     assert has_etl, "Day 5 has not been deployed; migration 005 is required"
 if has_etl:
     row = next((row for row in services if row["Service"] == "etl-worker"), None)
     assert row and row["State"] == "running" and row["Health"] == "healthy", "Unhealthy/missing ETL worker"
     checks["healthy_services"].append("etl-worker")
-    checks["etl"] = json.loads(run(*compose, "exec", "-T", "etl-worker", "python", "-m", "etl.run", "status"))
+    deadline = time.monotonic() + (120 if args.day6 else 0)
+    while True:
+        checks["etl"] = json.loads(run(*compose, "exec", "-T", "etl-worker", "python", "-m", "etl.run", "status"))
+        current = checks["etl"]
+        if (current["pending"] == 0 and current["dead"] == 0 and current.get("last_run")
+                and current["last_run"]["status"] == "success") or time.monotonic() >= deadline:
+            break
+        time.sleep(2)
     assert checks["etl"]["pending"] == 0 and checks["etl"]["dead"] == 0
     assert checks["etl"]["last_run"] and checks["etl"]["last_run"]["status"] == "success"
 else:

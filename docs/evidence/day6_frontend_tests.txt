@@ -1,0 +1,68 @@
+
+> frontend@0.0.0 test
+> ng test --watch=false
+
+❯ Building...
+✔ Building...
+Initial chunk files                                        | Names                                                   |  Raw size
+styles.css                                                 | styles                                                  | 381.42 kB | 
+spec-app-features-admin-category-manage-category-manage.js | spec-app-features-admin-category-manage-category-manage |  78.14 kB | 
+spec-app-features-home-home.js                             | spec-app-features-home-home                             |  67.45 kB | 
+spec-app-features-customer-checkout-checkout.js            | spec-app-features-customer-checkout-checkout            |  61.87 kB | 
+spec-app-features-shop-shop.js                             | spec-app-features-shop-shop                             |  50.33 kB | 
+spec-app-features-customer-cart-cart.js                    | spec-app-features-customer-cart-cart                    |  39.02 kB | 
+chunk-GYWHPAXS.js                                          | -                                                       |  34.31 kB | 
+spec-app-app.js                                            | spec-app-app                                            |  30.45 kB | 
+spec-app-features-customer-profile-profile.js              | spec-app-features-customer-profile-profile              |  25.53 kB | 
+spec-app-features-contact-contact.js                       | spec-app-features-contact-contact                       |  22.82 kB | 
+chunk-GXD2HXYN.js                                          | -                                                       |  20.13 kB | 
+chunk-GMQGONTR.js                                          | -                                                       |  19.41 kB | 
+chunk-C2H7PCB5.js                                          | -                                                       |   6.63 kB | 
+chunk-RSTWSNOR.js                                          | -                                                       |   4.75 kB | 
+chunk-OTQSDJ2A.js                                          | -                                                       |   4.67 kB | 
+spec-app-features-admin-dashboard-sales-chart.js           | spec-app-features-admin-dashboard-sales-chart           |   2.09 kB | 
+chunk-UOWKMG6S.js                                          | -                                                       |   1.75 kB | 
+chunk-G6V6NUNU.js                                          | -                                                       |   1.48 kB | 
+init-testbed.js                                            | init-testbed                                            |   1.21 kB | 
+spec-app-layout-components-header-header.js                | spec-app-layout-components-header-header                | 846 bytes | 
+spec-app-features-auth-register-register.js                | spec-app-features-auth-register-register                | 794 bytes | 
+spec-app-features-auth-login-login.js                      | spec-app-features-auth-login-login                      | 770 bytes | 
+vitest-mock-patch.js                                       | vitest-mock-patch                                       | 704 bytes | 
+
+                                                           | Initial total                                           | 856.57 kB
+
+Application bundle generation complete. [26.998 seconds] - 2026-10-30T06:31:46.905Z
+
+
+ RUN  v4.1.0 /app
+
+ ✓  frontend  src/app/features/admin/dashboard/sales-chart.spec.ts (3 tests) 44ms
+ ✓  frontend  src/app/features/customer/profile/profile.spec.ts (1 test) 1325ms
+     ✓ should create  1273ms
+ ✓  frontend  src/app/features/auth/login/login.spec.ts (1 test) 840ms
+     ✓ should create  840ms
+ ✓  frontend  src/app/features/contact/contact.spec.ts (1 test) 2494ms
+     ✓ should create  2469ms
+ ✓  frontend  src/app/layout/components/header/header.spec.ts (1 test) 2456ms
+     ✓ should create  2454ms
+ ✓  frontend  src/app/features/auth/register/register.spec.ts (1 test) 2415ms
+     ✓ should create  2326ms
+ ✓  frontend  src/app/features/admin/category-manage/category-manage.spec.ts (1 test) 3086ms
+     ✓ should create  2963ms
+ ✓  frontend  src/app/features/customer/checkout/checkout.spec.ts (1 test) 2165ms
+     ✓ should create  2132ms
+ ✓  frontend  src/app/features/customer/cart/cart.spec.ts (1 test) 573ms
+     ✓ should create  569ms
+ ✓  frontend  src/app/features/shop/shop.spec.ts (1 test) 918ms
+     ✓ should create  914ms
+ ✓  frontend  src/app/app.spec.ts (2 tests) 4010ms
+     ✓ should create the app  2592ms
+     ✓ renders the application shell and router outlet  1404ms
+ ✓  frontend  src/app/features/home/home.spec.ts (1 test) 1895ms
+     ✓ should create  1881ms
+
+ Test Files  12 passed (12)
+      Tests  15 passed (15)
+   Start at  06:31:47
+   Duration  27.34s (transform 12.43s, setup 29.20s, import 36.64s, tests 22.22s, environment 123.45s)
+

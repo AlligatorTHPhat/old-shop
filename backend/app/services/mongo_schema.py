@@ -74,6 +74,7 @@ INDEXES = {
     "product_details": [
         ([("product_id", 1)], {"unique": True}),
         ([("category_id", 1), ("attributes.brand", 1)], {}),
+        ([("attributes.$**", 1)], {"name": "idx_product_attributes"}),
         ([("description", "text"), ("tags", "text")], {}),
     ],
     "reviews": [

@@ -133,3 +133,31 @@ Private backups: `deploy/backups/day5_20261030_094800/`; restored PostgreSQL reh
 `day5_restore_20261030_094800`. Keep private backups outside Git and copy them off the host.
 Public evidence contains only counts, run metadata and health checks:
 [rollout](evidence/day5_rollout.json), [stack checks](evidence/day5_stack.json).
+
+## Day 6 integration and local rollout (completed 30/10/2026)
+
+See [Day 6 findings](DAY6_FINDINGS_LOG.md) for the actual rollout state, and
+[completion plan](design/06_completion_plan.md) for API contracts and remaining work.
+Compose defaults now use day6 backend/frontend images; an existing database needs the controlled
+`bash deploy/scripts/apply-day6.sh --resilience` maintenance procedure. It builds both images,
+stops API/frontend/worker, backs up and rehearses restore, applies migration 006, provisions the
+Mongo attribute index, runs full ETL/reconciliation and compares the 18 original source tables.
+It reopens services only after success; failure keeps maintenance, never resets/reseeds the DB.
+
+`python3 deploy/scripts/check-data-stack.py --resilience --day6 --output docs/evidence/day6_stack.json`
+requires schema 006, healthy services and successful worker catch-up. Its product detail probe
+increments the normal view counter, so it waits for the resulting outbox events before checking.
+`bash deploy/scripts/test-day6.sh --mongo-image mongo:7.0` creates and removes its own test project;
+it never stops the current oldshop-data stack. Mongo8 remains default for compatible hosts/CI.
+
+The legacy VPS Compose now explicitly sets DEBUG=false but does not itself add Mongo/MinIO/ETL;
+the distributed Compose is the current one-host polyglot deployment. Multi-host/TLS/fencing,
+off-host backups and key rotation remain deployment work before production exposure.
+
+Day 6 is now deployed locally: backup/restore, migration 006, full/reconcile and all 18 source
+snapshots passed. A CLI status cursor bug retained maintenance after the first rollout;
+its regression test passed and the corrected image reopened services. Evidence records both
+that initial failure and recovery, rather than reporting the first command as successful.
+Private backups: `deploy/backups/day6_20261030_134922/`; rehearsal DB:
+`day6_restore_20261030_134922`. See [rollout](evidence/day6_rollout.json),
+[final stack](evidence/day6_stack.json) and [API contract](evidence/day6_api_contract.json).

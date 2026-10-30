@@ -1,3 +1,4 @@
+import { testProviders } from '../../../../testing/providers';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CheckoutComponent } from './checkout';
@@ -8,6 +9,7 @@ describe('CheckoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: testProviders,
       imports: [CheckoutComponent],
     }).compileComponents();
 

@@ -2,11 +2,11 @@
   <header class="dashboard-header d-flex justify-content-between align-items-center mb-4">
     <div>
       <h1 class="fw-bold text-dark mb-1">Trung tâm Quản trị Hệ thống</h1>
-      <p class="text-muted mb-0">Giám sát hoạt động, người dùng và doanh thu thời gian thực.</p>
+      <p class="text-muted mb-0">Giám sát người dùng, đơn hàng và giá trị hàng đã giao.</p>
     </div>
     <div class="header-meta d-flex gap-3">
       <div class="status-badge shadow-sm">
-        <i class="bi bi-cpu-fill me-2"></i>Hệ thống: Ổn định
+        <i class="bi bi-cpu-fill me-2"></i>Thống kê quản trị
       </div>
       <button class="btn btn-light border shadow-sm rounded-circle btn-refresh" (click)="loadStats()">
         <i class="bi bi-arrow-clockwise"></i>
@@ -14,6 +14,7 @@
     </div>
   </header>
 
+  <p class="alert alert-warning" role="alert" *ngIf="error">{{ error }}</p>
   <div class="row g-4 mb-4">
     <div class="col-md-4">
       <div class="card border-0 shadow-sm stat-card users-card h-100">
@@ -23,7 +24,7 @@
             <div class="icon-box bg-primary-light"><i class="bi bi-people text-primary"></i></div>
           </div>
           <h2 class="fw-bold mb-0 text-dark">{{ stats.total_users | number }}</h2>
-          <span class="text-success small fw-medium"><i class="bi bi-arrow-up me-1"></i>+12% tháng này</span>
+          <span class="text-muted small">Tài khoản đang hoạt động</span>
         </div>
       </div>
     </div>
@@ -36,7 +37,7 @@
             <div class="icon-box bg-success-light"><i class="bi bi-currency-dollar text-success"></i></div>
           </div>
           <h2 class="fw-bold mb-0 text-dark">{{ stats.total_revenue | currency:'VND':'symbol':'1.0-0' }}</h2>
-          <span class="text-success small fw-medium"><i class="bi bi-graph-up me-1"></i>Tăng trưởng ổn định</span>
+          <span class="text-muted small">Tổng tiền đơn đã giao, gồm phí và giảm giá</span>
         </div>
       </div>
     </div>
@@ -49,7 +50,7 @@
             <div class="icon-box bg-purple-light"><i class="bi bi-cart-check text-purple"></i></div>
           </div>
           <h2 class="fw-bold mb-0 text-dark">{{ stats.total_orders | number }}</h2>
-          <span class="text-muted small">Cập nhật 1 phút trước</span>
+          <span class="text-muted small">Đơn hàng chưa bị xóa</span>
         </div>
       </div>
     </div>
@@ -59,9 +60,15 @@
     <div class="card-body p-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h5 class="fw-bold text-dark mb-1"><i class="bi bi-bar-chart-line me-2 text-primary"></i>Phân tích Doanh thu</h5>
-          <p class="text-muted small mb-0">Theo dõi biến động dòng tiền hệ thống</p>
+          <h5 class="fw-bold text-dark mb-1"><i class="bi bi-bar-chart-line me-2 text-primary"></i>Giá trị hàng đã giao</h5>
+          <p class="text-muted small mb-0">Giá hàng trước giảm giá, chưa gồm phí vận chuyển. Tổng hợp định kỳ.</p>
         </div>
+        <div class="d-flex gap-2 align-items-center">
+          <label for="sales-year">Năm</label>
+          <input id="sales-year" type="number" class="form-control form-control-sm" style="width:6rem" min="2000" max="2100" [(ngModel)]="salesYear" (change)="loadStats()">
+          <select aria-label="Tháng báo cáo" class="form-select form-select-sm" [(ngModel)]="salesMonth" (change)="updateChartData()">
+            <option *ngFor="let month of months" [ngValue]="month">Tháng {{ month }}</option>
+          </select>
         <div class="btn-group btn-group-sm p-1 bg-light rounded-pill">
           <button
             class="btn rounded-pill px-3 fw-bold transition-all"
@@ -73,10 +80,16 @@
             class="btn rounded-pill px-5 fw-bold transition-all"
             [ngClass]="chartView === 'month' ? 'btn-white shadow-sm text-dark' : 'btn-transparent text-muted'"
             (click)="switchChartView('month')">
-            Tháng này
+            Tháng đã chọn
           </button>
-        </div>
+        </div></div>
       </div>
+      <p class="text-muted small" *ngIf="stats.sales_report?.available">
+        Cập nhật: {{ stats.sales_report?.as_of | date:'dd/MM/yyyy HH:mm:ss' }} ·
+        Tổng năm: {{ stats.sales_report?.gross_sales_vnd | currency:'VND':'symbol':'1.0-0' }}
+        <span class="text-warning" *ngIf="stats.sales_report?.stale"> · Số liệu có thể đã cũ</span>
+      </p>
+      <p class="text-muted" *ngIf="!stats.sales_report?.available">Chưa có báo cáo tổng hợp.</p>
       <div style="height: 350px; position: relative;">
         <canvas #adminChart></canvas>
       </div>
@@ -95,21 +108,21 @@
               <i class="bi bi-check-circle-fill text-success me-3 fs-5"></i>
               <div>
                 <p class="mb-0 fw-bold text-dark small">Database Backup</p>
-                <span class="text-muted extra-small">Hoàn thành lúc 02:00 AM hôm nay</span>
+                <span class="text-muted extra-small">Xem bằng chứng backup trong nhật ký triển khai</span>
               </div>
             </div>
             <div class="list-group-item px-0 border-0 d-flex align-items-center mb-2">
               <i class="bi bi-check-circle-fill text-success me-3 fs-5"></i>
               <div>
                 <p class="mb-0 fw-bold text-dark small">SSL Certificate</p>
-                <span class="text-muted extra-small">Hợp lệ - Còn hạn 365 ngày</span>
+                <span class="text-muted extra-small">Kiểm tra chứng chỉ tại môi trường triển khai</span>
               </div>
             </div>
             <div class="list-group-item px-0 border-0 d-flex align-items-center">
               <i class="bi bi-exclamation-triangle-fill text-warning me-3 fs-5"></i>
               <div>
                 <p class="mb-0 fw-bold text-dark small">Báo cáo vi phạm</p>
-                <span class="text-danger fw-bold extra-small">12 báo cáo mới chưa xử lý</span>
+                <span class="text-danger fw-bold extra-small">Xem hàng đợi báo cáo tại trang kiểm duyệt</span>
               </div>
             </div>
           </div>

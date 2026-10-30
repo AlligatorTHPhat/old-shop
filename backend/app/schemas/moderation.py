@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
 from pydantic import BaseModel, EmailStr, Field
@@ -57,8 +57,24 @@ class SystemFeedbackResponse(ORMModel):
     created_at: datetime
 
 
+class DailySales(BaseModel):
+    day: date
+    gross_sales_vnd: int
+    item_quantity: int
+
+
+class SalesReport(BaseModel):
+    year: int
+    as_of: datetime | None
+    available: bool
+    stale: bool
+    gross_sales_vnd: int
+    daily: list[DailySales]
+
+
 class AdminDashboardStats(BaseModel):
     total_users: int
     total_revenue: Decimal
     pending_products: int
     total_orders: int
+    sales_report: SalesReport | None = None

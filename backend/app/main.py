@@ -100,7 +100,8 @@ def create_app() -> FastAPI:
     async def health():
         return {"status": "ok", "service": settings.PROJECT_NAME, "version": settings.PROJECT_VERSION}
 
-    @app.get("/health/ready", tags=["system"], summary="Readiness probe (checks the database)")
+    @app.get("/ready", include_in_schema=False)
+    @app.get("/health/ready", tags=["system"], summary="Readiness of PostgreSQL, MongoDB and image storage")
     async def ready():
         checks = {"database": "up" if await run_in_threadpool(ping_database) else "down"}
         if settings.MONGO_URI:

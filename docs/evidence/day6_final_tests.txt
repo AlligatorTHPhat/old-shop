@@ -1,0 +1,22 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 28 items
+
+tests/test_day5_etl.py ............................                      [100%]
+
+======================== 28 passed in 92.25s (0:01:32) =========================
+PASS phase=etl database=day5_test_20261030133926_etl
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 21 items
+
+tests/test_day6_integration.py .....................                     [100%]
+
+============================= 21 passed in 43.85s ==============================
+PASS phase=app database=day5_test_20261030133926_app

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { AdminDashboardStats } from '../../core/models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,9 @@ export class AdminService {
   constructor(private http: HttpClient) {}
 
   // Dashboard Stats
-  getStats(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/admin/stats`);
+  getStats(salesYear?: number): Observable<AdminDashboardStats> {
+    const params: Record<string, string> = salesYear ? { sales_year: salesYear.toString() } : {};
+    return this.http.get<AdminDashboardStats>(`${this.apiUrl}/admin/stats`, { params });
   }
 
   // User Management

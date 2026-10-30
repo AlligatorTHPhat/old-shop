@@ -22,8 +22,12 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 
 @router.get("/stats", response_model=AdminDashboardStats)
-def get_dashboard_stats(db: Session = Depends(get_db), admin: User = Depends(get_current_admin)):
-    return crud_admin.get_stats(db)
+def get_dashboard_stats(
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+    sales_year: int | None = Query(None, ge=2000, le=2100),
+):
+    return crud_admin.get_stats(db, sales_year)
 
 
 @router.get("/users", response_model=list[UserResponse])

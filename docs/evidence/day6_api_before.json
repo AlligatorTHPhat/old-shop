@@ -1,0 +1,644 @@
+{
+  "paths": {
+    "/health": [
+      "get"
+    ],
+    "/health/ready": [
+      "get"
+    ],
+    "/api/v1/auth/register": [
+      "post"
+    ],
+    "/api/v1/auth/login": [
+      "post"
+    ],
+    "/api/v1/auth/me": [
+      "get"
+    ],
+    "/api/v1/auth/forgot-password": [
+      "post"
+    ],
+    "/api/v1/auth/reset-password": [
+      "post"
+    ],
+    "/api/v1/auth/forgot-password-otp": [
+      "post"
+    ],
+    "/api/v1/auth/verify-reset-password": [
+      "post"
+    ],
+    "/api/v1/users/me": [
+      "get",
+      "put"
+    ],
+    "/api/v1/users/me/change-password": [
+      "post"
+    ],
+    "/api/v1/users/me/avatar": [
+      "post"
+    ],
+    "/api/v1/users/me/contacts": [
+      "get",
+      "post"
+    ],
+    "/api/v1/users/me/contacts/{contact_id}/set-default": [
+      "post"
+    ],
+    "/api/v1/users/me/contacts/{contact_id}": [
+      "delete"
+    ],
+    "/api/v1/users/seller/dashboard-stats": [
+      "get"
+    ],
+    "/api/v1/users": [
+      "get"
+    ],
+    "/api/v1/users/{user_id}": [
+      "delete",
+      "get"
+    ],
+    "/api/v1/categories": [
+      "get",
+      "post"
+    ],
+    "/api/v1/categories/parent": [
+      "get"
+    ],
+    "/api/v1/categories/{category_id}": [
+      "delete",
+      "get",
+      "put"
+    ],
+    "/api/v1/categories/{category_id}/children": [
+      "get"
+    ],
+    "/api/v1/categories/{category_id}/hard-delete": [
+      "delete"
+    ],
+    "/api/v1/categories/{category_id}/restore": [
+      "post"
+    ],
+    "/api/v1/products": [
+      "get",
+      "post"
+    ],
+    "/api/v1/products/seller/my-products": [
+      "get"
+    ],
+    "/api/v1/products/moderation/list": [
+      "get"
+    ],
+    "/api/v1/products/pending/all": [
+      "get"
+    ],
+    "/api/v1/products/{product_id}": [
+      "delete",
+      "get",
+      "put"
+    ],
+    "/api/v1/products/{product_id}/status": [
+      "patch",
+      "post"
+    ],
+    "/api/v1/products/{product_id}/reviews": [
+      "post"
+    ],
+    "/api/v1/products/{product_id}/approve": [
+      "post"
+    ],
+    "/api/v1/products/{product_id}/reject": [
+      "post"
+    ],
+    "/api/v1/cart": [
+      "delete",
+      "get"
+    ],
+    "/api/v1/cart/items": [
+      "post"
+    ],
+    "/api/v1/cart/items/{cart_item_id}": [
+      "delete",
+      "put"
+    ],
+    "/api/v1/orders/payment-methods": [
+      "get"
+    ],
+    "/api/v1/orders/check-voucher/{code}": [
+      "get"
+    ],
+    "/api/v1/orders/seller": [
+      "get"
+    ],
+    "/api/v1/orders": [
+      "get",
+      "post"
+    ],
+    "/api/v1/orders/{order_id}": [
+      "delete",
+      "get",
+      "put"
+    ],
+    "/api/v1/orders/create-paypal-order": [
+      "post"
+    ],
+    "/api/v1/orders/{order_id}/capture-paypal": [
+      "post"
+    ],
+    "/api/v1/moderator/products/pending": [
+      "get"
+    ],
+    "/api/v1/moderator/products/{product_id}/status": [
+      "patch"
+    ],
+    "/api/v1/moderator/reviews/violations": [
+      "get"
+    ],
+    "/api/v1/moderator/reviews/{review_id}/violation": [
+      "post"
+    ],
+    "/api/v1/moderator/users": [
+      "get"
+    ],
+    "/api/v1/moderator/users/{user_id}/ban": [
+      "post"
+    ],
+    "/api/v1/moderator/users/{user_id}/unban": [
+      "post"
+    ],
+    "/api/v1/moderator/users/{user_id}/lock-unlock": [
+      "post"
+    ],
+    "/api/v1/moderator/violation-logs": [
+      "get"
+    ],
+    "/api/v1/admin/stats": [
+      "get"
+    ],
+    "/api/v1/admin/users": [
+      "get"
+    ],
+    "/api/v1/admin/feedbacks": [
+      "get"
+    ],
+    "/api/v1/admin/feedbacks/{feedback_id}": [
+      "patch"
+    ],
+    "/api/v1/admin/moderators": [
+      "get",
+      "post"
+    ],
+    "/api/v1/admin/moderators/{user_id}/status": [
+      "patch"
+    ],
+    "/api/v1/admin/violation-logs": [
+      "get"
+    ],
+    "/api/v1/admin/vouchers": [
+      "get",
+      "post"
+    ],
+    "/api/v1/admin/vouchers/{voucher_id}": [
+      "delete",
+      "patch"
+    ],
+    "/api/v1/admin/vouchers/{voucher_id}/hard-delete": [
+      "delete"
+    ],
+    "/api/v1/system/feedback": [
+      "post"
+    ],
+    "/api/v1/system/contact": [
+      "post"
+    ]
+  },
+  "fields": {
+    "AdminDashboardStats": [
+      "pending_products",
+      "total_orders",
+      "total_revenue",
+      "total_users"
+    ],
+    "Body_create_product_api_v1_products_post": [
+      "category_id",
+      "condition_rating",
+      "description",
+      "dimensions",
+      "files",
+      "price",
+      "quantity",
+      "title",
+      "transfer_method",
+      "video_url",
+      "warranty_months",
+      "weight_grams"
+    ],
+    "Body_login_api_v1_auth_login_post": [
+      "client_id",
+      "client_secret",
+      "grant_type",
+      "password",
+      "scope",
+      "username"
+    ],
+    "Body_update_product_status_api_v1_products__product_id__status_post": [
+      "new_status",
+      "reject_reason"
+    ],
+    "Body_upload_avatar_api_v1_users_me_avatar_post": [
+      "file"
+    ],
+    "CategoryCreate": [
+      "description",
+      "name",
+      "parent_id"
+    ],
+    "CategoryResponse": [
+      "category_id",
+      "created_at",
+      "description",
+      "is_active",
+      "is_deleted",
+      "name",
+      "parent_id"
+    ],
+    "CategoryUpdate": [
+      "description",
+      "is_active",
+      "name",
+      "parent_id"
+    ],
+    "ChangePasswordRequest": [
+      "current_password",
+      "new_password"
+    ],
+    "ContactInfoCreate": [
+      "address",
+      "district",
+      "full_name",
+      "is_default",
+      "phone_number",
+      "province",
+      "ward"
+    ],
+    "ContactInfoResponse": [
+      "address",
+      "contact_id",
+      "created_at",
+      "district",
+      "full_name",
+      "is_default",
+      "is_deleted",
+      "phone_number",
+      "province",
+      "user_id",
+      "ward"
+    ],
+    "ContactMessageCreate": [
+      "email",
+      "full_name",
+      "message",
+      "phone",
+      "subject"
+    ],
+    "ForgotPasswordRequest": [
+      "email"
+    ],
+    "HTTPValidationError": [
+      "detail"
+    ],
+    "Message": [
+      "message"
+    ],
+    "OrderCreate": [
+      "contact_id",
+      "notes",
+      "order_items",
+      "payment_method_id",
+      "phone_number",
+      "shipping_address",
+      "shipping_fee",
+      "voucher_code"
+    ],
+    "OrderDetailResponse": [
+      "order_detail_id",
+      "price_at_purchase",
+      "product",
+      "product_id",
+      "quantity",
+      "subtotal"
+    ],
+    "OrderItemCreate": [
+      "product_id",
+      "quantity"
+    ],
+    "OrderResponse": [
+      "buyer_id",
+      "contact_id",
+      "discount_amount",
+      "final_amount",
+      "is_deleted",
+      "notes",
+      "order_date",
+      "order_id",
+      "order_status",
+      "payment_method_id",
+      "phone_number",
+      "shipping_address",
+      "shipping_fee",
+      "total_amount",
+      "tracking_number",
+      "voucher_code"
+    ],
+    "OrderUpdate": [
+      "notes",
+      "order_status",
+      "tracking_number"
+    ],
+    "OrderWithDetailsResponse": [
+      "buyer",
+      "buyer_id",
+      "contact_id",
+      "discount_amount",
+      "final_amount",
+      "is_deleted",
+      "notes",
+      "order_date",
+      "order_details",
+      "order_id",
+      "order_status",
+      "payment_method_id",
+      "phone_number",
+      "shipping_address",
+      "shipping_fee",
+      "total_amount",
+      "tracking_number",
+      "voucher_code"
+    ],
+    "PaymentMethodResponse": [
+      "is_deleted",
+      "is_online",
+      "method_name",
+      "payment_method_id"
+    ],
+    "ProductApprovalRequest": [
+      "product_id",
+      "reason",
+      "status"
+    ],
+    "ProductDetailResponse": [
+      "category_id",
+      "condition_rating",
+      "created_at",
+      "description",
+      "dimensions",
+      "is_approved",
+      "is_deleted",
+      "price",
+      "product_id",
+      "product_images",
+      "quantity",
+      "reject_reason",
+      "reviews",
+      "seller",
+      "seller_id",
+      "status",
+      "title",
+      "transfer_method",
+      "updated_at",
+      "video_url",
+      "view_count",
+      "warranty_months",
+      "weight_grams"
+    ],
+    "ProductImageResponse": [
+      "alt_text",
+      "display_order",
+      "image_id",
+      "image_url",
+      "is_primary"
+    ],
+    "ProductResponse": [
+      "category_id",
+      "condition_rating",
+      "created_at",
+      "description",
+      "dimensions",
+      "is_approved",
+      "is_deleted",
+      "price",
+      "product_id",
+      "product_images",
+      "quantity",
+      "reject_reason",
+      "seller_id",
+      "status",
+      "title",
+      "transfer_method",
+      "updated_at",
+      "video_url",
+      "view_count",
+      "warranty_months",
+      "weight_grams"
+    ],
+    "ProductReviewResponse": [
+      "buyer_id",
+      "content",
+      "created_at",
+      "product_id",
+      "rating",
+      "review_id",
+      "reviewer"
+    ],
+    "ProductUpdate": [
+      "category_id",
+      "condition_rating",
+      "description",
+      "dimensions",
+      "price",
+      "quantity",
+      "title",
+      "transfer_method",
+      "video_url",
+      "warranty_months",
+      "weight_grams"
+    ],
+    "ResetPasswordRequest": [
+      "new_password",
+      "token"
+    ],
+    "ReviewCreate": [
+      "content",
+      "product_id",
+      "rating",
+      "title"
+    ],
+    "ReviewResponse": [
+      "buyer_id",
+      "content",
+      "created_at",
+      "helpful_count",
+      "is_deleted",
+      "is_verified_purchase",
+      "product",
+      "product_id",
+      "rating",
+      "review_id",
+      "reviewer",
+      "title",
+      "updated_at"
+    ],
+    "RoleResponse": [
+      "created_at",
+      "description",
+      "is_deleted",
+      "role_id",
+      "role_name"
+    ],
+    "ShoppingCartItemCreate": [
+      "product_id",
+      "quantity"
+    ],
+    "ShoppingCartItemResponse": [
+      "added_at",
+      "cart_item_id",
+      "product",
+      "product_id",
+      "quantity"
+    ],
+    "ShoppingCartResponse": [
+      "cart_id",
+      "cart_items",
+      "last_updated",
+      "user_id"
+    ],
+    "StatusUpdate": [
+      "new_status",
+      "reject_reason"
+    ],
+    "SystemFeedbackCreate": [
+      "content",
+      "guest_email",
+      "subject"
+    ],
+    "SystemFeedbackResponse": [
+      "content",
+      "created_at",
+      "feedback_id",
+      "guest_email",
+      "status",
+      "subject",
+      "user_id"
+    ],
+    "TokenResponse": [
+      "access_token",
+      "expires_in",
+      "token_type"
+    ],
+    "UserBanRequest": [
+      "reason",
+      "user_id"
+    ],
+    "UserCreate": [
+      "address",
+      "email",
+      "full_name",
+      "password",
+      "phone_number",
+      "role_id",
+      "username"
+    ],
+    "UserLockRequest": [
+      "action",
+      "reason"
+    ],
+    "UserResponse": [
+      "address",
+      "avatar_url",
+      "balance",
+      "created_at",
+      "email",
+      "email_verified",
+      "full_name",
+      "is_active",
+      "is_deleted",
+      "last_login",
+      "phone_number",
+      "role_id",
+      "roles",
+      "trust_score",
+      "updated_at",
+      "user_id",
+      "username"
+    ],
+    "UserUpdate": [
+      "address",
+      "email",
+      "full_name",
+      "is_active",
+      "phone_number"
+    ],
+    "ValidationError": [
+      "ctx",
+      "input",
+      "loc",
+      "msg",
+      "type"
+    ],
+    "VerifyOTPRequest": [
+      "email",
+      "new_password",
+      "otp"
+    ],
+    "ViolationLogResponse": [
+      "action_taken",
+      "created_at",
+      "log_id",
+      "reason",
+      "user_id",
+      "username"
+    ],
+    "VoucherCheckResponse": [
+      "calculated_discount",
+      "code",
+      "description",
+      "discount_type",
+      "discount_value",
+      "voucher_id"
+    ],
+    "VoucherCreate": [
+      "code",
+      "description",
+      "discount_type",
+      "discount_value",
+      "max_usage",
+      "min_order_amount",
+      "valid_from",
+      "valid_to"
+    ],
+    "VoucherResponse": [
+      "code",
+      "created_at",
+      "description",
+      "discount_type",
+      "discount_value",
+      "is_active",
+      "is_deleted",
+      "max_usage",
+      "min_order_amount",
+      "usage_count",
+      "valid_from",
+      "valid_to",
+      "voucher_id"
+    ],
+    "VoucherUpdate": [
+      "description",
+      "discount_value",
+      "is_active",
+      "is_deleted",
+      "max_usage",
+      "min_order_amount",
+      "valid_from",
+      "valid_to"
+    ]
+  }
+}

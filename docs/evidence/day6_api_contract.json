@@ -1,0 +1,18 @@
+{
+  "result": "PASS",
+  "existing_paths_preserved": 64,
+  "removed_methods_or_paths": [],
+  "removed_fields": {},
+  "new_paths": [
+    "/api/v1/products/{product_id}/images/{image_id}"
+  ],
+  "product_detail_added_fields": [
+    "attributes",
+    "metadata_status",
+    "metadata_synced_at",
+    "tags"
+  ],
+  "admin_stats_added_fields": [
+    "sales_report"
+  ]
+}

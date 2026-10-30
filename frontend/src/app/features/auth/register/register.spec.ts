@@ -1,3 +1,4 @@
+import { testProviders } from '../../../../testing/providers';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterComponent } from './register';
@@ -8,6 +9,7 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: testProviders,
       imports: [RegisterComponent],
     }).compileComponents();
 

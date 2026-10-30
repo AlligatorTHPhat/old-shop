@@ -51,6 +51,7 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       ENVIRONMENT: production
+      DEBUG: "false"
       LOG_FORMAT: json
     volumes:
       - media_data:/data/media

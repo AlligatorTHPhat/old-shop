@@ -44,6 +44,10 @@ export interface Review {
 }
 
 export interface Product {
+  attributes?: Record<string, unknown>;
+  tags?: string[];
+  metadata_status?: 'available' | 'missing' | 'unavailable';
+  metadata_synced_at?: string | null;
   product_id: number;
   title: string;
   description?: string;
@@ -79,6 +83,23 @@ export interface Voucher {
   valid_from: string;
   valid_to: string;
   is_active: boolean;
+}
+
+export interface SalesReport {
+  year: number;
+  as_of: string | null;
+  available: boolean;
+  stale: boolean;
+  gross_sales_vnd: number;
+  daily: { day: string; gross_sales_vnd: number; item_quantity: number }[];
+}
+
+export interface AdminDashboardStats {
+  total_users: number;
+  total_orders: number;
+  pending_products: number;
+  total_revenue: number | string;
+  sales_report?: SalesReport | null;
 }
 
 export interface Order {

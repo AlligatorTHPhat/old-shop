@@ -122,6 +122,17 @@
         <div class="tab-content p-4">
           <div class="tab-pane fade show active" id="desc">
             <div class="lh-lg text-muted" style="white-space: pre-wrap;">{{ product.description }}</div>
+            <section class="mt-4" *ngIf="product.metadata_status === 'available'">
+              <h5>Thông số sản phẩm</h5>
+              <dl class="row" *ngFor="let attribute of product.attributes | keyvalue">
+                <dt class="col-sm-4">{{ attribute.key }}</dt>
+                <dd class="col-sm-8">{{ formatAttribute(attribute.value) }}</dd>
+              </dl>
+              <span class="badge bg-light text-dark me-2" *ngFor="let tag of product.tags">{{ tag }}</span>
+            </section>
+            <p class="text-muted small mt-3" *ngIf="product.metadata_status === 'unavailable'">
+              Thông số bổ sung tạm thời chưa tải được. Giá và tồn kho vẫn được cập nhật.
+            </p>
           </div>
           
           <div class="tab-pane fade" id="rev">

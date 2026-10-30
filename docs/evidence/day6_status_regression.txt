@@ -1,0 +1,14 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 22 items / 21 deselected / 1 selected
+
+tests/test_day6_integration.py .                                         [100%]
+
+======================= 1 passed, 21 deselected in 4.67s =======================
+Dedicated test database retained: day5_test_day6_status_20261030135315
+ Container oldshop-data-backend-run-d360733a5b84 Creating 
+ Container oldshop-data-backend-run-d360733a5b84 Created 
+{"pending": 0, "dead": 0, "oldest_pending_seconds": 0.0, "last_run": {"run_id": "842eab92-f418-4e9a-954a-6b3ddede97e8", "mode": "incremental", "status": "success", "started_at": "2026-10-30 13:50:56.267909+07:00", "ended_at": "2026-10-30 13:50:56.563249+07:00", "rows_in": 0, "rows_out": 0, "errors": 0}, "media_cleanup": {"pending": 0, "failed": 0}}

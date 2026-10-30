@@ -408,3 +408,16 @@ Sau khi người dùng đồng ý bảo trì, stack local đã áp schema 001–
 Backup/restore đạt; full ETL hai lần đều thành công với 57 document, không nhân bản;
 đối soát count/digest của 18 bảng nguồn khớp trước/sau. Backend/frontend đã mở lại.
 Xem [05_etl.md](design/05_etl.md), [DAY5_FINDINGS_LOG.md](DAY5_FINDINGS_LOG.md).
+
+### Cập nhật Ngày 6 — Tích hợp ứng dụng
+
+Product detail đọc PG primary và bổ sung attributes/tags Mongo; fallback chỉ cho metadata,
+không lấy giá/stock từ snapshot. Catalogue có query JSON attributes với phân trang sau filter.
+Admin stats giữ total_revenue, thêm sales_report từ bảng ETL trên primary; dashboard bỏ số giả.
+Ảnh tiếp tục đi qua /media và MinioStorage. Migration 006 enqueue xóa ảnh sau unlink/đổi avatar;
+worker kiểm tham chiếu và retry, không xóa object khi soft-delete sản phẩm.
+/ready alias /health/ready; production DEBUG=false; CI thêm integration stack và frontend tests.
+Trạng thái triển khai/kiểm thử tại [DAY6_FINDINGS_LOG.md](DAY6_FINDINGS_LOG.md),
+phân công, hợp đồng API và việc còn lại tại [06_completion_plan.md](design/06_completion_plan.md).
+Đã rollout local schema 001–006 sau chấp thuận bảo trì; 18 bảng nguồn khớp snapshot trước/sau,
+146 backend test và 15 frontend test đạt; 9 scenario lỗi/phục hồi và checker stack đều PASS.

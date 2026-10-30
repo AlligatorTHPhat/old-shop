@@ -20,6 +20,7 @@ export class ProductService {
     category_id?: number;
     search?: string;
     sort_by?: string;
+    attributes?: Record<string, string | number | boolean>;
   }): Observable<Product[]> {
     let httpParams = new HttpParams();
 
@@ -29,6 +30,7 @@ export class ProductService {
       if (params.category_id !== undefined) httpParams = httpParams.set('category_id', params.category_id.toString());
       if (params.search) httpParams = httpParams.set('search', params.search);
       if (params.sort_by) httpParams = httpParams.set('sort_by', params.sort_by);
+      if (params.attributes) httpParams = httpParams.set('attributes', JSON.stringify(params.attributes));
     }
 
     const token = sessionStorage.getItem('token');

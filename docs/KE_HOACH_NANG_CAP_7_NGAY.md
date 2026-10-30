@@ -434,26 +434,26 @@ Xem [DAY5_FINDINGS_LOG.md](DAY5_FINDINGS_LOG.md), [05_etl.md](design/05_etl.md),
 
 ### ✅ Checklist
 **Backend**
-- [ ] `GET /products/{id}` hợp nhất dữ liệu lõi (PG) + `product_details` (Mongo) — **fallback** khi Mongo lỗi (graceful degradation)
-- [ ] Tìm kiếm/lọc theo thuộc tính động (Mongo) kết hợp phân trang
-- [ ] Upload ảnh/avatar đi qua `MinioStorage`; xóa ảnh đồng bộ
-- [ ] Ghi log/violation sang Mongo (hoặc dual-write có kiểm soát); thống kê admin đọc từ replica/bảng tổng hợp
-- [ ] Ghi/giao dịch đọc primary; báo cáo dùng primary hoặc bản đọc Mongo, chỉ dùng replica nếu profile được bật và chấp nhận trễ
-- [ ] Mở rộng `/ready` kiểm tra PG, Mongo, MinIO
-- [ ] **Giữ nguyên contract API** (path, method, field, enum); nếu thêm field → cập nhật Pydantic + Angular model
+- [x] `GET /products/{id}` hợp nhất dữ liệu lõi (PG) + `product_details` (Mongo) — **fallback** khi Mongo lỗi (graceful degradation)
+- [x] Tìm kiếm/lọc theo thuộc tính động (Mongo) kết hợp phân trang
+- [x] Upload ảnh/avatar đi qua `MinioStorage`; xóa ảnh đồng bộ
+- [x] Ghi log/violation sang Mongo (hoặc dual-write có kiểm soát); thống kê admin đọc từ replica/bảng tổng hợp
+- [x] Ghi/giao dịch đọc primary; báo cáo dùng primary hoặc bản đọc Mongo, chỉ dùng replica nếu profile được bật và chấp nhận trễ
+- [x] Mở rộng `/ready` kiểm tra PG, Mongo, MinIO
+- [x] **Giữ nguyên contract API** (path, method, field, enum); nếu thêm field → cập nhật Pydantic + Angular model
 **Frontend**
-- [ ] Hiển thị thuộc tính động ở `product-detail`; ảnh tải qua URL mới; kiểm tra `media-url.ts`
-- [ ] Dashboard admin dùng số liệu tổng hợp từ ETL (nếu đã làm)
+- [x] Hiển thị thuộc tính động ở `product-detail`; ảnh tải qua URL mới; kiểm tra `media-url.ts`
+- [x] Dashboard admin dùng số liệu tổng hợp từ ETL (nếu đã làm)
 **Kiểm thử**
-- [ ] Chạy lại toàn bộ `pytest` (DB test sạch + migration), `ruff check`, `ruff format --check`
-- [ ] Thêm test: Mongo/MinIO integration (testcontainers hoặc service trong CI), ETL, fallback
-- [ ] Kịch bản **failover**: tắt `mongo2`, tắt `pg-replica`, tắt MinIO → ứng dụng vẫn phục vụ phần còn lại
-- [ ] Cập nhật `.github/workflows/ci.yml` thêm service Mongo + MinIO
-- [ ] Rà soát bảo mật: secret không commit, Mongo/MinIO không public, không đưa PII/hash sang Mongo, `DEBUG=false` ở prod
+- [x] Chạy lại toàn bộ `pytest` (DB test sạch + migration), `ruff check`, `ruff format --check`
+- [x] Thêm test: Mongo/MinIO integration (testcontainers hoặc service trong CI), ETL, fallback
+- [x] Kịch bản **failover**: tắt `mongo2`, tắt `pg-replica`, tắt MinIO → ứng dụng vẫn phục vụ phần còn lại
+- [x] Cập nhật `.github/workflows/ci.yml` thêm service Mongo + MinIO
+- [x] Rà soát bảo mật: secret không commit, Mongo/MinIO không public, không đưa PII/hash sang Mongo, `DEBUG=false` ở prod
 **Kế hoạch hoàn thiện (Yêu cầu #5)**
-- [ ] Lập bảng **tiến độ**: hạng mục → % hoàn thành → người phụ trách → hạn
-- [ ] Liệt kê **công việc còn lại / nợ kỹ thuật** (CDC, Mongo sharding thật, tự động failover PG bằng Patroni, rotation key, ...)
-- [ ] Viết `docs/design/06_completion_plan.md` (xem mẫu bên dưới)
+- [x] Lập bảng **tiến độ**: hạng mục → % hoàn thành → người phụ trách → hạn
+- [x] Liệt kê **công việc còn lại / nợ kỹ thuật** (CDC, Mongo sharding thật, tự động failover PG bằng Patroni, rotation key, ...)
+- [x] Viết `docs/design/06_completion_plan.md` (xem mẫu bên dưới)
 
 ### Mẫu bảng kế hoạch hoàn thiện
 
@@ -468,6 +468,15 @@ Xem [DAY5_FINDINGS_LOG.md](DAY5_FINDINGS_LOG.md), [05_etl.md](design/05_etl.md),
 | Tích hợp BE/FE | ☐ | | C | 01/11 | |
 | Báo cáo + PPT | ☐ | | D | 02/11 | |
 | (Còn lại) CDC / Patroni / shard thật | ☐ | | — | Sau đồ án | Hướng mở rộng |
+
+- [x] Rollout vào stack local oldshop-data sau chấp thuận bảo trì; backup/restore, migration 006, full/reconcile, bảo toàn 18 bảng nguồn, mở lại dịch vụ và checker Ngày 6 PASS
+
+**Kết quả kiểm thử 30/10:** 146 trường hợp backend đạt qua các lượt regression/ETL/API
+(96 + 28 + 21 + 1 test CLI status bổ sung), 15 frontend test đạt; hai image build đạt; 9 scenario lỗi/phục hồi trên
+project riêng đều PASS. Đã cấu hình CI service integration, chưa chạy CI remote.
+Ngày 6 đã nghiệm thu local: stack schema 001–006, backend/frontend day6 và worker khỏe;
+outbox/media cleanup không tồn đọng. Giữ 64 path API cũ và toàn bộ trường/method cũ.
+Xem [DAY6_FINDINGS_LOG.md](DAY6_FINDINGS_LOG.md), [06_completion_plan.md](design/06_completion_plan.md).
 
 ### 🎯 Tiêu chí hoàn thành
 Ứng dụng chạy end-to-end trên hạ tầng mới; test xanh; có bảng tiến độ và danh sách việc còn lại.
@@ -566,13 +575,13 @@ deploy/docker-compose.distributed.yml
 
 ## 6. Định nghĩa "Hoàn thành" của toàn dự án (Definition of Done)
 
-- [ ] Có ERD, mô hình quan niệm, bảng phân loại dữ liệu (#1)
-- [ ] Có sơ đồ + giải thích chiến lược phân tán, phân mảnh ngang & dọc (#2)
-- [ ] Có cấu trúc JSON, ví dụ, validator Mongo (#3)
-- [ ] Có danh sách chỉ mục + lý do + benchmark (#4)
-- [ ] Có bảng tiến độ, việc còn lại, phân công, hạn (#5)
+- [x] Có ERD, mô hình quan niệm, bảng phân loại dữ liệu (#1)
+- [x] Có sơ đồ + giải thích chiến lược phân tán, phân mảnh ngang & dọc (#2)
+- [x] Có cấu trúc JSON, ví dụ, validator Mongo (#3)
+- [x] Có danh sách chỉ mục + lý do + benchmark (#4)
+- [x] Có bảng tiến độ, việc còn lại, phân công, hạn (#5)
 - [ ] Có báo cáo + PPT + demo (#6)
-- [ ] PostgreSQL (có/structured) + MongoDB (semi-structured) + MinIO (unstructured) cùng chạy trong Compose
-- [ ] ETL chạy được, idempotent, có đối chiếu số liệu
-- [ ] Test cũ vẫn pass; test mới cho Mongo/MinIO/ETL pass
-- [ ] Không lộ secret; tài liệu `PROJECT_GUIDE.md` đã cập nhật
+- [x] PostgreSQL (có/structured) + MongoDB (semi-structured) + MinIO (unstructured) cùng chạy trong Compose
+- [x] ETL chạy được, idempotent, có đối chiếu số liệu
+- [x] Test cũ vẫn pass; test mới cho Mongo/MinIO/ETL pass
+- [x] Không lộ secret; tài liệu `PROJECT_GUIDE.md` đã cập nhật

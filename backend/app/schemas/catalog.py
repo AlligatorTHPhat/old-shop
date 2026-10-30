@@ -1,7 +1,8 @@
 from datetime import datetime
 from decimal import Decimal
+from typing import Literal
 
-from pydantic import BaseModel, Field, computed_field
+from pydantic import BaseModel, Field, JsonValue, computed_field
 
 from app.core.constants import ProductStatus
 from app.schemas.common import ORMModel
@@ -138,3 +139,7 @@ class ReviewResponse(ORMModel):
 class ProductDetailResponse(ProductResponse):
     seller: UserResponse | None = None
     reviews: list[ProductReviewResponse] = []
+    attributes: dict[str, JsonValue] = Field(default_factory=dict)
+    tags: list[str] = Field(default_factory=list)
+    metadata_status: Literal["available", "missing", "unavailable"] = "missing"
+    metadata_synced_at: datetime | None = None

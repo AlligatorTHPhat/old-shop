@@ -177,7 +177,7 @@ services:
     restart: "no"
 
   mongo-schema-init:
-    image: ${BACKEND_IMAGE:-oldshop-data-backend:day5}
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day6}
     build:
       context: ..
       dockerfile: backend/Dockerfile
@@ -194,7 +194,7 @@ services:
     restart: "no"
 
   backend:
-    image: ${BACKEND_IMAGE:-oldshop-data-backend:day5}
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day6}
     build:
       context: ..
       dockerfile: backend/Dockerfile
@@ -240,7 +240,7 @@ services:
     restart: unless-stopped
 
   etl-worker:
-    image: ${BACKEND_IMAGE:-oldshop-data-backend:day5}
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day6}
     entrypoint: ["python", "-m", "etl.run", "worker"]
     environment:
       <<: *app-environment
@@ -265,7 +265,7 @@ services:
 
   etl-test:
     profiles: [test]
-    image: ${BACKEND_IMAGE:-oldshop-data-backend:day5}
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day6}
     entrypoint: ["python", "-m", "scripts.init_mongo"]
     environment:
       <<: *app-environment
@@ -275,7 +275,7 @@ services:
     restart: "no"
 
   frontend:
-    image: ${FRONTEND_IMAGE:-oldshop-data-frontend:day2}
+    image: ${FRONTEND_IMAGE:-oldshop-data-frontend:day6}
     build:
       context: ../frontend
     ports:

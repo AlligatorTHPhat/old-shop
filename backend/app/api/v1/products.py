@@ -8,7 +8,7 @@ from app.api.deps import any_user, customer, get_current_moderator, get_current_
 from app.core.constants import ProductStatus, RoleId
 from app.crud.category import crud_category
 from app.crud.product import crud_product
-from app.models import Product, User
+from app.models import Product, ProductImage, User
 from app.schemas import (
     Message,
     ProductDetailResponse,
@@ -18,6 +18,7 @@ from app.schemas import (
     ReviewResponse,
     StatusUpdate,
 )
+from app.services import product_metadata
 from app.services.storage import delete_media, save_image
 
 logger = logging.getLogger(__name__)
@@ -48,20 +49,22 @@ def list_products(
     category_id: int | None = Query(None),
     search: str | None = Query(None),
     sort_by: str = Query("created_at", pattern="^(created_at|price|rating)$"),
+    attributes: str | None = Query(None, max_length=4096, description='JSON equality filters, e.g. {"ram_gb":8}'),
     current_user: User | None = Depends(get_current_user_optional),
     db: Session = Depends(get_db),
 ):
     """Approved products. Logged-in sellers don't see their own listings."""
-    if search:
-        products = crud_product.search(db, search, skip=skip, limit=limit)
-    elif category_id:
-        products = crud_product.get_by_category(db, category_id, skip=skip, limit=limit, order_by=sort_by)
-    else:
-        products = crud_product.get_approved(db, skip=skip, limit=limit, order_by=sort_by)
-
-    if current_user:
-        products = [p for p in products if p.seller_id != current_user.user_id]
-    return products
+    ids = product_metadata.matching_ids(product_metadata.parse_filters(attributes)) if attributes is not None else None
+    return crud_product.catalogue(
+        db,
+        skip=skip,
+        limit=limit,
+        category_id=category_id,
+        search=search,
+        sort_by=sort_by,
+        exclude_seller=current_user.user_id if current_user else None,
+        product_ids=ids,
+    )
 
 
 @router.get("/seller/my-products", response_model=list[ProductResponse])
@@ -99,7 +102,8 @@ def get_pending_products(
 def get_product(product_id: int, db: Session = Depends(get_db)):
     product = _get_or_404(db, product_id)
     crud_product.increment_view_count(db, product)
-    return product
+    response = ProductDetailResponse.model_validate(product)
+    return response.model_copy(update=product_metadata.read(product.product_id, product.category_id))
 
 
 # ---------- seller actions ----------
@@ -201,6 +205,23 @@ def delete_product(product_id: int, current_user: User = Depends(any_user), db: 
     product = _get_or_404(db, product_id)
     _ensure_owner_or_admin(product, current_user)
     crud_product.soft_delete(db, product)
+
+
+@router.delete("/{product_id}/images/{image_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_product_image(
+    product_id: int, image_id: int, current_user: User = Depends(any_user), db: Session = Depends(get_db)
+):
+    product = _get_or_404(db, product_id)
+    _ensure_owner_or_admin(product, current_user)
+    image = db.query(ProductImage).filter_by(product_id=product_id, image_id=image_id).first()
+    if image is None:
+        raise HTTPException(404, "Image not found")
+    db.delete(image)
+    db.flush()  # PG triggers atomically enqueue Mongo refresh and durable object deletion.
+    remaining = db.query(ProductImage).filter_by(product_id=product_id).order_by(ProductImage.display_order).all()
+    if remaining and not any(item.is_primary for item in remaining):
+        remaining[0].is_primary = True
+    db.commit()
 
 
 @router.post("/{product_id}/reviews", response_model=ReviewResponse)

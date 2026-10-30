@@ -15,6 +15,30 @@ SORT_COLUMNS = {
 
 
 class CRUDProduct(CRUDBase[Product]):
+    def catalogue(
+        self,
+        db: Session,
+        *,
+        skip=0,
+        limit=100,
+        category_id=None,
+        search=None,
+        sort_by="created_at",
+        exclude_seller=None,
+        product_ids=None,
+    ) -> list[Product]:
+        query = self._visible(db).filter(Category.is_active == True)
+        if category_id is not None:
+            query = query.filter(Product.category_id == category_id)
+        if search:
+            pattern = f"%{search}%"
+            query = query.filter(Product.title.ilike(pattern) | Product.description.ilike(pattern))
+        if exclude_seller is not None:
+            query = query.filter(Product.seller_id != exclude_seller)
+        if product_ids is not None:
+            query = query.filter(Product.product_id.in_(product_ids))
+        return query.order_by(SORT_COLUMNS[sort_by], Product.product_id.asc()).offset(skip).limit(limit).all()
+
     def _visible(self, db: Session) -> Query:
         """Approved, not deleted, and in a live category."""
         return (

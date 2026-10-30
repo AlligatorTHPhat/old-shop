@@ -1,129 +1,69 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../shared/services/admin.service';
+import { AdminDashboardStats } from '../../../core/models';
 import { RouterModule } from '@angular/router';
 import Chart from 'chart.js/auto';
+import { salesChart } from './sales-chart';
 
 @Component({
-  selector: 'app-admin-dashboard',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss'
+  selector: 'app-admin-dashboard', standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
+  templateUrl: './dashboard.html', styleUrl: './dashboard.scss'
 })
-export class AdminDashboardComponent implements OnInit, AfterViewInit {
-  @ViewChild('adminChart') adminChart!: ElementRef;
-  
-  stats: any = {
-    total_users: 0,
-    total_orders: 0,
-    pending_products: 0,
-    total_revenue: 0
-  };
+export class AdminDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('adminChart') adminChart!: ElementRef<HTMLCanvasElement>;
+  stats: AdminDashboardStats = { total_users: 0, total_orders: 0, pending_products: 0, total_revenue: 0 };
   isLoading = true;
-
-  // Biến điều khiển Chart
+  error = '';
   chartView: 'year' | 'month' = 'year';
-  chartInstance: any;
+  salesYear = Number(new Intl.DateTimeFormat('en', { year: 'numeric', timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date()));
+  salesMonth = Number(new Intl.DateTimeFormat('en', { month: 'numeric', timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date()));
+  months = Array.from({ length: 12 }, (_, i) => i + 1);
+  chartInstance?: Chart;
 
-  constructor(
-    private adminService: AdminService,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private adminService: AdminService, private cdr: ChangeDetectorRef) {}
 
-  ngOnInit(): void {
-    this.loadStats();
-  }
-
-  ngAfterViewInit(): void {
-    this.initChart();
-  }
+  ngOnInit() { this.loadStats(); }
+  ngAfterViewInit() { this.initChart(); }
+  ngOnDestroy() { this.chartInstance?.destroy(); }
 
   loadStats() {
     this.isLoading = true;
-    this.adminService.getStats().subscribe({
-      next: (data) => {
+    this.error = '';
+    this.adminService.getStats(this.salesYear).subscribe({
+      next: data => {
         this.stats = data;
         this.isLoading = false;
+        this.updateChartData();
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Error loading stats:', err);
+      error: () => {
+        this.error = 'Không thể cập nhật số liệu. Dữ liệu đang hiển thị có thể đã cũ.';
         this.isLoading = false;
         this.cdr.detectChanges();
       }
     });
   }
 
-  switchChartView(view: 'year' | 'month') {
-    if (this.chartView === view) return;
-    this.chartView = view;
-    this.cdr.detectChanges();
-    this.updateChartData();  
-  }
+  switchChartView(view: 'year' | 'month') { this.chartView = view; this.updateChartData(); }
 
   initChart() {
-    const ctx = this.adminChart.nativeElement.getContext('2d');
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(13, 110, 253, 0.2)');
-    gradient.addColorStop(1, 'rgba(13, 110, 253, 0)');
-
-    if (this.chartInstance) {
-      this.chartInstance.destroy();
-    }
-
-    this.chartInstance = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
-        datasets: [{
-          label: 'Doanh thu (VND)',
-          data: [45000000, 52000000, 48000000, 70000000, 65000000, 80000000, 85000000, 0, 0, 0, 0, 0],
-          borderColor: '#0d6efd',
-          borderWidth: 3,
-          pointBackgroundColor: '#ffffff',
-          pointBorderColor: '#0d6efd',
-          pointBorderWidth: 2,
-          pointRadius: 4,
-          fill: true,
-          backgroundColor: gradient,
-          tension: 0.4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            grid: { color: '#f1f1f1' },
-            ticks: { color: '#6c757d', font: { weight: 'bold' } }
-          },
-          x: {
-            grid: { display: false },
-            ticks: { color: '#6c757d', font: { weight: 'bold' } }
-          }
-        }
-      }
+    this.chartInstance = new Chart(this.adminChart.nativeElement, {
+      type: 'line', data: { labels: [], datasets: [{
+        label: 'Giá trị hàng đã giao (VND)', data: [], borderColor: '#0d6efd', tension: 0.2
+      }] },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
     });
+    this.updateChartData();
   }
 
   updateChartData() {
     if (!this.chartInstance) return;
-
-    if (this.chartView === 'year') {
-      this.chartInstance.data.labels = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
-      this.chartInstance.data.datasets[0].data = [45000000, 52000000, 48000000, 70000000, 65000000, 80000000, 85000000, 0, 0, 0, 0, 0];
-    } else {
-      // Fake data 30 ngày cho tháng
-      this.chartInstance.data.labels = Array.from({length: 30}, (_, i) => `Ngày ${i + 1}`);
-      this.chartInstance.data.datasets[0].data = Array.from({length: 30}, () => Math.floor(Math.random() * 5000000) + 1000000);
-    }
-
-    // Cập nhật lại biểu đồ với animation
+    const series = salesChart(this.stats.sales_report, this.chartView, this.salesMonth);
+    this.chartInstance.data.labels = series.labels;
+    this.chartInstance.data.datasets[0].data = series.values;
     this.chartInstance.update();
   }
 }

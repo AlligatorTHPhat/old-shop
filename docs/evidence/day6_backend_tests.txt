@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 96 items
+
+tests/test_day3_data.py ........................                         [ 25%]
+tests/test_day4_migrations.py ...............                            [ 40%]
+tests/test_system.py ...........                                         [ 52%]
+tests/test_v1_admin.py ....                                              [ 56%]
+tests/test_v1_auth.py ..........                                         [ 66%]
+tests/test_v1_cart.py .....                                              [ 71%]
+tests/test_v1_category.py ....                                           [ 76%]
+tests/test_v1_moderator.py .....                                         [ 81%]
+tests/test_v1_order.py ......                                            [ 87%]
+tests/test_v1_product.py ......                                          [ 93%]
+tests/test_v1_user.py ......                                             [100%]
+
+============================= 96 passed in 17.74s ==============================
+PASS phase=regression database=day5_test_20261030132635_regression
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 28 items
+
+tests/test_day5_etl.py ............................                      [100%]
+
+======================== 28 passed in 97.36s (0:01:37) =========================
+PASS phase=etl database=day5_test_20261030132635_etl
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 20 items
+
+tests/test_day6_integration.py ....................                      [100%]
+
+============================= 20 passed in 56.68s ==============================
+PASS phase=app database=day5_test_20261030132635_app

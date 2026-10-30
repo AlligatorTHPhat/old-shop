@@ -104,8 +104,8 @@ CI runs the same steps on every push, builds the Angular app, and builds both Do
 **Day 2 data stack (local, separate volumes/ports):** PostgreSQL + MongoDB + MinIO,
 with optional replication profile. See [distribution strategy and commands](docs/design/02_distribution_strategy.md)
 and [Day 2 findings](docs/DAY2_FINDINGS_LOG.md), including the MongoDB 8/kernel compatibility exception.
-The local stack now has migrations 001–005 and a healthy Day 5 ETL worker,
-following an approved maintenance rollout with backup/restore and reconciliation.
+The local stack now has migrations 001–006, Day 6 backend/frontend and a healthy ETL worker,
+following an approved maintenance rollout with backup/restore and source reconciliation.
 
 Production runs on a single VPS with Docker Compose; see **[docs/deployment.md](docs/deployment.md)**.
 
@@ -150,3 +150,15 @@ PG daily gross-item sales reports. [Design/runbook](docs/design/05_etl.md),
 `bash deploy/scripts/apply-day5.sh --resilience`: backup/restore rehearsal, migration 005,
 full ETL twice and reconciliation of all 18 original source tables before reopening services.
 For an existing database, follow this maintenance runbook before starting the worker.
+
+**Day 6 application integration (tested and deployed locally):** product detail merges public Mongo attributes/tags with current
+PG data, attribute search filters before pagination, and the admin chart reads ETL daily gross
+sales while preserving the existing net-revenue field. Migration 006 queues image deletion with
+retry after unlinking; `/ready` aliases the existing readiness probe.
+See [completion plan/contracts](docs/design/06_completion_plan.md) and
+[Day 6 results and rollout status](docs/DAY6_FINDINGS_LOG.md).
+`bash deploy/scripts/test-day6.sh --mongo-image mongo:7.0` tests on a disposable Compose stack,
+including service outages; omit the override on a host compatible with the default Mongo8 image.
+Use `bash deploy/scripts/apply-day6.sh --resilience` for an existing local stack after tests pass.
+The production/VPS Compose example above remains a separate deployment; the current polyglot
+MVP uses `deploy/docker-compose.distributed.yml`.

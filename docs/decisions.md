@@ -29,6 +29,17 @@ Session backend mới đặt UTC, SQL trực tiếp theo timezone phiên. Chuy�
 chưa triển khai, D8 status chưa đổi. Những đoạn đề xuất D7 phía dưới là bối cảnh Ngày 1;
 phần quy ước nguồn giờ ETL hiện ưu tiên xác nhận này.
 
+## Cập nhật Ngày 6 — 30/10/2026
+
+Sau xác nhận bảo trì của người dùng, stack local đã áp migration 006 và chạy backend/frontend
+image day6. Product detail chỉ merge attributes/tags Mongo; giao dịch và core luôn PG primary.
+Báo cáo đọc bảng ETL trên primary, giữ ý nghĩa total_revenue cũ và thêm sales_report gross.
+Xóa ảnh dùng hàng đợi PG trong transaction, kiểm tham chiếu và retry sau khi Mongo bắt kịp;
+soft-delete giữ ảnh, avatar seed/shared không tự GC. Không thêm dual-write trực tiếp vào request.
+Backup/restore và 18 bảng nguồn đối soát đạt; 146 backend/15 frontend test và 9 scenario
+lỗi/phục hồi local đạt. [Nhật ký và giới hạn](DAY6_FINDINGS_LOG.md),
+[kế hoạch hoàn thiện](design/06_completion_plan.md). D8, CDC/Patroni/sharding vẫn ngoài thay đổi này.
+
 ## Bảng chốt D1–D6
 
 | Quyết định | Trạng thái | Kết luận / thông tin còn thiếu |

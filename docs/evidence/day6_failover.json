@@ -1,0 +1,225 @@
+{
+  "project": "oldshop-day6-test-961bcab6",
+  "mongo_image": "mongo:7.0",
+  "isolated": true,
+  "scenarios": [
+    {
+      "scenario": "baseline",
+      "/health": 200,
+      "/api/v1/products": 200,
+      "/api/v1/products/1": 200,
+      "/api/v1/categories": 200,
+      "readiness": {
+        "code": 200,
+        "status": "ok",
+        "database": "up",
+        "mongo": "up",
+        "minio": "up"
+      },
+      "frontend_proxy": 200,
+      "attribute_search": 200,
+      "media": 200,
+      "/api/v1/cart": 200,
+      "/api/v1/orders": 200,
+      "admin_report": {
+        "code": 200,
+        "available": true
+      },
+      "result": "PASS"
+    },
+    {
+      "scenario": "mongo2_stopped",
+      "/health": 200,
+      "/api/v1/products": 200,
+      "/api/v1/products/1": 200,
+      "/api/v1/categories": 200,
+      "readiness": {
+        "code": 200,
+        "status": "ok",
+        "database": "up",
+        "mongo": "up",
+        "minio": "up"
+      },
+      "frontend_proxy": 200,
+      "attribute_search": 200,
+      "media": 200,
+      "/api/v1/cart": 200,
+      "/api/v1/orders": 200,
+      "admin_report": {
+        "code": 200,
+        "available": true
+      },
+      "result": "PASS"
+    },
+    {
+      "scenario": "mongo2_recovered",
+      "/health": 200,
+      "/api/v1/products": 200,
+      "/api/v1/products/1": 200,
+      "/api/v1/categories": 200,
+      "readiness": {
+        "code": 200,
+        "status": "ok",
+        "database": "up",
+        "mongo": "up",
+        "minio": "up"
+      },
+      "frontend_proxy": 200,
+      "attribute_search": 200,
+      "media": 200,
+      "/api/v1/cart": 200,
+      "/api/v1/orders": 200,
+      "admin_report": {
+        "code": 200,
+        "available": true
+      },
+      "result": "PASS"
+    },
+    {
+      "scenario": "pg-replica_stopped",
+      "/health": 200,
+      "/api/v1/products": 200,
+      "/api/v1/products/1": 200,
+      "/api/v1/categories": 200,
+      "readiness": {
+        "code": 200,
+        "status": "ok",
+        "database": "up",
+        "mongo": "up",
+        "minio": "up"
+      },
+      "frontend_proxy": 200,
+      "attribute_search": 200,
+      "media": 200,
+      "/api/v1/cart": 200,
+      "/api/v1/orders": 200,
+      "admin_report": {
+        "code": 200,
+        "available": true
+      },
+      "result": "PASS"
+    },
+    {
+      "scenario": "pg-replica_recovered",
+      "/health": 200,
+      "/api/v1/products": 200,
+      "/api/v1/products/1": 200,
+      "/api/v1/categories": 200,
+      "readiness": {
+        "code": 200,
+        "status": "ok",
+        "database": "up",
+        "mongo": "up",
+        "minio": "up"
+      },
+      "frontend_proxy": 200,
+      "attribute_search": 200,
+      "media": 200,
+      "/api/v1/cart": 200,
+      "/api/v1/orders": 200,
+      "admin_report": {
+        "code": 200,
+        "available": true
+      },
+      "result": "PASS"
+    },
+    {
+      "scenario": "minio_stopped",
+      "/health": 200,
+      "/api/v1/products": 200,
+      "/api/v1/products/1": 200,
+      "/api/v1/categories": 200,
+      "readiness": {
+        "code": 503,
+        "status": "unavailable",
+        "database": "up",
+        "mongo": "up",
+        "minio": "down"
+      },
+      "frontend_proxy": 200,
+      "attribute_search": 200,
+      "media": 503,
+      "failed_upload_preserved_avatar": true,
+      "/api/v1/cart": 200,
+      "/api/v1/orders": 200,
+      "admin_report": {
+        "code": 200,
+        "available": true
+      },
+      "result": "PASS"
+    },
+    {
+      "scenario": "minio_recovered",
+      "/health": 200,
+      "/api/v1/products": 200,
+      "/api/v1/products/1": 200,
+      "/api/v1/categories": 200,
+      "readiness": {
+        "code": 200,
+        "status": "ok",
+        "database": "up",
+        "mongo": "up",
+        "minio": "up"
+      },
+      "frontend_proxy": 200,
+      "attribute_search": 200,
+      "media": 200,
+      "/api/v1/cart": 200,
+      "/api/v1/orders": 200,
+      "admin_report": {
+        "code": 200,
+        "available": true
+      },
+      "result": "PASS"
+    },
+    {
+      "scenario": "mongo_unavailable",
+      "/health": 200,
+      "/api/v1/products": 200,
+      "/api/v1/products/1": 200,
+      "/api/v1/categories": 200,
+      "readiness": {
+        "code": 503,
+        "status": "unavailable",
+        "database": "up",
+        "mongo": "down",
+        "minio": "up"
+      },
+      "frontend_proxy": 200,
+      "attribute_search": 503,
+      "media": 200,
+      "/api/v1/cart": 200,
+      "/api/v1/orders": 200,
+      "admin_report": {
+        "code": 200,
+        "available": true
+      },
+      "result": "PASS"
+    },
+    {
+      "scenario": "mongo_recovered",
+      "/health": 200,
+      "/api/v1/products": 200,
+      "/api/v1/products/1": 200,
+      "/api/v1/categories": 200,
+      "readiness": {
+        "code": 200,
+        "status": "ok",
+        "database": "up",
+        "mongo": "up",
+        "minio": "up"
+      },
+      "frontend_proxy": 200,
+      "attribute_search": 200,
+      "media": 200,
+      "/api/v1/cart": 200,
+      "/api/v1/orders": 200,
+      "admin_report": {
+        "code": 200,
+        "available": true
+      },
+      "result": "PASS"
+    }
+  ],
+  "result": "PASS"
+}

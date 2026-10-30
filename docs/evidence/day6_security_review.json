@@ -1,0 +1,20 @@
+{
+  "scope": "Changed tracked and untracked non-ignored files only",
+  "files_scanned": 64,
+  "private_env_values_in_changed_files": false,
+  "production_debug_forced_false": true,
+  "reviewed": [
+    "PG/Mongo allowlists and ETL PII regression",
+    "Mongo port unpublished",
+    "Local published ports bind 127.0.0.1",
+    "MinIO private buckets and app-scoped credentials",
+    "Attribute filter operator rejection",
+    "HTTP testing backend avoids external test requests"
+  ],
+  "limitations": [
+    "Public seed passwords must be rotated before production",
+    "No remote CI run in this task",
+    "Existing public user DTO and upload content inspection remain in completion plan"
+  ],
+  "result": "PASS"
+}

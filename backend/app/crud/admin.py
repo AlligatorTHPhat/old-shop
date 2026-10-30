@@ -10,13 +10,15 @@ from app.core.security import hash_password
 from app.crud.user import new_random_key
 from app.models import Order, Product, Role, SystemFeedback, User
 from app.schemas import AdminDashboardStats, SystemFeedbackCreate, UserCreate
+from app.services import sales_report
 
 logger = logging.getLogger(__name__)
 
 
 class CRUDAdmin:
-    def get_stats(self, db: Session) -> AdminDashboardStats:
+    def get_stats(self, db: Session, sales_year: int | None = None) -> AdminDashboardStats:
         return AdminDashboardStats(
+            sales_report=sales_report.read(db, sales_year),
             total_users=db.query(func.count(User.user_id))
             .filter(User.is_active == True, User.is_deleted == False)
             .scalar(),
