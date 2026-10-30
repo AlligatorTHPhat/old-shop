@@ -37,13 +37,14 @@ def test_migration_repeat_and_checksum_refusal(tmp_path):
 
 def test_failed_migration_rolls_back_ddl_and_history(tmp_path):
     directory = migration_copy(tmp_path)
-    (directory / "005_failure.sql").write_text("CREATE TABLE day4_must_rollback(id int); SELECT 1/0;")
+    next_version = f"{max(int(p.name[:3]) for p in directory.glob('*.sql')) + 1:03d}"
+    (directory / f"{next_version}_failure.sql").write_text("CREATE TABLE day4_must_rollback(id int); SELECT 1/0;")
     with pytest.raises(psycopg2.errors.DivisionByZero):
         run_migrations(directory)
     with connect() as connection, connection.cursor() as cursor:
         cursor.execute("SELECT to_regclass('day4_must_rollback')")
         assert cursor.fetchone()[0] is None
-        cursor.execute("SELECT count(*) FROM schema_migrations WHERE version='005'")
+        cursor.execute("SELECT count(*) FROM schema_migrations WHERE version=%s", (next_version,))
         assert cursor.fetchone()[0] == 0
     assert run_migrations() == []  # failed run released its session lock
 

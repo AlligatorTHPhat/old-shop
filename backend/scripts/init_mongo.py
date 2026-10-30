@@ -17,6 +17,9 @@ def initialize(database=None) -> dict:
             database.create_collection(name, **options)
         for keys, options in INDEXES[name]:
             database[name].create_index(keys, **options)
+    from etl.errors import initialize as initialize_errors
+
+    initialize_errors(database)
     return {"collections": sorted(INDEXES), "validation": "strict/error"}
 
 

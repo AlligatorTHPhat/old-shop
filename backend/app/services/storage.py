@@ -195,10 +195,10 @@ def delete_media(url_path: str) -> None:
         get_storage().delete(url_path.removeprefix("/media/"))
 
 
-def image_metadata(url: str) -> dict:
+def image_metadata(url: str, backend: str | None = None) -> dict:
     """Stat one referenced image; never scan a bucket or infer a product from its filename."""
     path = validate_path(url.removeprefix("/media/"))
-    if settings.STORAGE_BACKEND == "minio":
+    if (backend or settings.STORAGE_BACKEND) == "minio":
         try:
             info = minio_client().stat_object(bucket_for(path), path)
             return {"content_type": info.content_type, "size_bytes": info.size}

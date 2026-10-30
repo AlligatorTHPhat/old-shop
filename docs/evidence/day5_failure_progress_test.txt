@@ -1,0 +1,12 @@
+ Container oldshop-data-etl-test-run-b7c3a6a72edc Creating 
+ Container oldshop-data-etl-test-run-b7c3a6a72edc Created 
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 27 items / 26 deselected / 1 selected
+
+tests/test_day5_etl.py .                                                 [100%]
+
+======================= 1 passed, 26 deselected in 2.88s =======================

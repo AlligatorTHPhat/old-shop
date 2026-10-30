@@ -50,6 +50,12 @@ class Settings(BaseSettings):
     MINIO_BUCKET_USER_AVATARS: str = "user-avatars"
     MINIO_BUCKET_ATTACHMENTS: str = "attachments"
 
+    # ETL: one worker, at-least-once delivery; only metadata/read models use Mongo.
+    ETL_POLL_SECONDS: int = 60
+    ETL_BATCH_SIZE: int = 100
+    ETL_MAX_ATTEMPTS: int = 5
+    ETL_BACKOFF_SECONDS: int = 15
+
     # Auth
     SECRET_KEY: str
     ALGORITHM: str = "HS256"

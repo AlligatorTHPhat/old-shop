@@ -1,0 +1,46 @@
+@startuml
+!theme plain
+title OldShop Day 5 - Transactional outbox ETL (one host)
+actor User
+rectangle "FastAPI\nPG transactions use UTC" as api
+database "PG primary\ntransactional source" as pg
+database "etl_time_origin\nlegacy: Asia/Ho_Chi_Minh\nnew: session timezone" as origins
+queue "etl_outbox\nID/key/op only\npending / dead / done" as outbox
+rectangle "etl-worker\nSingle session advisory lock\nfull then incremental every 60s" as worker
+rectangle "Extract\nREPEATABLE READ\ncolumn allowlists" as extract
+rectangle "Transform\nexact VND / aware UTC\nstrict schema / safe text" as transform
+rectangle "Load\npartial upsert by source key\npreserve Mongo-owned fields" as load
+database "Mongo\n6 projections + etl_errors" as mongo
+storage "MinIO\nprivate buckets" as minio
+database "PG report_daily_sales\nVN business day\ngross delivered items" as report
+database "PG etl_runs / etl_state\ncounts, errors, backlog, heartbeat" as runs
+User --> api
+api --> pg : transactional writes
+pg --> outbox : I/U/D triggers, same transaction
+pg --> origins : timestamp provenance
+outbox --> worker : unacknowledged due events\nno MAX(id) cursor
+worker --> extract
+pg --> extract
+origins --> extract
+extract --> transform
+transform --> load
+load --> mongo : majority write
+load --> minio : copy exact referenced local key if missing
+worker --> outbox : ACK exact event after successful writes
+worker --> report : atomic rebuild
+worker --> runs
+worker --> mongo : sanitized errors, retry/backoff
+worker --> pg : daily reconciliation
+note bottom of pg
+No source timestamp rewrite.
+Stock/balance decisions remain in PG.
+Outbox enabled before the full snapshot.
+Concurrent source changes stay queued.
+end note
+note bottom of mongo
+attributes/tags, review moderation/evidence,
+contact attachments survive full load/replay.
+Crash before ACK -> replay (at least once).
+Log copy TTL 90d; PG logs are not purged.
+end note
+@enduml

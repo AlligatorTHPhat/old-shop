@@ -16,6 +16,19 @@ local sau backup/restore và đối soát dữ liệu; 96 test đạt. Chi tiế
 Những đoạn “chưa có/sắp triển khai” dưới đây ghi bối cảnh lúc chốt Ngày 1; trạng thái hiện tại
 ưu tiên bản cập nhật này. D2 outbox/ETL còn Ngày 5; D7/D8 chưa tự chốt; FDW ngoài MVP.
 
+## Cập nhật triển khai 30/10/2026 — Ngày 5
+
+D2 outbox/ETL/retry/reconciliation đã kiểm thử trên database riêng và rollout vào stack local
+sau khi người dùng đồng ý bảo trì. Migration 005, full hai lần và đối soát 18 bảng nguồn đạt;
+worker poll 60 giây đã hoạt động, backend/frontend đã mở lại.
+Bằng chứng [DAY5_FINDINGS_LOG.md](DAY5_FINDINGS_LOG.md), thiết kế [05_etl.md](design/05_etl.md).
+
+D7 đã được người dùng xác nhận cho backfill ETL: **toàn bộ dữ liệu cũ là giờ Việt Nam**.
+Migration 005 ghi timezone provenance, không sửa timestamp nguồn. Bản sao Mongo là UTC;
+Session backend mới đặt UTC, SQL trực tiếp theo timezone phiên. Chuyển cột PG sang timestamptz
+chưa triển khai, D8 status chưa đổi. Những đoạn đề xuất D7 phía dưới là bối cảnh Ngày 1;
+phần quy ước nguồn giờ ETL hiện ưu tiên xác nhận này.
+
 ## Bảng chốt D1–D6
 
 | Quyết định | Trạng thái | Kết luận / thông tin còn thiếu |

@@ -15,6 +15,7 @@ class DocumentModel(BaseModel):
 class Document(DocumentModel):
     id: str = Field(alias="_id", min_length=1, max_length=200)
     schema_version: Literal[1] = 1
+    deleted: bool = False
 
 
 class ObjectReference(DocumentModel):
@@ -47,6 +48,7 @@ class ETLMetadata(DocumentModel):
     synced_at: AwareDatetime
     source_updated_at: AwareDatetime | None = None
     run_id: str | None = None
+    source_created_at: str | None = None
 
 
 class ProductDetails(Document):
@@ -118,6 +120,14 @@ class PaymentSnapshot(DocumentModel):
     fraud_score: Annotated[float, Field(ge=0, le=1)] | None = None
 
 
+class VoucherSnapshot(DocumentModel):
+    voucher_id: Identifier
+    discount_type_code_current: int
+    discount_value_current: str = Field(pattern=r"^\d+(\.\d+)?$")
+    is_active_current: bool
+    is_deleted_current: bool
+
+
 class OrderSnapshot(Document):
     order_id: Identifier
     buyer: BuyerReference
@@ -128,6 +138,7 @@ class OrderSnapshot(Document):
     discount_amount_vnd: VND
     final_amount_vnd: VND
     voucher_id: Identifier | None = None
+    voucher_current: VoucherSnapshot | None = None
     order_status: int = Field(ge=0, le=4)
     order_date: AwareDatetime
     deleted: bool = False

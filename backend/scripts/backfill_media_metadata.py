@@ -10,7 +10,7 @@ from app.models import ProductImage
 from app.services.storage import image_metadata
 
 
-def backfill() -> dict:
+def backfill(backend: str | None = None) -> dict:
     result = {"updated": 0, "unavailable_image_ids": []}
     with SessionLocal() as session:
         images = session.scalars(
@@ -21,7 +21,7 @@ def backfill() -> dict:
                 result["unavailable_image_ids"].append(image.image_id)
                 continue
             try:
-                metadata = image_metadata(image.image_url)
+                metadata = image_metadata(image.image_url, backend)
             except HTTPException:
                 result["unavailable_image_ids"].append(image.image_id)
                 continue

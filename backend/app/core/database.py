@@ -1,6 +1,6 @@
 from collections.abc import Iterator
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 from app.core.config import settings
@@ -30,3 +30,9 @@ def ping_database() -> bool:
         return True
     except Exception:
         return False
+
+
+@event.listens_for(Session, "after_begin")
+def _utc_transaction(session, transaction, connection):
+    # ORM defaults use datetime.utcnow(); SQL functions/defaults in this transaction agree.
+    connection.exec_driver_sql("SET LOCAL TIME ZONE 'UTC'")

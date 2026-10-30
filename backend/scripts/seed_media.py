@@ -22,6 +22,15 @@ def seed_media(root: Path = SEED_MEDIA_DIR) -> dict:
     client = minio_client()
     stats = {"uploaded": 0, "skipped": 0, "missing": [], "avatar_fallbacks": 0}
 
+    def exists(key: str) -> bool:
+        try:
+            client.stat_object(bucket_for(key), key)
+            return True
+        except S3Error as exc:
+            if exc.code in ("NoSuchKey", "NoSuchObject"):
+                return False
+            raise
+
     def upload(source: Path, key: str):
         validate_path(key)
         if not source.is_file():
@@ -60,7 +69,11 @@ def seed_media(root: Path = SEED_MEDIA_DIR) -> dict:
             relative = validate_path(image.image_url.removeprefix("/media/"))
             source = sources.get(relative)
             if source is None:
-                stats["missing"].append(relative)
+                # Real MinIO uploads need no second local copy or synthetic seed alias.
+                if exists(relative):
+                    stats["skipped"] += 1
+                else:
+                    stats["missing"].append(relative)
                 continue
             name = uuid.uuid5(uuid.NAMESPACE_URL, f"oldshop:product-image:{image.image_id}:{relative}").hex
             upload(source, f"products/{image.product_id}/{name}{source.suffix.lower()}")
@@ -72,7 +85,10 @@ def seed_media(root: Path = SEED_MEDIA_DIR) -> dict:
             if source is None:
                 # Only known seed URLs may receive the default avatar fallback.
                 if relative not in seed_avatars:
-                    stats["missing"].append(relative)
+                    if exists(relative):
+                        stats["skipped"] += 1
+                    else:
+                        stats["missing"].append(relative)
                     continue
                 source = root / "users/default.png"
                 stats["avatar_fallbacks"] += 1

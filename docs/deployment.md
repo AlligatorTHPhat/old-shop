@@ -115,3 +115,21 @@ Schedule it with cron (`crontab -e` as `deploy`):
 ```
 
 Copy `deploy/backups` off the server (rclone, S3, another VPS); a backup on the same disk is not a backup.
+
+## Day 5 local data-stack rollout (completed 30/10/2026)
+
+The user explicitly approved local maintenance after the procedure was explained.
+The oldshop-data stack now runs migrations 001–005 and the ETL worker. Backup/restore,
+two full ETL runs and reconciliation of all 18 source tables passed. See
+[Day 5 findings](DAY5_FINDINGS_LOG.md) and [ETL runbook](design/05_etl.md).
+
+`bash deploy/scripts/apply-day5.sh --resilience` handles stop/backup/restore
+rehearsal/migrate/schema-init/full twice/reconciliation/reopen. It stops the ETL worker as well
+as the API and frontend. Failures retain maintenance; image-only rollback does not undo schema.
+`python3 deploy/scripts/check-data-stack.py --resilience --day5`
+requires migration 005, a healthy worker and an empty backlog with a successful last run.
+
+Private backups: `deploy/backups/day5_20261030_094800/`; restored PostgreSQL rehearsal database:
+`day5_restore_20261030_094800`. Keep private backups outside Git and copy them off the host.
+Public evidence contains only counts, run metadata and health checks:
+[rollout](evidence/day5_rollout.json), [stack checks](evidence/day5_stack.json).

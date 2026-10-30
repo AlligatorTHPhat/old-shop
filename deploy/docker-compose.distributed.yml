@@ -177,7 +177,7 @@ services:
     restart: "no"
 
   mongo-schema-init:
-    image: ${BACKEND_IMAGE:-oldshop-data-backend:day4}
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day5}
     build:
       context: ..
       dockerfile: backend/Dockerfile
@@ -194,11 +194,11 @@ services:
     restart: "no"
 
   backend:
-    image: ${BACKEND_IMAGE:-oldshop-data-backend:day4}
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day5}
     build:
       context: ..
       dockerfile: backend/Dockerfile
-    environment:
+    environment: &app-environment
       ENVIRONMENT: development
       DEBUG: "false"
       DB_HOST: pg-primary
@@ -239,6 +239,41 @@ services:
     cpus: 1.0
     restart: unless-stopped
 
+  etl-worker:
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day5}
+    entrypoint: ["python", "-m", "etl.run", "worker"]
+    environment:
+      <<: *app-environment
+      ETL_POLL_SECONDS: ${ETL_POLL_SECONDS:-60}
+      ETL_BATCH_SIZE: ${ETL_BATCH_SIZE:-100}
+      ETL_MAX_ATTEMPTS: ${ETL_MAX_ATTEMPTS:-5}
+    volumes:
+      - data_media:/data/media
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks: [data]
+    mem_limit: 512m
+    cpus: 0.75
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-m", "etl.run", "health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 120s
+      retries: 3
+
+  etl-test:
+    profiles: [test]
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day5}
+    entrypoint: ["python", "-m", "scripts.init_mongo"]
+    environment:
+      <<: *app-environment
+      MONGO_URI: mongodb://${MONGO_ROOT_USER:-oldshop_admin}:${MONGO_ROOT_PASSWORD}@mongo1:27017/admin?replicaSet=oldshop-rs&authSource=admin
+    networks: [data]
+    mem_limit: 768m
+    restart: "no"
+
   frontend:
     image: ${FRONTEND_IMAGE:-oldshop-data-frontend:day2}
     build:
@@ -253,7 +288,7 @@ services:
     cpus: 0.5
     restart: unless-stopped
 
-# ETL is implemented on Day 5; no fake idle worker is marked healthy on Day 2.
+# Day 5 ETL polls the transactional outbox. Test profile uses a separate temporary database.
 networks:
   data:
   web:

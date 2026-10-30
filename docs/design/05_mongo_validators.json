@@ -1,0 +1,1611 @@
+{
+  "product_details": {
+    "$jsonSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "schema_version": {
+          "enum": [
+            1
+          ],
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "deleted": {
+          "bsonType": "bool"
+        },
+        "product_id": {
+          "minimum": 0,
+          "exclusiveMinimum": true,
+          "maximum": 9223372036854775807,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "category_id": {
+          "minimum": 0,
+          "exclusiveMinimum": true,
+          "maximum": 9223372036854775807,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "description": {
+          "anyOf": [
+            {
+              "bsonType": "string"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "video_url": {
+          "anyOf": [
+            {
+              "bsonType": "string"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "weight_grams": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "bsonType": [
+                "int",
+                "long"
+              ]
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "dimensions": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "length": {
+                  "minimum": 0,
+                  "exclusiveMinimum": true,
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long"
+                  ]
+                },
+                "width": {
+                  "minimum": 0,
+                  "exclusiveMinimum": true,
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long"
+                  ]
+                },
+                "height": {
+                  "minimum": 0,
+                  "exclusiveMinimum": true,
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long"
+                  ]
+                },
+                "unit": {
+                  "enum": [
+                    "cm",
+                    "mm",
+                    "m"
+                  ],
+                  "bsonType": "string"
+                }
+              },
+              "required": [
+                "length",
+                "width",
+                "height"
+              ],
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "dimensions_raw": {
+          "anyOf": [
+            {
+              "bsonType": "string"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "condition": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "grade": {
+                  "maximum": 10,
+                  "minimum": 1,
+                  "bsonType": [
+                    "int",
+                    "long"
+                  ]
+                },
+                "warranty_months": {
+                  "minimum": 0,
+                  "bsonType": [
+                    "int",
+                    "long"
+                  ]
+                },
+                "defects": {
+                  "items": {
+                    "bsonType": "string"
+                  },
+                  "bsonType": "array"
+                }
+              },
+              "required": [
+                "grade"
+              ],
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "attributes": {
+          "bsonType": "object"
+        },
+        "tags": {
+          "items": {
+            "bsonType": "string"
+          },
+          "bsonType": "array"
+        },
+        "images": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "bucket": {
+                "maxLength": 63,
+                "minLength": 3,
+                "bsonType": "string"
+              },
+              "key": {
+                "maxLength": 1024,
+                "minLength": 1,
+                "bsonType": "string"
+              },
+              "content_type": {
+                "anyOf": [
+                  {
+                    "bsonType": "string"
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              },
+              "size": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "bsonType": [
+                      "int",
+                      "long"
+                    ]
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              },
+              "image_id": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
+                    "maximum": 9223372036854775807,
+                    "bsonType": [
+                      "int",
+                      "long"
+                    ]
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              },
+              "is_primary": {
+                "bsonType": "bool"
+              },
+              "display_order": {
+                "bsonType": [
+                  "int",
+                  "long"
+                ]
+              }
+            },
+            "required": [
+              "bucket",
+              "key"
+            ],
+            "bsonType": "object"
+          },
+          "bsonType": "array"
+        },
+        "updated_at": {
+          "bsonType": "date"
+        },
+        "etl": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "synced_at": {
+                  "bsonType": "date"
+                },
+                "source_updated_at": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "run_id": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "source_created_at": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "synced_at"
+              ],
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "_id",
+        "product_id",
+        "category_id",
+        "updated_at"
+      ],
+      "bsonType": "object"
+    }
+  },
+  "reviews": {
+    "$jsonSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "schema_version": {
+          "enum": [
+            1
+          ],
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "deleted": {
+          "bsonType": "bool"
+        },
+        "review_id": {
+          "minimum": 0,
+          "exclusiveMinimum": true,
+          "maximum": 9223372036854775807,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "product_id": {
+          "minimum": 0,
+          "exclusiveMinimum": true,
+          "maximum": 9223372036854775807,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "buyer_id": {
+          "minimum": 0,
+          "exclusiveMinimum": true,
+          "maximum": 9223372036854775807,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "type": {
+          "enum": [
+            "review",
+            "report"
+          ],
+          "bsonType": "string"
+        },
+        "rating": {
+          "maximum": 5,
+          "minimum": 0,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "title": {
+          "anyOf": [
+            {
+              "bsonType": "string"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "content": {
+          "anyOf": [
+            {
+              "bsonType": "string"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "pending",
+                "approved",
+                "rejected"
+              ],
+              "bsonType": "string"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "moderation": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "actor_id": {
+                  "minimum": 0,
+                  "exclusiveMinimum": true,
+                  "maximum": 9223372036854775807,
+                  "bsonType": [
+                    "int",
+                    "long"
+                  ]
+                },
+                "at": {
+                  "bsonType": "date"
+                },
+                "reason": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "actor_id",
+                "at"
+              ],
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "bucket": {
+                "maxLength": 63,
+                "minLength": 3,
+                "bsonType": "string"
+              },
+              "key": {
+                "maxLength": 1024,
+                "minLength": 1,
+                "bsonType": "string"
+              },
+              "content_type": {
+                "anyOf": [
+                  {
+                    "bsonType": "string"
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              },
+              "size": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "bsonType": [
+                      "int",
+                      "long"
+                    ]
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "bucket",
+              "key"
+            ],
+            "bsonType": "object"
+          },
+          "bsonType": "array"
+        },
+        "created_at": {
+          "bsonType": "date"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "bsonType": "date"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "etl": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "synced_at": {
+                  "bsonType": "date"
+                },
+                "source_updated_at": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "run_id": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "source_created_at": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "synced_at"
+              ],
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "_id",
+        "review_id",
+        "product_id",
+        "buyer_id",
+        "type",
+        "rating",
+        "created_at"
+      ],
+      "bsonType": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "report"
+              ]
+            },
+            "rating": {
+              "enum": [
+                0
+              ]
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "review"
+              ]
+            },
+            "rating": {
+              "minimum": 1
+            }
+          }
+        }
+      ]
+    }
+  },
+  "order_snapshots": {
+    "$jsonSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "schema_version": {
+          "enum": [
+            1
+          ],
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "deleted": {
+          "bsonType": "bool"
+        },
+        "order_id": {
+          "minimum": 0,
+          "exclusiveMinimum": true,
+          "maximum": 9223372036854775807,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "buyer": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "maximum": 9223372036854775807,
+              "bsonType": [
+                "int",
+                "long"
+              ]
+            },
+            "region": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "north",
+                    "central",
+                    "south",
+                    "unknown"
+                  ],
+                  "bsonType": "string"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "bsonType": "object"
+        },
+        "items": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "product_id": {
+                "minimum": 0,
+                "exclusiveMinimum": true,
+                "maximum": 9223372036854775807,
+                "bsonType": [
+                  "int",
+                  "long"
+                ]
+              },
+              "quantity": {
+                "minimum": 0,
+                "exclusiveMinimum": true,
+                "bsonType": [
+                  "int",
+                  "long"
+                ]
+              },
+              "price_at_purchase_vnd": {
+                "maximum": 9223372036854775807,
+                "minimum": 0,
+                "bsonType": [
+                  "int",
+                  "long"
+                ]
+              },
+              "subtotal_vnd": {
+                "maximum": 9223372036854775807,
+                "minimum": 0,
+                "bsonType": [
+                  "int",
+                  "long"
+                ]
+              },
+              "title_current": {
+                "anyOf": [
+                  {
+                    "bsonType": "string"
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              },
+              "category_id_current": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
+                    "maximum": 9223372036854775807,
+                    "bsonType": [
+                      "int",
+                      "long"
+                    ]
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              },
+              "seller_id_current": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
+                    "maximum": 9223372036854775807,
+                    "bsonType": [
+                      "int",
+                      "long"
+                    ]
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "product_id",
+              "quantity",
+              "price_at_purchase_vnd",
+              "subtotal_vnd"
+            ],
+            "bsonType": "object"
+          },
+          "minItems": 1,
+          "bsonType": "array"
+        },
+        "payments": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "transaction_id": {
+                "minimum": 0,
+                "exclusiveMinimum": true,
+                "maximum": 9223372036854775807,
+                "bsonType": [
+                  "int",
+                  "long"
+                ]
+              },
+              "method_id": {
+                "minimum": 0,
+                "exclusiveMinimum": true,
+                "maximum": 9223372036854775807,
+                "bsonType": [
+                  "int",
+                  "long"
+                ]
+              },
+              "status_code": {
+                "bsonType": [
+                  "int",
+                  "long"
+                ]
+              },
+              "amount_vnd": {
+                "maximum": 9223372036854775807,
+                "minimum": 0,
+                "bsonType": [
+                  "int",
+                  "long"
+                ]
+              },
+              "fraud_score": {
+                "anyOf": [
+                  {
+                    "maximum": 1,
+                    "minimum": 0,
+                    "bsonType": [
+                      "double",
+                      "int",
+                      "long"
+                    ]
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "transaction_id",
+              "method_id",
+              "status_code",
+              "amount_vnd"
+            ],
+            "bsonType": "object"
+          },
+          "bsonType": "array"
+        },
+        "total_amount_vnd": {
+          "maximum": 9223372036854775807,
+          "minimum": 0,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "shipping_fee_vnd": {
+          "maximum": 9223372036854775807,
+          "minimum": 0,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "discount_amount_vnd": {
+          "maximum": 9223372036854775807,
+          "minimum": 0,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "final_amount_vnd": {
+          "maximum": 9223372036854775807,
+          "minimum": 0,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "voucher_id": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "maximum": 9223372036854775807,
+              "bsonType": [
+                "int",
+                "long"
+              ]
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "voucher_current": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "voucher_id": {
+                  "minimum": 0,
+                  "exclusiveMinimum": true,
+                  "maximum": 9223372036854775807,
+                  "bsonType": [
+                    "int",
+                    "long"
+                  ]
+                },
+                "discount_type_code_current": {
+                  "bsonType": [
+                    "int",
+                    "long"
+                  ]
+                },
+                "discount_value_current": {
+                  "pattern": "^\\d+(\\.\\d+)?$",
+                  "bsonType": "string"
+                },
+                "is_active_current": {
+                  "bsonType": "bool"
+                },
+                "is_deleted_current": {
+                  "bsonType": "bool"
+                }
+              },
+              "required": [
+                "voucher_id",
+                "discount_type_code_current",
+                "discount_value_current",
+                "is_active_current",
+                "is_deleted_current"
+              ],
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "order_status": {
+          "maximum": 4,
+          "minimum": 0,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "order_date": {
+          "bsonType": "date"
+        },
+        "etl": {
+          "additionalProperties": false,
+          "properties": {
+            "synced_at": {
+              "bsonType": "date"
+            },
+            "source_updated_at": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "run_id": {
+              "anyOf": [
+                {
+                  "bsonType": "string"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "source_created_at": {
+              "anyOf": [
+                {
+                  "bsonType": "string"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "synced_at"
+          ],
+          "bsonType": "object"
+        }
+      },
+      "required": [
+        "_id",
+        "order_id",
+        "buyer",
+        "items",
+        "total_amount_vnd",
+        "shipping_fee_vnd",
+        "discount_amount_vnd",
+        "final_amount_vnd",
+        "order_status",
+        "order_date",
+        "etl"
+      ],
+      "bsonType": "object"
+    }
+  },
+  "system_logs": {
+    "$jsonSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "schema_version": {
+          "enum": [
+            1
+          ],
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "deleted": {
+          "bsonType": "bool"
+        },
+        "log_id": {
+          "minimum": 0,
+          "exclusiveMinimum": true,
+          "maximum": 9223372036854775807,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "actor_id": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "maximum": 9223372036854775807,
+              "bsonType": [
+                "int",
+                "long"
+              ]
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "action": {
+          "maxLength": 100,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "resource_type": {
+          "anyOf": [
+            {
+              "bsonType": "string"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "resource_id": {
+          "anyOf": [
+            {
+              "bsonType": [
+                "int",
+                "long"
+              ]
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "message": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "bsonType": "string"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "payload": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "event": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "reason_code": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "changed_fields": {
+                  "items": {
+                    "bsonType": "string"
+                  },
+                  "bsonType": "array"
+                }
+              },
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "ip_hash": {
+          "anyOf": [
+            {
+              "bsonType": "string"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "created_at": {
+          "bsonType": "date"
+        },
+        "etl": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "synced_at": {
+                  "bsonType": "date"
+                },
+                "source_updated_at": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "run_id": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "source_created_at": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "synced_at"
+              ],
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "_id",
+        "log_id",
+        "action",
+        "created_at"
+      ],
+      "bsonType": "object"
+    }
+  },
+  "violation_logs": {
+    "$jsonSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "schema_version": {
+          "enum": [
+            1
+          ],
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "deleted": {
+          "bsonType": "bool"
+        },
+        "log_id": {
+          "minimum": 0,
+          "exclusiveMinimum": true,
+          "maximum": 9223372036854775807,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "target_user_id": {
+          "minimum": 0,
+          "exclusiveMinimum": true,
+          "maximum": 9223372036854775807,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "actor_id": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "maximum": 9223372036854775807,
+              "bsonType": [
+                "int",
+                "long"
+              ]
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "reason": {
+          "maxLength": 500,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "action_taken": {
+          "maxLength": 100,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "created_at": {
+          "bsonType": "date"
+        },
+        "payload": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "event": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "reason_code": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "changed_fields": {
+                  "items": {
+                    "bsonType": "string"
+                  },
+                  "bsonType": "array"
+                }
+              },
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "etl": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "synced_at": {
+                  "bsonType": "date"
+                },
+                "source_updated_at": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "run_id": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "source_created_at": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "synced_at"
+              ],
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "_id",
+        "log_id",
+        "target_user_id",
+        "reason",
+        "action_taken",
+        "created_at"
+      ],
+      "bsonType": "object"
+    }
+  },
+  "contact_messages": {
+    "$jsonSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "schema_version": {
+          "enum": [
+            1
+          ],
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "deleted": {
+          "bsonType": "bool"
+        },
+        "feedback_id": {
+          "minimum": 0,
+          "exclusiveMinimum": true,
+          "maximum": 9223372036854775807,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "user_id": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "maximum": 9223372036854775807,
+              "bsonType": [
+                "int",
+                "long"
+              ]
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        },
+        "subject": {
+          "maxLength": 200,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "content": {
+          "maxLength": 5000,
+          "minLength": 1,
+          "bsonType": "string"
+        },
+        "status": {
+          "maximum": 2,
+          "minimum": 0,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "attachments": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "bucket": {
+                "maxLength": 63,
+                "minLength": 3,
+                "bsonType": "string"
+              },
+              "key": {
+                "maxLength": 1024,
+                "minLength": 1,
+                "bsonType": "string"
+              },
+              "content_type": {
+                "anyOf": [
+                  {
+                    "bsonType": "string"
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              },
+              "size": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "bsonType": [
+                      "int",
+                      "long"
+                    ]
+                  },
+                  {
+                    "bsonType": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "bucket",
+              "key"
+            ],
+            "bsonType": "object"
+          },
+          "bsonType": "array"
+        },
+        "created_at": {
+          "bsonType": "date"
+        },
+        "etl": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "synced_at": {
+                  "bsonType": "date"
+                },
+                "source_updated_at": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "run_id": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "source_created_at": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "synced_at"
+              ],
+              "bsonType": "object"
+            },
+            {
+              "bsonType": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "_id",
+        "feedback_id",
+        "subject",
+        "content",
+        "status",
+        "created_at"
+      ],
+      "bsonType": "object"
+    }
+  },
+  "etl_errors": {
+    "$jsonSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "_id": {
+          "bsonType": "string"
+        },
+        "event_id": {
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "run_id": {
+          "bsonType": "string"
+        },
+        "entity_type": {
+          "enum": [
+            "product",
+            "order",
+            "review",
+            "system_log",
+            "violation_log",
+            "contact"
+          ],
+          "bsonType": "string"
+        },
+        "entity_key": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "maximum": 9223372036854775807,
+              "bsonType": [
+                "int",
+                "long"
+              ]
+            },
+            "created_at": {
+              "anyOf": [
+                {
+                  "bsonType": "string"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "bsonType": "object"
+        },
+        "code": {
+          "maxLength": 80,
+          "bsonType": "string"
+        },
+        "attempts": {
+          "minimum": 1,
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "last_at": {
+          "bsonType": "date"
+        },
+        "resolved": {
+          "bsonType": "bool"
+        }
+      },
+      "required": [
+        "_id",
+        "event_id",
+        "run_id",
+        "entity_type",
+        "entity_key",
+        "code",
+        "attempts",
+        "last_at"
+      ],
+      "bsonType": "object"
+    }
+  }
+}

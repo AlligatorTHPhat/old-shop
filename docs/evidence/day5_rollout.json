@@ -1,0 +1,287 @@
+{
+  "date": "2026-10-30",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "authorization": "User explicitly agreed to the local maintenance rollout after explanation.",
+  "command": "bash deploy/scripts/apply-day5.sh --resilience",
+  "exit_code": 0,
+  "backup_directory": "deploy/backups/day5_20261030_094800",
+  "restore_database": "day5_restore_20261030_094800",
+  "source_reconciliation": {
+    "tables": 18,
+    "counts_and_digests_equal": true,
+    "rows": {
+      "category": 8,
+      "contact_info": 15,
+      "order": 30,
+      "order_detail": 30,
+      "payment_method": 5,
+      "product": 16,
+      "product_image": 32,
+      "review": 0,
+      "role": 3,
+      "shopping_cart": 11,
+      "shopping_cart_item": 0,
+      "system_feedback": 0,
+      "system_log": 0,
+      "transaction": 30,
+      "user": 15,
+      "user_role": 15,
+      "violation_log": 11,
+      "voucher": 4
+    }
+  },
+  "backup_restore": [
+    {
+      "mongo_collections": 6,
+      "mongo_documents": 0,
+      "minio_objects": 95
+    },
+    {
+      "mongo_restored": 6,
+      "minio_restored": 95,
+      "result": "PASS"
+    }
+  ],
+  "migration": {
+    "applied": [
+      "005"
+    ]
+  },
+  "full_runs": [
+    {
+      "run_id": "dea68aab-91f5-4b11-8493-700c4659561d",
+      "status": "success",
+      "mode": "full",
+      "rows_in": 57,
+      "rows_out": 57,
+      "errors": 0,
+      "details": {
+        "media": {
+          "uploaded": 0,
+          "skipped": 95,
+          "missing": [],
+          "avatar_fallbacks": 11,
+          "metadata": {
+            "updated": 0,
+            "unavailable_image_ids": []
+          }
+        },
+        "product": {
+          "rows_in": 16,
+          "rows_out": 16,
+          "errors": 0
+        },
+        "order": {
+          "rows_in": 30,
+          "rows_out": 30,
+          "errors": 0
+        },
+        "review": {
+          "rows_in": 0,
+          "rows_out": 0,
+          "errors": 0
+        },
+        "system_log": {
+          "rows_in": 0,
+          "rows_out": 0,
+          "errors": 0
+        },
+        "violation_log": {
+          "rows_in": 11,
+          "rows_out": 11,
+          "errors": 0
+        },
+        "contact": {
+          "rows_in": 0,
+          "rows_out": 0,
+          "errors": 0
+        },
+        "swept": 0,
+        "aggregate": {
+          "groups": 2,
+          "gross_sales_vnd": 13100000,
+          "business_timezone": "Asia/Ho_Chi_Minh"
+        },
+        "quality": {
+          "collections": {
+            "product_details": {
+              "pg_active": 16,
+              "mongo_active": 16,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            },
+            "order_snapshots": {
+              "pg_active": 30,
+              "mongo_active": 30,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            },
+            "reviews": {
+              "pg_active": 0,
+              "mongo_active": 0,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            },
+            "system_logs": {
+              "pg_active": 0,
+              "mongo_active": 0,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            },
+            "violation_logs": {
+              "pg_active": 11,
+              "mongo_active": 11,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            },
+            "contact_messages": {
+              "pg_active": 0,
+              "mongo_active": 0,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            }
+          },
+          "media": {
+            "referenced": 32,
+            "found": 32,
+            "errors": 0
+          },
+          "mismatches": 0
+        },
+        "backlog": {
+          "pending": 0,
+          "dead": 0,
+          "oldest_pending_seconds": 0.0
+        }
+      }
+    },
+    {
+      "run_id": "fc9dd766-22df-4ae2-92b7-b8a09e726e12",
+      "status": "success",
+      "mode": "full",
+      "rows_in": 57,
+      "rows_out": 57,
+      "errors": 0,
+      "details": {
+        "media": {
+          "uploaded": 0,
+          "skipped": 95,
+          "missing": [],
+          "avatar_fallbacks": 11,
+          "metadata": {
+            "updated": 0,
+            "unavailable_image_ids": []
+          }
+        },
+        "product": {
+          "rows_in": 16,
+          "rows_out": 16,
+          "errors": 0
+        },
+        "order": {
+          "rows_in": 30,
+          "rows_out": 30,
+          "errors": 0
+        },
+        "review": {
+          "rows_in": 0,
+          "rows_out": 0,
+          "errors": 0
+        },
+        "system_log": {
+          "rows_in": 0,
+          "rows_out": 0,
+          "errors": 0
+        },
+        "violation_log": {
+          "rows_in": 11,
+          "rows_out": 11,
+          "errors": 0
+        },
+        "contact": {
+          "rows_in": 0,
+          "rows_out": 0,
+          "errors": 0
+        },
+        "swept": 0,
+        "aggregate": {
+          "groups": 2,
+          "gross_sales_vnd": 13100000,
+          "business_timezone": "Asia/Ho_Chi_Minh"
+        },
+        "quality": {
+          "collections": {
+            "product_details": {
+              "pg_active": 16,
+              "mongo_active": 16,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            },
+            "order_snapshots": {
+              "pg_active": 30,
+              "mongo_active": 30,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            },
+            "reviews": {
+              "pg_active": 0,
+              "mongo_active": 0,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            },
+            "system_logs": {
+              "pg_active": 0,
+              "mongo_active": 0,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            },
+            "violation_logs": {
+              "pg_active": 11,
+              "mongo_active": 11,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            },
+            "contact_messages": {
+              "pg_active": 0,
+              "mongo_active": 0,
+              "field_mismatches": 0,
+              "projection_errors": 0
+            }
+          },
+          "media": {
+            "referenced": 32,
+            "found": 32,
+            "errors": 0
+          },
+          "mismatches": 0
+        },
+        "backlog": {
+          "pending": 0,
+          "dead": 0,
+          "oldest_pending_seconds": 0.0
+        }
+      }
+    }
+  ],
+  "etl_status_at_reopen": {
+    "pending": 0,
+    "dead": 0,
+    "oldest_pending_seconds": 0.0,
+    "last_run": {
+      "run_id": "3cbc2116-10df-492b-acb4-d5fc63484aba",
+      "mode": "incremental",
+      "status": "success",
+      "started_at": "2026-10-30 09:49:31.127999+07:00",
+      "ended_at": "2026-10-30 09:49:31.355750+07:00",
+      "rows_in": 0,
+      "rows_out": 0,
+      "errors": 0
+    }
+  },
+  "readiness": {
+    "status": "ok",
+    "database": "up",
+    "mongo": "up",
+    "minio": "up"
+  }
+}

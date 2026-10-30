@@ -1,0 +1,70 @@
+ Container oldshop-data-etl-test-run-ec0c250d4be0 Creating 
+ Container oldshop-data-etl-test-run-ec0c250d4be0 Created 
+{"ts": "2026-10-30T02:18:10.345+00:00", "level": "info", "logger": "init_db", "msg": "Creating database day5_test_20261030091807_26227_regression", "request_id": "-"}
+{"ts": "2026-10-30T02:18:10.498+00:00", "level": "info", "logger": "init_db", "msg": "Loading schema and seed data from /opt/database/init.sql", "request_id": "-"}
+psql:02_functions/order_detail/triggers.sql:48: NOTICE:  trigger "trg_no_self_buying" for relation "order_detail" does not exist, skipping
+psql:init.sql:68: NOTICE:  ================================================
+psql:init.sql:68: NOTICE:  OldShop Database Setup Completed Successfully!
+psql:init.sql:68: NOTICE:  ================================================
+psql:init.sql:68: NOTICE:  Version: 2.0.0
+psql:init.sql:68: NOTICE:  Features: Security, Performance, Monitoring
+psql:init.sql:68: NOTICE:  Default admin: admin@oldshop.com / admin123
+psql:init.sql:68: NOTICE:  ================================================
+{"ts": "2026-10-30T02:18:13.255+00:00", "level": "info", "logger": "init_db", "msg": "Migrations applied: ['001', '002', '003', '004', '005']", "request_id": "-"}
+{"ts": "2026-10-30T02:18:13.285+00:00", "level": "info", "logger": "init_db", "msg": "Copied 37 seed media files into /tmp/day5-media", "request_id": "-"}
+ Container oldshop-data-etl-test-run-da22aebfd9fd Creating 
+ Container oldshop-data-etl-test-run-da22aebfd9fd Created 
+{"collections": ["contact_messages", "order_snapshots", "product_details", "reviews", "system_logs", "violation_logs"], "validation": "strict/error"}
+ Container oldshop-data-etl-test-run-539cb86e63c1 Creating 
+ Container oldshop-data-etl-test-run-539cb86e63c1 Created 
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 96 items
+
+tests/test_day3_data.py ........................                         [ 25%]
+tests/test_day4_migrations.py ...............                            [ 40%]
+tests/test_system.py ...........                                         [ 52%]
+tests/test_v1_admin.py ....                                              [ 56%]
+tests/test_v1_auth.py ..........                                         [ 66%]
+tests/test_v1_cart.py .....                                              [ 71%]
+tests/test_v1_category.py ....                                           [ 76%]
+tests/test_v1_moderator.py .....                                         [ 81%]
+tests/test_v1_order.py ......                                            [ 87%]
+tests/test_v1_product.py ......                                          [ 93%]
+tests/test_v1_user.py ......                                             [100%]
+
+============================= 96 passed in 14.89s ==============================
+Isolated PG/Mongo databases retained for inspection: day5_test_20261030091807_26227_regression
+ Container oldshop-data-etl-test-run-b975684698ec Creating 
+ Container oldshop-data-etl-test-run-b975684698ec Created 
+{"ts": "2026-10-30T02:19:05.269+00:00", "level": "info", "logger": "init_db", "msg": "Creating database day5_test_20261030091807_26227_etl", "request_id": "-"}
+{"ts": "2026-10-30T02:19:05.402+00:00", "level": "info", "logger": "init_db", "msg": "Loading schema and seed data from /opt/database/init.sql", "request_id": "-"}
+psql:02_functions/order_detail/triggers.sql:48: NOTICE:  trigger "trg_no_self_buying" for relation "order_detail" does not exist, skipping
+psql:init.sql:68: NOTICE:  ================================================
+psql:init.sql:68: NOTICE:  OldShop Database Setup Completed Successfully!
+psql:init.sql:68: NOTICE:  ================================================
+psql:init.sql:68: NOTICE:  Version: 2.0.0
+psql:init.sql:68: NOTICE:  Features: Security, Performance, Monitoring
+psql:init.sql:68: NOTICE:  Default admin: admin@oldshop.com / admin123
+psql:init.sql:68: NOTICE:  ================================================
+{"ts": "2026-10-30T02:19:08.298+00:00", "level": "info", "logger": "init_db", "msg": "Migrations applied: ['001', '002', '003', '004', '005']", "request_id": "-"}
+{"ts": "2026-10-30T02:19:08.320+00:00", "level": "info", "logger": "init_db", "msg": "Copied 37 seed media files into /tmp/day5-media", "request_id": "-"}
+ Container oldshop-data-etl-test-run-d22c65c1ab2e Creating 
+ Container oldshop-data-etl-test-run-d22c65c1ab2e Created 
+{"collections": ["contact_messages", "order_snapshots", "product_details", "reviews", "system_logs", "violation_logs"], "validation": "strict/error"}
+ Container oldshop-data-etl-test-run-2688fb9554e9 Creating 
+ Container oldshop-data-etl-test-run-2688fb9554e9 Created 
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 26 items
+
+tests/test_day5_etl.py ..........................                        [100%]
+
+============================= 26 passed in 56.51s ==============================
+Isolated PG/Mongo databases retained for inspection: day5_test_20261030091807_26227_etl

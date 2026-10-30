@@ -1,0 +1,36 @@
+{
+  "scope": "day5_test_worker_20261030_a",
+  "poll_seconds": 60,
+  "initial_backlog": {
+    "pending": 16,
+    "dead": 0,
+    "oldest_pending_seconds": 0.009538
+  },
+  "elapsed_seconds": 26.06,
+  "after": {
+    "pending": 0,
+    "dead": 0,
+    "oldest_pending_seconds": 0.0,
+    "last_run": {
+      "run_id": "a00e244e-96ad-49a4-b11f-e5cc6cbdc909",
+      "mode": "incremental",
+      "status": "running",
+      "started_at": "2026-10-30 09:31:27.200006+07:00",
+      "ended_at": null,
+      "rows_in": 0,
+      "rows_out": 0,
+      "errors": 0
+    }
+  },
+  "completed_run": {
+    "run_id": "a00e244e-96ad-49a4-b11f-e5cc6cbdc909",
+    "mode": "incremental",
+    "status": "success",
+    "started_at": "2026-10-30 09:31:27.200006+07:00",
+    "ended_at": "2026-10-30 09:31:27.989914+07:00",
+    "rows_in": 16,
+    "rows_out": 16,
+    "errors": 0
+  },
+  "completed_quality_mismatches": 0
+}

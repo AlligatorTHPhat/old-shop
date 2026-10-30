@@ -397,3 +397,14 @@ Model User map user_core, proxy vào ba model con để giữ API cũ; không gh
 SystemLog có khóa ghép `(log_id,created_at)`. Metadata file product_image có content_type,
 size_bytes; API không cần scan MinIO. Regression chạy bằng `test-day4.sh` tạo DB riêng;
 apply-day4.sh dừng ghi và kiểm thử restore trước khi đổi schema stack hiện hữu.
+
+### Cập nhật Ngày 5 — ETL đã kiểm thử và rollout local
+
+`backend/etl/` và migration 005 hiện thực sáu pipeline/outbox. Ngày 30/10 người dùng xác nhận
+mọi dữ liệu cũ là giờ VN; provenance giữ timestamp gốc PG, bản đọc xuất aware UTC. Backend
+mới đặt transaction UTC; các timestamp SQL trực tiếp theo timezone phiên. D8 giữ raw status.
+Code đã qua regression và ETL test trên DB riêng; daemon poll 60 giây đã thử độc lập.
+Sau khi người dùng đồng ý bảo trì, stack local đã áp schema 001–005 và bật worker thật.
+Backup/restore đạt; full ETL hai lần đều thành công với 57 document, không nhân bản;
+đối soát count/digest của 18 bảng nguồn khớp trước/sau. Backend/frontend đã mở lại.
+Xem [05_etl.md](design/05_etl.md), [DAY5_FINDINGS_LOG.md](DAY5_FINDINGS_LOG.md).

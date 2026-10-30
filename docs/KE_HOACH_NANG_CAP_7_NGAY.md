@@ -389,23 +389,32 @@ Mỗi chỉ mục có lý do + minh chứng đo; partition pruning được ch�
 - `deploy/docker-compose.monitoring.yml`, `deploy/prometheus/prometheus.yml` (nếu muốn xuất metric ETL)
 
 ### ✅ Checklist
-- [ ] Tạo package `backend/etl/` (hoặc `etl/` ở gốc): `extract.py`, `transform.py`, `load.py`, `pipelines/`, `run.py`
-- [ ] **Pipeline 1 — Product:** PG `products` + `product_images` → Mongo `product_details` (merge thuộc tính động, đổi path ảnh → `bucket/key`)
-- [ ] **Pipeline 2 — Order snapshot:** PG `orders` + `order_details` + `transactions` + voucher + fraud → Mongo `order_snapshots` (denormalize)
-- [ ] **Pipeline 3 — Review/Report:** `reviews` → Mongo `reviews` (gán `type` theo `rating = 0`)
-- [ ] **Pipeline 4 — Logs/Audit:** `system_logs`, `violation_logs` → Mongo (TTL), đánh dấu đã chuyển
-- [ ] **Pipeline 5 — Media:** `database/03_seeds/media/**` + ảnh trong volume `media` → MinIO; cập nhật key
-- [ ] **Pipeline 6 — Aggregate:** doanh thu theo ngày/danh mục/seller → bảng `report_daily_sales` (PG replica/Mongo) phục vụ dashboard admin
-- [ ] Incremental qua transactional outbox theo D2; ACK từng event sau Mongo thành công, không dùng MAX(id)/updated_at làm cursor duy nhất; upsert idempotent, giữ attributes/tags do Mongo quản lý
-- [ ] **Transform & làm sạch**: chuẩn hóa kiểu tiền (VND integer), thời gian UTC, loại bản ghi mồ côi, che dữ liệu nhạy cảm (không đưa password hash/PII thừa sang Mongo)
-- [ ] **Data quality check**: đối chiếu số lượng PG ↔ Mongo ↔ MinIO sau mỗi lần chạy; ghi báo cáo `etl_runs` (start, end, rows_in/out, errors)
-- [ ] Lập lịch: etl-worker full lần đầu sau bật outbox, incremental poll 60 giây; mục tiêu dưới 5 phút khi tải bình thường, theo dõi backlog; CLI full và đối soát hằng ngày
-- [ ] **Xử lý lỗi**: retry, dead-letter (collection `etl_errors`), log có `run_id`
-- [ ] Test ETL: unit (transform) + integration (PG test DB → Mongo test)
-- [ ] Vẽ **sơ đồ luồng ETL** (Extract → Transform → Load, nguồn/đích)
+- [x] Tạo package `backend/etl/` (hoặc `etl/` ở gốc): `extract.py`, `transform.py`, `load.py`, `pipelines/`, `run.py`
+- [x] **Pipeline 1 — Product:** PG `product` + `product_images` → Mongo `product_details` (merge thuộc tính động, đổi path ảnh → `bucket/key`)
+- [x] **Pipeline 2 — Order snapshot:** PG `order` + `order_detail` + `transaction` + voucher + fraud → Mongo `order_snapshots` (denormalize)
+- [x] **Pipeline 3 — Review/Report:** `review` → Mongo `reviews` (gán `type` theo `rating = 0`)
+- [x] **Pipeline 4 — Logs/Audit:** `system_log`, `violation_log` → Mongo (chỉ system_logs TTL 90 ngày), đánh dấu đã chuyển
+- [x] **Pipeline 5 — Media:** `database/03_seeds/media/**` + ảnh trong volume `media` → MinIO; cập nhật key
+- [x] **Pipeline 6 — Aggregate:** doanh thu theo ngày/danh mục/seller → bảng `report_daily_sales` (PG replica/Mongo) phục vụ dashboard admin
+- [x] Incremental qua transactional outbox theo D2; ACK từng event sau Mongo thành công, không dùng MAX(id)/updated_at làm cursor duy nhất; upsert idempotent, giữ attributes/tags do Mongo quản lý
+- [x] **Transform & làm sạch**: chuẩn hóa kiểu tiền (VND integer), thời gian UTC, loại bản ghi mồ côi, che dữ liệu nhạy cảm (không đưa password hash/PII thừa sang Mongo)
+- [x] **Data quality check**: đối chiếu số lượng PG ↔ Mongo ↔ MinIO sau mỗi lần chạy; ghi báo cáo `etl_runs` (start, end, rows_in/out, errors)
+- [x] Lập lịch: etl-worker full lần đầu sau bật outbox, incremental poll 60 giây; mục tiêu dưới 5 phút khi tải bình thường, theo dõi backlog; CLI full và đối soát hằng ngày
+- [x] **Xử lý lỗi**: retry, dead-letter (collection `etl_errors`), log có `run_id`
+- [x] Test ETL: unit (transform) + integration (PG test DB → Mongo test)
+- [x] Vẽ **sơ đồ luồng ETL** (Extract → Transform → Load, nguồn/đích)
+- [x] Rollout migration 005/full/worker vào stack local sau khi người dùng đồng ý bảo trì; backup/restore, full hai lần và đối soát 18 bảng nguồn đều đạt
 
 ### 📦 Sản phẩm đầu ra
 Package ETL + `docs/design/05_etl.md` + sơ đồ + log một lần chạy mẫu (số dòng in/out)
+
+**Trạng thái 30/10:** implementation và **124 trường hợp kiểm thử đạt** trên DB riêng;
+worker thử tự full, poll 60 giây, xử lý 16 event sau 26,06 giây; dữ liệu và đối soát khớp.
+Stack local đã áp schema 001–005, bật worker thật và mở lại backend/frontend;
+hai lượt full đều 57 in/57 out, errors=0, không nhân bản, 32/32 tham chiếu ảnh hợp lệ.
+Count/digest 18 bảng nguồn trước/sau khớp; nghiệm thu Ngày 5 trên môi trường local Mongo7.
+Xem [DAY5_FINDINGS_LOG.md](DAY5_FINDINGS_LOG.md), [05_etl.md](design/05_etl.md),
+[PUML](diagram/05_etl_flow.puml) và `docs/evidence/day5_*`.
 
 ### 🎯 Tiêu chí hoàn thành
 `docker compose up` → seed PG → chạy ETL → Mongo và MinIO có dữ liệu đúng; chạy lần hai không nhân bản; số liệu đối chiếu khớp.

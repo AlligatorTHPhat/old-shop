@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--resilience", action="store_true")
+parser.add_argument("--day5", action="store_true", help="Require migration 005 and an ETL worker")
 parser.add_argument("--output", type=Path)
 args = parser.parse_args()
 compose = ["docker", "compose", "--env-file", str(ROOT / "deploy/.env.data"),
@@ -66,7 +67,7 @@ assert pg("pg-primary", "SELECT pg_is_in_recovery()") == "f"
 checks["baseline"] = pg("pg-primary", "SELECT count(*) FROM pg_tables WHERE schemaname='public'")
 if pg("pg-primary", "SELECT to_regclass('public.schema_migrations') IS NOT NULL") == "t":
     checks["migrations"] = pg("pg-primary", "SELECT string_agg(version,',' ORDER BY version) FROM schema_migrations")
-    assert checks["migrations"] == "001,002,003,004"
+    assert checks["migrations"] in ("001,002,003,004", "001,002,003,004,005")
     assert pg("pg-primary", "SELECT count(*) FROM pg_inherits WHERE inhparent='public.\"order\"'::regclass") == "4"
     assert pg("pg-primary", "SELECT count(*) FROM information_schema.columns WHERE table_name='users_full' AND table_schema='public'") == "20"
 else:
@@ -104,6 +105,18 @@ for url in urls:
         result[url] = response.status
 print(json.dumps(result))
 """))
+has_etl = checks.get("migrations") == "001,002,003,004,005"
+if args.day5:
+    assert has_etl, "Day 5 has not been deployed; migration 005 is required"
+if has_etl:
+    row = next((row for row in services if row["Service"] == "etl-worker"), None)
+    assert row and row["State"] == "running" and row["Health"] == "healthy", "Unhealthy/missing ETL worker"
+    checks["healthy_services"].append("etl-worker")
+    checks["etl"] = json.loads(run(*compose, "exec", "-T", "etl-worker", "python", "-m", "etl.run", "status"))
+    assert checks["etl"]["pending"] == 0 and checks["etl"]["dead"] == 0
+    assert checks["etl"]["last_run"] and checks["etl"]["last_run"]["status"] == "success"
+else:
+    checks["etl"] = {"deployed": False, "note": "Stack remains on its previous schema"}
 checks["minio_version"] = run(*compose, "exec", "-T", "minio", "minio", "--version").splitlines()[0]
 if args.resilience:
     target = pg("pg-primary", "SELECT pg_current_wal_lsn()")

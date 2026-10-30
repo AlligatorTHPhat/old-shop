@@ -74,6 +74,7 @@ cd backend
 python -m venv .venv && . .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements-dev.txt
 cp .env.example .env                               # adjust DB credentials
+python -m scripts.init_db                         # validates baseline and applies migrations
 uvicorn app.main:app --reload
 
 # frontend
@@ -91,6 +92,7 @@ The backend suite exercises the real API against PostgreSQL loaded with the seed
 ```bash
 createdb oldshop_test && (cd database && psql -d oldshop_test -f init.sql)
 cd backend
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/oldshop_test python -m scripts.migrate
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/oldshop_test pytest
 ruff check . && ruff format --check .
 ```
@@ -102,7 +104,8 @@ CI runs the same steps on every push, builds the Angular app, and builds both Do
 **Day 2 data stack (local, separate volumes/ports):** PostgreSQL + MongoDB + MinIO,
 with optional replication profile. See [distribution strategy and commands](docs/design/02_distribution_strategy.md)
 and [Day 2 findings](docs/DAY2_FINDINGS_LOG.md), including the MongoDB 8/kernel compatibility exception.
-This stack retains the baseline schema; partitioning and ETL are later milestones.
+The local stack now has migrations 001–005 and a healthy Day 5 ETL worker,
+following an approved maintenance rollout with backup/restore and reconciliation.
 
 Production runs on a single VPS with Docker Compose; see **[docs/deployment.md](docs/deployment.md)**.
 
@@ -128,7 +131,7 @@ private MinIO buckets and LocalStorage/MinioStorage behind existing `/media/...`
 See [JSON and storage design](docs/design/03_json_design.md) and
 [Day 3 findings](docs/DAY3_FINDINGS_LOG.md). Run `bash deploy/scripts/test-day3.sh`
 after building/provisioning the data stack; it creates a separate PostgreSQL test database.
-Mongo data synchronization is scheduled for Day 5.
+Mongo data synchronization is implemented by the Day 5 ETL worker.
 
 **Day 4 migrations / benchmarks:** SQL-first bootstrap now applies versioned migrations after
 baseline initialization. Orders use four HASH partitions; system logs use monthly RANGE
@@ -138,3 +141,12 @@ and [Day 4 findings](docs/DAY4_FINDINGS_LOG.md). Build the backend image, then r
 `bash deploy/scripts/test-day4.sh` on a fresh test database. For the existing local data stack,
 `bash deploy/scripts/apply-day4.sh --resilience` handles maintenance, backup/restore verification,
 migration and reconciliation. Changing only the application image does not reverse a schema migration.
+
+**Day 5 ETL (implemented, tested and deployed locally):** `backend/etl` provides six pipelines,
+transactional outbox migration 005, a 60-second worker, reconciliation/retry/dead letters and
+PG daily gross-item sales reports. [Design/runbook](docs/design/05_etl.md),
+[findings and rollout evidence](docs/DAY5_FINDINGS_LOG.md), [PUML](docs/diagram/05_etl_flow.puml).
+`bash deploy/scripts/test-day5.sh` creates isolated PG/Mongo pairs. The local rollout used
+`bash deploy/scripts/apply-day5.sh --resilience`: backup/restore rehearsal, migration 005,
+full ETL twice and reconciliation of all 18 original source tables before reopening services.
+For an existing database, follow this maintenance runbook before starting the worker.

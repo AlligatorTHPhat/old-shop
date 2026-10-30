@@ -31,6 +31,7 @@ WORKDIR /app
 # Code stays root-owned and read-only for the runtime user; only /data is writable.
 COPY backend/app ./app
 COPY backend/scripts ./scripts
+COPY backend/etl ./etl
 COPY --chmod=755 backend/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY database /opt/database
 
