@@ -1,0 +1,261 @@
+{
+  "project": "oldshop-day7-demo-8decc65e",
+  "isolated": true,
+  "date": "2026-10-30",
+  "stages": [
+    {
+      "name": "stack",
+      "elapsed_seconds": 1.76,
+      "services": [
+        {
+          "service": "backend",
+          "state": "running",
+          "health": "healthy"
+        },
+        {
+          "service": "etl-worker",
+          "state": "running",
+          "health": "healthy"
+        },
+        {
+          "service": "frontend",
+          "state": "running",
+          "health": "healthy"
+        },
+        {
+          "service": "minio",
+          "state": "running",
+          "health": "healthy"
+        },
+        {
+          "service": "mongo1",
+          "state": "running",
+          "health": "healthy"
+        },
+        {
+          "service": "mongo2",
+          "state": "running",
+          "health": "healthy"
+        },
+        {
+          "service": "mongo3",
+          "state": "running",
+          "health": "healthy"
+        },
+        {
+          "service": "pg-primary",
+          "state": "running",
+          "health": "healthy"
+        },
+        {
+          "service": "pg-replica",
+          "state": "running",
+          "health": "healthy"
+        }
+      ]
+    },
+    {
+      "name": "postgres",
+      "elapsed_seconds": 41.71,
+      "partitions": {
+        "columns": [
+          "relid",
+          "parentrelid",
+          "isleaf",
+          "level"
+        ],
+        "rows": [
+          [
+            "\"order\"",
+            null,
+            false,
+            0
+          ],
+          [
+            "order_h0",
+            "\"order\"",
+            true,
+            1
+          ],
+          [
+            "order_h1",
+            "\"order\"",
+            true,
+            1
+          ],
+          [
+            "order_h2",
+            "\"order\"",
+            true,
+            1
+          ],
+          [
+            "order_h3",
+            "\"order\"",
+            true,
+            1
+          ]
+        ]
+      },
+      "replication": {
+        "columns": [
+          "application_name",
+          "state",
+          "sync_state"
+        ],
+        "rows": [
+          [
+            "oldshop-data-replica",
+            "streaming",
+            "async"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "mongo",
+      "elapsed_seconds": 80.69,
+      "product": {
+        "product_id": 1,
+        "price": "8500000.00",
+        "quantity": 55,
+        "attributes": {
+          "brand": "OldShop Demo",
+          "ram_gb": 8,
+          "storage_gb": 256
+        },
+        "tags": [
+          "demo-isolated",
+          "used"
+        ],
+        "metadata_status": "available"
+      },
+      "document": {
+        "product_id": 1,
+        "attributes": {
+          "brand": "OldShop Demo",
+          "ram_gb": 8,
+          "storage_gb": 256
+        },
+        "etl": {
+          "synced_at": "2026-10-30 07:51:17.415000+00:00",
+          "source_updated_at": "2026-10-30 07:51:07.136000+00:00",
+          "run_id": "cab2e0fb-ac12-452e-8b9c-1c6f81a576f3",
+          "source_created_at": null
+        },
+        "tags": [
+          "demo-isolated",
+          "used"
+        ]
+      }
+    },
+    {
+      "name": "product_ui",
+      "elapsed_seconds": 119.14,
+      "metadata_visible": true
+    },
+    {
+      "name": "minio_console",
+      "elapsed_seconds": 157.59,
+      "authenticated": true,
+      "bucket_visible": "product-images",
+      "license_panel_closed": true,
+      "image_object_visible": "prod_1_1_laptop.jpg"
+    },
+    {
+      "name": "etl_twice",
+      "elapsed_seconds": 206.86,
+      "counts": {
+        "product_details": 16,
+        "order_snapshots": 30,
+        "reviews": 0,
+        "system_logs": 0,
+        "violation_logs": 11,
+        "contact_messages": 0
+      },
+      "media": {
+        "referenced": 32,
+        "found": 32,
+        "errors": 0
+      },
+      "metadata_preserved": true,
+      "runs": [
+        {
+          "run_id": "d4698446-7864-4f53-8467-3e34585bb7a3",
+          "status": "success",
+          "rows_in": 57,
+          "rows_out": 57,
+          "errors": 0
+        },
+        {
+          "run_id": "86cf9d15-daa5-468c-a8ed-bb29f32a67ee",
+          "status": "success",
+          "rows_in": 57,
+          "rows_out": 57,
+          "errors": 0
+        }
+      ]
+    },
+    {
+      "name": "explain",
+      "elapsed_seconds": 239.8,
+      "seed_query_plan_recorded": true
+    },
+    {
+      "name": "mongo2_down",
+      "elapsed_seconds": 288.74,
+      "members": {
+        "set": "oldshop-rs",
+        "members": [
+          {
+            "host": "mongo1:27017",
+            "state": "PRIMARY"
+          },
+          {
+            "host": "mongo2:27017",
+            "state": "(not reachable/healthy)"
+          },
+          {
+            "host": "mongo3:27017",
+            "state": "SECONDARY"
+          }
+        ]
+      },
+      "product_http_200": true
+    },
+    {
+      "name": "recovered",
+      "elapsed_seconds": 332.53,
+      "members": {
+        "set": "oldshop-rs",
+        "members": [
+          {
+            "host": "mongo1:27017",
+            "state": "PRIMARY"
+          },
+          {
+            "host": "mongo2:27017",
+            "state": "SECONDARY"
+          },
+          {
+            "host": "mongo3:27017",
+            "state": "SECONDARY"
+          }
+        ]
+      },
+      "ready": {
+        "status": "ok",
+        "database": "up",
+        "mongo": "up",
+        "minio": "up"
+      }
+    }
+  ],
+  "result": "PASS",
+  "note": "Video is silent with subtitles; SQL/API console is explicitly labelled, not a pgAdmin/Compass impersonation.",
+  "video_seconds": 366.32,
+  "video": "docs/report/generated/oldshop_demo.mp4",
+  "video_width": 1280,
+  "video_height": 720,
+  "cleanup": "Owned project and all its disposable volumes removed in finally"
+}

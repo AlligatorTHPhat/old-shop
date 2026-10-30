@@ -1,0 +1,6 @@
+PASS: Rehearsal must target
+PASS: Only runner-owned
+PASS: Invalid release tag
+All checks passed!
+PASS: Ruff formatting, four Day 7 Python scripts
+PASS: Both final PUML diagrams check-only

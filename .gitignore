@@ -46,6 +46,8 @@ deploy/.deploy-history
 *.xlsx
 *.pdf
 *.local.md
+docs/report/generated/
+dist/releases/
 
 # IDE / OS
 .idea/

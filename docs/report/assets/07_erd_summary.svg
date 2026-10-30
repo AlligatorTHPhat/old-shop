@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="570" viewBox="0 0 1100 570">
+<defs><marker id="a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="#008F86"/></marker></defs>
+<rect width="1100" height="570" fill="#F6F8FA"/>
+<line x1="290" y1="85" x2="385" y2="85" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="775" y1="85" x2="660" y2="85" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="158" y1="140" x2="158" y2="200" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="290" y1="110" x2="400" y2="200" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="775" y1="260" x2="660" y2="260" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="520" y1="140" x2="850" y2="200" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="520" y1="330" x2="520" y2="395" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="1040" y1="140" x2="1040" y2="395" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="25" y="30" width="265" height="110" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="41" y="60" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">user_core</text>
+<text x="41" y="88" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">PK user_id · roles qua user_role</text>
+<rect x="390" y="30" width="265" height="110" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="406" y="60" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">product</text>
+<text x="406" y="88" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">PK product_id · seller_id</text>
+<text x="406" y="112" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">price / quantity / status</text>
+<rect x="780" y="30" width="265" height="110" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="796" y="60" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">category</text>
+<text x="796" y="88" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">PK category_id</text>
+<rect x="25" y="205" width="265" height="125" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="41" y="235" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">user fragments</text>
+<text x="41" y="263" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">profile / secret / wallet</text>
+<text x="41" y="287" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">PK/FK user_id → core</text>
+<text x="41" y="311" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">users_full: view chỉ đọc</text>
+<rect x="390" y="205" width="265" height="125" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="406" y="235" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">order (HASH)</text>
+<text x="406" y="263" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">PK order_id · buyer_id</text>
+<text x="406" y="287" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">contact / payment / voucher</text>
+<rect x="780" y="205" width="265" height="125" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="796" y="235" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">order_detail</text>
+<text x="796" y="263" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">FK order_id / product_id</text>
+<text x="796" y="287" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">price_at_purchase / subtotal</text>
+<rect x="390" y="400" width="265" height="100" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="406" y="430" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">transaction</text>
+<text x="406" y="458" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">FK order_id</text>
+<text x="406" y="482" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">UNIQUE reference_number</text>
+<rect x="780" y="400" width="265" height="100" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="796" y="430" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">product_image</text>
+<text x="796" y="458" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">FK product_id · URL / MIME / size</text>
+<text x="28" y="550" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#546C80">ERD rút gọn; schema đầy đủ gồm vận hành ETL ở 07_erd_current.dbml.</text></svg>

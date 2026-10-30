@@ -1,0 +1,75 @@
+{
+  "checked_at": "2026-10-30T15:03:20.267693+07:00",
+  "profile": "resilience",
+  "checks": {
+    "docker": "CPUs=8 MemoryBytes=8053350400 Version=29.7.2",
+    "healthy_services": [
+      "backend",
+      "frontend",
+      "minio",
+      "mongo1",
+      "mongo2",
+      "mongo3",
+      "pg-primary",
+      "pg-replica",
+      "etl-worker"
+    ],
+    "postgres_version": "16.15",
+    "baseline": "37",
+    "migrations": "001,002,003,004,005,006",
+    "orders": "30",
+    "mongo": {
+      "set": "oldshop-rs",
+      "version": "7.0.43",
+      "members": [
+        {
+          "host": "mongo1:27017",
+          "state": "PRIMARY"
+        },
+        {
+          "host": "mongo2:27017",
+          "state": "SECONDARY"
+        },
+        {
+          "host": "mongo3:27017",
+          "state": "SECONDARY"
+        }
+      ]
+    },
+    "mongo_app_auth": {
+      "authenticated": true,
+      "database": "oldshop"
+    },
+    "http": {
+      "http://127.0.0.1:8000/health/ready": 200,
+      "http://127.0.0.1:8000/api/v1/categories": 200,
+      "http://minio:9000/minio/health/ready": 200,
+      "http://frontend:8080/healthz": 200,
+      "http://frontend:8080/api/v1/categories": 200
+    },
+    "etl": {
+      "pending": 0,
+      "dead": 0,
+      "oldest_pending_seconds": 0.0,
+      "last_run": {
+        "run_id": "742ed691-0709-4ccc-9b7a-85eaeb084bef",
+        "mode": "incremental",
+        "status": "success",
+        "started_at": "2026-10-30 15:03:28.357050+07:00",
+        "ended_at": "2026-10-30 15:03:28.529361+07:00",
+        "rows_in": 0,
+        "rows_out": 0,
+        "errors": 0
+      },
+      "media_cleanup": {
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "minio_version": "minio version RELEASE.2025-09-07T16-13-09Z (commit-id=07c3a429bfed433e49018cb0f78a52145d4bedeb)",
+    "pg_stat_replication": "oldshop-data-replica:streaming:async",
+    "replica_orders": "30",
+    "resources": "oldshop-data-backend-1 30.3MiB / 768MiB 0.57%\noldshop-data-etl-worker-1 12.92MiB / 512MiB 0.17%\noldshop-data-frontend-1 4.734MiB / 128MiB 0.00%\noldshop-data-minio-1 110.1MiB / 512MiB 0.00%\noldshop-data-mongo1-1 46MiB / 768MiB 1.23%\noldshop-data-mongo2-1 58.31MiB / 768MiB 1.52%\noldshop-data-mongo3-1 72.9MiB / 768MiB 1.24%\noldshop-data-pg-primary-1 20.69MiB / 512MiB 0.02%\noldshop-data-pg-replica-1 10.81MiB / 512MiB 0.00%"
+  },
+  "result": "PASS"
+}

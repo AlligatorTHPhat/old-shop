@@ -86,7 +86,7 @@ A/B/C/D là **vai trò** từ kế hoạch, chưa có tên thành viên thực t
 | ETL, outbox, đối soát | Đạt local | 100 | C | 31/10 | Ngày 5 rollout, poll 60 giây |
 | Backend/frontend và regression | Đạt và rollout local | 100 | C | 01/11 | 146 backend + 15 FE; 9 outage scenario; checker PASS |
 | CI service integration | Đã cấu hình | 90 | C/D | 01/11 | Cần một lượt remote sau push được người dùng cho phép |
-| Báo cáo, PPT, demo tổng duyệt | Chưa thực hiện Ngày 7 | 0 | D | 02/11 | Dùng bằng chứng/sơ đồ hiện có |
+| Báo cáo, PPT, demo tổng duyệt | Đạt Ngày 7 local | 100 | D | 02/11 | PDF 15 trang, 18 slide, demo 6:06; DAY7_FINDINGS_LOG |
 | CDC/Patroni/sharding/đa máy | Ngoài MVP | 0 | A/B/D | Sau đồ án | Cần yêu cầu và tài nguyên riêng |
 
 ## Công việc còn lại / nợ kỹ thuật

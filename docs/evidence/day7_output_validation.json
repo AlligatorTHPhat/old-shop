@@ -1,0 +1,46 @@
+{
+  "result": "PASS",
+  "checked_at": "2026-10-30T15:10:02.332599+07:00",
+  "chapters": 9,
+  "appendices": 3,
+  "slides": 18,
+  "all_slides_have_notes": true,
+  "pdf_pages": {
+    "oldshop_report.pdf": 15,
+    "oldshop_slides.pdf": 18
+  },
+  "video_seconds": 366.32,
+  "video_dimensions": [
+    1280,
+    720
+  ],
+  "rehearsal_stages": 9,
+  "required_screenshots": 9,
+  "artifact_hashes": {
+    "oldshop_report.docx": {
+      "bytes": 616524,
+      "sha256": "30aba1229d6f59ab55092aa213b282e629d23099d29ca06f19bbfd7f3ef73ee5"
+    },
+    "oldshop_report.pdf": {
+      "bytes": 822812,
+      "sha256": "1c810cd232cc9a8875a16f70976ce384cdf260c529ae7345281dd38631fe5fde"
+    },
+    "oldshop_slides.pptx": {
+      "bytes": 909398,
+      "sha256": "80517a7bea25d94fe8e70d4c160f14c0408e9b53a568a8f3cc90e6b8f7400009"
+    },
+    "oldshop_slides.pdf": {
+      "bytes": 907037,
+      "sha256": "071d872ee51b8756ea27e95f136f3ff01ccc71cfdf2af40c83eb078cc99e1ca9"
+    },
+    "oldshop_demo.mp4": {
+      "bytes": 3774937,
+      "sha256": "1117c0a173ad209d9e92b2f06f3978de6f5a6aa078b2a6651f9c4ad3bb87da4e"
+    },
+    "oldshop_demo.srt": {
+      "bytes": 955,
+      "sha256": "ac140bcbb9b1b518746ccb055d48f306d5bb00e5b944cbc297ac5ff21e1eaec2"
+    }
+  },
+  "scope": "Artifact integrity/structure; visual layout reviewed separately, not a production certification"
+}

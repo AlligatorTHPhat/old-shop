@@ -1,0 +1,123 @@
+{
+  "result": "PASS",
+  "method": "Same read-only queries as demo_mongo.js, application Mongo role",
+  "product": {
+    "product_id": 1,
+    "attributes": {},
+    "etl": {
+      "synced_at": "2026-10-30 06:57:11.830000+00:00",
+      "source_updated_at": "2026-10-30 06:56:48.165000+00:00",
+      "run_id": "6914fa39-07e5-4298-b4e8-7369906620c5",
+      "source_created_at": null
+    },
+    "images": [
+      {
+        "bucket": "product-images",
+        "key": "products/prod_1_1_laptop.jpg",
+        "content_type": "image/jpeg",
+        "size": 188961,
+        "image_id": 1,
+        "is_primary": true,
+        "display_order": 1
+      },
+      {
+        "bucket": "product-images",
+        "key": "products/prod_1_2_laptop.jpg",
+        "content_type": "image/jpeg",
+        "size": 188961,
+        "image_id": 2,
+        "is_primary": false,
+        "display_order": 2
+      }
+    ],
+    "tags": []
+  },
+  "order": {
+    "order_id": 1,
+    "etl": {
+      "synced_at": "2026-10-30 06:57:11.772000+00:00",
+      "source_updated_at": null,
+      "run_id": "6914fa39-07e5-4298-b4e8-7369906620c5",
+      "source_created_at": null
+    },
+    "final_amount_vnd": 180000,
+    "items": [
+      {
+        "product_id": 1,
+        "quantity": 1,
+        "price_at_purchase_vnd": 150000,
+        "subtotal_vnd": 150000,
+        "title_current": "Laptop Dell Inspiron 15",
+        "category_id_current": 1,
+        "seller_id_current": 3
+      }
+    ]
+  },
+  "indexes": {
+    "product_details": [
+      {
+        "name": "_id_",
+        "key": {
+          "_id": 1
+        }
+      },
+      {
+        "name": "product_id_1",
+        "key": {
+          "product_id": 1
+        }
+      },
+      {
+        "name": "category_id_1_attributes.brand_1",
+        "key": {
+          "category_id": 1,
+          "attributes.brand": 1
+        }
+      },
+      {
+        "name": "description_text_tags_text",
+        "key": {
+          "_fts": "text",
+          "_ftsx": 1
+        }
+      },
+      {
+        "name": "idx_product_attributes",
+        "key": {
+          "attributes.$**": 1
+        }
+      }
+    ],
+    "system_logs": [
+      {
+        "name": "_id_",
+        "key": {
+          "_id": 1
+        }
+      },
+      {
+        "name": "log_id_1_created_at_1",
+        "key": {
+          "log_id": 1,
+          "created_at": 1
+        }
+      },
+      {
+        "name": "created_at_1",
+        "key": {
+          "created_at": 1
+        },
+        "expireAfterSeconds": 7776000
+      },
+      {
+        "name": "action_1_actor_id_1_created_at_-1",
+        "key": {
+          "action": 1,
+          "actor_id": 1,
+          "created_at": -1
+        }
+      }
+    ]
+  },
+  "replica_set": "oldshop-rs"
+}

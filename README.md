@@ -4,23 +4,39 @@ A full-stack marketplace for second-hand goods: buyers browse and check out (COD
 sellers list products that go through moderation, moderators handle reports and bans,
 admins manage staff, vouchers and feedback. Each checkout is risk-scored before payment.
 
-**Stack:** FastAPI · SQLAlchemy · PostgreSQL (SQL-first schema, PL/pgSQL) · Angular 21 · PayPal Orders API ·
+**Stack:** FastAPI · SQLAlchemy · PostgreSQL (SQL-first schema, PL/pgSQL) · MongoDB · MinIO · Angular 21 · PayPal Orders API ·
 scikit-learn · Google Apps Script · Docker · Caddy · Nginx · Prometheus · Grafana · Loki/Promtail ⇄ ELK ·
 GitHub Actions · SonarCloud
 
+Current data MVP (`deploy/docker-compose.distributed.yml`, one host, schema 001–006):
+
 ```mermaid
 flowchart LR
-  user((Browser)) -->|HTTPS| caddy[Caddy<br/>TLS, HTTP/3]
-  caddy --> web[Nginx<br/>Angular SPA]
-  web -->|/api, /media| api[FastAPI<br/>uvicorn workers]
-  api --> pg[(PostgreSQL)]
-  api -->|Orders v2| paypal[PayPal]
-  api -->|signed webhook| gas[Apps Script<br/>Sheet helpdesk + email]
-  api -.->|/metrics| prom[Prometheus] --> grafana[Grafana]
-  api -.->|JSON logs| ship{{Promtail or Filebeat}}
-  ship --> loki[Loki] --> grafana
-  ship --> es[Elasticsearch] --> kibana[Kibana]
+  user((Browser)) --> web[Nginx / Angular]
+  web -->|/api and /media| api[FastAPI]
+  api -->|core / transactions / reports| pg[(PG primary)]
+  api -->|attributes / tags| mongo[(Mongo replica set)]
+  api -->|private image gateway| minio[(MinIO)]
+  pg -->|outbox / provenance| worker[ETL worker]
+  worker -->|partial upsert / majority| mongo
+  worker -->|ACK / daily aggregate| pg
+  worker -->|media copy / cleanup| minio
+  pg -.->|async WAL / resilience profile| standby[(PG standby)]
 ```
+
+The resilience profile adds two Mongo members and a PG standby on the same host. It does not
+provide host fault tolerance or automatic PG promotion. Mongo8 is the default image; this local
+kernel was verified with Mongo7.0.43 instead. Caddy, payment/helpdesk integrations and the
+production observability stack are documented separately in [deployment](docs/deployment.md).
+
+**Day 7 handoff:** [report source](docs/report/07_report.md),
+[18-slide outline and speaker notes](docs/report/07_slides.md),
+[demo/rebuild instructions](docs/report/07_demo_script.md), [Q&A](docs/report/07_qa.md),
+[findings and validation](docs/DAY7_FINDINGS_LOG.md). Final DBML/PUML diagrams are in
+`docs/diagram/07_*`; the earlier diagrams preserve the design history.
+DOCX/PDF/PPTX and the subtitled demo video are generated under `docs/report/generated/`
+and included in the local release ZIP under `dist/releases/`; generated binaries are ignored by Git.
+Release tag: `v0.7.0-data-upgrade` (local; no remote push).
 
 ## Features
 
@@ -40,6 +56,7 @@ flowchart LR
 
 ```
 backend/                  FastAPI service
+  etl/                    outbox, transform/load, reconciliation, media cleanup and worker CLI
   app/api/                routers (v1) and dependencies (auth, role guards)
   app/core/               config, DB session, security, logging, domain enums and errors
   app/crud/               data access and business rules
@@ -48,20 +65,27 @@ backend/                  FastAPI service
   scripts/init_db.py      idempotent bootstrap: create DB, load schema/seed once, copy seed images
   tests/                  integration tests against a real PostgreSQL
 database/                 SQL source of truth: schema, functions/triggers, seed data, seed images
+  04_migrations/          versioned migrations 001–006; checksums verified by runner
 frontend/                 Angular SPA + Nginx config
 integrations/google-apps-script/   contact relay (clasp project)
 deploy/                   production compose files, Caddy, Prometheus, Grafana, Loki, ELK, ops scripts
 docs/deployment.md        VPS runbook
+docs/report/              Day 7 report, slides, demo script, Q&A and generated handoff
 ```
 
 ## Run locally
 
-**With Docker** (everything, seeded):
+**Original local stack with Docker** (PostgreSQL, backend and frontend, seeded):
 
 ```bash
 docker compose up --build
 # shop: http://localhost:8080   API docs: http://localhost:8000/api/docs
 ```
+
+For the current PG + Mongo + MinIO MVP, use the isolated
+[Day 7 rehearsal](docs/report/07_demo_script.md). Persistent data-stack setup and upgrades follow
+[storage provisioning](docs/design/03_json_design.md), [ETL](docs/design/05_etl.md) and
+[Day 6 integration](docs/design/06_completion_plan.md). Do not rerun `init.sql` on an existing database.
 
 **Without Docker** (hot reload):
 

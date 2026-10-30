@@ -1,0 +1,153 @@
+{
+  "report_date": "2026-10-30",
+  "scope": "One-host MVP, migrations 001–006; no remote CI/Mongo8 claim",
+  "backend_distinct_tests": 146,
+  "frontend_tests": 15,
+  "day6_failure_scenarios": 9,
+  "pg_benchmark": {
+    "database": "day4_bench_20261029_final",
+    "postgresql": "PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+    "cache": "warmup + median of 3, same database, no forced planner",
+    "generated": {
+      "users": 1000,
+      "products": 50000,
+      "orders": 100000,
+      "reviews": 100000,
+      "logs": 100000
+    },
+    "migration_seconds": 11.474594043999787,
+    "applied": [
+      "001",
+      "002",
+      "003",
+      "004"
+    ],
+    "users_after": 1015,
+    "before": {
+      "catalogue": {
+        "median_execution_ms": 0.261
+      },
+      "search": {
+        "median_execution_ms": 316.562
+      },
+      "buyer_history": {
+        "median_execution_ms": 0.73
+      },
+      "seller_orders": {
+        "median_execution_ms": 44.052
+      },
+      "review_history": {
+        "median_execution_ms": 0.085
+      },
+      "reports": {
+        "median_execution_ms": 0.145
+      },
+      "cart_lookup": {
+        "median_execution_ms": 0.048
+      },
+      "order_pk_pruning": {
+        "median_execution_ms": 0.05
+      },
+      "log_month_pruning": {
+        "median_execution_ms": 4.41
+      },
+      "index_bytes": 35225600,
+      "rows": {
+        "product": 50016,
+        "order": 100030,
+        "system_log": 100000
+      }
+    },
+    "after": {
+      "catalogue": {
+        "median_execution_ms": 0.166
+      },
+      "search": {
+        "median_execution_ms": 0.372
+      },
+      "buyer_history": {
+        "median_execution_ms": 0.436
+      },
+      "seller_orders": {
+        "median_execution_ms": 17.521
+      },
+      "review_history": {
+        "median_execution_ms": 0.158
+      },
+      "reports": {
+        "median_execution_ms": 0.327
+      },
+      "cart_lookup": {
+        "median_execution_ms": 0.114
+      },
+      "order_pk_pruning": {
+        "median_execution_ms": 0.088
+      },
+      "log_month_pruning": {
+        "median_execution_ms": 4.582
+      },
+      "index_bytes": 58736640,
+      "rows": {
+        "product": 50016,
+        "order": 100030,
+        "system_log": 100000
+      }
+    }
+  },
+  "mongo_benchmark": {
+    "generated_per_collection": 10000,
+    "cases": {
+      "product_details": {
+        "before": {
+          "nReturned": 20,
+          "totalKeysExamined": 0,
+          "totalDocsExamined": 192,
+          "executionTimeMillis": 4
+        },
+        "after": {
+          "nReturned": 20,
+          "totalKeysExamined": 20,
+          "totalDocsExamined": 20,
+          "executionTimeMillis": 2
+        }
+      },
+      "reviews": {
+        "before": {
+          "nReturned": 10,
+          "totalKeysExamined": 0,
+          "totalDocsExamined": 10000,
+          "executionTimeMillis": 83
+        },
+        "after": {
+          "nReturned": 10,
+          "totalKeysExamined": 10,
+          "totalDocsExamined": 10,
+          "executionTimeMillis": 2
+        }
+      },
+      "order_snapshots": {
+        "before": {
+          "nReturned": 10,
+          "totalKeysExamined": 0,
+          "totalDocsExamined": 10000,
+          "executionTimeMillis": 20
+        },
+        "after": {
+          "nReturned": 10,
+          "totalKeysExamined": 10,
+          "totalDocsExamined": 10,
+          "executionTimeMillis": 1
+        }
+      }
+    },
+    "version": "7.0.43"
+  },
+  "sources": [
+    "docs/evidence/day6_stack.json",
+    "docs/evidence/day6_rollout.json",
+    "docs/evidence/day6_api_contract.json",
+    "docs/evidence/day6_backend_tests.txt",
+    "docs/evidence/day6_final_tests.txt",
+    "docs/evidence/day6_status_regression.txt"
+  ]
+}

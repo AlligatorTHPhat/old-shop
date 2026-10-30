@@ -1,0 +1,33 @@
+@startuml
+title OldShop — trạng thái triển khai Ngày 7 (một máy)
+left to right direction
+skinparam shadowing false
+actor Browser
+node "Một Docker host — không chịu mất host" {
+  component "Angular / Nginx" as web
+  component "FastAPI\n/health + /ready" as api
+  database "PG primary\nsource giao dịch + PII\nHASH order / RANGE log\nuser split / outbox / report" as pg
+  database "PG replica\nasync, read-only\nkhông tự promote" as replica
+  component "ETL worker\npoll 60 giây\npartial upsert + retry" as worker
+  database "Mongo oldshop-rs\nmongo1 + mongo2 + mongo3\nmetadata + projections" as mongo
+  storage "MinIO single-node\n3 bucket private" as objects
+}
+Browser --> web
+web --> api : /api + /media
+api --> pg : giao dịch / core / báo cáo
+api --> mongo : attributes + tags / filter
+api --> objects : upload / stream ảnh
+pg --> replica : WAL async (profile)
+pg --> worker : outbox / provenance
+worker --> mongo : majority write → ACK
+worker --> pg : ACK / aggregate / quality
+worker --> objects : copy / retry cleanup sau unlink
+note bottom of mongo
+  3 member là replication, không phải sharding.
+  Mongo lỗi: detail fallback PG; filter thuộc tính trả 503.
+end note
+note bottom of objects
+  MinIO lỗi: ảnh/upload 503, phần PG vẫn phục vụ.
+  Caddy/FDW/Patroni/đa máy không thuộc stack demo.
+end note
+@enduml

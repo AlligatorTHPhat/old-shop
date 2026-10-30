@@ -1,0 +1,26 @@
+@startuml
+title OldShop — ownership và đồng bộ hiện hành
+skinparam shadowing false
+rectangle "Request giao dịch" as request
+database "PG source" as pg
+queue "etl_outbox + etl_time_origin\ncùng transaction với nguồn" as outbox
+rectangle "Worker có advisory lock\nfull → incremental / 60s\nVND nguyên / UTC / allowlist" as worker
+database "Mongo\nPG-owned: partial $set\nMongo-owned: giữ attributes/tags" as mongo
+database "PG report_daily_sales\ngross hàng đã giao\nngày kinh doanh Việt Nam" as report
+queue "media_deletions\nunlink / đổi avatar cùng transaction" as cleanup
+storage "MinIO private" as minio
+request --> pg
+pg --> outbox
+outbox --> worker
+worker --> mongo : write majority
+worker --> outbox : ACK chính xác event sau write
+worker --> report
+pg --> cleanup
+cleanup --> worker
+worker --> minio : khi không còn tham chiếu PG/Mongo
+note bottom of worker
+  At least once, không dùng MAX(event_id) làm cursor.
+  Retry/backoff + errors; full lặp không mất metadata.
+  Log Mongo TTL 90 ngày, không purge log nguồn PG.
+end note
+@enduml

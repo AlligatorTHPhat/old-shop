@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="570" viewBox="0 0 1100 570">
+<defs><marker id="a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="#008F86"/></marker></defs>
+<rect width="1100" height="570" fill="#F6F8FA"/>
+<line x1="280" y1="100" x2="365" y2="100" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="450" y1="155" x2="240" y2="225" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="550" y1="155" x2="550" y2="225" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="680" y1="120" x2="910" y2="225" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="180" y1="355" x2="180" y2="405" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="325" y1="305" x2="400" y2="452" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="550" y1="410" x2="550" y2="360" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="695" y1="452" x2="910" y2="360" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="35" y="45" width="245" height="110" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="51" y="75" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">Angular / Nginx</text>
+<text x="51" y="103" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">Browser → /api + /media</text>
+<rect x="370" y="45" width="310" height="110" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="386" y="75" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">FastAPI</text>
+<text x="386" y="103" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">Core PG · metadata Mongo</text>
+<text x="386" y="127" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">Gateway ảnh · readiness</text>
+<rect x="35" y="230" width="290" height="125" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="51" y="260" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">PG primary</text>
+<text x="51" y="288" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">Giao dịch + PII</text>
+<text x="51" y="312" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">Partition · outbox · report</text>
+<rect x="35" y="410" width="290" height="95" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="51" y="440" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">PG replica (profile)</text>
+<text x="51" y="468" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">WAL async · chưa tự promote</text>
+<rect x="405" y="230" width="290" height="125" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="421" y="260" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">Mongo replica set</text>
+<text x="421" y="288" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">Metadata + projections</text>
+<text x="421" y="312" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">3 member cùng host</text>
+<rect x="770" y="230" width="290" height="125" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="786" y="260" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">MinIO single-node</text>
+<text x="786" y="288" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">3 bucket private</text>
+<text x="786" y="312" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">Ảnh/upload qua FastAPI</text>
+<rect x="405" y="410" width="290" height="95" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="421" y="440" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">ETL worker</text>
+<text x="421" y="468" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">Poll 60s · upsert/retry/ACK</text>
+<text x="28" y="550" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#546C80">Một Docker host. Replication không phải sharding hoặc HA chịu mất host.</text></svg>

@@ -2,7 +2,9 @@
 
 > **Mục đích:** tài liệu ngữ cảnh cho các tác vụ AI/dev tiếp theo. Đọc file này trước khi sửa mã để hiểu các tầng kiến trúc, vị trí chức năng, cách chạy/test và các quy ước quan trọng.
 >
-> **Phạm vi:** được tổng hợp từ mã nguồn trong `Epic-Ecommerce-FastAPI-main(1).zip`. Tên nhánh, cấu hình triển khai hoặc trạng thái thực tế của máy chủ có thể khác với bản ZIP.
+> **Phạm vi hiện hành (30/10/2026):** cập nhật qua Ngày 7, schema 001–006 và stack local `oldshop-data`.
+> Phần bổ sung theo ngày giữ lịch sử thiết kế; mô hình cuối xem `docs/diagram/07_*` và
+> [nhật ký Ngày 7](DAY7_FINDINGS_LOG.md). Cấu hình VPS và stack dữ liệu một máy là hai profile triển khai riêng.
 
 ## 1. Tổng quan dự án
 
@@ -12,6 +14,8 @@
 
 - Backend: Python, FastAPI, SQLAlchemy, Pydantic Settings, JWT, pytest, Ruff.
 - Database: PostgreSQL 16; schema, PL/pgSQL functions/triggers, dữ liệu mẫu được quản lý bằng SQL trong `database/`.
+- MongoDB: attributes/tags và projection có validator/index; MinIO: bucket private cho byte ảnh.
+- ETL: transactional outbox, poll 60 giây, partial upsert và đối soát; aggregate bán hàng đọc từ PG primary.
 - Frontend: Angular 21 standalone components, TypeScript, RxJS, Bootstrap 5, Bootstrap Icons, Chart.js, SweetAlert2.
 - Tích hợp: PayPal Orders API, SMTP/OTP, Google Apps Script relay cho form liên hệ, mô hình scikit-learn tùy chọn để chấm điểm rủi ro.
 - Hạ tầng: Docker Compose, Nginx, Caddy, GitHub Actions, Prometheus/Grafana; Loki/Promtail mặc định và tùy chọn ELK.
@@ -28,6 +32,8 @@ Nginx + Angular SPA
   ├── /api/*   ───────────────► FastAPI / Uvicorn
   └── /media/* ───────────────► FastAPI media gateway (LocalStorage / MinioStorage)
                                    ├── PostgreSQL
+                                   ├── MongoDB (metadata sản phẩm / filter)
+                                   ├── MinIO (gateway byte ảnh, bucket private)
                                    ├── PayPal Orders API
                                    ├── SMTP (tùy chọn)
                                    ├── Google Apps Script (tùy chọn, HMAC-signed)
@@ -35,7 +41,18 @@ Nginx + Angular SPA
 
 FastAPI metrics/logs ──► Prometheus / Grafana
 Docker logs ──────────► Promtail + Loki (mặc định) hoặc Filebeat + ELK
+
+Stack dữ liệu một máy (deploy/docker-compose.distributed.yml):
+PG primary ──outbox/provenance──► ETL worker ──majority upsert──► Mongo replica set
+PG primary ◄──ACK / report────── ETL worker ──copy/cleanup──────► MinIO
+PG primary ──WAL async─────────► PG standby (profile resilience)
 ```
+
+Profile resilience thêm PG standby và hai Mongo member cùng host; không tự promote PG,
+không chịu mất host. Mongo8.0.32 là mặc định cấu hình; kernel local hiện kiểm chứng Mongo7.0.43.
+Caddy/observability trong sơ đồ production không tự có trong Compose dữ liệu. Transaction,
+stock và dữ liệu tài chính luôn ở PG; detail có fallback khi Mongo lỗi, filter trả 503;
+MinIO single-node lỗi thì ảnh/upload 503. Không coi ETL 60 giây là SLA độ trễ tối đa.
 
 Luồng API thường gặp:
 
@@ -421,3 +438,21 @@ Trạng thái triển khai/kiểm thử tại [DAY6_FINDINGS_LOG.md](DAY6_FINDIN
 phân công, hợp đồng API và việc còn lại tại [06_completion_plan.md](design/06_completion_plan.md).
 Đã rollout local schema 001–006 sau chấp thuận bảo trì; 18 bảng nguồn khớp snapshot trước/sau,
 146 backend test và 15 frontend test đạt; 9 scenario lỗi/phục hồi và checker stack đều PASS.
+
+
+### Cập nhật Ngày 7 — Hồ sơ bàn giao
+
+Báo cáo chín chương + ba phụ lục, 18 slide kèm lời dẫn, biểu đồ từ benchmark có nguồn,
+video phụ đề và bộ 20 câu hỏi tại [docs/report](report/README.md). Sơ đồ cuối dùng
+`diagram/07_erd_current.dbml` (28 bảng logic, 222 cột),
+`diagram/07_architecture_current.puml` và `diagram/07_data_flow_current.puml`;
+không dùng sơ đồ đề xuất Ngày 2 thay trạng thái triển khai cuối. SVG phục vụ báo cáo;
+PNG trong screenshots là ảnh chụp UI thật.
+
+`deploy/scripts/build-day7.py` xuất Office/PDF; `demo-day7.py` tạo project seed riêng,
+quay browser/SQL/API và kiểm full ETL lặp, lỗi/khôi phục Mongo member rồi dọn;
+`validate-day7.py` ghi hash artifact; `package-day7.py` đóng gói source đã tag cùng sáu
+deliverable sinh ra, kiểm CRC/SHA-256 và loại secret/runtime data. Binary được ignore bởi Git.
+Tag local `v0.7.0-data-upgrade`, không tự push. Trạng thái và các phát hiện xem
+[DAY7_FINDINGS_LOG.md](DAY7_FINDINGS_LOG.md); các evidence `day7_*` phân biệt kết quả
+mới với 146 backend/15 frontend/9 scenario đã kiểm chứng Ngày 6.

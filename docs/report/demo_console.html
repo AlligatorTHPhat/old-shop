@@ -1,0 +1,20 @@
+<!doctype html><html lang="vi"><meta charset="utf-8"><title>OldShop — bằng chứng demo</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f5f8;color:#14283f;font:19px 'Noto Sans','DejaVu Sans',sans-serif}
+header{padding:18px 30px;background:#14283f;color:white;display:flex;justify-content:space-between;align-items:center}
+header span{font-size:14px;color:#9ce3d1}main{padding:22px 32px}h1{font-size:30px;margin:0 0 8px}h2{font-size:19px;color:#008f86}
+.meta{color:#526b80;font-size:15px;margin-bottom:14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+pre{background:white;border:1px solid #d0dce5;border-radius:10px;padding:18px;font:15px 'DejaVu Sans Mono',monospace;white-space:pre-wrap;overflow:hidden;max-height:490px;margin:8px 0}
+img{width:100%;max-height:490px;object-fit:contain;background:white;border-radius:10px}.footer{position:fixed;bottom:0;padding:12px 30px;background:#14283f;color:#c6dce8;width:100%;font-size:14px}
+</style><header><b>OLDSHOP / DEMO KỸ THUẬT</b><span>Project cô lập · Dữ liệu seed · PostgreSQL / MongoDB / MinIO</span></header>
+<main><h1 id="title">Đang tải bằng chứng</h1><div id="meta" class="meta"></div><div class="grid">
+<section><h2 id="left-title"></h2><pre id="left"></pre></section>
+<section><h2 id="right-title"></h2><pre id="right"></pre><img id="visual" hidden></section></div></main>
+<div class="footer">Snapshot truy vấn thực có thời điểm thu thập. Đây là bảng trình bày SQL/API, không phải GUI pgAdmin4 hoặc Compass.</div>
+<script>
+async function update(){const r=await fetch('generated/demo_data.json?time='+Date.now());if(!r.ok)return;const d=await r.json();
+document.getElementById('title').textContent=d.title;document.getElementById('meta').textContent=d.meta;
+for(const side of ['left','right']){document.getElementById(side+'-title').textContent=d[side+'_title'];document.getElementById(side).textContent=typeof d[side]==='string'?d[side]:JSON.stringify(d[side],null,2);}
+const img=document.getElementById('visual');img.hidden=!d.visual;document.getElementById('right').hidden=!!d.visual;if(d.visual)img.src=d.visual;
+}update();setInterval(update,1200);
+</script></html>

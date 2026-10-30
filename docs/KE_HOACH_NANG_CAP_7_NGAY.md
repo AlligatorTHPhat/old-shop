@@ -493,29 +493,39 @@ Xem [DAY6_FINDINGS_LOG.md](DAY6_FINDINGS_LOG.md), [06_completion_plan.md](design
 
 ### ✅ Checklist
 **Báo cáo (.docx/.pdf)**
-- [ ] 1. Giới thiệu & bài toán (OldShop, vì sao cần polyglot + phân tán)
-- [ ] 2. Thiết kế dữ liệu: ERD, mô hình quan niệm, phân loại cấu trúc/bán/phi cấu trúc
-- [ ] 3. Thiết kế hệ thống phân tán: sơ đồ, phân mảnh ngang/dọc, allocation, replication, nhất quán
-- [ ] 4. Thiết kế JSON: cấu trúc + ví dụ + embedding vs referencing
-- [ ] 5. Indexing: bảng trường–chỉ mục–lý do + số liệu EXPLAIN trước/sau
-- [ ] 6. ETL: sơ đồ, pipeline, kiểm tra chất lượng
-- [ ] 7. Triển khai & kiểm thử (Compose, failover, CI)
-- [ ] 8. Kế hoạch hoàn thiện: tiến độ, việc còn lại, phân công, thời hạn
-- [ ] 9. Kết luận, hạn chế, hướng phát triển (CDC, Patroni, shard thật, Kafka)
-- [ ] Phụ lục: SQL migration, script, cấu hình
+- [x] 1. Giới thiệu & bài toán (OldShop, vì sao cần polyglot + phân tán)
+- [x] 2. Thiết kế dữ liệu: ERD, mô hình quan niệm, phân loại cấu trúc/bán/phi cấu trúc
+- [x] 3. Thiết kế hệ thống phân tán: sơ đồ, phân mảnh ngang/dọc, allocation, replication, nhất quán
+- [x] 4. Thiết kế JSON: cấu trúc + ví dụ + embedding vs referencing
+- [x] 5. Indexing: bảng trường–chỉ mục–lý do + số liệu EXPLAIN trước/sau
+- [x] 6. ETL: sơ đồ, pipeline, kiểm tra chất lượng
+- [x] 7. Triển khai & kiểm thử (Compose, failover, CI)
+- [x] 8. Kế hoạch hoàn thiện: tiến độ, việc còn lại, phân công, thời hạn
+- [x] 9. Kết luận, hạn chế, hướng phát triển (CDC, Patroni, shard thật, Kafka)
+- [x] Phụ lục: SQL migration, script, cấu hình
 **PPT (≈ 15–20 slide)**
-- [ ] Slide: Bối cảnh → Kiến trúc tổng thể → ERD → Phân loại dữ liệu → Phân mảnh ngang → Phân mảnh dọc → Sơ đồ phân tán → JSON → Indexing (kèm benchmark) → ETL → Demo → Kết quả → Kế hoạch còn lại → Q&A
-- [ ] Mỗi slide ≤ 1 sơ đồ chính; số liệu benchmark dạng biểu đồ
+- [x] Slide: Bối cảnh → Kiến trúc tổng thể → ERD → Phân loại dữ liệu → Phân mảnh ngang → Phân mảnh dọc → Sơ đồ phân tán → JSON → Indexing (kèm benchmark) → ETL → Demo → Kết quả → Kế hoạch còn lại → Q&A
+- [x] Mỗi slide ≤ 1 sơ đồ chính; số liệu benchmark dạng biểu đồ
 **Demo (5–7 phút)**
-- [ ] Kịch bản: (1) `docker compose up` (2) xem pgAdmin: partition + replication (3) Mongo: document sản phẩm (4) MinIO console: ảnh (5) chạy ETL, đối chiếu số lượng (6) `EXPLAIN` trước/sau (7) tắt một node → hệ thống vẫn chạy
-- [ ] Quay video demo dự phòng; chuẩn bị ảnh chụp màn hình
+- [x] Kịch bản: (1) `docker compose up` (2) xem pgAdmin: partition + replication (3) Mongo: document sản phẩm (4) MinIO console: ảnh (5) chạy ETL, đối chiếu số lượng (6) `EXPLAIN` trước/sau (7) tắt một node → hệ thống vẫn chạy
+- [x] Quay video demo dự phòng; chuẩn bị ảnh chụp màn hình
 **Hoàn tất**
-- [ ] Tổng duyệt 1 lượt, chuẩn bị Q&A (vì sao Mongo không thay PG cho đơn hàng? CAP? consistency ETL?)
-- [ ] Cập nhật `README.md` + `PROJECT_GUIDE.md` cho kiến trúc mới
-- [ ] Tag release Git, đóng gói nộp
+- [x] Tổng duyệt 1 lượt, chuẩn bị Q&A (vì sao Mongo không thay PG cho đơn hàng? CAP? consistency ETL?)
+- [x] Cập nhật `README.md` + `PROJECT_GUIDE.md` cho kiến trúc mới
+- [x] Tag release Git, đóng gói nộp
 
 ### 🎯 Tiêu chí hoàn thành
 Báo cáo + PPT + demo chạy trơn tru; mọi sơ đồ nhất quán với mã nguồn thật.
+
+**Nghiệm thu local ngày 30/10/2026:** báo cáo PDF 15 trang (9 chương + 3 phụ lục),
+18 slide có notes, video 366,32 giây / 1280×720 và 10 ảnh dự phòng; chín chặng tổng duyệt PASS,
+full ETL lặp/metadata/media khớp, Mongo member dừng/khôi phục đạt. Stack người dùng vẫn khỏe.
+PG/Mongo trong video là bảng SQL/API có nhãn, không phải GUI pgAdmin/Compass; kèm file truy vấn
+cho Query Tool/Compass Shell. Benchmark trước/sau dùng raw evidence đã lưu, không giả là đo lại.
+Sơ đồ cuối: `docs/diagram/07_*`. Tag local `v0.7.0-data-upgrade`; gói nộp tại `dist/releases/`.
+Xem [DAY7_FINDINGS_LOG.md](DAY7_FINDINGS_LOG.md), `docs/evidence/day7_*` và
+`docs/report/generated/packaging_validation.json`. Không tự push; Mongo8/CI remote/HA đa máy
+vẫn chưa kiểm chứng, giữ trong kế hoạch sau MVP.
 
 ---
 
@@ -580,7 +590,7 @@ deploy/docker-compose.distributed.yml
 - [x] Có cấu trúc JSON, ví dụ, validator Mongo (#3)
 - [x] Có danh sách chỉ mục + lý do + benchmark (#4)
 - [x] Có bảng tiến độ, việc còn lại, phân công, hạn (#5)
-- [ ] Có báo cáo + PPT + demo (#6)
+- [x] Có báo cáo + PPT + demo (#6)
 - [x] PostgreSQL (có/structured) + MongoDB (semi-structured) + MinIO (unstructured) cùng chạy trong Compose
 - [x] ETL chạy được, idempotent, có đối chiếu số liệu
 - [x] Test cũ vẫn pass; test mới cho Mongo/MinIO/ETL pass

@@ -1,0 +1,8 @@
+{
+  "result": "PASS",
+  "scope": "Source/evidence candidates from git ls-files -co --exclude-standard; generated binaries checked separately by packager",
+  "source_files_checked": 549,
+  "private_runtime_values_checked": 8,
+  "private_values_printed": false,
+  "runtime_env_in_source": false
+}

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="570" viewBox="0 0 1100 570">
+<defs><marker id="a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8" fill="#008F86"/></marker></defs>
+<rect width="1100" height="570" fill="#F6F8FA"/>
+<line x1="305" y1="95" x2="445" y2="70" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="305" y1="125" x2="445" y2="185" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="305" y1="365" x2="445" y2="340" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<line x1="305" y1="405" x2="445" y2="470" stroke="#008F86" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="35" y="55" width="270" height="110" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="51" y="85" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">order</text>
+<text x="51" y="113" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">HASH(order_id)</text>
+<text x="51" y="137" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">PK đơn được giữ</text>
+<rect x="450" y="30" width="270" height="80" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="466" y="60" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">order_h0 / h1</text>
+<text x="466" y="88" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">modulus 4, remainder 0 / 1</text>
+<rect x="450" y="145" width="270" height="80" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="466" y="175" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">order_h2 / h3</text>
+<text x="466" y="203" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">modulus 4, remainder 2 / 3</text>
+<rect x="35" y="330" width="270" height="110" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="51" y="360" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">system_log</text>
+<text x="51" y="388" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">RANGE(created_at)</text>
+<text x="51" y="412" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">PK(log_id, created_at)</text>
+<rect x="450" y="295" width="340" height="100" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="466" y="325" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">system_log_YYYYMM</text>
+<text x="466" y="353" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">[đầu tháng, đầu tháng sau)</text>
+<text x="466" y="377" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">Các khoảng không giao nhau</text>
+<rect x="450" y="430" width="340" height="80" rx="10" fill="white" stroke="#C8D6DF" stroke-width="2"/>
+<text x="466" y="460" font-family="DejaVu Sans,Noto Sans" font-size="21" font-weight="bold" fill="#14283F">system_log_default</text>
+<text x="466" y="488" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#3D5266">Nhận ngày ngoài lịch hiện có</text>
+<text x="28" y="550" font-family="DejaVu Sans,Noto Sans" font-size="16" fill="#546C80">Prune theo partition key; buyer/seller history không HASH-prune theo buyer/seller.</text></svg>

@@ -1,0 +1,101 @@
+                                         version                                          | current_database | pg_is_in_recovery
+------------------------------------------------------------------------------------------+------------------+-------------------
+ PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit | oldshop          | f
+(1 row)
+
+ version |          applied_at           |                             checksum
+---------+-------------------------------+------------------------------------------------------------------
+ 001     | 2026-10-29 18:39:19.176004+07 | 6260a735840a9414d9c1edd45e14cf3beaa5f00dae4f424b51e1156c8558fff5
+ 002     | 2026-10-29 18:39:19.258422+07 | 352a6ee022f0064fdb2e17d99ff17f3ac0d128eb1e0d6de40f426ae0d75b8af7
+ 003     | 2026-10-29 18:39:19.785568+07 | afda323b0323bb3e7d67ef59010d56ee07fa7ee7e848174406a28c1e0473e4e2
+ 004     | 2026-10-29 18:39:19.912436+07 | 16739b49ad7f35dc1d397d034a37abea29e700ddf8c5c97abbb73fafddfe2fb8
+ 005     | 2026-10-30 09:48:39.777912+07 | 3385e1085552dcae5f905986abe0c1225de71a166564ac42b7b6c2a161f88d66
+ 006     | 2026-10-30 13:50:05.351442+07 | a199c5984ce6a7540634e6f55b1727a7e7b14fa2e7477defcd6d3a099df466b6
+(6 rows)
+
+ relation | parent  | isleaf | level
+----------+---------+--------+-------
+ "order"  |         | f      |     0
+ order_h0 | "order" | t      |     1
+ order_h1 | "order" | t      |     1
+ order_h2 | "order" | t      |     1
+ order_h3 | "order" | t      |     1
+(5 rows)
+
+      relation      |   parent   | isleaf | level
+--------------------+------------+--------+-------
+ system_log         |            | f      |     0
+ system_log_202610  | system_log | t      |     1
+ system_log_202611  | system_log | t      |     1
+ system_log_202612  | system_log | t      |     1
+ system_log_202701  | system_log | t      |     1
+ system_log_default | system_log | t      |     1
+(6 rows)
+
+ physical_partition | count
+--------------------+-------
+ order_h0           |     8
+ order_h1           |     8
+ order_h2           |     6
+ order_h3           |     8
+(4 rows)
+
+ reconstructed_users
+---------------------
+                  15
+(1 row)
+
+ core | profile | secret_count | wallet_count
+------+---------+--------------+--------------
+   15 |      15 |           15 |           15
+(1 row)
+
+   application_name   |   state   | sync_state
+----------------------+-----------+------------
+ oldshop-data-replica | streaming | async
+(1 row)
+
+                                                           QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using order_h0_pkey on order_h0 "order"  (cost=0.14..8.16 rows=1 width=6) (actual time=0.252..0.254 rows=1 loops=1)
+   Index Cond: (order_id = 1)
+   Buffers: shared hit=2
+ Planning:
+   Buffers: shared hit=6
+ Planning Time: 0.334 ms
+ Execution Time: 0.281 ms
+(7 rows)
+
+                                                                                QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=8.17..8.18 rows=1 width=8) (actual time=0.031..0.032 rows=1 loops=1)
+   Buffers: shared hit=2
+   ->  Index Only Scan using system_log_202610_created_at_idx on system_log_202610 system_log  (cost=0.14..8.16 rows=1 width=0) (actual time=0.027..0.028 rows=0 loops=1)
+         Index Cond: ((created_at >= '2026-10-01 00:00:00'::timestamp without time zone) AND (created_at < '2026-11-01 00:00:00'::timestamp without time zone))
+         Heap Fetches: 0
+         Buffers: shared hit=2
+ Planning:
+   Buffers: shared hit=176
+ Planning Time: 2.188 ms
+ Execution Time: 0.078 ms
+(10 rows)
+
+ status | count
+--------+-------
+ done   |    16
+(1 row)
+
+    mode     | status  | rows_in | rows_out | errors |          started_at           |           ended_at
+-------------+---------+---------+----------+--------+-------------------------------+-------------------------------
+ incremental | success |       0 |        0 |      0 | 2026-10-30 14:40:23.178908+07 | 2026-10-30 14:40:23.437029+07
+ incremental | success |       0 |        0 |      0 | 2026-10-30 14:39:22.877841+07 | 2026-10-30 14:39:23.09014+07
+ incremental | success |       0 |        0 |      0 | 2026-10-30 14:38:22.521946+07 | 2026-10-30 14:38:22.722207+07
+ incremental | success |       0 |        0 |      0 | 2026-10-30 14:37:22.26918+07  | 2026-10-30 14:37:22.451907+07
+ incremental | success |       0 |        0 |      0 | 2026-10-30 14:36:21.96988+07  | 2026-10-30 14:36:22.188679+07
+(5 rows)
+
+ report_date | seller_id | category_id | gross_sales_vnd |         refreshed_at
+-------------+-----------+-------------+-----------------+-------------------------------
+ 2026-10-28  |         3 |           1 |         3800000 | 2026-10-30 14:40:23.359799+07
+ 2026-10-28  |         4 |           2 |         9300000 | 2026-10-30 14:40:23.359833+07
+(2 rows)

@@ -1,0 +1,17 @@
+{
+  "result": "PASS",
+  "parser": "@dbml/core 11.0.0 / dbmlv2",
+  "logical_tables": 28,
+  "columns": 222,
+  "table_column_type_nullability_diffs": [],
+  "scope": "Compared live PG16 public parent/regular tables (excluding physical partitions) to 07_erd_current.dbml; serial normalized to integer. SQL migrations remain authoritative for defaults, constraints, triggers and physical children.",
+  "puml_syntax": {
+    "result": "PASS",
+    "tool": "PlantUML 1.2025.2 / check-only",
+    "files": [
+      "docs/diagram/07_architecture_current.puml",
+      "docs/diagram/07_data_flow_current.puml"
+    ],
+    "raster_files_generated": false
+  }
+}
