@@ -801,6 +801,10 @@ Dừng và gỡ container/network, giữ named volumes để lần sau chạy ti
 dc down
 ```
 
+```xoá hết
+dc down --volumes --remove-orphans
+```
+
 **Windows — PowerShell 7.3+**
 
 ```powershell
