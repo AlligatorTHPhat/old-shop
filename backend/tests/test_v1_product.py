@@ -33,8 +33,16 @@ def test_create_product_then_moderate(client, seller, mod_headers, png_bytes):
     assert product["status"] == 0
     assert product["product_images"][0]["image_url"].startswith(f"/media/products/prod_{product['product_id']}_1_")
 
-    pending_ids = [p["product_id"] for p in client.get("/api/v1/products/pending/all", headers=mod_headers).json()]
-    assert product["product_id"] in pending_ids
+    # The expanded seed has more than one page of pending products.
+    skip = 0
+    while True:
+        pending = client.get("/api/v1/products/pending/all", params={"skip": skip, "limit": 100}, headers=mod_headers)
+        assert pending.status_code == 200
+        page = pending.json()
+        if product["product_id"] in {p["product_id"] for p in page}:
+            break
+        assert page, "Created product is missing from pending listings"
+        skip += len(page)
 
     approved = client.post(f"/api/v1/products/{product['product_id']}/approve", headers=mod_headers)
     assert approved.status_code == 200

@@ -1,0 +1,1899 @@
+{
+  "sql": "UPDATE product SET quantity=quantity-1 WHERE product_id=1000043",
+  "representative_plan": {
+    "Plan": {
+      "Node Type": "ModifyTable",
+      "Operation": "Update",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Relation Name": "product",
+      "Alias": "product",
+      "Startup Cost": 0.29,
+      "Total Cost": 8.31,
+      "Plan Rows": 0,
+      "Plan Width": 0,
+      "Actual Startup Time": 1.188,
+      "Actual Total Time": 1.189,
+      "Actual Rows": 0,
+      "Actual Loops": 1,
+      "Shared Hit Blocks": 33,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0,
+      "WAL Records": 14,
+      "WAL FPI": 0,
+      "WAL Bytes": 2748,
+      "Plans": [
+        {
+          "Node Type": "Index Scan",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Scan Direction": "Forward",
+          "Index Name": "product_pkey",
+          "Relation Name": "product",
+          "Alias": "product",
+          "Startup Cost": 0.29,
+          "Total Cost": 8.31,
+          "Plan Rows": 1,
+          "Plan Width": 10,
+          "Actual Startup Time": 0.108,
+          "Actual Total Time": 0.116,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Index Cond": "(product_id = 1000043)",
+          "Rows Removed by Index Recheck": 0,
+          "Shared Hit Blocks": 5,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "WAL Records": 0,
+          "WAL FPI": 0,
+          "WAL Bytes": 0
+        }
+      ]
+    },
+    "Planning": {
+      "Shared Hit Blocks": 0,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0
+    },
+    "Planning Time": 0.213,
+    "Triggers": [
+      {
+        "Trigger Name": "trg_etl_capture",
+        "Relation": "product",
+        "Time": 2.745,
+        "Calls": 1
+      },
+      {
+        "Trigger Name": "trg_update_product_status",
+        "Relation": "product",
+        "Time": 0.09,
+        "Calls": 1
+      }
+    ],
+    "Execution Time": 4.086
+  },
+  "samples": [
+    {
+      "execution_ms": 4.086,
+      "wal_bytes": 2748,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.745,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.09,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.071,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.048,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.072,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.939,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.997,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.075,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.107,
+      "wal_bytes": 2847,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.973,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.067,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.747,
+      "wal_bytes": 2907,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.604,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.076,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.771,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.673,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.082,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.126,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.48,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.047,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.6,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.977,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.047,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.111,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.359,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.054,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.217,
+      "wal_bytes": 2851,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.375,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.059,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.93,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.29,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.075,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.966,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.378,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.043,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.208,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.517,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.051,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.178,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.553,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.045,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.048,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.385,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.05,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.023,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.366,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.045,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.002,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.31,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.053,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.11,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.406,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.049,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.574,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.838,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.053,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.003,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.332,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.069,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.01,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.366,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.079,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.185,
+      "wal_bytes": 2748,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.382,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.07,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.457,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.729,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.044,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.218,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.516,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.048,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.673,
+      "wal_bytes": 2853,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.622,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.075,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.276,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.54,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.059,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.08,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.422,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.048,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.418,
+      "wal_bytes": 2847,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.466,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.05,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.574,
+      "wal_bytes": 2849,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.719,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.061,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.461,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.711,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.056,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.202,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.547,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.05,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.101,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.404,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.05,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.284,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.463,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.048,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 5.777,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 5.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.07,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.277,
+      "wal_bytes": 2748,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.399,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.055,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.509,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.638,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.079,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.119,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.099,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.073,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.116,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.418,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.057,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.451,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.548,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.062,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.307,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.56,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.07,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.283,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.532,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.057,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.98,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.329,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.045,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.984,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.294,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.049,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.138,
+      "wal_bytes": 2748,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.356,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.045,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.122,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.421,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.045,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.209,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.516,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.051,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.504,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.634,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.063,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.843,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.243,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.042,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.318,
+      "wal_bytes": 2799,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.336,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.044,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.394,
+      "wal_bytes": 2748,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.566,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.044,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.212,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.451,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.06,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.211,
+      "wal_bytes": 2901,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.931,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.075,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.073,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.363,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.054,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.14,
+      "wal_bytes": 2903,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.365,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.042,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.292,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.6,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.077,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.022,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.384,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.048,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.335,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.55,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.053,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.69,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.015,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.044,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 4.043,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.729,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.114,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.749,
+      "wal_bytes": 2849,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.376,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.09,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.92,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.816,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.085,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 4.982,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 3.922,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.052,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.733,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.428,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.078,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.326,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.44,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.061,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.744,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.905,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.046,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.5,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.38,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.08,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 4.047,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.673,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.097,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.981,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.999,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.075,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.462,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.343,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.079,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.349,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.255,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.08,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.575,
+      "wal_bytes": 2748,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.141,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.108,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.94,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.898,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.076,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.387,
+      "wal_bytes": 2799,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.936,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.072,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.533,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.686,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.066,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.638,
+      "wal_bytes": 2804,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.78,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.061,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.906,
+      "wal_bytes": 2847,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.783,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.056,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.756,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.838,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.066,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.929,
+      "wal_bytes": 2847,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.866,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.064,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.816,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.882,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.065,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.739,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.847,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.068,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.585,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.754,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.073,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.692,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.797,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.062,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.829,
+      "wal_bytes": 2748,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.787,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.057,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.697,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.759,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.073,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.237,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.215,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.069,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.862,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.946,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.06,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.503,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.672,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.082,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.805,
+      "wal_bytes": 2750,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.885,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.088,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.858,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.974,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.064,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.631,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.764,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.088,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.707,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.764,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.078,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.152,
+      "wal_bytes": 2748,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.886,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.108,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.913,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.96,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.072,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.719,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.861,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.067,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.733,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.816,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.064,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.926,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.968,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.071,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.522,
+      "wal_bytes": 2907,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.048,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.066,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.488,
+      "wal_bytes": 2748,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.171,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.075,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.33,
+      "wal_bytes": 2696,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.342,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.076,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.271,
+      "wal_bytes": 2847,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.045,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_update_product_status",
+          "Relation": "product",
+          "Time": 0.072,
+          "Calls": 1
+        }
+      ]
+    }
+  ]
+}

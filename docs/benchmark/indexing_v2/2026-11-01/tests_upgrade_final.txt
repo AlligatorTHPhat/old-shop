@@ -1,0 +1,10 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 1 item
+
+tests/test_indexing_v2.py .                                              [100%]
+
+============================== 1 passed in 5.69s ===============================

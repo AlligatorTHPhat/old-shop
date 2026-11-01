@@ -4,7 +4,8 @@ Tài liệu dành cho phiên bản sau Ngày 7: PostgreSQL + MongoDB + MinIO + F
 và ETL. Mỗi nhóm lệnh có hai bản: **Linux/WSL dùng Bash**, **Windows dùng PowerShell 7.3+**.
 Chỉ chạy bản tương ứng với terminal của bạn, không chạy cả hai bản liên tiếp.
 Các lệnh chạy từ **thư mục gốc dự án**, trừ khi có ghi đổi thư mục.
-Cập nhật theo mã nguồn ngày 30/10/2026, migration 001–006.
+Cập nhật indexing ngày 01/11/2026: mã nguồn có migration 001–007.
+DB hiện hữu chỉ có 007 sau khi bạn tự áp dụng; xem [runbook indexing v2](benchmark/indexing_v2/README.md).
 
 ## 1. Chọn đúng cách chạy
 
@@ -352,7 +353,7 @@ dc run --rm --no-deps --entrypoint python backend -m scripts.init_db
 1. Chờ PG kết nối được và tạo DB nếu chưa có.
 2. Nếu chưa có bảng `user`/`user_core`, chạy `database/init.sql` bằng `psql`.
 3. `init.sql` nạp schema, functions/triggers và toàn bộ seed được include.
-4. Migration runner kiểm baseline/checksum rồi áp lần lượt 001–006.
+4. Migration runner kiểm baseline/checksum rồi áp lần lượt 001–007.
 5. Chép file ảnh seed vào volume media, giữ file đã tồn tại.
 
 Không chạy seed từng bảng sau bước này. Nếu DB đã có schema, bootstrap bỏ qua `init.sql`
@@ -395,7 +396,7 @@ riêng ở đầu dòng. Chỉ `$POSTGRES_USER`/`$POSTGRES_DB` trong `sh -c` đ�
 container. Không đổi here-string thành chuỗi double-quote làm PowerShell nội suy trước.
 
 DB mới theo seed hiện có: 15 user, 1.000 product, 2.000 product_image, 30 order, 30 transaction;
-migration đủ `001` đến `006`. Các số này sẽ thay đổi sau khi bạn thao tác ứng dụng.
+migration đủ `001` đến `007`. Các số này sẽ thay đổi sau khi bạn thao tác ứng dụng.
 Catalogue giữ 16 sản phẩm gốc và thêm 984 biến thể có tên/mã riêng (`SP-00017`–`SP-01000`),
 phủ đủ 8 danh mục, 4 trạng thái, nhiều mức giá, tồn kho và người bán. Một phần sản phẩm
 được đánh dấu xóa mềm để thử bộ lọc; vì vậy danh sách công khai không hiển thị đủ 1.000 dòng.
@@ -549,7 +550,7 @@ curl.exe -fsS http://localhost:58080/api/v1/categories
 py -3 deploy/scripts/check-data-stack.py --resilience --day6
 ```
 
-Checker cần trả `result: PASS`: chín service khỏe, schema 001–006, PG replica streaming,
+Checker cần trả `result: PASS`: chín service khỏe, schema 001–007 khi đã nâng indexing, PG replica streaming,
 Mongo một PRIMARY/hai SECONDARY, ETL bắt kịp nguồn và media đọc được. Checker `--day6` có
 GET product detail nên tăng `view_count` theo hành vi API bình thường và chờ ETL xử lý event đó.
 Nếu chỉ muốn kiểm hạ tầng/ETL/readiness, dùng `--resilience --day5` thay cho `--day6`;
@@ -606,7 +607,7 @@ Tạo một database rỗng bằng pgAdmin trước, chọn đúng DB rồi mở
 Trên Linux output ở `/tmp/oldshop-init-pgadmin.sql`; trên Windows nằm trong thư mục tạm
 `$env:TEMP`, ví dụ `C:\Users\<user>\AppData\Local\Temp\oldshop-init-pgadmin.sql`.
 File output phải chưa tồn tại; đổi tên nếu sinh lại. `init.sql` gốc có `\i` của psql nên không
-paste trực tiếp vào Query Tool. SQL sinh ra chỉ là baseline + seed Ngày 1, **chưa áp 001–006**.
+paste trực tiếp vào Query Tool. SQL sinh ra chỉ là baseline + seed Ngày 1, **chưa áp 001–007**.
 Muốn dùng DB đó với backend hiện tại cần cấu hình backend trỏ đúng DB và chạy migration runner
 theo quy trình phù hợp; không coi file sinh SQL này là cách migration DB đã có dữ liệu.
 
@@ -760,6 +761,24 @@ cần kiểm tra vì script apply dùng Compose chính, không tự ghép file G
 Đổi `DB_PASSWORD`, `MONGO_APP_PASSWORD`, `MINIO_APP_SECRET_KEY` trong file env không tự đổi
 password đã lưu trong PG/Mongo/MinIO. Không sinh lại credentials cho volume cũ. Việc rotate
 secret, đổi major Mongo hoặc chuyển storage là thao tác riêng cần kế hoạch bảo toàn dữ liệu.
+
+### 10.3. Nâng indexing v2 từ schema 006
+
+Bản cập nhật có `007_indexing_v2.sql` (9 index PostgreSQL) và M01 MongoDB. Không thêm
+bảng/cột, không đổi seed hoặc PK/UNIQUE; schema vẫn 28 bảng logic/222 cột. Không sửa file
+migration đã áp hoặc reseed DB đang dùng. [Kết quả đo và kiểm thử](benchmark/indexing_v2/2026-11-01/README.md)
+được tạo trên môi trường riêng; DB của bạn chưa tự nhận thay đổi này.
+
+- Backend chạy trực tiếp: dùng cấu hình kết nối trong `backend/.env`, làm backup/thử
+  restore và dừng nguồn ghi, rồi chạy runner theo [hướng dẫn tự áp](benchmark/indexing_v2/README.md).
+- Stack Compose chính đã qua 006: dùng `bash deploy/scripts/apply-indexing-v2.sh`
+  (thêm `--resilience` nếu đang dùng profile đó). Script backup/thử restore, migrate,
+  ANALYZE, init index Mongo và kiểm postflight/reconcile trước khi mở lại ứng dụng.
+- Kiểm chỉ đọc từ môi trường backend sau áp: `python -m scripts.verify_indexing_v2 --mongo`.
+  Trước áp dùng `--preflight` để kiểm lịch sử/checksum tối thiểu 006.
+
+Không dùng script Compose cho DB native hoặc stack có override/project name riêng.
+Các index cũ được giữ để theo dõi usage trước khi cân nhắc thu hồi ở version tiếp theo.
 
 ## 11. Xem log, dừng hệ thống và chạy ETL thủ công
 

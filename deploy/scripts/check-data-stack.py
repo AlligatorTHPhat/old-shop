@@ -22,7 +22,7 @@ if args.resilience:
 
 
 def run(*command):
-    result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, timeout=60)
+    result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, timeout=60, check=False)
     if result.returncode:
         # Commands are fixed and never contain credentials.
         raise RuntimeError(result.stderr.strip() or result.stdout.strip() or "Command failed")
@@ -68,7 +68,13 @@ assert pg("pg-primary", "SELECT pg_is_in_recovery()") == "f"
 checks["baseline"] = pg("pg-primary", "SELECT count(*) FROM pg_tables WHERE schemaname='public'")
 if pg("pg-primary", "SELECT to_regclass('public.schema_migrations') IS NOT NULL") == "t":
     checks["migrations"] = pg("pg-primary", "SELECT string_agg(version,',' ORDER BY version) FROM schema_migrations")
-    assert checks["migrations"] in ("001,002,003,004", "001,002,003,004,005", "001,002,003,004,005,006")
+    local_versions = sorted(
+        path.name[:3] for path in (ROOT / "database/04_migrations").glob("[0-9][0-9][0-9]_*.sql")
+    )
+    applied_versions = checks["migrations"].split(",")
+    assert len(applied_versions) >= 4 and applied_versions == local_versions[:len(applied_versions)], (
+        "Unrecognized migration history"
+    )
     assert pg("pg-primary", "SELECT count(*) FROM pg_inherits WHERE inhparent='public.\"order\"'::regclass") == "4"
     assert pg("pg-primary", "SELECT count(*) FROM information_schema.columns WHERE table_name='users_full' AND table_schema='public'") == "20"
 else:
@@ -106,9 +112,13 @@ for url in urls:
         result[url] = response.status
 print(json.dumps(result))
 """))
-has_etl = checks.get("migrations") in ("001,002,003,004,005", "001,002,003,004,005,006")
+has_etl = "005" in checks.get("migrations", "").split(",")
+if "007" in checks.get("migrations", "").split(","):
+    checks["indexing_v2"] = json.loads(run(
+        *compose, "exec", "-T", "backend", "python", "-m", "scripts.verify_indexing_v2", "--mongo"
+    ))
 if args.day6:
-    assert checks.get("migrations") == "001,002,003,004,005,006", "Day 6 migration 006 is required"
+    assert "006" in checks.get("migrations", "").split(","), "Day 6 migration 006 is required"
     checks["day6_api"] = json.loads(run(*compose, "exec", "-T", "backend", "python", "-m", "scripts.verify_day6"))
 if args.day5:
     assert has_etl, "Day 5 has not been deployed; migration 005 is required"

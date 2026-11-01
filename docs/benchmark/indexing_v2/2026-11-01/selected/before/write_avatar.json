@@ -1,0 +1,1293 @@
+{
+  "sql": "UPDATE user_profile SET avatar_url='/media/users/index_write.png' WHERE user_id=2000042",
+  "representative_plan": {
+    "Plan": {
+      "Node Type": "ModifyTable",
+      "Operation": "Update",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Relation Name": "user_profile",
+      "Alias": "user_profile",
+      "Startup Cost": 0.29,
+      "Total Cost": 8.31,
+      "Plan Rows": 0,
+      "Plan Width": 0,
+      "Actual Startup Time": 0.179,
+      "Actual Total Time": 0.18,
+      "Actual Rows": 0,
+      "Actual Loops": 1,
+      "Shared Hit Blocks": 13,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0,
+      "WAL Records": 3,
+      "WAL FPI": 0,
+      "WAL Bytes": 246,
+      "Plans": [
+        {
+          "Node Type": "Index Scan",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Scan Direction": "Forward",
+          "Index Name": "user_profile_pkey",
+          "Relation Name": "user_profile",
+          "Alias": "user_profile",
+          "Startup Cost": 0.29,
+          "Total Cost": 8.31,
+          "Plan Rows": 1,
+          "Plan Width": 522,
+          "Actual Startup Time": 0.096,
+          "Actual Total Time": 0.103,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Index Cond": "(user_id = 2000042)",
+          "Rows Removed by Index Recheck": 0,
+          "Shared Hit Blocks": 5,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "WAL Records": 0,
+          "WAL FPI": 0,
+          "WAL Bytes": 0
+        }
+      ]
+    },
+    "Planning": {
+      "Shared Hit Blocks": 0,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0
+    },
+    "Planning Time": 0.169,
+    "Triggers": [
+      {
+        "Trigger Name": "queue_avatar_cleanup",
+        "Relation": "user_profile",
+        "Time": 0.198,
+        "Calls": 1
+      }
+    ],
+    "Execution Time": 0.448
+  },
+  "samples": [
+    {
+      "execution_ms": 0.448,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.198,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.511,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.279,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.402,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.189,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.371,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.167,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.433,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.224,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.373,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.168,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.256,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.117,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.232,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.116,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.212,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.091,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.205,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.095,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.366,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.162,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.431,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.182,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.34,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.15,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.37,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.19,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.373,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.175,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.407,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.183,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.429,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.21,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.321,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.143,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.287,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.131,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.234,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.113,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.236,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.116,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.206,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.094,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.327,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.139,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.233,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.102,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.39,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.187,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.315,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.138,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.291,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.131,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.372,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.174,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.403,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.177,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.484,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.223,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.455,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.182,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.471,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.213,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.535,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.245,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.446,
+      "wal_bytes": 381,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.149,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.379,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.166,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.754,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.228,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.431,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.203,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.394,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.173,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.378,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.152,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.471,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.205,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.412,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.2,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.399,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.175,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.38,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.166,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.486,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.212,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.426,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.193,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.418,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.177,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.398,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.174,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.42,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.221,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.421,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.186,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.469,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.203,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.441,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.203,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.363,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.18,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.291,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.139,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.306,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.147,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.35,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.158,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.589,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.284,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.445,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.199,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.488,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.203,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.312,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.142,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.345,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.142,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.377,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.166,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.233,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.106,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.21,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.093,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.235,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.114,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.282,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.148,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.187,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.087,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.185,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.084,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.182,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.083,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.233,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.129,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.434,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.194,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.381,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.171,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.394,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.174,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.456,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.183,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.436,
+      "wal_bytes": 381,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.168,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.398,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.167,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.33,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.136,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.258,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.117,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.31,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.124,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.272,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.116,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.271,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.128,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.253,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.102,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.274,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.098,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.341,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.124,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.285,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.142,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.215,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.085,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.229,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.087,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.209,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.083,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.196,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.08,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.227,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.083,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.324,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.14,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.195,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.077,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.173,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.07,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.18,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.069,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.185,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.076,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.256,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.088,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.194,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.092,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.441,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.078,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.175,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.07,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.352,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.145,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.259,
+      "wal_bytes": 246,
+      "triggers": [
+        {
+          "Trigger Name": "queue_avatar_cleanup",
+          "Relation": "user_profile",
+          "Time": 0.108,
+          "Calls": 1
+        }
+      ]
+    }
+  ]
+}

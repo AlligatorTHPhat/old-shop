@@ -1,0 +1,1352 @@
+{
+  "applied": [
+    "007"
+  ],
+  "replay_noop": true,
+  "source_digest_unchanged": true,
+  "before": {
+    "Q01_category": {
+      "median_ms": 0.422,
+      "min_ms": 0.291,
+      "max_ms": 0.452,
+      "shared_hit_blocks": 31,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_catalogue"
+      ],
+      "sorts": [
+        "Incremental Sort"
+      ],
+      "result_sha256": "89d62392a724910586e0fd046bdf41158e054774a361f34ce9d2633ffa181f0f",
+      "returned": 20
+    },
+    "Q01_seller_exclusion": {
+      "median_ms": 0.399,
+      "min_ms": 0.258,
+      "max_ms": 0.455,
+      "shared_hit_blocks": 31,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_catalogue"
+      ],
+      "sorts": [
+        "Incremental Sort"
+      ],
+      "result_sha256": "89d62392a724910586e0fd046bdf41158e054774a361f34ce9d2633ffa181f0f",
+      "returned": 20
+    },
+    "Q01_offset": {
+      "median_ms": 6.644,
+      "min_ms": 4.092,
+      "max_ms": 8.806,
+      "shared_hit_blocks": 1027,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_catalogue"
+      ],
+      "sorts": [
+        "Incremental Sort"
+      ],
+      "result_sha256": "d0b0603e4b758fd7b19f6292bdb87439374835cd22066f1461131127fb128156",
+      "returned": 20
+    },
+    "Q01_candidates": {
+      "median_ms": 0.986,
+      "min_ms": 0.735,
+      "max_ms": 3.772,
+      "shared_hit_blocks": 317,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "category_pkey",
+        "idx_product_created_at"
+      ],
+      "sorts": [
+        "Incremental Sort"
+      ],
+      "result_sha256": "f0e9d73089e25bcf47df4d58582bec8a8170a1f118504084db482da280d02153",
+      "returned": 20
+    },
+    "Q02_all": {
+      "median_ms": 1.1,
+      "min_ms": 0.687,
+      "max_ms": 1.286,
+      "shared_hit_blocks": 152,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "category_pkey",
+        "idx_product_created_at"
+      ],
+      "sorts": [
+        "Incremental Sort"
+      ],
+      "result_sha256": "dcb045cdd86582dc15350770ed9538e28f4944615876b6006d7d47787eeda3bc",
+      "returned": 20
+    },
+    "Q02_price": {
+      "median_ms": 0.59,
+      "min_ms": 0.545,
+      "max_ms": 2.94,
+      "shared_hit_blocks": 237,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_price"
+      ],
+      "sorts": [
+        "Incremental Sort"
+      ],
+      "result_sha256": "d75ba694d63b3377520df4c60805283e4488571a5445ee5c54314030412fe76b",
+      "returned": 20
+    },
+    "Q03_search": {
+      "median_ms": 0.892,
+      "min_ms": 0.778,
+      "max_ms": 1.01,
+      "shared_hit_blocks": 85,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_description_trgm",
+        "idx_product_title_trgm"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "02a768604f1d88e0c95e57f832162a8cd26b38a0818ba01769bcbb738b241cc0",
+      "returned": 41
+    },
+    "Q03_short": {
+      "median_ms": 0.331,
+      "min_ms": 0.328,
+      "max_ms": 0.357,
+      "shared_hit_blocks": 4,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "product_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "8f90529d2e608f5956b2d90f9dc425ffbdd54a27f8f535c6d1dd30d73b9eabc5",
+      "returned": 20
+    },
+    "Q03_vietnamese": {
+      "median_ms": 1.844,
+      "min_ms": 1.139,
+      "max_ms": 2.956,
+      "shared_hit_blocks": 64,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_description_trgm",
+        "idx_product_title_trgm"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "3c27d192c5f42c5e8eb40af417a2c0f010c27989853295aba41ceb80ce080abb",
+      "returned": 20
+    },
+    "Q04_detail": {
+      "median_ms": 0.098,
+      "min_ms": 0.082,
+      "max_ms": 0.16,
+      "shared_hit_blocks": 3,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "product_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "9c4c325850956810218c534d03df93c2eccd904d06b318ce9e8ae2fdb31abf28",
+      "returned": 1
+    },
+    "Q05_images": {
+      "median_ms": 0.282,
+      "min_ms": 0.239,
+      "max_ms": 0.592,
+      "shared_hit_blocks": 23,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_image_product"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "0c3d9af546e3ca4432ffcf5af7f43ceecbaf07bec716c87816c81f332b6a7ae1",
+      "returned": 4
+    },
+    "Q06_buyer": {
+      "median_ms": 0.429,
+      "min_ms": 0.283,
+      "max_ms": 0.49,
+      "shared_hit_blocks": 31,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "order_h0_buyer_id_order_date_idx",
+        "order_h1_buyer_id_order_date_idx",
+        "order_h2_buyer_id_order_date_idx",
+        "order_h3_buyer_id_order_date_idx"
+      ],
+      "sorts": [],
+      "result_sha256": "0765ddb54fe64748c71ea58baae1c3910df8e827141a604aae518f90ff0f3fb6",
+      "returned": 20
+    },
+    "Q07_seller": {
+      "median_ms": 18.007,
+      "min_ms": 12.77,
+      "max_ms": 21.297,
+      "shared_hit_blocks": 4857,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_order_detail_product_order",
+        "order_h0_pkey",
+        "order_h1_pkey",
+        "order_h2_pkey",
+        "order_h3_pkey"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "2fd4d798428d8ffa4be3656bdbf2afa0b11a01cfa0acf831090300ed330adf51",
+      "returned": 20
+    },
+    "Q08_cart": {
+      "median_ms": 0.11,
+      "min_ms": 0.093,
+      "max_ms": 0.122,
+      "shared_hit_blocks": 3,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "uq_cart_product"
+      ],
+      "sorts": [],
+      "result_sha256": "dfdc518b5c9a1e4ec95927aa7945fc312589b31d6c23e868a0d04be8469b7434",
+      "returned": 1
+    },
+    "Q09_login": {
+      "median_ms": 0.088,
+      "min_ms": 0.084,
+      "max_ms": 0.117,
+      "shared_hit_blocks": 4,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "user_email_key"
+      ],
+      "sorts": [],
+      "result_sha256": "3087bfec754924a701da8b51a1222458145d16d28249b56f52f4e20adc3229a8",
+      "returned": 1
+    },
+    "Q10_paypal_reuse": {
+      "median_ms": 0.771,
+      "min_ms": 0.53,
+      "max_ms": 1.119,
+      "shared_hit_blocks": 201,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "order_h0_buyer_id_order_date_idx",
+        "order_h1_buyer_id_order_date_idx",
+        "order_h2_buyer_id_order_date_idx",
+        "order_h3_buyer_id_order_date_idx"
+      ],
+      "sorts": [],
+      "result_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "returned": 0
+    },
+    "Q11_items": {
+      "median_ms": 0.139,
+      "min_ms": 0.126,
+      "max_ms": 0.179,
+      "shared_hit_blocks": 3,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_order_detail_order"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "5e2cf28d44d73e8b44702bcde81f66b0194acd19330b47c4394b332a2fd57fde",
+      "returned": 1
+    },
+    "Q11_payments": {
+      "median_ms": 0.089,
+      "min_ms": 0.063,
+      "max_ms": 0.134,
+      "shared_hit_blocks": 1,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "043f347c2cdc0d8ce70c38775d24e556c0290acf6d0c87a3a52aa85471cb8d02",
+      "returned": 1
+    },
+    "Q12_poll": {
+      "median_ms": 141.257,
+      "min_ms": 119.355,
+      "max_ms": 159.659,
+      "shared_hit_blocks": 4601,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "etl_outbox_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "3d2aaffc8f9709619ce2960dfba3568752bcf1b34bf845bd9453f4dfd93b6e01",
+      "returned": 100
+    },
+    "Q12_stable": {
+      "median_ms": 125.308,
+      "min_ms": 117.984,
+      "max_ms": 129.281,
+      "shared_hit_blocks": 4601,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "etl_outbox_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "3d2aaffc8f9709619ce2960dfba3568752bcf1b34bf845bd9453f4dfd93b6e01",
+      "returned": 100
+    },
+    "Q13_retry": {
+      "median_ms": 180.022,
+      "min_ms": 120.888,
+      "max_ms": 196.106,
+      "shared_hit_blocks": 4366,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "returned": 0
+    },
+    "Q14_status": {
+      "median_ms": 16.342,
+      "min_ms": 13.567,
+      "max_ms": 24.599,
+      "shared_hit_blocks": 326,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "e9d3553d7397d8b1de914db4da1b11a588850f65fa86470c4a1c3207dc88cd2e",
+      "returned": 1
+    },
+    "Q14_aggregate": {
+      "median_ms": 14.086,
+      "min_ms": 12.896,
+      "max_ms": 35.896,
+      "shared_hit_blocks": 326,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "c59920ac43f5204add8ca04283394097c9545a27e580a64c812180f9c0891ded",
+      "returned": 1
+    },
+    "Q15_image_missing": {
+      "median_ms": 48.072,
+      "min_ms": 38.799,
+      "max_ms": 50.472,
+      "shared_hit_blocks": 2720,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [],
+      "result_sha256": "bd0805f65a4bf3a397d7c053b525a6dd180aa6a8187eb6575e03eb0e1f2f64c5",
+      "returned": 1
+    },
+    "Q15_image_unique": {
+      "median_ms": 47.335,
+      "min_ms": 44.662,
+      "max_ms": 61.531,
+      "shared_hit_blocks": 2705,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [],
+      "result_sha256": "351b8028fd97538c6eb946f4e4e8d7b7430b770c5e0b78006244f5fc4c6f4c3f",
+      "returned": 1
+    },
+    "Q15_image_shared": {
+      "median_ms": 0.34,
+      "min_ms": 0.304,
+      "max_ms": 0.884,
+      "shared_hit_blocks": 39,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [],
+      "result_sha256": "351b8028fd97538c6eb946f4e4e8d7b7430b770c5e0b78006244f5fc4c6f4c3f",
+      "returned": 1
+    },
+    "Q15_avatar_missing": {
+      "median_ms": 13.294,
+      "min_ms": 10.32,
+      "max_ms": 15.01,
+      "shared_hit_blocks": 518,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [],
+      "result_sha256": "bd0805f65a4bf3a397d7c053b525a6dd180aa6a8187eb6575e03eb0e1f2f64c5",
+      "returned": 1
+    },
+    "Q15_avatar_unique": {
+      "median_ms": 14.387,
+      "min_ms": 14.06,
+      "max_ms": 14.809,
+      "shared_hit_blocks": 512,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [],
+      "result_sha256": "351b8028fd97538c6eb946f4e4e8d7b7430b770c5e0b78006244f5fc4c6f4c3f",
+      "returned": 1
+    },
+    "Q16_audit": {
+      "median_ms": 35.408,
+      "min_ms": 31.241,
+      "max_ms": 37.788,
+      "shared_hit_blocks": 2944,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "6b729643585650acf003bd9117059831f7aa6880f2a6c103986c6d5bbf8cdae4",
+      "returned": 2
+    },
+    "Q17_voucher": {
+      "median_ms": 23.828,
+      "min_ms": 20.657,
+      "max_ms": 26.731,
+      "shared_hit_blocks": 1044,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "e04368091ae80f56f85880871fd2ff08ec33800935f4ca7c251f869b2a928e56",
+      "returned": 5000
+    },
+    "Q18_report": {
+      "median_ms": 14.796,
+      "min_ms": 10.79,
+      "max_ms": 20.006,
+      "shared_hit_blocks": 163,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "b4319c5b2242cdc91780e2efb581708da86baf26eeb54c11b68a7e2e9db49455",
+      "returned": 74
+    },
+    "role_lookup": {
+      "median_ms": 8.165,
+      "min_ms": 5.826,
+      "max_ms": 10.42,
+      "shared_hit_blocks": 222,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "edea2ca2e4e2a0f30bc4b991c80aebfd4652ac1d05764ba74ecf186c6fc6f718",
+      "returned": 503
+    },
+    "token_lookup": {
+      "median_ms": 8.524,
+      "min_ms": 6.655,
+      "max_ms": 10.878,
+      "shared_hit_blocks": 569,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [],
+      "result_sha256": "3087bfec754924a701da8b51a1222458145d16d28249b56f52f4e20adc3229a8",
+      "returned": 1
+    },
+    "cleanup_poll": {
+      "median_ms": 97.841,
+      "min_ms": 76.989,
+      "max_ms": 201.982,
+      "shared_hit_blocks": 3050,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "media_deletions_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "ef31abe3904505fb7e2ace5a0bba8214747b7ec1482b41589c63a15004646ae4",
+      "returned": 100
+    },
+    "cleanup_stable": {
+      "median_ms": 89.617,
+      "min_ms": 83.47,
+      "max_ms": 100.516,
+      "shared_hit_blocks": 3050,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "media_deletions_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "ef31abe3904505fb7e2ace5a0bba8214747b7ec1482b41589c63a15004646ae4",
+      "returned": 100
+    },
+    "Q17_voucher_missing": {
+      "median_ms": 17.245,
+      "min_ms": 14.416,
+      "max_ms": 21.032,
+      "shared_hit_blocks": 1044,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "returned": 0
+    }
+  },
+  "after": {
+    "Q01_category": {
+      "median_ms": 0.214,
+      "min_ms": 0.206,
+      "max_ms": 0.664,
+      "shared_hit_blocks": 31,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_catalogue"
+      ],
+      "sorts": [
+        "Incremental Sort"
+      ],
+      "result_sha256": "89d62392a724910586e0fd046bdf41158e054774a361f34ce9d2633ffa181f0f",
+      "returned": 20
+    },
+    "Q01_seller_exclusion": {
+      "median_ms": 0.356,
+      "min_ms": 0.25,
+      "max_ms": 0.431,
+      "shared_hit_blocks": 31,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_catalogue"
+      ],
+      "sorts": [
+        "Incremental Sort"
+      ],
+      "result_sha256": "89d62392a724910586e0fd046bdf41158e054774a361f34ce9d2633ffa181f0f",
+      "returned": 20
+    },
+    "Q01_offset": {
+      "median_ms": 2.664,
+      "min_ms": 2.59,
+      "max_ms": 5.023,
+      "shared_hit_blocks": 1027,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_catalogue"
+      ],
+      "sorts": [
+        "Incremental Sort"
+      ],
+      "result_sha256": "d0b0603e4b758fd7b19f6292bdb87439374835cd22066f1461131127fb128156",
+      "returned": 20
+    },
+    "Q01_candidates": {
+      "median_ms": 0.283,
+      "min_ms": 0.219,
+      "max_ms": 0.513,
+      "shared_hit_blocks": 38,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "category_pkey",
+        "idx_product_visible_date_id"
+      ],
+      "sorts": [],
+      "result_sha256": "f0e9d73089e25bcf47df4d58582bec8a8170a1f118504084db482da280d02153",
+      "returned": 20
+    },
+    "Q02_all": {
+      "median_ms": 0.202,
+      "min_ms": 0.201,
+      "max_ms": 0.319,
+      "shared_hit_blocks": 38,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "category_pkey",
+        "idx_product_visible_date_id"
+      ],
+      "sorts": [],
+      "result_sha256": "dcb045cdd86582dc15350770ed9538e28f4944615876b6006d7d47787eeda3bc",
+      "returned": 20
+    },
+    "Q02_price": {
+      "median_ms": 0.408,
+      "min_ms": 0.34,
+      "max_ms": 0.66,
+      "shared_hit_blocks": 237,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_price"
+      ],
+      "sorts": [
+        "Incremental Sort"
+      ],
+      "result_sha256": "d75ba694d63b3377520df4c60805283e4488571a5445ee5c54314030412fe76b",
+      "returned": 20
+    },
+    "Q03_search": {
+      "median_ms": 0.423,
+      "min_ms": 0.363,
+      "max_ms": 0.49,
+      "shared_hit_blocks": 85,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_description_trgm",
+        "idx_product_title_trgm"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "02a768604f1d88e0c95e57f832162a8cd26b38a0818ba01769bcbb738b241cc0",
+      "returned": 41
+    },
+    "Q03_short": {
+      "median_ms": 0.395,
+      "min_ms": 0.224,
+      "max_ms": 0.455,
+      "shared_hit_blocks": 4,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "product_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "8f90529d2e608f5956b2d90f9dc425ffbdd54a27f8f535c6d1dd30d73b9eabc5",
+      "returned": 20
+    },
+    "Q03_vietnamese": {
+      "median_ms": 1.424,
+      "min_ms": 1.195,
+      "max_ms": 2.101,
+      "shared_hit_blocks": 10,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "product_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "3c27d192c5f42c5e8eb40af417a2c0f010c27989853295aba41ceb80ce080abb",
+      "returned": 20
+    },
+    "Q04_detail": {
+      "median_ms": 0.115,
+      "min_ms": 0.104,
+      "max_ms": 0.367,
+      "shared_hit_blocks": 3,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "product_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "9c4c325850956810218c534d03df93c2eccd904d06b318ce9e8ae2fdb31abf28",
+      "returned": 1
+    },
+    "Q05_images": {
+      "median_ms": 0.404,
+      "min_ms": 0.226,
+      "max_ms": 0.515,
+      "shared_hit_blocks": 22,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_image_product"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "0c3d9af546e3ca4432ffcf5af7f43ceecbaf07bec716c87816c81f332b6a7ae1",
+      "returned": 4
+    },
+    "Q06_buyer": {
+      "median_ms": 0.389,
+      "min_ms": 0.238,
+      "max_ms": 0.459,
+      "shared_hit_blocks": 31,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "order_h0_buyer_id_order_date_idx",
+        "order_h1_buyer_id_order_date_idx",
+        "order_h2_buyer_id_order_date_idx",
+        "order_h3_buyer_id_order_date_idx"
+      ],
+      "sorts": [],
+      "result_sha256": "0765ddb54fe64748c71ea58baae1c3910df8e827141a604aae518f90ff0f3fb6",
+      "returned": 20
+    },
+    "Q07_seller": {
+      "median_ms": 16.598,
+      "min_ms": 15.898,
+      "max_ms": 18.221,
+      "shared_hit_blocks": 4857,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_order_detail_product_order",
+        "order_h0_pkey",
+        "order_h1_pkey",
+        "order_h2_pkey",
+        "order_h3_pkey"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "2fd4d798428d8ffa4be3656bdbf2afa0b11a01cfa0acf831090300ed330adf51",
+      "returned": 20
+    },
+    "Q08_cart": {
+      "median_ms": 0.099,
+      "min_ms": 0.07,
+      "max_ms": 0.125,
+      "shared_hit_blocks": 3,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "uq_cart_product"
+      ],
+      "sorts": [],
+      "result_sha256": "dfdc518b5c9a1e4ec95927aa7945fc312589b31d6c23e868a0d04be8469b7434",
+      "returned": 1
+    },
+    "Q09_login": {
+      "median_ms": 0.104,
+      "min_ms": 0.065,
+      "max_ms": 0.168,
+      "shared_hit_blocks": 4,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "user_email_key"
+      ],
+      "sorts": [],
+      "result_sha256": "3087bfec754924a701da8b51a1222458145d16d28249b56f52f4e20adc3229a8",
+      "returned": 1
+    },
+    "Q10_paypal_reuse": {
+      "median_ms": 0.557,
+      "min_ms": 0.518,
+      "max_ms": 0.836,
+      "shared_hit_blocks": 201,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "order_h0_buyer_id_order_date_idx",
+        "order_h1_buyer_id_order_date_idx",
+        "order_h2_buyer_id_order_date_idx",
+        "order_h3_buyer_id_order_date_idx"
+      ],
+      "sorts": [],
+      "result_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "returned": 0
+    },
+    "Q11_items": {
+      "median_ms": 0.163,
+      "min_ms": 0.073,
+      "max_ms": 0.188,
+      "shared_hit_blocks": 3,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_order_detail_order"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "5e2cf28d44d73e8b44702bcde81f66b0194acd19330b47c4394b332a2fd57fde",
+      "returned": 1
+    },
+    "Q11_payments": {
+      "median_ms": 0.05,
+      "min_ms": 0.029,
+      "max_ms": 0.057,
+      "shared_hit_blocks": 1,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "043f347c2cdc0d8ce70c38775d24e556c0290acf6d0c87a3a52aa85471cb8d02",
+      "returned": 1
+    },
+    "Q12_poll": {
+      "median_ms": 0.561,
+      "min_ms": 0.515,
+      "max_ms": 0.949,
+      "shared_hit_blocks": 216,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_etl_outbox_pending_event"
+      ],
+      "sorts": [],
+      "result_sha256": "3d2aaffc8f9709619ce2960dfba3568752bcf1b34bf845bd9453f4dfd93b6e01",
+      "returned": 100
+    },
+    "Q12_stable": {
+      "median_ms": 0.7,
+      "min_ms": 0.42,
+      "max_ms": 0.746,
+      "shared_hit_blocks": 216,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_etl_outbox_pending_event"
+      ],
+      "sorts": [],
+      "result_sha256": "3d2aaffc8f9709619ce2960dfba3568752bcf1b34bf845bd9453f4dfd93b6e01",
+      "returned": 100
+    },
+    "Q13_retry": {
+      "median_ms": 0.086,
+      "min_ms": 0.079,
+      "max_ms": 0.357,
+      "shared_hit_blocks": 2,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_etl_outbox_entity_pending"
+      ],
+      "sorts": [],
+      "result_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "returned": 0
+    },
+    "Q14_status": {
+      "median_ms": 0.09,
+      "min_ms": 0.072,
+      "max_ms": 0.149,
+      "shared_hit_blocks": 3,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_etl_runs_started"
+      ],
+      "sorts": [],
+      "result_sha256": "e9d3553d7397d8b1de914db4da1b11a588850f65fa86470c4a1c3207dc88cd2e",
+      "returned": 1
+    },
+    "Q14_aggregate": {
+      "median_ms": 0.152,
+      "min_ms": 0.123,
+      "max_ms": 0.213,
+      "shared_hit_blocks": 3,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_etl_runs_aggregate_success"
+      ],
+      "sorts": [],
+      "result_sha256": "c59920ac43f5204add8ca04283394097c9545a27e580a64c812180f9c0891ded",
+      "returned": 1
+    },
+    "Q15_image_missing": {
+      "median_ms": 0.09,
+      "min_ms": 0.066,
+      "max_ms": 0.178,
+      "shared_hit_blocks": 3,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_image_url"
+      ],
+      "sorts": [],
+      "result_sha256": "bd0805f65a4bf3a397d7c053b525a6dd180aa6a8187eb6575e03eb0e1f2f64c5",
+      "returned": 1
+    },
+    "Q15_image_unique": {
+      "median_ms": 0.092,
+      "min_ms": 0.074,
+      "max_ms": 0.142,
+      "shared_hit_blocks": 5,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_product_image_url"
+      ],
+      "sorts": [],
+      "result_sha256": "351b8028fd97538c6eb946f4e4e8d7b7430b770c5e0b78006244f5fc4c6f4c3f",
+      "returned": 1
+    },
+    "Q15_image_shared": {
+      "median_ms": 0.565,
+      "min_ms": 0.38,
+      "max_ms": 1.152,
+      "shared_hit_blocks": 39,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [],
+      "result_sha256": "351b8028fd97538c6eb946f4e4e8d7b7430b770c5e0b78006244f5fc4c6f4c3f",
+      "returned": 1
+    },
+    "Q15_avatar_missing": {
+      "median_ms": 0.1,
+      "min_ms": 0.08,
+      "max_ms": 0.158,
+      "shared_hit_blocks": 3,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_user_profile_avatar_url"
+      ],
+      "sorts": [],
+      "result_sha256": "bd0805f65a4bf3a397d7c053b525a6dd180aa6a8187eb6575e03eb0e1f2f64c5",
+      "returned": 1
+    },
+    "Q15_avatar_unique": {
+      "median_ms": 0.138,
+      "min_ms": 0.129,
+      "max_ms": 0.147,
+      "shared_hit_blocks": 5,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_user_profile_avatar_url"
+      ],
+      "sorts": [],
+      "result_sha256": "351b8028fd97538c6eb946f4e4e8d7b7430b770c5e0b78006244f5fc4c6f4c3f",
+      "returned": 1
+    },
+    "Q16_audit": {
+      "median_ms": 29.063,
+      "min_ms": 26.79,
+      "max_ms": 43.725,
+      "shared_hit_blocks": 2944,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "6b729643585650acf003bd9117059831f7aa6880f2a6c103986c6d5bbf8cdae4",
+      "returned": 2
+    },
+    "Q17_voucher": {
+      "median_ms": 10.358,
+      "min_ms": 7.534,
+      "max_ms": 12.151,
+      "shared_hit_blocks": 1054,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "order_h0_voucher_id_idx",
+        "order_h1_voucher_id_idx",
+        "order_h2_voucher_id_idx",
+        "order_h3_voucher_id_idx"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "e04368091ae80f56f85880871fd2ff08ec33800935f4ca7c251f869b2a928e56",
+      "returned": 5000
+    },
+    "Q18_report": {
+      "median_ms": 19.184,
+      "min_ms": 13.677,
+      "max_ms": 22.009,
+      "shared_hit_blocks": 163,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "b4319c5b2242cdc91780e2efb581708da86baf26eeb54c11b68a7e2e9db49455",
+      "returned": 74
+    },
+    "role_lookup": {
+      "median_ms": 0.358,
+      "min_ms": 0.288,
+      "max_ms": 0.666,
+      "shared_hit_blocks": 5,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "idx_user_role_role_user"
+      ],
+      "sorts": [],
+      "result_sha256": "edea2ca2e4e2a0f30bc4b991c80aebfd4652ac1d05764ba74ecf186c6fc6f718",
+      "returned": 503
+    },
+    "token_lookup": {
+      "median_ms": 11.542,
+      "min_ms": 6.974,
+      "max_ms": 13.184,
+      "shared_hit_blocks": 569,
+      "shared_read_blocks": 0,
+      "indexes": [],
+      "sorts": [],
+      "result_sha256": "3087bfec754924a701da8b51a1222458145d16d28249b56f52f4e20adc3229a8",
+      "returned": 1
+    },
+    "cleanup_poll": {
+      "median_ms": 92.302,
+      "min_ms": 88.826,
+      "max_ms": 113.175,
+      "shared_hit_blocks": 3050,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "media_deletions_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "ef31abe3904505fb7e2ace5a0bba8214747b7ec1482b41589c63a15004646ae4",
+      "returned": 100
+    },
+    "cleanup_stable": {
+      "median_ms": 76.276,
+      "min_ms": 71.268,
+      "max_ms": 113.535,
+      "shared_hit_blocks": 3050,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "media_deletions_pkey"
+      ],
+      "sorts": [],
+      "result_sha256": "ef31abe3904505fb7e2ace5a0bba8214747b7ec1482b41589c63a15004646ae4",
+      "returned": 100
+    },
+    "Q17_voucher_missing": {
+      "median_ms": 0.156,
+      "min_ms": 0.138,
+      "max_ms": 0.337,
+      "shared_hit_blocks": 8,
+      "shared_read_blocks": 0,
+      "indexes": [
+        "order_h0_voucher_id_idx",
+        "order_h1_voucher_id_idx",
+        "order_h2_voucher_id_idx",
+        "order_h3_voucher_id_idx"
+      ],
+      "sorts": [
+        "Sort"
+      ],
+      "result_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "returned": 0
+    }
+  },
+  "before_writes": {
+    "view_count": {
+      "median_ms": 2.6254999999999997,
+      "p95_ms": 4.465,
+      "samples": 100,
+      "wal_bytes": 1066.0
+    },
+    "reserve": {
+      "median_ms": 3.1805000000000003,
+      "p95_ms": 6.533,
+      "samples": 100,
+      "wal_bytes": 1074.0
+    },
+    "moderate": {
+      "median_ms": 2.692,
+      "p95_ms": 3.589,
+      "samples": 100,
+      "wal_bytes": 1082.0
+    },
+    "description": {
+      "median_ms": 2.444,
+      "p95_ms": 3.531,
+      "samples": 100,
+      "wal_bytes": 1074.0
+    },
+    "image_insert": {
+      "median_ms": 0.7304999999999999,
+      "p95_ms": 1.526,
+      "samples": 100,
+      "wal_bytes": 247.0
+    },
+    "avatar": {
+      "median_ms": 0.351,
+      "p95_ms": 0.486,
+      "samples": 100,
+      "wal_bytes": 246.0
+    },
+    "run_insert": {
+      "median_ms": 0.2195,
+      "p95_ms": 0.427,
+      "samples": 100,
+      "wal_bytes": 5017.0
+    },
+    "event_ack": {
+      "median_ms": 0.296,
+      "p95_ms": 0.463,
+      "samples": 100,
+      "wal_bytes": 324.0
+    },
+    "order_insert": {
+      "median_ms": 1.573,
+      "p95_ms": 2.411,
+      "samples": 100,
+      "wal_bytes": 434.0
+    },
+    "role_insert": {
+      "median_ms": 0.198,
+      "p95_ms": 0.371,
+      "samples": 100,
+      "wal_bytes": 127.0
+    }
+  },
+  "after_writes": {
+    "view_count": {
+      "median_ms": 2.4335,
+      "p95_ms": 3.55,
+      "samples": 100,
+      "wal_bytes": 1066.0
+    },
+    "reserve": {
+      "median_ms": 2.726,
+      "p95_ms": 4.14,
+      "samples": 100,
+      "wal_bytes": 1074.0
+    },
+    "moderate": {
+      "median_ms": 2.455,
+      "p95_ms": 3.621,
+      "samples": 100,
+      "wal_bytes": 1082.0
+    },
+    "description": {
+      "median_ms": 2.4265,
+      "p95_ms": 3.534,
+      "samples": 100,
+      "wal_bytes": 1074.0
+    },
+    "image_insert": {
+      "median_ms": 0.802,
+      "p95_ms": 1.286,
+      "samples": 100,
+      "wal_bytes": 335.0
+    },
+    "avatar": {
+      "median_ms": 0.24,
+      "p95_ms": 0.447,
+      "samples": 100,
+      "wal_bytes": 334.0
+    },
+    "run_insert": {
+      "median_ms": 0.182,
+      "p95_ms": 0.435,
+      "samples": 100,
+      "wal_bytes": 272.0
+    },
+    "event_ack": {
+      "median_ms": 0.2685,
+      "p95_ms": 0.455,
+      "samples": 100,
+      "wal_bytes": 150.0
+    },
+    "order_insert": {
+      "median_ms": 1.496,
+      "p95_ms": 2.44,
+      "samples": 100,
+      "wal_bytes": 498.0
+    },
+    "role_insert": {
+      "median_ms": 0.1835,
+      "p95_ms": 0.368,
+      "samples": 100,
+      "wal_bytes": 191.0
+    }
+  },
+  "orm_before": {
+    "ids": [
+      1000729,
+      1001094,
+      1001459,
+      1001824,
+      1002189,
+      1002554,
+      1003649,
+      1004014,
+      1004379,
+      1004744,
+      1005109,
+      1005839,
+      1006204,
+      1006569,
+      1006934,
+      1007299,
+      1007664,
+      1008394,
+      1008759,
+      1009124,
+      1009489,
+      1009854,
+      1010219,
+      1010949,
+      1011314,
+      1011679,
+      1012044,
+      1012409,
+      1012774,
+      1013504,
+      1014234,
+      1014599,
+      1014964,
+      1015329,
+      1016059,
+      1016424,
+      1016789,
+      1017154,
+      1017519,
+      1017884,
+      1018614,
+      1018979,
+      1019344,
+      1019709,
+      1020074,
+      1020439,
+      1021169,
+      1021534,
+      1021899,
+      1022264,
+      1022629,
+      1022994,
+      1023724,
+      1024089,
+      1024819,
+      1025184,
+      1025549,
+      1026279,
+      1026644,
+      1027009,
+      1027374,
+      1027739,
+      1028104,
+      1028834,
+      1029199,
+      1029564,
+      1029929,
+      1030294,
+      1030659,
+      1031389,
+      1031754,
+      1032119,
+      1032484,
+      1032849,
+      1033214,
+      1033944,
+      1034309,
+      1034674,
+      1035404,
+      1035769,
+      1036499,
+      1036864,
+      1037229,
+      1037594,
+      1037959,
+      1038324,
+      1039054,
+      1039419,
+      1039784,
+      1040149,
+      1040514,
+      1040879,
+      1041609,
+      1041974,
+      1042339,
+      1042704,
+      1043069,
+      1043434,
+      1044164,
+      1044529
+    ],
+    "execution_ms": 3.482,
+    "indexes": [
+      "category_pkey",
+      "idx_product_created_at",
+      "idx_product_image_product"
+    ]
+  },
+  "orm_after": {
+    "ids": [
+      1000729,
+      1001094,
+      1001459,
+      1001824,
+      1002189,
+      1002554,
+      1003649,
+      1004014,
+      1004379,
+      1004744,
+      1005109,
+      1005839,
+      1006204,
+      1006569,
+      1006934,
+      1007299,
+      1007664,
+      1008394,
+      1008759,
+      1009124,
+      1009489,
+      1009854,
+      1010219,
+      1010949,
+      1011314,
+      1011679,
+      1012044,
+      1012409,
+      1012774,
+      1013504,
+      1014234,
+      1014599,
+      1014964,
+      1015329,
+      1016059,
+      1016424,
+      1016789,
+      1017154,
+      1017519,
+      1017884,
+      1018614,
+      1018979,
+      1019344,
+      1019709,
+      1020074,
+      1020439,
+      1021169,
+      1021534,
+      1021899,
+      1022264,
+      1022629,
+      1022994,
+      1023724,
+      1024089,
+      1024819,
+      1025184,
+      1025549,
+      1026279,
+      1026644,
+      1027009,
+      1027374,
+      1027739,
+      1028104,
+      1028834,
+      1029199,
+      1029564,
+      1029929,
+      1030294,
+      1030659,
+      1031389,
+      1031754,
+      1032119,
+      1032484,
+      1032849,
+      1033214,
+      1033944,
+      1034309,
+      1034674,
+      1035404,
+      1035769,
+      1036499,
+      1036864,
+      1037229,
+      1037594,
+      1037959,
+      1038324,
+      1039054,
+      1039419,
+      1039784,
+      1040149,
+      1040514,
+      1040879,
+      1041609,
+      1041974,
+      1042339,
+      1042704,
+      1043069,
+      1043434,
+      1044164,
+      1044529
+    ],
+    "execution_ms": 2.82,
+    "indexes": [
+      "category_pkey",
+      "idx_product_image_product",
+      "idx_product_visible_date_id"
+    ]
+  },
+  "before_index_bytes": 177881088,
+  "after_index_bytes": 195518464
+}

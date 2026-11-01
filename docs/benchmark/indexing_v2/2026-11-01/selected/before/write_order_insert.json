@@ -1,0 +1,4115 @@
+{
+  "sql": "INSERT INTO \"order\"(buyer_id,contact_id,payment_method_id,total_amount,final_amount) VALUES(7,7,1,1000,1000)",
+  "representative_plan": {
+    "Plan": {
+      "Node Type": "ModifyTable",
+      "Operation": "Insert",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Relation Name": "order",
+      "Alias": "order",
+      "Startup Cost": 0.0,
+      "Total Cost": 0.02,
+      "Plan Rows": 0,
+      "Plan Width": 0,
+      "Actual Startup Time": 0.323,
+      "Actual Total Time": 0.324,
+      "Actual Rows": 0,
+      "Actual Loops": 1,
+      "Shared Hit Blocks": 12,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0,
+      "WAL Records": 6,
+      "WAL FPI": 0,
+      "WAL Bytes": 434,
+      "Plans": [
+        {
+          "Node Type": "Result",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 0.0,
+          "Total Cost": 0.02,
+          "Plan Rows": 1,
+          "Plan Width": 393,
+          "Actual Startup Time": 0.029,
+          "Actual Total Time": 0.03,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Shared Hit Blocks": 1,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "WAL Records": 0,
+          "WAL FPI": 0,
+          "WAL Bytes": 0
+        }
+      ]
+    },
+    "Planning": {
+      "Shared Hit Blocks": 0,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0
+    },
+    "Planning Time": 0.107,
+    "Triggers": [
+      {
+        "Trigger Name": "RI_ConstraintTrigger_c_17074",
+        "Constraint Name": "order_buyer_id_fkey",
+        "Relation": "order_h1",
+        "Time": 0.442,
+        "Calls": 1
+      },
+      {
+        "Trigger Name": "RI_ConstraintTrigger_c_17091",
+        "Constraint Name": "order_contact_id_fkey",
+        "Relation": "order_h1",
+        "Time": 0.231,
+        "Calls": 1
+      },
+      {
+        "Trigger Name": "RI_ConstraintTrigger_c_17108",
+        "Constraint Name": "order_payment_method_id_fkey",
+        "Relation": "order_h1",
+        "Time": 0.128,
+        "Calls": 1
+      },
+      {
+        "Trigger Name": "RI_ConstraintTrigger_c_17125",
+        "Constraint Name": "order_voucher_id_fkey",
+        "Relation": "order_h1",
+        "Time": 0.007,
+        "Calls": 1
+      },
+      {
+        "Trigger Name": "trg_etl_capture",
+        "Relation": "order_h1",
+        "Time": 1.333,
+        "Calls": 1
+      }
+    ],
+    "Execution Time": 2.598
+  },
+  "samples": [
+    {
+      "execution_ms": 2.598,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.442,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.231,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.128,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 1.333,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 8.071,
+      "wal_bytes": 36831,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.477,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.277,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.135,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.046,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 5.104,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.379,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.359,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.206,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.145,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 1.276,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.182,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.283,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.175,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.103,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.008,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.247,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 7.072,
+      "wal_bytes": 40531,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.419,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.248,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.146,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.053,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 4.795,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 7.993,
+      "wal_bytes": 46449,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.241,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.099,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.084,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.038,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 3.408,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.713,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.143,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.12,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.046,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.07,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.48,
+      "wal_bytes": 490,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.162,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.103,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.047,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.644,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.564,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.109,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.059,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.028,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.08,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.407,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.103,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.06,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.029,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.944,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.227,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.089,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.055,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.027,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.835,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.224,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.101,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.06,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.027,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.813,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.411,
+      "wal_bytes": 13292,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.133,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.082,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.028,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 1.296,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.204,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.191,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.131,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.053,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.285,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.722,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.104,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.079,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.128,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.009,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 1.065,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.261,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.096,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.057,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.027,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.845,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.291,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.089,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.055,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.034,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 0.874,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.072,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.142,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.101,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.047,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.378,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.219,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.191,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.096,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.044,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 1.473,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.276,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.11,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.061,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.03,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.786,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.626,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.141,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.122,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.041,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.938,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.651,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.141,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.114,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.044,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.901,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.2,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.165,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.099,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.046,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 1.478,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.709,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.162,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.098,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.044,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.996,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.708,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.17,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.091,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.041,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.027,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.554,
+      "wal_bytes": 562,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.125,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.172,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.039,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.884,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.508,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.133,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.155,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.039,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.83,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.917,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.142,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.081,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.041,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 1.259,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.115,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.096,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.063,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.026,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.655,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.165,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.09,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.059,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.028,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.759,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.251,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.089,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.055,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.027,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 0.845,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.02,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.082,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.052,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.025,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.642,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.411,
+      "wal_bytes": 533,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.14,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.081,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.037,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.011,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.789,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.157,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.137,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.085,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.04,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 1.482,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.814,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.167,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.096,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.053,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.086,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.607,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.157,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.079,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.039,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.949,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.96,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.125,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.085,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.063,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 1.33,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.125,
+      "wal_bytes": 9552,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.146,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.076,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.035,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 0.878,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.595,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.123,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.079,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.043,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.995,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.528,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.126,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.074,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.035,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.916,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.402,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.136,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.072,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.032,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.78,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.34,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.104,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.057,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.029,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.87,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.861,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.213,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.14,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.047,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.062,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.909,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.177,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.114,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.045,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.118,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.269,
+      "wal_bytes": 566,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.16,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.091,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.049,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.469,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.714,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.136,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.093,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.045,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 1.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.741,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.15,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.095,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.047,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.057,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.698,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.153,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.084,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.041,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.973,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.77,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.17,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.082,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.042,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.018,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.846,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.166,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.129,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.046,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 1.07,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.768,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.199,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.121,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.044,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 0.975,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.51,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.135,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.076,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.064,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.862,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.336,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.114,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.07,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.034,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.789,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.263,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.104,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.071,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.033,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 0.766,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.797,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.141,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.068,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.033,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 1.082,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.806,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.175,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.109,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.049,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 1.048,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.651,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.153,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.093,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.052,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.006,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.183,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.11,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.065,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.035,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.721,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.968,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.087,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.053,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.044,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 0.57,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.995,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.088,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.053,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.024,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.604,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.158,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.093,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.055,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.025,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.73,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.102,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.1,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.057,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.027,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.666,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.248,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.096,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.128,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.036,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.744,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.003,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.097,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.054,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.027,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.564,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.023,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.119,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.056,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.027,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.575,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.911,
+      "wal_bytes": 533,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.073,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.081,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.042,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.523,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.898,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.075,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.052,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.022,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.557,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.042,
+      "wal_bytes": 490,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.087,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.056,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.024,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.627,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.01,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.192,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.095,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.043,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.363,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.869,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.174,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.115,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.048,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 1.094,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.294,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.122,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.064,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.031,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.732,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.984,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.088,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.053,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.025,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.586,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.883,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.079,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.049,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.024,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.52,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.891,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.076,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.049,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.023,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.549,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.905,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.076,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.049,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.022,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.537,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.582,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.135,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.086,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.054,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.96,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.902,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.149,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.095,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.044,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.195,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.813,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.146,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.107,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.068,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.081,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.309,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.105,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.088,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.047,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.803,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.585,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.129,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.106,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.046,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.94,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.782,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.16,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.096,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.043,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.074,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.303,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.142,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.065,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.031,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 0.731,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.615,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.111,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.095,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.043,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.041,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.639,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.14,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.099,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.045,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.004,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.348,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.137,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.063,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.03,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.828,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.401,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.097,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.058,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.027,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.005,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.951,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.953,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.188,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.101,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.049,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.007,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.174,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.255,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.126,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.065,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.038,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 0.693,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.078,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.092,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.056,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.026,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 0.663,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.062,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.087,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.054,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.026,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.666,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.008,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.176,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.12,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.049,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 1.228,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.086,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17077",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.177,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17094",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.097,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17111",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.066,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17128",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h2",
+          "Time": 0.008,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h2",
+          "Time": 1.321,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.341,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.13,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.07,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.032,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.764,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.067,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.091,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.056,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.026,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 0.663,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.01,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.086,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.057,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.025,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.616,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.981,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.08,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.05,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.024,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.602,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.39,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.154,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.07,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.031,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.745,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.617,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17074",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.149,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17091",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.104,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17108",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.087,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17125",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h1",
+          "Time": 0.006,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h1",
+          "Time": 0.889,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.287,
+      "wal_bytes": 533,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17071",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.119,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17088",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.1,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17105",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.035,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17122",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h0",
+          "Time": 0.004,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h0",
+          "Time": 0.714,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.193,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17080",
+          "Constraint Name": "order_buyer_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.104,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17097",
+          "Constraint Name": "order_contact_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.059,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17114",
+          "Constraint Name": "order_payment_method_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.025,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_17131",
+          "Constraint Name": "order_voucher_id_fkey",
+          "Relation": "order_h3",
+          "Time": 0.003,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "order_h3",
+          "Time": 0.654,
+          "Calls": 1
+        }
+      ]
+    }
+  ]
+}

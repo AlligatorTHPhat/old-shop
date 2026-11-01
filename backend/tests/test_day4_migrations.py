@@ -196,8 +196,9 @@ def test_log_identity_month_routing_and_overflow():
 
     assert [col.name for col in inspect(SystemLog).primary_key] == ["log_id", "created_at"]
     with SessionLocal() as session:
+        month = session.execute(text("SELECT date_trunc('month', CURRENT_TIMESTAMP)::timestamp")).scalar_one()
         records = [
-            SystemLog(action="DAY4_TEST", created_at=datetime(2026, 10, 1)),
+            SystemLog(action="DAY4_TEST", created_at=month),
             SystemLog(action="DAY4_TEST", created_at=datetime(2200, 1, 1)),
         ]
         session.add_all(records)
@@ -211,7 +212,7 @@ def test_log_identity_month_routing_and_overflow():
             .scalars()
             .all()
         )
-        assert routes == ["system_log_202610", "system_log_default"]
+        assert routes == [f"system_log_{month:%Y%m}", "system_log_default"]
         session.rollback()
 
 

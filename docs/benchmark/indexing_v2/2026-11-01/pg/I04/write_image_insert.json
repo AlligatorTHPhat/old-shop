@@ -1,0 +1,1994 @@
+{
+  "sql": "INSERT INTO product_image(product_id,image_url) VALUES(1000042,'/media/products/index_write.jpg')",
+  "representative_plan": {
+    "Plan": {
+      "Node Type": "ModifyTable",
+      "Operation": "Insert",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Relation Name": "product_image",
+      "Alias": "product_image",
+      "Startup Cost": 0.0,
+      "Total Cost": 0.02,
+      "Plan Rows": 0,
+      "Plan Width": 0,
+      "Actual Startup Time": 0.143,
+      "Actual Total Time": 0.144,
+      "Actual Rows": 0,
+      "Actual Loops": 1,
+      "Shared Hit Blocks": 9,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0,
+      "WAL Records": 4,
+      "WAL FPI": 0,
+      "WAL Bytes": 335,
+      "Plans": [
+        {
+          "Node Type": "Result",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 0.0,
+          "Total Cost": 0.02,
+          "Plan Rows": 1,
+          "Plan Width": 1279,
+          "Actual Startup Time": 0.02,
+          "Actual Total Time": 0.02,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Shared Hit Blocks": 1,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "WAL Records": 0,
+          "WAL FPI": 0,
+          "WAL Bytes": 0
+        }
+      ]
+    },
+    "Planning": {
+      "Shared Hit Blocks": 0,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0
+    },
+    "Planning Time": 0.055,
+    "Triggers": [
+      {
+        "Trigger Name": "RI_ConstraintTrigger_c_16652",
+        "Constraint Name": "product_image_product_id_fkey",
+        "Relation": "product_image",
+        "Time": 0.356,
+        "Calls": 1
+      },
+      {
+        "Trigger Name": "trg_etl_capture",
+        "Relation": "product_image",
+        "Time": 0.635,
+        "Calls": 1
+      }
+    ],
+    "Execution Time": 1.173
+  },
+  "samples": [
+    {
+      "execution_ms": 1.173,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.356,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.635,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.089,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.338,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.601,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.912,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.291,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.484,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.781,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.242,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.439,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.398,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.365,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.882,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.862,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.142,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.577,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.845,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.137,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.585,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.866,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.153,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.57,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.811,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.135,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.552,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.738,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.119,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.507,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.985,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.171,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 1.354,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.827,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.135,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.558,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.919,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.126,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.636,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.094,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.124,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.846,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.718,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.12,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.48,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.744,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.147,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.485,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.731,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.116,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.502,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.679,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.116,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.453,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.752,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.155,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.49,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.997,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.12,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.764,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.67,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.12,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.44,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.724,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.136,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.48,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.78,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.118,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.54,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.812,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.133,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.55,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.713,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.125,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.469,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.697,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.118,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.453,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.532,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.203,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 2.156,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.09,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.195,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.715,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.014,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.209,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.642,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.064,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.176,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.658,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 7.337,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.15,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 7.002,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.972,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.159,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.628,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.974,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.177,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.629,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.873,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.146,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.584,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.75,
+      "wal_bytes": 1095,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.155,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.648,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.853,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.144,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.571,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.81,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.136,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.546,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.91,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.136,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.625,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.006,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.134,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.741,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.897,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.142,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.608,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.835,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.151,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.538,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.873,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.197,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 1.487,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.984,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.174,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.618,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.118,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.175,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 2.769,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.011,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.182,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.642,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.79,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.127,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.54,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.703,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.125,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.464,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.801,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.128,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.488,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.737,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.134,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.489,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.818,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.12,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.568,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.682,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.116,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.456,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.692,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.131,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.455,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.186,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.136,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.924,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.784,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.172,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.492,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.066,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.125,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.811,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.706,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.121,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.471,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.72,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.119,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.487,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.692,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.117,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.459,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.783,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.125,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.535,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.94,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.168,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.615,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.921,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.169,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 1.592,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.018,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.186,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.662,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.821,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.142,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.539,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.932,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.16,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.617,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.96,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.149,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.655,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.867,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.14,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.594,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.75,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.157,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.454,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.002,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.161,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.67,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.856,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.147,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.57,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.028,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.183,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.687,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.882,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.144,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.596,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.987,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.16,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.659,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.837,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.155,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.551,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.973,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.18,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.64,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.953,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.172,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.63,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.941,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.138,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.628,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.944,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.164,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.617,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.045,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.16,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.714,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.948,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.149,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.643,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.95,
+      "wal_bytes": 387,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.132,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.669,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.477,
+      "wal_bytes": 1547,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.174,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.716,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.969,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.16,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.654,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.31,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.216,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 2.9,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.115,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.243,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.692,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.075,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.159,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.635,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.813,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.121,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.558,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.924,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.144,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.626,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.452,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.205,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.955,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.036,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.156,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.726,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.968,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.164,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.646,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.909,
+      "wal_bytes": 434,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.148,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.612,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.971,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.159,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.634,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.889,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.15,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.588,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.882,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.164,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.555,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.925,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.156,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.596,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.96,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.162,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.644,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.954,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.157,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.639,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.854,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.185,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.518,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.918,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.179,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.586,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.618,
+      "wal_bytes": 335,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16652",
+          "Constraint Name": "product_image_product_id_fkey",
+          "Relation": "product_image",
+          "Time": 0.102,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product_image",
+          "Time": 0.421,
+          "Calls": 1
+        }
+      ]
+    }
+  ]
+}

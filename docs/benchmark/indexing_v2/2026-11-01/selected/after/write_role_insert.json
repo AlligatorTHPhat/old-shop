@@ -1,0 +1,2095 @@
+{
+  "sql": "INSERT INTO user_role(user_id,role_id) VALUES(2000042,1)",
+  "representative_plan": {
+    "Plan": {
+      "Node Type": "ModifyTable",
+      "Operation": "Insert",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Relation Name": "user_role",
+      "Alias": "user_role",
+      "Startup Cost": 0.0,
+      "Total Cost": 0.01,
+      "Plan Rows": 0,
+      "Plan Width": 0,
+      "Actual Startup Time": 0.042,
+      "Actual Total Time": 0.042,
+      "Actual Rows": 0,
+      "Actual Loops": 1,
+      "Shared Hit Blocks": 6,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0,
+      "WAL Records": 3,
+      "WAL FPI": 0,
+      "WAL Bytes": 191,
+      "Plans": [
+        {
+          "Node Type": "Result",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 0.0,
+          "Total Cost": 0.01,
+          "Plan Rows": 1,
+          "Plan Width": 8,
+          "Actual Startup Time": 0.002,
+          "Actual Total Time": 0.002,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "WAL Records": 0,
+          "WAL FPI": 0,
+          "WAL Bytes": 0
+        }
+      ]
+    },
+    "Planning": {
+      "Shared Hit Blocks": 0,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0
+    },
+    "Planning Time": 0.022,
+    "Triggers": [
+      {
+        "Trigger Name": "RI_ConstraintTrigger_c_16566",
+        "Constraint Name": "user_role_user_id_fkey",
+        "Relation": "user_role",
+        "Time": 0.1,
+        "Calls": 1
+      },
+      {
+        "Trigger Name": "RI_ConstraintTrigger_c_16571",
+        "Constraint Name": "user_role_role_id_fkey",
+        "Relation": "user_role",
+        "Time": 0.026,
+        "Calls": 1
+      }
+    ],
+    "Execution Time": 0.186
+  },
+  "samples": [
+    {
+      "execution_ms": 0.186,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.1,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.026,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.159,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.084,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.022,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.149,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.082,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.146,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.079,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.146,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.079,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.022,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.147,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.08,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.146,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.08,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.159,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.082,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.148,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.082,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.298,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.159,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.06,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.243,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.142,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.031,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.283,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.131,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.041,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.234,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.121,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.036,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.233,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.121,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.036,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.192,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.106,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.027,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.149,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.081,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.144,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.078,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.159,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.089,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.221,
+      "wal_bytes": 326,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.067,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.215,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.144,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.025,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.135,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.075,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.019,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.127,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.069,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.019,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.134,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.073,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.126,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.068,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.019,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.135,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.074,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.162,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.072,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.019,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.126,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.069,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.018,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.125,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.068,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.018,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.132,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.07,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.019,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.169,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.108,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.342,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.184,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.051,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.332,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.175,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.049,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.312,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.16,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.044,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.264,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.141,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.041,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.355,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.19,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.04,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.183,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.096,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.024,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.232,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.125,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.03,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.173,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.099,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.025,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.141,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.076,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.174,
+      "wal_bytes": 243,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.079,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.136,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.074,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.146,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.078,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.145,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.08,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.143,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.08,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.147,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.081,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.129,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.07,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.019,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.158,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.096,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.135,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.077,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.128,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.069,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.019,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.656,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.132,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.029,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.285,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.153,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.043,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.437,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.231,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.057,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.308,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.154,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.059,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.26,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.124,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.068,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.177,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.096,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.026,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.168,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.091,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.024,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.134,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.072,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.133,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.071,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.022,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.252,
+      "wal_bytes": 326,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.097,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.027,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.136,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.074,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.02,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.13,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.072,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.019,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.137,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.076,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.019,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.152,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.084,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.027,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.154,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.085,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.021,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.291,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.134,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.034,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.355,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.191,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.043,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.415,
+      "wal_bytes": 243,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.17,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.051,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.316,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.167,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.044,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.301,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.153,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.045,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.402,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.203,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.056,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.263,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.142,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.033,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.187,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.1,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.026,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.171,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.09,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.025,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.294,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.155,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.041,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.239,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.124,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.034,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.209,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.11,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.029,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.207,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.108,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.035,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.28,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.152,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.042,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.289,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.141,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.06,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.25,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.146,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.032,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.199,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.107,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.028,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.184,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.098,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.027,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.187,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.102,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.028,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.183,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.098,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.027,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.23,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.146,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.026,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.227,
+      "wal_bytes": 243,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.097,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.028,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.175,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.092,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.025,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.171,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.091,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.025,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.164,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.088,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.025,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.175,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.094,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.026,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.176,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.093,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.025,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.259,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.147,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.042,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.466,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.242,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.076,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.355,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.187,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.046,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.306,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.162,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.044,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.285,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.159,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.039,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.304,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.162,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.034,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.204,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.107,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.029,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.368,
+      "wal_bytes": 378,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.124,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.032,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 0.233,
+      "wal_bytes": 191,
+      "triggers": [
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16566",
+          "Constraint Name": "user_role_user_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.126,
+          "Calls": 1
+        },
+        {
+          "Trigger Name": "RI_ConstraintTrigger_c_16571",
+          "Constraint Name": "user_role_role_id_fkey",
+          "Relation": "user_role",
+          "Time": 0.034,
+          "Calls": 1
+        }
+      ]
+    }
+  ]
+}

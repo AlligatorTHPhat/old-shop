@@ -1,0 +1,64 @@
+{
+  "docker": {
+    "version": "29.7.2",
+    "cpus": 8,
+    "memory_bytes": 8056680448
+  },
+  "containers": [
+    {
+      "name": "oldshop-indexing-v2-723e4eec-runner",
+      "image_tag": "oldshop-data-backend:day6",
+      "image_id": "sha256:d85c42e506edc93cbc0e196823af00bee3b7844cd2a4a51ff4a54d8411e960d0",
+      "running": true,
+      "started_at": "2026-11-01T14:09:47.350214376Z",
+      "memory_limit": 805306368,
+      "nano_cpus": 0
+    },
+    {
+      "name": "oldshop-indexing-v2-723e4eec-pg-primary-1",
+      "image_tag": "postgres:16-alpine",
+      "image_id": "sha256:0cefaabd882e42bcb2a2f3dc56d3ce4770560ba62fd7f197f1a2e008fd5731ab",
+      "running": true,
+      "started_at": "2026-11-01T14:09:25.440198056Z",
+      "memory_limit": 536870912,
+      "nano_cpus": 1000000000
+    },
+    {
+      "name": "oldshop-indexing-v2-723e4eec-mongo1-1",
+      "image_tag": "mongo:8.0.32",
+      "image_id": "sha256:d0d926f94df099bff534b7ee5b5986458131a22489dfff8664509af0c1e2ca9c",
+      "running": true,
+      "started_at": "2026-11-01T14:09:25.445173654Z",
+      "memory_limit": 805306368,
+      "nano_cpus": 1000000000
+    },
+    {
+      "name": "oldshop-indexing-v2-723e4eec-minio-1",
+      "image_tag": "quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e",
+      "image_id": "sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e",
+      "running": true,
+      "started_at": "2026-11-01T14:09:25.442445332Z",
+      "memory_limit": 536870912,
+      "nano_cpus": 1000000000
+    },
+    {
+      "name": "lab03-mongo",
+      "image_tag": "mongo:8.0.32",
+      "image_id": "sha256:d0d926f94df099bff534b7ee5b5986458131a22489dfff8664509af0c1e2ca9c",
+      "running": true,
+      "started_at": "2026-11-01T13:14:22.834069786Z",
+      "memory_limit": 2147483648,
+      "nano_cpus": 2000000000
+    },
+    {
+      "name": "minio-local",
+      "image_tag": "quay.io/minio/minio",
+      "image_id": "sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e",
+      "running": true,
+      "started_at": "2026-11-01T13:14:22.836203995Z",
+      "memory_limit": 0,
+      "nano_cpus": 0
+    }
+  ],
+  "credentials_exported": false
+}

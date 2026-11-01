@@ -1,0 +1,236 @@
+{
+  "version": "8.0.32",
+  "count": 50000,
+  "collection": "indexing_v2_products_44cec28fe15f4bfbac8f13f08b4309f3",
+  "baseline_indexes": {
+    "_id_": {
+      "v": 2,
+      "key": [
+        [
+          "_id",
+          1
+        ]
+      ]
+    },
+    "product_id_1": {
+      "v": 2,
+      "key": [
+        [
+          "product_id",
+          1
+        ]
+      ],
+      "unique": true
+    },
+    "category_id_1_attributes.brand_1": {
+      "v": 2,
+      "key": [
+        [
+          "category_id",
+          1
+        ],
+        [
+          "attributes.brand",
+          1
+        ]
+      ]
+    },
+    "idx_product_attributes": {
+      "v": 2,
+      "key": [
+        [
+          "attributes.$**",
+          1
+        ]
+      ]
+    },
+    "description_text_tags_text": {
+      "v": 2,
+      "key": [
+        [
+          "_fts",
+          "text"
+        ],
+        [
+          "_ftsx",
+          1
+        ]
+      ],
+      "weights": {
+        "description": 1,
+        "tags": 1
+      },
+      "default_language": "english",
+      "language_override": "language",
+      "textIndexVersion": 3
+    }
+  },
+  "before": {
+    "image_missing": {
+      "nReturned": 0,
+      "totalKeysExamined": 0,
+      "totalDocsExamined": 50000,
+      "executionTimeMillis": 128,
+      "result_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+    },
+    "image_unique": {
+      "nReturned": 1,
+      "totalKeysExamined": 0,
+      "totalDocsExamined": 49999,
+      "executionTimeMillis": 125,
+      "result_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+    },
+    "image_shared": {
+      "nReturned": 1,
+      "totalKeysExamined": 0,
+      "totalDocsExamined": 10,
+      "executionTimeMillis": 0,
+      "result_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+    },
+    "brand_ram": {
+      "nReturned": 323,
+      "totalKeysExamined": 1000,
+      "totalDocsExamined": 1000,
+      "executionTimeMillis": 7,
+      "result_sha256": "0b8b32278a28ea086007de55af9272d5b07568bfd621e80dd6187eeb3e12be7a"
+    }
+  },
+  "before_writes": {
+    "attribute_update": {
+      "median_ms": 4.177804999926593,
+      "p95_ms": 5.368301000089559,
+      "measurement": "client wall-clock, same connection/one writer"
+    },
+    "image_update": {
+      "median_ms": 4.097932999911791,
+      "p95_ms": 5.247393999979977,
+      "measurement": "client wall-clock, same connection/one writer"
+    }
+  },
+  "candidates": {
+    "M01": {
+      "queries": {
+        "image_missing": {
+          "nReturned": 0,
+          "totalKeysExamined": 0,
+          "totalDocsExamined": 0,
+          "executionTimeMillis": 0,
+          "result_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "image_unique": {
+          "nReturned": 1,
+          "totalKeysExamined": 1,
+          "totalDocsExamined": 1,
+          "executionTimeMillis": 0,
+          "result_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "image_shared": {
+          "nReturned": 1,
+          "totalKeysExamined": 1,
+          "totalDocsExamined": 1,
+          "executionTimeMillis": 0,
+          "result_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "brand_ram": {
+          "nReturned": 323,
+          "totalKeysExamined": 1000,
+          "totalDocsExamined": 1000,
+          "executionTimeMillis": 7,
+          "result_sha256": "0b8b32278a28ea086007de55af9272d5b07568bfd621e80dd6187eeb3e12be7a"
+        }
+      },
+      "writes": {
+        "attribute_update": {
+          "median_ms": 4.123878999507724,
+          "p95_ms": 5.524428000171611,
+          "measurement": "client wall-clock, same connection/one writer"
+        },
+        "image_update": {
+          "median_ms": 4.191274499589781,
+          "p95_ms": 5.805292999866651,
+          "measurement": "client wall-clock, same connection/one writer"
+        }
+      },
+      "build_seconds": 0.34768001099973844,
+      "added_index_bytes": 745472,
+      "definition": {
+        "keys": [
+          [
+            "images.key",
+            1
+          ]
+        ],
+        "name": "idx_live_product_image_key",
+        "partialFilterExpression": {
+          "deleted": false
+        }
+      }
+    },
+    "M02": {
+      "queries": {
+        "image_missing": {
+          "nReturned": 0,
+          "totalKeysExamined": 0,
+          "totalDocsExamined": 50000,
+          "executionTimeMillis": 131,
+          "result_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "image_unique": {
+          "nReturned": 1,
+          "totalKeysExamined": 0,
+          "totalDocsExamined": 49999,
+          "executionTimeMillis": 194,
+          "result_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "image_shared": {
+          "nReturned": 1,
+          "totalKeysExamined": 0,
+          "totalDocsExamined": 10,
+          "executionTimeMillis": 0,
+          "result_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "brand_ram": {
+          "nReturned": 323,
+          "totalKeysExamined": 323,
+          "totalDocsExamined": 0,
+          "executionTimeMillis": 3,
+          "result_sha256": "0b8b32278a28ea086007de55af9272d5b07568bfd621e80dd6187eeb3e12be7a"
+        }
+      },
+      "writes": {
+        "attribute_update": {
+          "median_ms": 5.71842849967652,
+          "p95_ms": 8.072718000221357,
+          "measurement": "client wall-clock, same connection/one writer"
+        },
+        "image_update": {
+          "median_ms": 5.167714500203147,
+          "p95_ms": 7.218243999886909,
+          "measurement": "client wall-clock, same connection/one writer"
+        }
+      },
+      "build_seconds": 0.3939084180001373,
+      "added_index_bytes": 671744,
+      "definition": {
+        "keys": [
+          [
+            "attributes.brand",
+            1
+          ],
+          [
+            "attributes.ram_gb",
+            1
+          ],
+          [
+            "product_id",
+            1
+          ]
+        ],
+        "name": "idx_live_product_brand_ram",
+        "partialFilterExpression": {
+          "deleted": false
+        }
+      }
+    }
+  }
+}

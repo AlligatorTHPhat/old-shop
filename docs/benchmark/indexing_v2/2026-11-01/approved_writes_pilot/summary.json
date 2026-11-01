@@ -1,0 +1,92 @@
+{
+  "before_writes": {
+    "view_count_approved": {
+      "median_ms": 1.9635,
+      "p95_ms": 2.977,
+      "samples": 100,
+      "wal_bytes": 2686.0
+    },
+    "reserve_approved": {
+      "median_ms": 2.4745,
+      "p95_ms": 3.571,
+      "samples": 100,
+      "wal_bytes": 2694.0
+    },
+    "description_approved": {
+      "median_ms": 1.897,
+      "p95_ms": 2.291,
+      "samples": 100,
+      "wal_bytes": 2838.0
+    },
+    "run_finish": {
+      "median_ms": 0.112,
+      "p95_ms": 0.159,
+      "samples": 100,
+      "wal_bytes": 329.0
+    },
+    "event_retry": {
+      "median_ms": 0.201,
+      "p95_ms": 0.283,
+      "samples": 100,
+      "wal_bytes": 231.0
+    }
+  },
+  "after_writes": {
+    "view_count_approved": {
+      "median_ms": 2.428,
+      "p95_ms": 3.061,
+      "samples": 100,
+      "wal_bytes": 2758.0
+    },
+    "reserve_approved": {
+      "median_ms": 2.534,
+      "p95_ms": 3.736,
+      "samples": 100,
+      "wal_bytes": 2766.0
+    },
+    "description_approved": {
+      "median_ms": 2.8045,
+      "p95_ms": 3.325,
+      "samples": 100,
+      "wal_bytes": 2910.0
+    },
+    "run_finish": {
+      "median_ms": 0.1275,
+      "p95_ms": 0.204,
+      "samples": 100,
+      "wal_bytes": 457.0
+    },
+    "event_retry": {
+      "median_ms": 0.256,
+      "p95_ms": 0.395,
+      "samples": 100,
+      "wal_bytes": 572.0
+    }
+  },
+  "product_status": 1,
+  "product_is_deleted": false,
+  "samples": 100,
+  "sampled_rows_unchanged": true,
+  "clone_history_unchanged": true,
+  "source_database_untouched": true,
+  "clone_dropped_on_exit": true,
+  "index_retention": {
+    "result": "PASS",
+    "old_indexes_preserved": 174,
+    "new_index_relations": [
+      "idx_etl_outbox_entity_pending",
+      "idx_etl_outbox_pending_event",
+      "idx_etl_runs_aggregate_success",
+      "idx_etl_runs_started",
+      "idx_order_voucher_lookup",
+      "idx_product_image_url",
+      "idx_product_visible_date_id",
+      "idx_user_profile_avatar_url",
+      "idx_user_role_role_user",
+      "order_h0_voucher_id_idx",
+      "order_h1_voucher_id_idx",
+      "order_h2_voucher_id_idx",
+      "order_h3_voucher_id_idx"
+    ]
+  }
+}

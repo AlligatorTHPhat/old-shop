@@ -1,0 +1,586 @@
+{
+  "sql": "UPDATE etl_runs SET status='success',details=details||'{\"aggregate\":{\"groups\":1}}'::jsonb,ended_at=clock_timestamp() WHERE run_id=md5('index-run-5')::uuid",
+  "representative_plan": {
+    "Plan": {
+      "Node Type": "ModifyTable",
+      "Operation": "Update",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Relation Name": "etl_runs",
+      "Alias": "etl_runs",
+      "Startup Cost": 0.29,
+      "Total Cost": 8.31,
+      "Plan Rows": 0,
+      "Plan Width": 0,
+      "Actual Startup Time": 0.138,
+      "Actual Total Time": 0.139,
+      "Actual Rows": 0,
+      "Actual Loops": 1,
+      "Shared Hit Blocks": 12,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0,
+      "WAL Records": 3,
+      "WAL FPI": 0,
+      "WAL Bytes": 329,
+      "Plans": [
+        {
+          "Node Type": "Index Scan",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Scan Direction": "Forward",
+          "Index Name": "etl_runs_pkey",
+          "Relation Name": "etl_runs",
+          "Alias": "etl_runs",
+          "Startup Cost": 0.29,
+          "Total Cost": 8.31,
+          "Plan Rows": 1,
+          "Plan Width": 78,
+          "Actual Startup Time": 0.063,
+          "Actual Total Time": 0.069,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Index Cond": "(run_id = 'ea6f820e-bbc2-8e54-4cf4-57bdaeca2e85'::uuid)",
+          "Rows Removed by Index Recheck": 0,
+          "Shared Hit Blocks": 5,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "WAL Records": 0,
+          "WAL FPI": 0,
+          "WAL Bytes": 0
+        }
+      ]
+    },
+    "Planning": {
+      "Shared Hit Blocks": 0,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0
+    },
+    "Planning Time": 0.108,
+    "Triggers": [],
+    "Execution Time": 0.186
+  },
+  "samples": [
+    {
+      "execution_ms": 0.186,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.183,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.14,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.215,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.245,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.217,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.163,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.13,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.136,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.105,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.114,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.107,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.128,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.103,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.122,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.106,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.215,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.142,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.24,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.234,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.136,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.131,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.134,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.137,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.122,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.115,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.102,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.112,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.209,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.201,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.151,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.125,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.121,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.117,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.116,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.156,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.119,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.194,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.197,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.136,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.127,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.191,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.137,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.14,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.114,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.114,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.146,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.132,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.197,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.122,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.107,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.115,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.116,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.113,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.16,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.176,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.112,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.101,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.101,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.131,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.1,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.1,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.109,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.11,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.108,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.175,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.132,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.134,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.12,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.113,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.124,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.149,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.109,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.104,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.224,
+      "wal_bytes": 534,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.244,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.324,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.287,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.257,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.312,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.332,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.321,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.562,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.637,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.204,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.192,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.215,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.186,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.198,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.19,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.202,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.249,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.142,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.14,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.252,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.231,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.248,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.405,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.476,
+      "wal_bytes": 329,
+      "triggers": []
+    },
+    {
+      "execution_ms": 0.223,
+      "wal_bytes": 329,
+      "triggers": []
+    }
+  ]
+}

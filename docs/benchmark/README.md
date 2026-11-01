@@ -73,3 +73,9 @@ DB benchmark/test được giữ cho việc xem xét, không tự reset. Script 
 - [Trạng thái stack và replication](day4_stack.json).
 - Snapshot so sánh 18 bảng nguồn bằng count + digest mọi cột v0; user khôi phục qua users_full.
   Backup chứa dữ liệu nhạy cảm ở deploy/backups, không chép vào thư mục evidence.
+
+## Indexing v2 (01/11/2026)
+
+[Quyết định I01–I14, M01/M02 và số liệu mới](indexing_v2/2026-11-01/README.md),
+[runner tái lập và hướng dẫn tự áp migration 007](indexing_v2/README.md). Đây là lần đo
+riêng trên baseline 001–006; bằng chứng Ngày 4/5/6 phía trên giữ nguyên mốc lịch sử.

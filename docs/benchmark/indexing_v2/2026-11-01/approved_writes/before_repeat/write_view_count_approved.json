@@ -1,0 +1,1293 @@
+{
+  "sql": "UPDATE product SET view_count=view_count+1 WHERE product_id=1000043",
+  "representative_plan": {
+    "Plan": {
+      "Node Type": "ModifyTable",
+      "Operation": "Update",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Relation Name": "product",
+      "Alias": "product",
+      "Startup Cost": 0.29,
+      "Total Cost": 8.31,
+      "Plan Rows": 0,
+      "Plan Width": 0,
+      "Actual Startup Time": 0.566,
+      "Actual Total Time": 0.568,
+      "Actual Rows": 0,
+      "Actual Loops": 1,
+      "Shared Hit Blocks": 32,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0,
+      "WAL Records": 13,
+      "WAL FPI": 0,
+      "WAL Bytes": 2688,
+      "Plans": [
+        {
+          "Node Type": "Index Scan",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Scan Direction": "Forward",
+          "Index Name": "product_pkey",
+          "Relation Name": "product",
+          "Alias": "product",
+          "Startup Cost": 0.29,
+          "Total Cost": 8.31,
+          "Plan Rows": 1,
+          "Plan Width": 10,
+          "Actual Startup Time": 0.068,
+          "Actual Total Time": 0.073,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Index Cond": "(product_id = 1000043)",
+          "Rows Removed by Index Recheck": 0,
+          "Shared Hit Blocks": 5,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0,
+          "WAL Records": 0,
+          "WAL FPI": 0,
+          "WAL Bytes": 0
+        }
+      ]
+    },
+    "Planning": {
+      "Shared Hit Blocks": 0,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0
+    },
+    "Planning Time": 0.131,
+    "Triggers": [
+      {
+        "Trigger Name": "trg_etl_capture",
+        "Relation": "product",
+        "Time": 1.329,
+        "Calls": 1
+      }
+    ],
+    "Execution Time": 1.994
+  },
+  "samples": [
+    {
+      "execution_ms": 1.994,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.329,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.109,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.437,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.879,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.288,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.11,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.543,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.069,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.464,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.901,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.344,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.064,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.384,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.957,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.263,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.981,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.384,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.873,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.27,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.9,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.283,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.083,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.463,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.853,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.232,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.661,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.145,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.076,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.454,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.091,
+      "wal_bytes": 2740,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.012,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.892,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.283,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.86,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.253,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.122,
+      "wal_bytes": 2843,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.304,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.9,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.302,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.84,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.26,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.077,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.432,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.864,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.275,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.736,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.217,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.307,
+      "wal_bytes": 2795,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.394,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.99,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.28,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.638,
+      "wal_bytes": 2869,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.812,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.654,
+      "wal_bytes": 2740,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.288,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.7,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.235,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.265,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.296,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.686,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.798,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.854,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.987,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.177,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.102,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.107,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.205,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.163,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.203,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.374,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.135,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.316,
+      "wal_bytes": 2740,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.157,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.207,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.175,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.376,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.67,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.654,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.68,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.883,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.032,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.243,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.211,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 4.158,
+      "wal_bytes": 2740,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.86,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 4.081,
+      "wal_bytes": 2869,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.965,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 4.15,
+      "wal_bytes": 2869,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.97,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.151,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.198,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.086,
+      "wal_bytes": 2863,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.954,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.596,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.656,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.846,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.569,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.539,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.75,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.963,
+      "wal_bytes": 2793,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.708,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.447,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.62,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.354,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.649,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.059,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.379,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.891,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.291,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.666,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.789,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.683,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.157,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.711,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.164,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.687,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.167,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.982,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.428,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.56,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.73,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.177,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.497,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.856,
+      "wal_bytes": 2893,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.204,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.917,
+      "wal_bytes": 2740,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.224,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.819,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 3.216,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.91,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.987,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.984,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.384,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.861,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.209,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.005,
+      "wal_bytes": 2815,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.28,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.702,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.141,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.722,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.846,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.091,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.166,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.515,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.739,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.619,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.76,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.717,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.881,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.513,
+      "wal_bytes": 2793,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.423,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.972,
+      "wal_bytes": 2742,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.296,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.165,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.544,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.58,
+      "wal_bytes": 2740,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.716,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.334,
+      "wal_bytes": 2843,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.429,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.196,
+      "wal_bytes": 2893,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.261,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.823,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.261,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.858,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.282,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.131,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.44,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.884,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.304,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.976,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.378,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.822,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.254,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.755,
+      "wal_bytes": 2796,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.171,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.996,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.373,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.077,
+      "wal_bytes": 2794,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.326,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.68,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.997,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.129,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.066,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 3.021,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 2.001,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.008,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.311,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.805,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.229,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.895,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.227,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.884,
+      "wal_bytes": 2740,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.181,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.181,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.586,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 2.047,
+      "wal_bytes": 2796,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.487,
+          "Calls": 1
+        }
+      ]
+    },
+    {
+      "execution_ms": 1.976,
+      "wal_bytes": 2688,
+      "triggers": [
+        {
+          "Trigger Name": "trg_etl_capture",
+          "Relation": "product",
+          "Time": 1.273,
+          "Calls": 1
+        }
+      ]
+    }
+  ]
+}

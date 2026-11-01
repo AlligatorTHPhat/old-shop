@@ -1,0 +1,10 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.6.0
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-7.1.0, anyio-4.15.1
+collected 22 items
+
+tests/test_day6_integration.py ......................                    [100%]
+
+======================== 22 passed in 650.79s (0:10:50) ========================

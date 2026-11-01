@@ -75,6 +75,11 @@ INDEXES = {
         ([("product_id", 1)], {"unique": True}),
         ([("category_id", 1), ("attributes.brand", 1)], {}),
         ([("attributes.$**", 1)], {"name": "idx_product_attributes"}),
+        # M01: cleanup checks live image references before deleting a shared object.
+        (
+            [("images.key", 1)],
+            {"name": "idx_live_product_image_key", "partialFilterExpression": {"deleted": False}},
+        ),
         ([("description", "text"), ("tags", "text")], {}),
     ],
     "reviews": [
