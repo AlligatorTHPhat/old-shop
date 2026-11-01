@@ -46,6 +46,8 @@ deploy/.deploy-history
 *.xlsx
 *.pdf
 *.local.md
+*.csv
+/docs/benchmark/indexing_v2/**/*.csv
 docs/report/generated/
 dist/releases/
 
