@@ -31,3 +31,18 @@ INSERT INTO product_image (product_id, image_url, alt_text, is_primary, display_
 (15, '/media/products/prod_16_2_olddrone.jpg', 'Flycam', FALSE, 2),
 (16, '/media/products/prod_3_1_headphone.jpg', 'Sony WH-1000XM4 Headphones', TRUE, 1),
 (16, '/media/products/prod_3_2_headphone.jpg', 'Sony WH-1000XM4 Headphones', FALSE, 2);
+
+-- Mỗi sản phẩm mới có 2 bản ghi ảnh, với image_id và alt_text riêng.
+-- Dùng lại URL/file ảnh của mẫu tương ứng, không cần tạo hoặc chép thêm ảnh.
+-- Tổng: 1.000 sản phẩm, 2.000 product_image, vẫn chỉ 32 file ảnh sản phẩm.
+INSERT INTO product_image (product_id, image_url, alt_text, is_primary, display_order)
+SELECT
+    p.product_id,
+    source.image_url,
+    format('%s - Ảnh %s', p.title, source.display_order),
+    source.is_primary,
+    source.display_order
+FROM product p
+JOIN product_image source ON source.product_id = 1 + ((p.product_id - 17) % 16)
+WHERE p.product_id BETWEEN 17 AND 1000
+ORDER BY p.product_id, source.display_order;

@@ -26,7 +26,7 @@ BEGIN
     END IF;
     FOR expected IN SELECT * FROM (VALUES
       ('role',3), ('user',15), ('user_role',15), ('category',8),
-      ('product',16), ('product_image',32), ('voucher',4), ('payment_method',5),
+      ('product',1000), ('product_image',2000), ('voucher',4), ('payment_method',5),
       ('contact_info',15), ('order',30), ('order_detail',30), ('transaction',30),
       ('shopping_cart',11), ('shopping_cart_item',0), ('review',0),
       ('system_log',0), ('system_feedback',0), ('violation_log',11)
@@ -39,6 +39,56 @@ BEGIN
         RAISE NOTICE 'PASS seed % = %', expected.table_name, actual;
     END LOOP;
     RAISE NOTICE 'PASS baseline: 18 tables, 167 columns, 2 triggers';
+END $$;
+
+-- Kiểm tra chất lượng catalogue, không chỉ đếm số bản ghi.
+DO $$
+BEGIN
+    IF (SELECT count(DISTINCT title) FROM product) <> 1000 THEN
+        RAISE EXCEPTION 'Expected 1000 distinct product titles';
+    END IF;
+    IF EXISTS (
+        SELECT 1 FROM category c WHERE NOT EXISTS (
+            SELECT 1 FROM product p
+            WHERE p.category_id = c.category_id AND p.status = 1 AND NOT p.is_deleted
+        )
+    ) THEN
+        RAISE EXCEPTION 'Every category must have products available for sale';
+    END IF;
+    IF (SELECT count(DISTINCT status) FROM product) <> 4
+        OR (SELECT count(DISTINCT transfer_method) FROM product) <> 2 THEN
+        RAISE EXCEPTION 'Missing product statuses or transfer methods';
+    END IF;
+    IF EXISTS (
+        SELECT p.product_id FROM product p
+        LEFT JOIN product_image i USING (product_id)
+        GROUP BY p.product_id
+        HAVING count(i.image_id) <> 2 OR count(*) FILTER (WHERE i.is_primary) <> 1
+            OR count(DISTINCT i.display_order) <> 2
+    ) THEN
+        RAISE EXCEPTION 'Each product needs two ordered images and exactly one primary image';
+    END IF;
+    IF (SELECT count(DISTINCT image_url) FROM product_image) <> 32 THEN
+        RAISE EXCEPTION 'Seed images must reuse the 32 existing product files';
+    END IF;
+    IF EXISTS (
+        SELECT 1 FROM product p
+        WHERE NOT EXISTS (
+            SELECT 1 FROM user_role r WHERE r.user_id = p.seller_id AND r.role_id = 3
+        )
+    ) THEN
+        RAISE EXCEPTION 'Product seller must have the customer/seller role';
+    END IF;
+    IF EXISTS (
+        SELECT 1 FROM product
+        WHERE (status = 3 AND quantity <> 0)
+            OR (status = 1 AND quantity = 0)
+            OR (status = 2 AND NULLIF(trim(reject_reason), '') IS NULL)
+            OR updated_at < created_at OR sold_at < created_at
+    ) THEN
+        RAISE EXCEPTION 'Inconsistent product stock, moderation or timestamps';
+    END IF;
+    RAISE NOTICE 'PASS catalogue: 1000 unique products, all categories/statuses, 2000 reusable images';
 END $$;
 
 -- Catalog counts include PK/UNIQUE backing indexes, not just explicit CREATE INDEX.

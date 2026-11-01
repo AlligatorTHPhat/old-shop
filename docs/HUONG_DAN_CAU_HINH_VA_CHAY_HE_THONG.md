@@ -394,8 +394,12 @@ Trên Windows, here-string `@' ... '@` giữ nguyên dấu nháy của SQL; dòn
 riêng ở đầu dòng. Chỉ `$POSTGRES_USER`/`$POSTGRES_DB` trong `sh -c` được mở rộng bên trong
 container. Không đổi here-string thành chuỗi double-quote làm PowerShell nội suy trước.
 
-DB mới theo seed hiện có: 15 user, 16 product, 32 product_image, 30 order, 30 transaction;
+DB mới theo seed hiện có: 15 user, 1.000 product, 2.000 product_image, 30 order, 30 transaction;
 migration đủ `001` đến `006`. Các số này sẽ thay đổi sau khi bạn thao tác ứng dụng.
+Catalogue giữ 16 sản phẩm gốc và thêm 984 biến thể có tên/mã riêng (`SP-00017`–`SP-01000`),
+phủ đủ 8 danh mục, 4 trạng thái, nhiều mức giá, tồn kho và người bán. Một phần sản phẩm
+được đánh dấu xóa mềm để thử bộ lọc; vì vậy danh sách công khai không hiển thị đủ 1.000 dòng.
+Mỗi sản phẩm có 2 bản ghi ảnh; toàn bộ dùng lại 32 file ảnh sản phẩm có sẵn.
 User sau migration nằm trong `user_core`, `user_profile`, `user_secret`, `user_wallet`;
 `users_full` là view đọc kết hợp. Không tìm bảng `user` cũ để kết luận seed bị mất.
 
@@ -468,7 +472,7 @@ dc run --rm --no-deps --entrypoint python backend -m etl.run status
 `last_run.status: success`. Nếu có `partial`/lỗi, xử lý theo mục 13 trước khi mở ứng dụng.
 Có thể chạy lại `full` thêm một lần để kiểm replay; số document nghiệp vụ không nhân đôi.
 
-Với seed ban đầu, các collection nghiệp vụ có 16 `product_details`, 30 `order_snapshots`,
+Với seed ban đầu, các collection nghiệp vụ có 1.000 `product_details`, 30 `order_snapshots`,
 11 `violation_logs`; `reviews`, `system_logs`, `contact_messages` ban đầu rỗng.
 `attributes`/`tags` của sản phẩm có thể rỗng: seed quan hệ không tự tạo thông số RAM/brand
 giả như bộ metadata riêng dùng trong video demo. Không import JSON ví dụ thiết kế như một

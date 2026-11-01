@@ -1,4 +1,5 @@
--- Reset và chèn dữ liệu mới với link video Drive thống nhất
+-- Seed cho DB mới: giữ 16 sản phẩm gốc để các đơn hàng mẫu giữ đúng tham chiếu.
+-- Phần generate_series bên dưới bổ sung 984 sản phẩm, tổng cộng đúng 1.000.
 INSERT INTO product (
     seller_id, 
     category_id, 
@@ -40,3 +41,77 @@ INSERT INTO product (
 -- Status 0: Đang chờ duyệt (Pending)
 (3, 1, 'Flycam cũ', 'Drone DJI cũ hoạt động tốt, kèm 2 pin dự phòng.', 5500000.00, 31, 1200, '25x25x10 cm', 9, 6, 0, 1, NULL, 'https://drive.google.com/file/d/1XSL6bU3sBJRAs6o3zg4BcFiH8V9zsmCL/view?usp=drive_link'),
 (3, 8, 'Tai nghe Sony WH-1000XM4', 'Tai nghe chống ồn đỉnh cao, đầy đủ phụ kiện cáp sạc.', 4500000.00, 36, 254, '30x26x7 cm', 9, 24, 0, 1, NULL, 'https://drive.google.com/file/d/1XSL6bU3sBJRAs6o3zg4BcFiH8V9zsmCL/view?usp=drive_link');
+
+-- Tái sử dụng 16 mẫu hàng và ảnh gốc, thay tên/mã, giá, tồn kho và thông tin bán.
+-- Mã SP-00017 .. SP-01000 nằm trong title vì schema hiện không có cột SKU.
+-- Công thức chọn mẫu phải khớp 03_seeds/product_images/seed.sql:
+-- source_product_id = 1 + ((product_id - 17) % 16).
+-- Không dùng random(): mỗi lần khởi tạo mới có cùng phân bố dữ liệu.
+WITH samples AS (
+    SELECT
+        n AS sample_no,
+        1 + ((n - 1) % 16) AS source_product_id,
+        (n - 1) / 16 AS batch_no,
+        ((n - 1) * 7 + (n - 1) / 16) % 20 AS status_bucket,
+        CURRENT_TIMESTAMP
+            - (7 + (n * 13) % 359) * INTERVAL '1 day'
+            - (n % 24) * INTERVAL '1 hour' AS listed_at
+    FROM generate_series(1, 984) AS series(n)
+), variants AS (
+    SELECT samples.*,
+        CASE
+            WHEN status_bucket < 14 THEN 1  -- phần lớn đang bán
+            WHEN status_bucket < 17 THEN 0  -- chờ duyệt
+            WHEN status_bucket < 19 THEN 2  -- bị từ chối
+            ELSE 3                         -- đã bán hết
+        END AS product_status
+    FROM samples
+)
+INSERT INTO product (
+    seller_id, category_id, title, description, price, quantity, view_count,
+    video_url, status, reject_reason, approved_by, is_deleted,
+    created_at, updated_at, sold_at, weight_grams, dimensions,
+    condition_rating, warranty_months, transfer_method
+)
+SELECT
+    (ARRAY[3, 4, 7, 8, 9, 10, 11, 12, 13, 14, 15])[1 + (v.sample_no * 7) % 11],
+    CASE
+        -- Thêm hàng thời trang và đồ chơi để phủ đủ 8 danh mục hiện có.
+        WHEN v.source_product_id IN (3, 14) AND v.batch_no % 2 = 1 THEN 4
+        WHEN v.source_product_id = 15 THEN 5
+        ELSE source.category_id
+    END,
+    format('%s - %s - SP-%s', source.title,
+        (ARRAY['Bản tiêu chuẩn', 'Bản tiết kiệm', 'Bản sưu tầm', 'Bản kèm phụ kiện'])
+            [1 + v.batch_no % 4],
+        lpad((v.sample_no + 16)::text, 5, '0')),
+    format('%s Mã hàng SP-%s. Tình trạng %s/10; %s. Dữ liệu mẫu phục vụ tìm kiếm, lọc và phân trang.',
+        source.description, lpad((v.sample_no + 16)::text, 5, '0'),
+        5 + (v.sample_no * 7) % 6,
+        CASE WHEN v.sample_no % 2 = 0 THEN 'có thể giao hàng' ELSE 'ưu tiên nhận trực tiếp' END),
+    round(source.price * (60 + (v.sample_no * 17) % 81) / 100.0, -3),
+    CASE WHEN v.product_status = 3 THEN 0 ELSE 1 + (v.sample_no * 7) % 80 END,
+    (v.sample_no * 37) % 5001,
+    CASE WHEN v.sample_no % 3 = 0 THEN NULL ELSE source.video_url END,
+    v.product_status,
+    CASE WHEN v.product_status = 2 THEN
+        (ARRAY['Ảnh chưa thể hiện đầy đủ tình trạng sản phẩm.',
+               'Cần bổ sung thông tin nguồn gốc và phụ kiện.',
+               'Mô tả cần được điều chỉnh trước khi đăng bán.'])[1 + v.sample_no % 3]
+    END,
+    CASE WHEN v.product_status IN (1, 3) THEN (ARRAY[2, 5, 6])[1 + v.sample_no % 3] END,
+    v.sample_no % 29 = 0,
+    v.listed_at,
+    CASE WHEN v.sample_no % 4 <> 0 THEN v.listed_at + INTERVAL '1 day' END,
+    CASE WHEN v.product_status = 3 THEN v.listed_at + INTERVAL '2 days' END,
+    source.weight_grams,
+    source.dimensions,
+    5 + (v.sample_no * 7) % 6,
+    CASE WHEN source.warranty_months > 0 THEN
+        (ARRAY[0, 3, 6, 12, 24])[1 + v.batch_no % 5]
+        ELSE 0
+    END,
+    1 + v.sample_no % 2
+FROM variants v
+JOIN product source ON source.product_id = v.source_product_id
+ORDER BY v.sample_no;
