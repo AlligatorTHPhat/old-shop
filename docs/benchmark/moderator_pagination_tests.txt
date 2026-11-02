@@ -1,0 +1,41 @@
+Moderator pagination verification — 2026-11-02 (Asia/Ho_Chi_Minh)
+
+Problem: UI paginated only the default 100 records from moderation/list. Remaining
+pending/approved/rejected products were unreachable, including new user submissions.
+
+Backend/API regression:
+  python deploy/scripts/test-product-video.py --image oldshop-video-validation:local \
+    --tests tests/test_moderation_pagination.py tests/test_v1_product.py tests/test_v1_moderator.py
+  Result: 26 passed in 4.08s.
+  Runs on private disposable PostgreSQL/MinIO containers; no published ports or live DB access.
+  All temporary containers/volumes/network removed by runner.
+  Reproduce without a prebuilt test image by omitting --image.
+
+Coverage:
+  - Traverse all three moderation statuses, including more than 100 pending records.
+  - Compare IDs/total to PostgreSQL; no missing or duplicate records in an unchanged queue.
+  - Actual user multipart submission appears first with image, seller and category names.
+  - Approve/reject moves a product to the corresponding filtered queue.
+  - Stable descending product ID ordering, including equal created_at values.
+  - Newest-submission ordering works despite legacy-local versus ORM-UTC timestamps.
+  - Search entire queue by title, seller and category; trim input and escape literal %/_ wildcards.
+  - Deleted products excluded; total matches search/status; out-of-range offsets return empty items.
+  - Validate bounds and role checks; legacy array endpoint remains available.
+
+Frontend:
+  cd frontend
+  npm test -- --watch=false
+  Result: 15 files passed, 28 tests passed (7 moderator tests).
+  Coverage: fetch page 30 at skip=145 for a total of 147; previous/next HTTP requests;
+  detail/image-video bindings; debounced global search; cancel obsolete requests on tab
+  changes; last-page moderation fallback; load-error retry; first-page refresh for new listings.
+
+Production build:
+  npm run build -- --configuration production
+  Result: PASS. Initial bundle 714.02 kB; existing 500 kB warning budget exceeded,
+  below configured 1 MB error budget. Existing Google Fonts required network access.
+
+Ruff on changed Python files: PASS.
+git diff --check: PASS.
+No schema migration or product_image changes. Live application containers and data
+were not modified. No live browser end-to-end run; rebuild both backend/frontend per guide.

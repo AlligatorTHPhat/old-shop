@@ -19,6 +19,7 @@ from app.schemas import (
     ReviewResponse,
     StatusUpdate,
 )
+from app.schemas.catalog import ModerationProductPage
 from app.services import product_metadata
 from app.services.product_video import cleanup_replaced_video, discard_video, normalize_video_link, save_video
 from app.services.storage import delete_media, save_image
@@ -88,6 +89,31 @@ def list_products_by_status(
     db: Session = Depends(get_db),
 ):
     return crud_product.get_by_status(db, status, skip=skip, limit=limit)
+
+
+@router.get("/moderation/page", response_model=ModerationProductPage)
+def moderation_product_page(
+    status: int = Query(..., ge=0, le=2, description="0: Pending, 1: Approved, 2: Rejected"),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=1000),
+    search: str | None = Query(None, max_length=200),
+    moderator: User = Depends(get_current_moderator),
+    db: Session = Depends(get_db),
+):
+    products, total = crud_product.moderation_page(db, status, skip=skip, limit=limit, search=search)
+    return {
+        "items": [
+            {
+                **ProductResponse.model_validate(product).model_dump(),
+                "seller_name": product.seller.username,
+                "category_name": product.category.name,
+            }
+            for product in products
+        ],
+        "total": total,
+        "skip": skip,
+        "limit": limit,
+    }
 
 
 @router.get("/pending/all", response_model=list[ProductResponse])

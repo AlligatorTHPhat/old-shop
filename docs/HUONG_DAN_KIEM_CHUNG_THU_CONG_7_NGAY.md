@@ -1430,6 +1430,15 @@ Các bài sau tiếp tục dùng **sản phẩm demo** từ mục 6.2. Đây là
 6. Trên website, mở sản phẩm tương ứng, xem thuộc tính/ảnh. DevTools → Network để đối
    chiếu response của API với phần hiển thị.
 
+Sau bản sửa phân trang moderator, kiểm thêm ở `/moderator/product-manage`: sản phẩm
+vừa đăng xuất hiện đầu tab chờ duyệt sau khi bấm **Tải lại**. Mỗi lần chuyển trang, Network
+phải gọi `GET /api/v1/products/moderation/page?status=0&skip=...&limit=5`; response có
+`items` và `total`. Với hơn 100 sản phẩm chờ duyệt, chuyển được đến trang sau mốc 100;
+tìm kiếm theo sản phẩm/người bán/danh mục áp dụng toàn bộ hàng chờ. Kiểm cả tab status
+1 và 2. Sau khi xử lý hết trang cuối, giao diện tự về trang hợp lệ trước đó.
+Xem cách cập nhật backend/frontend ở
+[hướng dẫn cấu hình, mục 17](HUONG_DAN_CAU_HINH_VA_CHAY_HE_THONG.md#17-danh-sách-kiểm-duyệt-sản-phẩm-đầy-đủ).
+
 GET detail tăng `view_count`, commit PG và có thể tạo thêm event ETL. Sau khi xem detail,
 backlog xuất hiện ngắn hạn là bình thường; không đòi outbox trống trong lúc liên tục refresh.
 

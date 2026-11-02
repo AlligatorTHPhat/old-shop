@@ -1067,3 +1067,38 @@ MP4 được lưu trong bucket private `product-videos` và phát qua media gate
 Xem [hướng dẫn video sản phẩm](HUONG_DAN_VIDEO_SAN_PHAM.md) để áp dụng vào stack hiện hữu,
 chuẩn bị video seed, cài ffprobe khi chạy host và kiểm chứng tạo/sửa/xóa video.
 Không cần thêm bảng hoặc chạy lại seed SQL trên DB đang dùng.
+
+## 17. Danh sách kiểm duyệt sản phẩm đầy đủ
+
+Moderator tải từng trang từ backend thay vì chia trang trên 100 bản ghi đầu tiên.
+API mới `GET /api/v1/products/moderation/page` nhận `status` (0/1/2), `skip`, `limit`,
+`search` và trả `{items, total, skip, limit}`. Mỗi lần tải mặc định trên giao diện là 5
+sản phẩm; chuyển trang sẽ yêu cầu trang tương ứng trên server, kể cả các bản ghi sau mốc 100.
+
+Tìm kiếm áp dụng trên toàn bộ danh sách theo tên sản phẩm, username người bán hoặc danh mục.
+Tên người bán và danh mục được API trả kèm; màn hình không cần tải trước danh sách user.
+Thứ tự là ID sản phẩm giảm dần để hiển thị tin đăng mới trước. Không so sánh trực tiếp
+`created_at` của seed theo giờ Việt Nam với timestamp UTC của ORM. Dữ liệu thời gian nguồn
+và provenance ETL được giữ nguyên. API danh sách dạng mảng cũ vẫn dùng được.
+
+Sau khi duyệt/từ chối, tổng số được tải lại; nếu trang cuối không còn sản phẩm, giao diện
+quay về trang hợp lệ trước đó. Nút **Tải lại** đưa về trang đầu để thấy tin đăng mới.
+Không có thay đổi schema, bảng `product_image` hoặc dữ liệu seed.
+
+Để áp dụng, từ thư mục gốc với hàm `dc` đã định nghĩa ở mục 4, chạy từng lệnh sau và
+chỉ tiếp tục khi lệnh trước thành công (Bash hoặc PowerShell 7.3+):
+
+```text
+dc build backend frontend
+dc up -d --no-deps --force-recreate --wait --wait-timeout 180 backend
+dc up -d --no-deps --force-recreate --wait --wait-timeout 90 frontend
+```
+
+Tải lại trình duyệt bằng Ctrl+Shift+R. Cần cập nhật cả backend và frontend; không cần
+reset DB hoặc xóa volume. Backend được khởi động trước; frontend được tạo lại sau đó
+để Nginx nhận địa chỉ backend hiện tại.
+
+Kiểm chứng: đăng một sản phẩm bằng user, chuyển sang moderator và bấm **Tải lại** ở
+tab chờ duyệt. Sản phẩm mới đứng đầu; chuyển đến trang cuối, kiểm tổng số và thử tìm tên
+sản phẩm nằm ngoài 100 bản ghi đầu. Kiểm tiếp hai tab đã duyệt và từ chối.
+Xem [bằng chứng kiểm thử](benchmark/moderator_pagination_tests.txt).

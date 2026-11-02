@@ -3,7 +3,7 @@ from sqlalchemy.orm import Query, Session, joinedload
 from app.core.constants import ProductStatus
 from app.core.exceptions import BadRequestError, NotFoundError
 from app.crud.base import CRUDBase
-from app.models import Category, Product, ProductImage, Review
+from app.models import Category, Product, ProductImage, Review, User
 from app.schemas import ReviewCreate
 from app.services.storage import image_metadata
 
@@ -112,10 +112,43 @@ class CRUDProduct(CRUDBase[Product]):
             db.query(Product)
             .options(joinedload(Product.product_images))
             .filter(Product.status == status, Product.is_deleted == False)
+            .order_by(Product.product_id.desc())
             .offset(skip)
             .limit(limit)
             .all()
         )
+
+    def moderation_page(
+        self, db: Session, status: int, *, skip: int = 0, limit: int = 20, search: str | None = None
+    ) -> tuple[list[Product], int]:
+        query = db.query(Product).filter(Product.status == status, Product.is_deleted.is_(False))
+        if search and search.strip():
+            term = search.strip().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            pattern = f"%{term}%"
+            query = (
+                query.join(Product.seller)
+                .join(Product.category)
+                .filter(
+                    Product.title.ilike(pattern, escape="\\")
+                    | User.username.ilike(pattern, escape="\\")
+                    | Category.name.ilike(pattern, escape="\\")
+                )
+            )
+        total = query.count()
+        items = (
+            query.options(
+                joinedload(Product.product_images),
+                joinedload(Product.seller).load_only(User.user_id, User.username),
+                joinedload(Product.category).load_only(Category.category_id, Category.name),
+            )
+            # Legacy seed dates are local time, ORM dates UTC. Submission IDs give a
+            # stable newest-submission order without comparing incompatible naive dates.
+            .order_by(Product.product_id.desc())
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+        return items, total
 
     def add_pending(self, db: Session, data: dict) -> Product:
         """Insert a product awaiting moderation. Flushes only; the caller commits."""

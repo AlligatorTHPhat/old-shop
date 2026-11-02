@@ -4,6 +4,19 @@ import { Observable } from 'rxjs';
 import { Product } from '../../core/models';
 import { environment } from '../../../environments/environment';
 
+export interface ModerationProduct extends Product {
+  seller_name: string;
+  category_name: string;
+  product_name?: string;
+}
+
+export interface ModerationProductPage {
+  items: ModerationProduct[];
+  total: number;
+  skip: number;
+  limit: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -67,6 +80,14 @@ export class ProductService {
         params: { status: status.toString() }, 
         headers 
     });
+  }
+
+  getModerationPage(status: number, skip: number, limit: number, search = ''): Observable<ModerationProductPage> {
+    let params = new HttpParams().set('status', status).set('skip', skip).set('limit', limit);
+    if (search.trim()) params = params.set('search', search.trim());
+    const token = sessionStorage.getItem('token');
+    const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
+    return this.http.get<ModerationProductPage>(`${this.apiUrl}/moderation/page`, { params, headers });
   }
 
   updateProductStatus(productId: number, status: number, reason?: string): Observable<Product> {

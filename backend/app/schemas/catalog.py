@@ -94,12 +94,25 @@ class ProductResponse(ProductBase, ORMModel):
     @property
     def video_source(self) -> Literal["google_drive", "upload", "external"] | None:
         from app.services.product_video import video_source
+
         return video_source(self.video_url)
 
     @computed_field
     @property
     def is_approved(self) -> bool:
         return self.status == ProductStatus.APPROVED
+
+
+class ModerationProductResponse(ProductResponse):
+    seller_name: str
+    category_name: str
+
+
+class ModerationProductPage(BaseModel):
+    items: list[ModerationProductResponse]
+    total: int = Field(ge=0)
+    skip: int = Field(ge=0)
+    limit: int = Field(ge=1)
 
 
 # ---------- Review ----------

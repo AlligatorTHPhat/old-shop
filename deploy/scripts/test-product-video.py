@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import shlex
 import subprocess
 import tempfile
 import time
@@ -18,6 +19,17 @@ def run(*args, **kwargs):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--image", help="Use an already-built backend image (otherwise builds one)")
+    parser.add_argument(
+        "--tests",
+        nargs="+",
+        default=[
+            "tests/test_product_video.py",
+            "tests/test_v1_product.py",
+            "tests/test_day3_data.py",
+            "tests/test_day5_etl.py",
+        ],
+        help="Pytest paths within backend; tests always run on disposable infrastructure",
+    )
     args = parser.parse_args()
     suffix = uuid.uuid4().hex[:10]
     network = f"oldshop-video-test-{suffix}"
@@ -158,8 +170,7 @@ def main():
                 "-c",
                 "mkdir -p /tmp/prometheus; python -m scripts.init_db > /tmp/video-bootstrap.log 2>&1 || "
                 "{ cat /tmp/video-bootstrap.log; exit 1; }; "
-                "python -m pytest -o addopts='' -p no:cacheprovider "
-                "tests/test_product_video.py tests/test_v1_product.py tests/test_day3_data.py tests/test_day5_etl.py",
+                "python -m pytest -o addopts='' -p no:cacheprovider " + shlex.join(args.tests),
             ]
         )
         run(*options)
