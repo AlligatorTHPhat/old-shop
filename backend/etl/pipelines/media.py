@@ -1,12 +1,12 @@
 """Reuse idempotent seed/runtime-media transfer and PG key-based metadata backfill."""
 
 from minio.error import S3Error
-
-from app.services.storage import bucket_for, content_type, local_path, minio_client, validate_path
-from etl.transform import QualityError
 from scripts.backfill_media_metadata import backfill
 from scripts.init_db import SEED_MEDIA_DIR
 from scripts.seed_media import seed_media
+
+from app.services.storage import bucket_for, content_type, local_path, minio_client, validate_path
+from etl.transform import QualityError
 
 
 def run():
@@ -19,10 +19,14 @@ def run():
 
 
 def ensure_images(document):
-    """Copy a newly referenced local image if needed; no bucket/volume scan per event."""
+    """Copy referenced images and MP4 if needed; no bucket/volume scan per event."""
     client = minio_client()
-    for image in document["images"]:
-        key = validate_path(image["key"])
+    keys = [image["key"] for image in document["images"]]
+    video = document.get("video_url")
+    if video and video.startswith("/media/videos/products/"):
+        keys.append(video.removeprefix("/media/"))
+    for reference in keys:
+        key = validate_path(reference)
         bucket = bucket_for(key)
         try:
             client.stat_object(bucket, key)

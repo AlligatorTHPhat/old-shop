@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import APIRouter, Body, Depends, File, Form, HTTPException, Query, UploadFile, status
+from pydantic import ValidationError
 from sqlalchemy.orm import Session
 from starlette.concurrency import run_in_threadpool
 
@@ -19,6 +20,7 @@ from app.schemas import (
     StatusUpdate,
 )
 from app.services import product_metadata
+from app.services.product_video import cleanup_replaced_video, discard_video, normalize_video_link, save_video
 from app.services.storage import delete_media, save_image
 
 logger = logging.getLogger(__name__)
@@ -118,6 +120,7 @@ async def create_product(
     price: float = Form(...),
     quantity: int = Form(...),
     video_url: str | None = Form(None),
+    video_file: UploadFile | None = File(None),
     weight_grams: int | None = Form(None),
     dimensions: str | None = Form(None),
     condition_rating: int | None = Form(None),
@@ -129,6 +132,9 @@ async def create_product(
     """Create a listing (multipart). It stays pending until a moderator approves it."""
     if not files:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="At least one image file is required")
+    if video_file is not None and video_url and video_url.strip():
+        raise HTTPException(400, "Chỉ chọn liên kết video hoặc file MP4.")
+    video_url = normalize_video_link(video_url)
     if not crud_category.get_by_id(db, category_id):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category not found")
 
@@ -151,13 +157,18 @@ async def create_product(
     )
 
     saved: list[str] = []
+    saved_video = None
     try:
+        if video_file is not None:
+            saved_video = await save_video(video_file, product.product_id)
+            product.video_url = saved_video
         for index, file in enumerate(files, start=1):
             saved.append(await save_image(file, "products", f"prod_{product.product_id}_{index}"))
         await run_in_threadpool(crud_product.add_images, db, product, saved)
         db.commit()
     except Exception:
         db.rollback()
+        discard_video(saved_video)
         for url in saved:
             await run_in_threadpool(delete_media, url)
         raise
@@ -174,14 +185,67 @@ def update_product(
     current_user: User = Depends(any_user),
     db: Session = Depends(get_db),
 ):
-    product = _get_or_404(db, product_id)
-    _ensure_owner_or_admin(product, current_user)
+    product = _editable_product(db, product_id, current_user)
+    return _save_listing(db, product, product_update)
 
-    new_category = product_update.category_id
-    if new_category and new_category != product.category_id and not crud_category.get_by_id(db, new_category):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category not found")
 
-    return crud_product.update(db, product, product_update)
+def _editable_product(db: Session, product_id: int, user: User) -> Product:
+    # Serialize replacements, preventing an older concurrent request from deleting a new video.
+    product = (
+        db.query(Product)
+        .filter(Product.product_id == product_id, Product.is_deleted.is_(False))
+        .with_for_update()
+        .first()
+    )
+    if not product:
+        raise HTTPException(404, "Product not found")
+    _ensure_owner_or_admin(product, user)
+    return product
+
+
+def _save_listing(db: Session, product: Product, product_update: ProductUpdate, uploaded: str | None = None) -> Product:
+    old_video = product.video_url
+    try:
+        new_category = product_update.category_id
+        if new_category and new_category != product.category_id and not crud_category.get_by_id(db, new_category):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category not found")
+        values = product_update.model_dump(exclude_unset=True)
+        if uploaded is not None:
+            values["video_url"] = uploaded
+        elif "video_url" in values:
+            values["video_url"] = normalize_video_link(values["video_url"], current_url=old_video)
+        for key, value in values.items():
+            if value is not None or key == "video_url":
+                setattr(product, key, value)
+        db.commit()
+    except Exception:
+        db.rollback()
+        discard_video(uploaded)
+        raise
+    # A failed refresh after commit must never cause deletion of the now-referenced upload.
+    db.refresh(product)
+    cleanup_replaced_video(db, old_video, product.video_url)
+    return product
+
+
+@router.put("/{product_id}/listing", response_model=ProductResponse)
+async def update_listing(
+    product_id: int,
+    details: str = Form(..., description="JSON ProductUpdate; omit video_url to keep, null to remove"),
+    video_file: UploadFile | None = File(None),
+    current_user: User = Depends(any_user),
+    db: Session = Depends(get_db),
+):
+    """Atomically update listing fields and optionally replace its MP4."""
+    try:
+        data = ProductUpdate.model_validate_json(details)
+    except ValidationError as exc:
+        raise HTTPException(422, "Thông tin sản phẩm không hợp lệ.") from exc
+    if video_file is not None and "video_url" in data.model_fields_set:
+        raise HTTPException(400, "Chỉ chọn liên kết video hoặc file MP4.")
+    product = _editable_product(db, product_id, current_user)
+    uploaded = await save_video(video_file, product_id) if video_file is not None else None
+    return _save_listing(db, product, data, uploaded)
 
 
 @router.patch("/{product_id}/status", response_model=Message)

@@ -444,7 +444,7 @@ Trình tự này tránh bật storage MinIO khi
 ảnh còn chỉ nằm trên đĩa local. Với ứng dụng đã có người dùng/upload, chuyển storage phải
 có thời gian bảo trì để không phát sinh file mới giữa lúc copy và đổi cấu hình.
 
-Ba bucket là `product-images`, `user-avatars`, `attachments`. Backend/ETL dùng
+Bốn bucket là `product-images`, `product-videos`, `user-avatars`, `attachments`. Backend/ETL dùng
 `MINIO_APP_ACCESS_KEY`/`MINIO_APP_SECRET_KEY`, không dùng root credentials để phục vụ request.
 
 ## 7. Nạp dữ liệu Mongo bằng ETL và mở ứng dụng
@@ -1059,3 +1059,11 @@ giữ tham số/dấu nháy, chuyển SQL vào stdin và báo lỗi khi native c
 
 Chưa có lượt cài mới end-to-end trên máy Windows trong tác vụ này. Trước khi kết luận máy
 Windows đã chạy thành công, thực hiện đến checker ở mục 8 trên chính máy đó.
+
+## 16. Video Google Drive và upload MP4
+
+Người bán có thể chọn liên kết Google Drive/YouTube hoặc upload MP4 tối đa 50 MiB.
+MP4 được lưu trong bucket private `product-videos` và phát qua media gateway.
+Xem [hướng dẫn video sản phẩm](HUONG_DAN_VIDEO_SAN_PHAM.md) để áp dụng vào stack hiện hữu,
+chuẩn bị video seed, cài ffprobe khi chạy host và kiểm chứng tạo/sửa/xóa video.
+Không cần thêm bảng hoặc chạy lại seed SQL trên DB đang dùng.

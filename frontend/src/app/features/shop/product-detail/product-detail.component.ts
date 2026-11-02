@@ -9,12 +9,13 @@ import { CartService } from '../../../core/services/cart.service';
 import { UIService } from '../../../core/services/ui.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { CategoryService } from '../../../shared/services/category.service';
+import { ProductVideoComponent } from '../../../shared/components/product-video/product-video';
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ProductVideoComponent],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })

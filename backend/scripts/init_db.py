@@ -94,6 +94,12 @@ def sync_seed_media() -> None:
             copied += 1
     if copied:
         logger.info("Copied %s seed media files into %s", copied, settings.MEDIA_DIR)
+    # One shared MP4 seed object; never overwrite files uploaded by users.
+    source = DATABASE_DIR / "03_seeds/assets/videos/Building_Windows_Apps.mp4"
+    target = settings.MEDIA_DIR / "videos/products/seed/product-demo.mp4"
+    if source.is_file() and not target.exists():
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
 
 
 def main() -> None:

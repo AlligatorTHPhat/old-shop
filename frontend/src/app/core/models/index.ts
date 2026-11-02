@@ -58,7 +58,8 @@ export interface Product {
   status: number;
   reject_reason?: string;
   view_count: number;
-  video_url?: string;
+  video_url?: string | null;
+  video_source?: 'google_drive' | 'upload' | 'external' | null;
   condition_rating?: number;  
   warranty_months?: number;
   is_deleted: boolean;

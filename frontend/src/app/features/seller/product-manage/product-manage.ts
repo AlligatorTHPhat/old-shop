@@ -1,17 +1,18 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
 import { UIService } from '../../../core/services/ui.service';
 import { mediaUrl } from '../../../core/utils/media-url';
+import { ProductVideoComponent } from '../../../shared/components/product-video/product-video';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-product-manage',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ProductVideoComponent],
   templateUrl: './product-manage.html',
   styleUrl: './product-manage.scss'
 })
@@ -28,6 +29,11 @@ export class ProductManageComponent implements OnInit {
   categories: any[] = [];
   productForm!: FormGroup;
   selectedFiles: File[] = [];
+  videoMode: 'none' | 'link' | 'upload' = 'none';
+  selectedVideo: File | null = null;
+  existingVideoUrl: string | null = null;
+  uploadProgress: number | null = null;
+  readonly maxVideoBytes = 50 * 1024 * 1024;
   
   currentStatus = 0;
   currentPage = 1;
@@ -191,6 +197,13 @@ export class ProductManageComponent implements OnInit {
     this.isEditMode = !!p;
     this.editingProductId = p ? p.product_id : null;
     this.isSubmitting = false;
+    this.selectedFiles = [];
+    this.selectedVideo = null;
+    this.uploadProgress = null;
+    this.existingVideoUrl = p?.video_url || null;
+    this.videoMode = this.existingVideoUrl?.startsWith('/media/videos/products/')
+      ? 'upload' : this.existingVideoUrl ? 'link' : 'none';
+    this.productForm.reset({ condition_rating: '8', warranty_months: '0', transfer_method: '1' });
 
     const fileInput = document.getElementById('fileUpload') as HTMLInputElement;
     if (fileInput) fileInput.value = ''; 
@@ -215,7 +228,29 @@ export class ProductManageComponent implements OnInit {
     if (event.target.files.length > 0) this.selectedFiles = Array.from(event.target.files);
   }
 
+  changeVideoMode(value: 'none' | 'link' | 'upload') {
+    this.videoMode = value;
+    this.selectedVideo = null;
+    if (value === 'link' && this.productForm.value.video_url?.startsWith('/media/')) {
+      this.productForm.patchValue({ video_url: '' });
+    }
+  }
+
+  onVideoSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    this.selectedVideo = null;
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.mp4') || file.size > this.maxVideoBytes || file.size === 0) {
+      input.value = '';
+      this.uiService.showError('Chọn file MP4 có dung lượng từ 1 byte đến 50 MB.', 'Video không hợp lệ');
+      return;
+    }
+    this.selectedVideo = file;
+  }
+
   onSubmit() {
+    if (this.isSubmitting) return;
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
       this.uiService.showError('Vui lòng điền đầy đủ các thông tin bắt buộc.', 'Thiếu thông tin');
@@ -226,23 +261,50 @@ export class ProductManageComponent implements OnInit {
       return;
     }
 
+    if (this.videoMode === 'upload' && !this.selectedVideo && !this.existingVideoUrl?.startsWith('/media/videos/products/')) {
+      this.uiService.showError('Vui lòng chọn file MP4.', 'Thiếu video');
+      return;
+    }
+    if (this.videoMode === 'link' && !this.productForm.value.video_url?.trim()) {
+      this.uiService.showError('Vui lòng nhập liên kết Google Drive hoặc YouTube.', 'Thiếu liên kết video');
+      return;
+    }
     this.isSubmitting = true;
+    this.uploadProgress = null;
     const formData = new FormData();
     const formValue = this.productForm.value;
     const dimensions = `${formValue.d || 0}x${formValue.r || 0}x${formValue.c || 0}`;
     
-    Object.keys(formValue).forEach(key => {
-      if (!['d', 'r', 'c'].includes(key)) formData.append(key, formValue[key]);
+    const details: Record<string, any> = { ...formValue, dimensions };
+    ['d', 'r', 'c', 'video_url'].forEach(key => delete details[key]);
+    Object.keys(details).forEach(key => {
+      if (details[key] === '' || details[key] === null || details[key] === undefined) delete details[key];
     });
-    formData.append('dimensions', dimensions);
-    this.selectedFiles.forEach(file => formData.append('files', file));
+    if (this.videoMode === 'link') details['video_url'] = formValue.video_url.trim();
+    else if (this.videoMode === 'none') details['video_url'] = null;
 
-    const obs = this.isEditMode 
-      ? this.http.put(`${this.apiUrl}/products/${this.editingProductId}`, { ...formValue, dimensions })
-      : this.http.post(`${this.apiUrl}/products`, formData, { responseType: 'text' }); 
+    if (this.isEditMode) {
+      formData.append('details', JSON.stringify(details));
+    } else {
+      Object.keys(details).forEach(key => {
+        if (details[key] !== null) formData.append(key, String(details[key]));
+      });
+      this.selectedFiles.forEach(file => formData.append('files', file));
+    }
+    if (this.videoMode === 'upload' && this.selectedVideo) formData.append('video_file', this.selectedVideo);
+
+    const options = { observe: 'events' as const, reportProgress: true };
+    const obs = this.isEditMode
+      ? this.http.put(`${this.apiUrl}/products/${this.editingProductId}/listing`, formData, options)
+      : this.http.post(`${this.apiUrl}/products`, formData, options);
 
     obs.subscribe({
-      next: () => {
+      next: (event) => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.uploadProgress = event.total ? Math.round(100 * event.loaded / event.total) : null;
+          this.cdr.detectChanges();
+        }
+        if (event.type !== HttpEventType.Response) return;
         // Lược bỏ Modal Success, chỉ Đóng form và Cập nhật bảng
         this.isSubmitting = false;
         this.closeModal();
@@ -250,15 +312,11 @@ export class ProductManageComponent implements OnInit {
       },
       error: (err) => {
         this.isSubmitting = false;
-        // Bắt lỗi Parse Json từ Backend
-        if (err.status === 200 || err.status === 201) {
-          this.closeModal();
-          this.loadProducts();
-        } else {
-          // Chỉ mở Error Alert nếu thực sự bị lỗi 400, 500
-          this.uiService.showError(err.error?.message || err.message || 'Có lỗi xảy ra từ máy chủ', 'Lỗi Server');
-          this.cdr.detectChanges();
-        }
+        const detail = err.error?.detail;
+        const message = err.status === 413 ? 'Tổng dung lượng ảnh và video vượt giới hạn của máy chủ.'
+          : typeof detail === 'string' ? detail : err.error?.message || 'Không thể lưu sản phẩm. Vui lòng kiểm tra thông tin và thử lại.';
+        this.uiService.showError(message, 'Không thể lưu sản phẩm');
+        this.cdr.detectChanges();
       }
     });
   }

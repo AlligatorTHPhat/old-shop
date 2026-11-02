@@ -119,7 +119,9 @@ def create_app() -> FastAPI:
 
     @app.api_route("/media/{path:path}", methods=["GET", "HEAD"], include_in_schema=False)
     def media(path: str, request: Request):
-        return get_storage().response(validate_path(path), head=request.method == "HEAD")
+        return get_storage().response(
+            validate_path(path), head=request.method == "HEAD", range_header=request.headers.get("range")
+        )
 
     Instrumentator(excluded_handlers=["/health.*", "/metrics", "/media.*"]).instrument(app).expose(
         app, include_in_schema=False

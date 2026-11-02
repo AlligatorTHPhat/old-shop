@@ -52,7 +52,7 @@ class ProductBase(BaseModel):
     description: str | None = None
     price: Decimal = Field(..., gt=0)
     quantity: int = Field(..., ge=0)
-    video_url: str | None = None
+    video_url: str | None = Field(None, max_length=500)
     weight_grams: int | None = None
     dimensions: str | None = None
     condition_rating: int | None = Field(None, ge=1, le=10)
@@ -66,7 +66,7 @@ class ProductUpdate(BaseModel):
     description: str | None = None
     price: Decimal | None = None
     quantity: int | None = None
-    video_url: str | None = None
+    video_url: str | None = Field(None, max_length=500)
     weight_grams: int | None = None
     dimensions: str | None = None
     condition_rating: int | None = None
@@ -89,6 +89,12 @@ class ProductResponse(ProductBase, ORMModel):
     created_at: datetime
     updated_at: datetime | None = None
     product_images: list[ProductImageResponse] = []
+
+    @computed_field
+    @property
+    def video_source(self) -> Literal["google_drive", "upload", "external"] | None:
+        from app.services.product_video import video_source
+        return video_source(self.video_url)
 
     @computed_field
     @property

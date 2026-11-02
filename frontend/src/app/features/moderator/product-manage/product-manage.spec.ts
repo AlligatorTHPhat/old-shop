@@ -20,6 +20,7 @@ describe('ModeratorProductManageComponent', () => {
     seller_id: 3,
     category_id: 1,
     product_images: [],
+    video_url: index === 5 ? '/media/videos/products/seed/product-demo.mp4' : null,
   }));
 
   beforeEach(async () => {
@@ -68,5 +69,7 @@ describe('ModeratorProductManageComponent', () => {
     expect(shownModal?.id).toBe('productDetailModal');
     expect(page.querySelector('#productDetailModal .modal-title')?.textContent).toContain('Sản phẩm kiểm thử 6');
     expect(page.querySelector('#productDetailModal .modal-body')?.textContent).toContain('Mô tả 6');
+    expect(page.querySelector('#productDetailModal video')?.getAttribute('src'))
+      .toContain('/media/videos/products/seed/product-demo.mp4');
   });
 });

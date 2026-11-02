@@ -15,10 +15,11 @@ from app.core.config import settings
 from app.core.database import SessionLocal
 from app.models import ProductImage, User
 from app.services.storage import bucket_for, content_type, minio_client, validate_path
-from scripts.init_db import DATABASE_DIR, SEED_MEDIA_DIR
+from scripts.init_db import DATABASE_DIR, SEED_MEDIA_DIR, sync_seed_media
 
 
 def seed_media(root: Path = SEED_MEDIA_DIR) -> dict:
+    sync_seed_media()
     client = minio_client()
     stats = {"uploaded": 0, "skipped": 0, "missing": [], "avatar_fallbacks": 0}
 
@@ -56,7 +57,7 @@ def seed_media(root: Path = SEED_MEDIA_DIR) -> dict:
             for source in sorted(directory.rglob("*")):
                 if source.is_file() and source.resolve().is_relative_to(directory.resolve()):
                     relative = source.relative_to(directory).as_posix()
-                    if source.suffix.lower() in (".jpg", ".jpeg", ".png", ".gif", ".webp"):
+                    if source.suffix.lower() in (".jpg", ".jpeg", ".png", ".gif", ".webp", ".mp4"):
                         sources[validate_path(relative)] = source
     for key, source in sources.items():
         upload(source, key)

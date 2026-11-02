@@ -3,7 +3,7 @@
 import re
 from datetime import UTC, datetime
 from decimal import Decimal, InvalidOperation
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
@@ -51,10 +51,23 @@ def label(value):
 def video_url(value):
     if not value:
         return None
-    parts = urlsplit(value)
+    if re.fullmatch(r"/media/videos/products/(?:\d+/[a-f0-9]{32}|seed/product-demo)\.mp4", value):
+        return value
+    try:
+        parts = urlsplit(value)
+    except ValueError:
+        return None
     if parts.scheme not in ("http", "https") or parts.username or parts.password:
         return None
-    return urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
+    # Keep only playback identifiers; discard tracking/access-token query parameters.
+    allowed = ()
+    if parts.hostname == "drive.google.com":
+        allowed = ("id", "resourcekey")
+    elif parts.hostname in ("youtube.com", "www.youtube.com", "youtu.be"):
+        allowed = ("v",)
+    query = parse_qs(parts.query)
+    safe_query = urlencode({name: query[name][0] for name in allowed if name in query})
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, safe_query, ""))
 
 
 def dimensions(value):

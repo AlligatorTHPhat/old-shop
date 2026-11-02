@@ -92,7 +92,10 @@ SELECT
     round(source.price * (60 + (v.sample_no * 17) % 81) / 100.0, -3),
     CASE WHEN v.product_status = 3 THEN 0 ELSE 1 + (v.sample_no * 7) % 80 END,
     (v.sample_no * 37) % 5001,
-    CASE WHEN v.sample_no % 3 = 0 THEN NULL ELSE source.video_url END,
+    -- Ba trường hợp kiểm chứng: không video, MP4 mẫu trên MinIO, liên kết Drive.
+    CASE WHEN v.sample_no % 3 = 0 THEN NULL
+         WHEN v.sample_no % 3 = 1 THEN '/media/videos/products/seed/product-demo.mp4'
+         ELSE source.video_url END,
     v.product_status,
     CASE WHEN v.product_status = 2 THEN
         (ARRAY['Ảnh chưa thể hiện đầy đủ tình trạng sản phẩm.',

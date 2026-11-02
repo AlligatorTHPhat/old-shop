@@ -207,15 +207,7 @@
               </div>
             </div>
           </div>
-          <div *ngIf="selectedProduct?.video_url" class="mt-4 p-3 rounded border bg-light">
-            <label class="text-primary small d-block mb-2 fw-bold"><i class="bi bi-camera-video-fill me-1"></i> Video đính kèm</label>
-            <div class="d-flex align-items-center justify-content-between">
-              <span class="text-truncate text-muted small me-2" style="max-width: 250px;">{{ selectedProduct.video_url }}</span>
-              <a [href]="getRawVideoUrl(selectedProduct)" target="_blank" class="btn btn-sm btn-primary fw-bold shadow-sm">
-                <i class="bi bi-play-circle me-1"></i> Xem Video
-              </a>
-            </div>
-          </div>
+          <app-product-video [url]="selectedProduct?.video_url" />
         </div>
         <div class="modal-footer border-top pt-3 pb-3 px-4">
           <ng-container *ngIf="activeTab === 'pending'">

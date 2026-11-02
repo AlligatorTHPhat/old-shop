@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ModeratorService } from '../../../shared/services/moderator.service';
 import { ProductService } from '../../../shared/services/product.service';
 import { CategoryService } from '../../../shared/services/category.service';
+import { ProductVideoComponent } from '../../../shared/components/product-video/product-video';
 import { environment } from '../../../../environments/environment';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
@@ -12,7 +13,7 @@ declare var bootstrap: any
 @Component({
   selector: 'app-moderator-product-manage',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ProductVideoComponent],
   templateUrl: './product-manage.html',
   styleUrl: './product-manage.scss'
 })

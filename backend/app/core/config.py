@@ -47,6 +47,7 @@ class Settings(BaseSettings):
     MINIO_SECRET_KEY: str = ""
     MINIO_SECURE: bool = False
     MINIO_BUCKET_PRODUCT_IMAGES: str = "product-images"
+    MINIO_BUCKET_PRODUCT_VIDEOS: str = "product-videos"
     MINIO_BUCKET_USER_AVATARS: str = "user-avatars"
     MINIO_BUCKET_ATTACHMENTS: str = "attachments"
 
@@ -64,6 +65,7 @@ class Settings(BaseSettings):
     # Files
     MEDIA_DIR: Path = BACKEND_DIR / "media"
     MAX_UPLOAD_BYTES: int = 2 * 1024 * 1024
+    MAX_VIDEO_UPLOAD_BYTES: int = 50 * 1024 * 1024
 
     # Mail (OTP). Leave SMTP_USER empty to disable sending.
     SMTP_HOST: str = "smtp.gmail.com"

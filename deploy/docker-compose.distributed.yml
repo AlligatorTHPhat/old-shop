@@ -216,6 +216,7 @@ services:
       MINIO_SECRET_KEY: ${MINIO_APP_SECRET_KEY:-}
       MINIO_SECURE: "false"
       STORAGE_BACKEND: ${STORAGE_BACKEND:-local}
+      MAX_VIDEO_UPLOAD_BYTES: ${MAX_VIDEO_UPLOAD_BYTES:-52428800}
     volumes:
       - data_media:/data/media
     ports:

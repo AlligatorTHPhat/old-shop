@@ -566,7 +566,7 @@ thật được kiểm riêng tại mục 5.4. Không dùng `bypassDocumentValid
 
 ### 4.3. Kiểm MinIO và ánh xạ một ảnh xuyên ba nơi
 
-1. Trong Console, kiểm ba bucket `product-images`, `user-avatars`, `attachments`.
+1. Trong Console, kiểm bốn bucket `product-images`, `product-videos`, `user-avatars`, `attachments`.
 2. Bucket private; `attachments` rỗng vẫn bình thường, chưa có luồng upload attachment
    công khai hoàn chỉnh. Không dùng `/media/attachments/...` để thử vì gateway hiện chỉ
    nhận prefix `products` và `users`.
@@ -599,6 +599,15 @@ không dùng tổng object trong bucket để so bằng số dòng `product_imag
 `http://localhost:59000/product-images/products/prod_1_1_laptop.jpg` bằng key có thật.
 **Mong đợi:** yêu cầu không ký bị từ chối, thường 403; `/media/...` qua backend vẫn 200.
 Link presigned hoặc phiên Console có quyền tải được không chứng minh bucket public.
+
+### 4.4. Video sản phẩm: Drive và MP4
+
+Sau khi áp dụng bản hỗ trợ video, kiểm thêm các trường hợp trong
+[hướng dẫn video sản phẩm, mục 6](HUONG_DAN_VIDEO_SAN_PHAM.md#6-kiểm-chứng-thủ-công).
+Đối chiếu `product.video_url` trong PostgreSQL với object MP4 trong bucket `product-videos`;
+video Drive là tham chiếu bên ngoài, không có object tương ứng trong MinIO.
+Không có bảng video riêng; `video_source` trên API được tính từ URL.
+Kiểm phát/tua MP4, quyền xem Drive, thay/bỏ video và giữ nguyên file seed dùng chung.
 
 ## 5. Ngày 4: index, phân mảnh và EXPLAIN
 

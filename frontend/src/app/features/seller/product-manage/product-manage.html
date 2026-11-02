@@ -180,8 +180,31 @@
                     <textarea id="product-manage-description" class="form-control" rows="4" formControlName="description" placeholder="Mô tả chất liệu, xuất xứ, tính năng..."></textarea>
                   </div>
                   <div class="col-12">
-                    <label for="product-manage-video-url" class="form-label text-muted fw-bold small text-uppercase">Video URL (Tùy chọn)</label>
-                    <input id="product-manage-video-url" type="text" class="form-control" formControlName="video_url" placeholder="Nhập link Youtube nếu có">
+                    <label for="product-manage-video-source" class="form-label text-muted fw-bold small text-uppercase">Video sản phẩm (Tùy chọn)</label>
+                    <select id="product-manage-video-source" class="form-select mb-2" [value]="videoMode"
+                      (change)="changeVideoMode($any($event.target).value)" [disabled]="isSubmitting">
+                      <option value="none">Không có video / Bỏ video hiện tại</option>
+                      <option value="link">Dùng liên kết Google Drive hoặc YouTube</option>
+                      <option value="upload">Upload file MP4</option>
+                    </select>
+                    <ng-container *ngIf="videoMode === 'link'">
+                      <label for="product-manage-video-url" class="form-label">Liên kết video</label>
+                      <input id="product-manage-video-url" type="url" class="form-control" formControlName="video_url" placeholder="https://drive.google.com/file/d/.../view">
+                      <p class="small text-muted mt-2">Với Google Drive, hãy cấp quyền xem cho bất kỳ ai có liên kết.</p>
+                    </ng-container>
+                    <ng-container *ngIf="videoMode === 'upload'">
+                      <label for="product-manage-video-file" class="form-label">File MP4 (tối đa 50 MB, H.264/AAC)</label>
+                      <input id="product-manage-video-file" type="file" class="form-control" accept=".mp4,video/mp4"
+                        (change)="onVideoSelected($event)" [disabled]="isSubmitting">
+                      <p *ngIf="selectedVideo" class="small mt-2">Đã chọn: {{ selectedVideo.name }}</p>
+                      <ng-container *ngIf="!selectedVideo && existingVideoUrl?.startsWith('/media/videos/products/')">
+                        <p class="small text-muted mt-2">Giữ video hiện tại nếu bạn không chọn file mới.</p>
+                        <app-product-video [url]="existingVideoUrl" />
+                      </ng-container>
+                    </ng-container>
+                    <p *ngIf="isSubmitting" class="small text-primary mt-2" role="status">
+                      {{ uploadProgress === null ? 'Đang lưu sản phẩm…' : uploadProgress < 100 ? 'Đang tải lên: ' + uploadProgress + '%' : 'Đã tải lên, đang xử lý…' }}
+                    </p>
                   </div>
                   <div class="col-md-6">
                     <label for="product-manage-price" class="form-label text-muted fw-bold small text-uppercase">Giá bán (VNĐ) *</label>

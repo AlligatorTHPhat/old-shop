@@ -1,0 +1,37 @@
+Product video verification — 2026-11-02 (Asia/Ho_Chi_Minh)
+
+Backend/ETL:
+  python deploy/scripts/test-product-video.py --image oldshop-video-validation:local
+  Result: 60 passed, 30 skipped in 7.30s.
+  PostgreSQL 16 and MinIO ran in a private disposable Docker network, no published ports.
+  Init script created private buckets and a scoped application user; video requests used that user.
+  Tested actual MP4 validation, size limits, fake/unsupported files, Drive normalization,
+  create/keep/replace/remove, ownership, rollback cleanup, shared seed preservation,
+  GET/HEAD/206/416, real MinIO file upload and range reads, and PG-to-document projection
+  plus local-to-MinIO video transfer before ETL acknowledgement.
+  30 skips are existing Day 3/Day 5 Mongo integration cases whose opt-in flags were not set.
+  Disposable containers/volumes/network and the temporary test-runner image were removed.
+  Reproduce without a prebuilt image: python deploy/scripts/test-product-video.py
+
+Frontend:
+  cd frontend
+  npm test -- --watch=false
+  Result: 15 test files passed, 23 tests passed.
+  New coverage: video player versus Drive link, unsafe external URL, playback failure,
+  create/link payload, atomic edit/upload payload, upload progress, keep/remove and failed submission.
+  Moderator regression includes the MP4 player after pagination and product selection.
+
+Production build:
+  npm run build -- --configuration production
+  Result: PASS. Existing initial-bundle warning: 750.46 kB exceeds the 500 kB warning budget;
+  below the configured 1 MB error budget. Build required network access for existing Google Fonts.
+
+Other checks:
+  Ruff (project rules) on changed Python files: PASS.
+  git diff --check: PASS.
+  sh -n deploy/data/minio/init.sh: PASS.
+  nginx -t in an isolated existing frontend image using the new config: PASS.
+  User-provided Building_Windows_Apps.mp4: ffprobe identifies H.264/AAC.
+
+Scope: source code, docs and isolated validation only. Live application containers,
+PostgreSQL, MongoDB and MinIO data were not changed. No browser end-to-end playback run.

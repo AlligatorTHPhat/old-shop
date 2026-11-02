@@ -20,7 +20,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 # psql is used once to load database/init.sql; curl for the healthcheck.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends postgresql-client curl \
+    && apt-get install -y --no-install-recommends postgresql-client curl ffmpeg \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --create-home --uid 10001 app \
     && mkdir -p /data/media /data/ml \
