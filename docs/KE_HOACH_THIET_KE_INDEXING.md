@@ -833,3 +833,10 @@ triển khai riêng. Không đặt tên một dict cache là index native của 
   [migration runner](../backend/scripts/migrate.py).
 - [Thiết kế Ngày 4](design/04_indexing.md), [benchmark](benchmark/README.md),
   [hướng dẫn kiểm chứng thủ công](HUONG_DAN_KIEM_CHUNG_THU_CONG_7_NGAY.md).
+
+
+## Bổ sung 03/11/2026: cấu hình index bằng JSON
+
+Đã triển khai cấu hình cho cả PostgreSQL và MongoDB tại `database/indexing/catalog.json`.
+Xem [Hướng dẫn indexing JSON](HUONG_DAN_INDEXING_JSON.md) để validate, plan, sinh migration, apply và verify snapshot đã áp.
+Các bước và số đo indexing v2/007 ở trên được giữ làm tài liệu lịch sử; không thay migration 001–007.

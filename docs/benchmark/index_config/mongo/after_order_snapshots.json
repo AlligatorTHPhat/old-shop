@@ -1,0 +1,160 @@
+{
+  "explainVersion": "1",
+  "queryPlanner": {
+    "namespace": "oldshop_index_test.day4_bench_order_snapshots_1068f622f8f64c959d6255866c0883dc",
+    "parsedQuery": {
+      "buyer.id": {
+        "$eq": 42
+      }
+    },
+    "indexFilterSet": false,
+    "queryHash": "56C63F44",
+    "planCacheShapeHash": "56C63F44",
+    "planCacheKey": "4283B0E4",
+    "optimizationTimeMillis": 1,
+    "maxIndexedOrSolutionsReached": false,
+    "maxIndexedAndSolutionsReached": false,
+    "maxScansToExplodeReached": false,
+    "prunedSimilarIndexes": false,
+    "winningPlan": {
+      "isCached": false,
+      "stage": "LIMIT",
+      "limitAmount": 20,
+      "inputStage": {
+        "stage": "FETCH",
+        "inputStage": {
+          "stage": "IXSCAN",
+          "keyPattern": {
+            "buyer.id": 1,
+            "order_date": -1
+          },
+          "indexName": "buyer.id_1_order_date_-1",
+          "isMultiKey": false,
+          "multiKeyPaths": {
+            "buyer.id": [],
+            "order_date": []
+          },
+          "isUnique": false,
+          "isSparse": false,
+          "isPartial": false,
+          "indexVersion": 2,
+          "direction": "forward",
+          "indexBounds": {
+            "buyer.id": [
+              "[42, 42]"
+            ],
+            "order_date": [
+              "[MaxKey, MinKey]"
+            ]
+          }
+        }
+      }
+    },
+    "rejectedPlans": []
+  },
+  "executionStats": {
+    "executionSuccess": true,
+    "nReturned": 10,
+    "executionTimeMillis": 4,
+    "totalKeysExamined": 10,
+    "totalDocsExamined": 10,
+    "executionStages": {
+      "isCached": false,
+      "stage": "LIMIT",
+      "nReturned": 10,
+      "executionTimeMillisEstimate": 0,
+      "works": 11,
+      "advanced": 10,
+      "needTime": 0,
+      "needYield": 0,
+      "saveState": 0,
+      "restoreState": 0,
+      "isEOF": 1,
+      "limitAmount": 20,
+      "inputStage": {
+        "stage": "FETCH",
+        "nReturned": 10,
+        "executionTimeMillisEstimate": 0,
+        "works": 11,
+        "advanced": 10,
+        "needTime": 0,
+        "needYield": 0,
+        "saveState": 0,
+        "restoreState": 0,
+        "isEOF": 1,
+        "docsExamined": 10,
+        "alreadyHasObj": 0,
+        "inputStage": {
+          "stage": "IXSCAN",
+          "nReturned": 10,
+          "executionTimeMillisEstimate": 0,
+          "works": 11,
+          "advanced": 10,
+          "needTime": 0,
+          "needYield": 0,
+          "saveState": 0,
+          "restoreState": 0,
+          "isEOF": 1,
+          "keyPattern": {
+            "buyer.id": 1,
+            "order_date": -1
+          },
+          "indexName": "buyer.id_1_order_date_-1",
+          "isMultiKey": false,
+          "multiKeyPaths": {
+            "buyer.id": [],
+            "order_date": []
+          },
+          "isUnique": false,
+          "isSparse": false,
+          "isPartial": false,
+          "indexVersion": 2,
+          "direction": "forward",
+          "indexBounds": {
+            "buyer.id": [
+              "[42, 42]"
+            ],
+            "order_date": [
+              "[MaxKey, MinKey]"
+            ]
+          },
+          "keysExamined": 10,
+          "seeks": 1,
+          "dupsTested": 0,
+          "dupsDropped": 0
+        }
+      }
+    }
+  },
+  "queryShapeHash": "0D9AB404F4CADBBBC964CF68B97FB572AC2B26BF58768BB7404F7F17AD41217A",
+  "command": {
+    "find": "day4_bench_order_snapshots_1068f622f8f64c959d6255866c0883dc",
+    "filter": {
+      "buyer.id": 42
+    },
+    "limit": 20,
+    "sort": {
+      "order_date": -1
+    },
+    "$db": "oldshop_index_test"
+  },
+  "serverInfo": {
+    "host": "phat-Latitude-3320",
+    "port": 55440,
+    "version": "8.0.32",
+    "gitVersion": "f9eb55a7cc900f33a722a5b32a0fdbf54385c749"
+  },
+  "serverParameters": {
+    "internalQueryFacetBufferSizeBytes": 104857600,
+    "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+    "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+    "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+    "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+    "internalQueryProhibitBlockingMergeOnMongoS": 0,
+    "internalQueryMaxAddToSetBytes": 104857600,
+    "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+    "internalQueryFrameworkControl": "trySbeRestricted",
+    "internalQueryPlannerIgnoreIndexWithCollationForRegex": 1
+  },
+  "ok": 1.0
+}

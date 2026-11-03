@@ -1,4 +1,4 @@
-"""Read-only preflight/postflight for indexing v2; never emit credentials or source PII."""
+"""Historical read-only checks for migration 007; use verify_indexes for JSON releases."""
 
 import argparse
 import hashlib
@@ -79,7 +79,9 @@ def verify(preflight=False, mongo=False):
                 for name, (table, keys, predicate) in SPECS.items():
                     cursor.execute(
                         """SELECT t.relname,am.amname,i.indisunique,i.indisvalid,
-                        ARRAY(SELECT pg_get_indexdef(i.indexrelid,k,true) || CASE WHEN (i.indoption[k-1] & 1)=1 THEN ' DESC' ELSE '' END FROM generate_series(1,i.indnkeyatts) k),
+                        ARRAY(SELECT pg_get_indexdef(i.indexrelid,k,true) ||
+                        CASE WHEN (i.indoption[k-1] & 1)=1 THEN ' DESC' ELSE '' END
+                        FROM generate_series(1,i.indnkeyatts) k),
                         pg_get_expr(i.indpred,i.indrelid),i.indoption::smallint[],i.indnatts=i.indnkeyatts
                         FROM pg_index i JOIN pg_class ix ON ix.oid=i.indexrelid
                         JOIN pg_class t ON t.oid=i.indrelid JOIN pg_am am ON am.oid=ix.relam

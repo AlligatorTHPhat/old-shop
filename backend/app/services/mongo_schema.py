@@ -3,6 +3,7 @@
 from copy import deepcopy
 
 from app.schemas.documents import DOCUMENT_MODELS
+from app.services.index_config import mongo_indexes
 
 
 def bson_schema(model) -> dict:
@@ -70,33 +71,5 @@ def validators() -> dict:
     return result
 
 
-INDEXES = {
-    "product_details": [
-        ([("product_id", 1)], {"unique": True}),
-        ([("category_id", 1), ("attributes.brand", 1)], {}),
-        ([("attributes.$**", 1)], {"name": "idx_product_attributes"}),
-        # M01: cleanup checks live image references before deleting a shared object.
-        (
-            [("images.key", 1)],
-            {"name": "idx_live_product_image_key", "partialFilterExpression": {"deleted": False}},
-        ),
-        ([("description", "text"), ("tags", "text")], {}),
-    ],
-    "reviews": [
-        ([("review_id", 1)], {"unique": True}),
-        ([("product_id", 1), ("created_at", -1)], {}),
-        ([("type", 1), ("status", 1)], {"partialFilterExpression": {"type": "report", "status": "pending"}}),
-    ],
-    "order_snapshots": [
-        ([("order_id", 1)], {"unique": True}),
-        ([("buyer.id", 1), ("order_date", -1)], {}),
-        ([("order_status", 1), ("order_date", -1)], {}),
-    ],
-    "system_logs": [
-        ([("log_id", 1), ("created_at", 1)], {"unique": True}),
-        ([("created_at", 1)], {"expireAfterSeconds": 90 * 86400}),
-        ([("action", 1), ("actor_id", 1), ("created_at", -1)], {}),
-    ],
-    "violation_logs": [([("log_id", 1)], {"unique": True}), ([("target_user_id", 1), ("created_at", -1)], {})],
-    "contact_messages": [([("feedback_id", 1)], {"unique": True}), ([("status", 1), ("created_at", -1)], {})],
-}
+# Compatibility adapter for benchmark/archive imports; JSON is the definition source.
+INDEXES = mongo_indexes()

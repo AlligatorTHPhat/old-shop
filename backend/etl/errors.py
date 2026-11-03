@@ -2,34 +2,26 @@
 
 from contextlib import suppress
 from datetime import UTC, datetime
-from typing import Literal
 
-from pydantic import AwareDatetime, Field, ValidationError
+from pydantic import ValidationError
 from pymongo.errors import PyMongoError
 
-from app.schemas.documents import DocumentModel, Identifier
+from app.schemas.etl import ErrorKey as ErrorKey
+from app.schemas.etl import ETLError
+from app.services.index_config import IndexCatalog, load_catalog
+from app.services.index_mongo import apply_mongo
 from app.services.mongo_schema import bson_schema
 from etl.transform import QualityError
 
 
-class ErrorKey(DocumentModel):
-    id: Identifier
-    created_at: str | None = None
-
-
-class ETLError(DocumentModel):
-    id: str = Field(alias="_id")
-    event_id: int
-    run_id: str
-    entity_type: Literal["product", "order", "review", "system_log", "violation_log", "contact"]
-    entity_key: ErrorKey
-    code: str = Field(max_length=80)
-    attempts: int = Field(ge=1)
-    last_at: AwareDatetime
-    resolved: bool = False
-
-
-def initialize(database):
+def initialize(database, catalog=None):
+    catalog = catalog or load_catalog()
+    subset = IndexCatalog(
+        schema_version=1,
+        revision=catalog.revision,
+        postgresql=[],
+        mongodb=[i for i in catalog.mongodb if i.collection == "etl_errors"],
+    )
     options = {
         "validator": {"$jsonSchema": bson_schema(ETLError)},
         "validationLevel": "strict",
@@ -39,7 +31,7 @@ def initialize(database):
         database.command("collMod", "etl_errors", **options)
     else:
         database.create_collection("etl_errors", **options)
-    database.etl_errors.create_index([("resolved", 1), ("last_at", 1)])
+    apply_mongo(database, subset, record=False)
 
 
 def code(error):

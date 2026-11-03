@@ -6,6 +6,9 @@ Chỉ chạy bản tương ứng với terminal của bạn, không chạy cả 
 Các lệnh chạy từ **thư mục gốc dự án**, trừ khi có ghi đổi thư mục.
 Cập nhật indexing ngày 01/11/2026: mã nguồn có migration 001–007.
 DB hiện hữu chỉ có 007 sau khi bạn tự áp dụng; xem [runbook indexing v2](benchmark/indexing_v2/README.md).
+Cập nhật 03/11/2026: cấu hình index nằm ở `database/indexing/catalog.json`.
+**Để chạy indexing JSON trên stack đang có, xem mục 18.2–18.3; để xử lý lỗi
+`email-validator` khi chạy pytest, xem mục 18.5.** Không cần chạy pytest để khởi động website.
 
 ## 1. Chọn đúng cách chạy
 
@@ -330,6 +333,11 @@ dc run --rm --no-deps mongo-schema-init
 | `mongo-expand` | Thêm mongo2/mongo3, chờ secondary; giữ cấu hình nếu đã có |
 | `minio-init` | Tạo ba bucket private và tài khoản ứng dụng có quyền trong các bucket |
 | `mongo-schema-init` | Tạo/cập nhật collection validators, indexes và collection lỗi ETL |
+
+Từ phiên bản indexing JSON, `mongo-schema-init` đọc `database/indexing/catalog.json`
+đã được đóng gói trong image và ghi snapshot Mongo tại `_index_catalog_state` sau khi
+đối soát thành công. Phải build image ở mục 4 trước bước này; sửa JSON trên host không
+tự cập nhật container. Nếu job báo index conflict, xem mục 18.6 thay vì xóa collection.
 
 Mongo không dùng `CREATE DATABASE` như SQL. Job init tạo user/collection trên DB đã chọn;
 dữ liệu nghiệp vụ được ETL nạp ở mục 7. MinIO không có database SQL, nó dùng bucket/object.
@@ -707,6 +715,9 @@ tiếp tục dùng profile `resilience`; không bỏ profile rồi chỉ chạy 
 
 ### 10.2. Thay cấu hình hoặc cập nhật code
 
+Nếu cập nhật bộ cấu hình indexing JSON trên DB đã qua 007, dùng mục 18.2–18.3.
+Nếu thay đổi định nghĩa index, dùng thêm mục 18.4 trước khi triển khai.
+
 `restart` không nạp lại biến môi trường mới vào container. Với thay đổi thông thường không
 liên quan schema/storage/secrets, dùng `dc up -d --wait` để Compose áp cấu hình container.
 Nếu backend bị recreate, Nginx có thể giữ IP backend cũ; sau khi backend khỏe, restart frontend:
@@ -878,7 +889,8 @@ Cần Python 3.13 và PostgreSQL client có `psql`. Từ root:
 cd backend
 python3.13 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements-dev.txt
+python -m pip install --only-binary=:all: --require-hashes -r requirements-dev.lock
+python -m pip check
 cp -n .env.example .env
 ```
 
@@ -887,7 +899,10 @@ cp -n .env.example .env
 ```powershell
 Set-Location .\backend
 py -3.13 -m venv .venv
-& .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+& .\.venv\Scripts\python.exe -m pip install --only-binary=:all: --require-hashes -r requirements-dev.lock
+if ($LASTEXITCODE -ne 0) { throw "Cai dependencies that bai; chua chay backend/test." }
+& .\.venv\Scripts\python.exe -m pip check
+if ($LASTEXITCODE -ne 0) { throw "Dependencies chua nhat quan." }
 if (-not (Test-Path -LiteralPath ".env")) {
     Copy-Item -LiteralPath ".env.example" -Destination ".env"
 }
@@ -896,6 +911,12 @@ if (-not (Test-Path -LiteralPath ".env")) {
 Trên Linux khối trên activate venv; trên Windows khối trên gọi trực tiếp
 `.venv\Scripts\python.exe`, nên không bắt buộc activate và không cần đổi execution policy
 để chạy `Activate.ps1`. Mở `backend/.env` bằng editor (Linux: `nano .env`, Windows: `notepad .env`).
+
+`requirements-dev.lock` chứa cả dependencies runtime và kiểm thử, bao gồm
+`email-validator`. Dùng `python -m pip` của cùng venv để tránh cài vào Conda `(base)`
+nhưng lại chạy bằng Python khác. Python 3.11+ ở mục 2 chỉ dành cho script điều phối;
+backend native theo hướng dẫn này dùng Python 3.13 giống Docker. Nếu chưa có Python
+3.13, có thể dùng luồng Docker mà không cần cài dependencies backend trên host.
 
 Mở `backend/.env` và sửa:
 
@@ -1012,6 +1033,9 @@ API `/api/v1` và media cùng origin Nginx, nên không chỉnh environment dev 
 | `py` không được nhận diện | Kiểm Python launcher/PATH; dùng đúng Python 3.11+ hoặc Python 3.13 cho nhánh dev |
 | PowerShell 5.1 làm mất dấu nháy khi gọi Docker | Dùng PowerShell 7.3+ và thiết lập native argument passing ở mục 2, hoặc dùng nhánh WSL |
 | `npm.ps1`/`Activate.ps1` bị chặn | Dùng `npm.cmd` và `.venv\Scripts\python.exe` như ví dụ Windows |
+| Pytest báo `No module named 'email_validator'` | Python đang chạy thiếu dependency runtime; chuẩn bị venv đầy đủ theo mục 18.5, không sửa catalog/index để chữa lỗi import |
+| `No module named scripts.indexes` | Kiểm thư mục làm việc `backend/` nếu chạy host, hoặc build lại image backend nếu chạy Docker; xem mục 18.2 |
+| Index CLI báo `No applied index snapshot` | PostgreSQL phải qua 007; Mongo cần init/apply snapshot bằng image mới; xem mục 18.3 |
 | WSL không tìm được repo / distro | Kiểm `wsl --list --verbose`, đổi tên distro và đường dẫn `/mnt/c/...` theo máy |
 | Container báo `bad interpreter` / `\r` | Đổi `.sh` sang LF; giữ quy tắc `.gitattributes` khi clone/edit trên Windows |
 
@@ -1039,6 +1063,8 @@ không dùng `bash` từ Git Bash thay cho distro WSL được cấu hình Docke
 Với host đã xác minh tương thích Mongo8, có thể dùng image mặc định của runner.
 Không chạy `pytest` tùy ý với `DB_NAME=oldshop` đang sử dụng: tests có ghi dữ liệu.
 Xem các điều kiện và cách chạy ở [06_completion_plan.md](design/06_completion_plan.md).
+Riêng bộ unit test indexing JSON không kết nối DB có quy trình chuẩn bị môi trường
+và lệnh giới hạn đúng file ở mục 18.5. `--noconftest` không thay thế việc cài dependencies.
 
 - [PROJECT_GUIDE.md](PROJECT_GUIDE.md): bản đồ mã nguồn và kiến trúc.
 - [Thiết kế Mongo/MinIO](design/03_json_design.md): validators, indexes và seed media.
@@ -1052,13 +1078,19 @@ migration → copy ảnh → bật MinIO → full ETL/reconcile → backend/fron
 
 ## 15. Phạm vi kiểm tra hai nền tảng
 
-Nhánh Linux dựa trên stack local và script đã có bằng chứng các ngày trước. Trong lần bổ sung
-này, **29 khối Bash** đã qua `bash -n`; **29 khối PowerShell** đã qua parser PowerShell 7.6.9
+Nhánh Linux dựa trên stack local và script đã có bằng chứng các ngày trước. Ở lần bổ sung
+hướng dẫn hai nền tảng trước đây, **29 khối Bash** đã qua `bash -n`; **29 khối PowerShell** đã qua parser PowerShell 7.6.9
 chạy trên Linux. Hai hàm `dc` và luồng SQL here-string/pipeline còn được kiểm bằng Docker giả lập:
 giữ tham số/dấu nháy, chuyển SQL vào stdin và báo lỗi khi native command trả mã khác 0.
 
 Chưa có lượt cài mới end-to-end trên máy Windows trong tác vụ này. Trước khi kết luận máy
 Windows đã chạy thành công, thực hiện đến checker ở mục 8 trên chính máy đó.
+
+Lần bổ sung indexing JSON ngày 03/11/2026 đã tái hiện lỗi môi trường Conda, rồi chạy
+**53 unit test PASS** và CLI `validate` PASS bằng Python 3.13 với dependencies đã khóa
+trong container riêng, không có kết nối mạng tới DB. Các bước apply ở mục 18 là hướng
+dẫn để người vận hành thực hiện; lần sửa tài liệu này không áp index vào DB đang dùng.
+Các lệnh PowerShell mới ở mục 18 chưa được chạy trên Windows.
 
 ## 16. Video Google Drive và upload MP4
 
@@ -1102,3 +1134,322 @@ Kiểm chứng: đăng một sản phẩm bằng user, chuyển sang moderator v
 tab chờ duyệt. Sản phẩm mới đứng đầu; chuyển đến trang cuối, kiểm tổng số và thử tìm tên
 sản phẩm nằm ngoài 100 bản ghi đầu. Kiểm tiếp hai tab đã duyệt và từ chối.
 Xem [bằng chứng kiểm thử](benchmark/moderator_pagination_tests.txt).
+
+
+## 18. Cấu hình và chạy indexing JSON
+
+### 18.1. Chọn đúng môi trường và bước cần chạy
+
+Phần này là quy trình vận hành. Chi tiết định dạng/giới hạn thiết kế xem
+[Hướng dẫn indexing JSON](HUONG_DAN_INDEXING_JSON.md).
+
+| Bạn đang cần | Thực hiện |
+|---|---|
+| Cài stack mới | Mục 3–8 đã bootstrap PostgreSQL và init Mongo; kiểm lại bằng mục 18.2 và lệnh verify ở 18.3 |
+| Stack đã có dữ liệu, đã qua migration 007, mới cập nhật code indexing JSON | Mục 18.2 rồi 18.3; giữ env và volumes |
+| Muốn thay trường/chiều/loại index trong JSON | Mục 18.4; chỉnh JSON chưa đồng nghĩa DB đã đổi |
+| Muốn chạy unit test hoặc đang gặp lỗi thiếu `email_validator` | Mục 18.5; đây là bước phát triển tùy chọn |
+| DB còn ở 006 hoặc thấp hơn | Nâng theo quy trình bảo trì mục 10 trước khi tiếp nhận snapshot `index-v1` |
+
+Phân biệt ba môi trường:
+
+| Cách gọi | Code/config được sử dụng | Địa chỉ DB |
+|---|---|---|
+| `dc run ... backend ...` | Image backend mới nhất và env Compose từ `deploy/.env.data` | PG `pg-primary:5432`, Mongo `mongo1:27017` trong Docker network |
+| `dc exec ... backend ...` | Container backend **đang chạy**, có thể vẫn giữ image/env cũ | Env tại thời điểm container được tạo |
+| `python -m scripts...` trong `backend/` | Source trên host, dependencies của Python đang gọi và `backend/.env`/environment | PG host thường `127.0.0.1:55432`; Mongo dùng cổng host theo mục 9.2 |
+
+Không đưa `127.0.0.1:55432` vào cấu hình backend chạy bên trong container: địa chỉ
+loopback ở đó là chính container. Không dùng hostname `mongo1` trong terminal host.
+Các lệnh Docker dưới đây không cần activate Conda/venv hoặc cài pip trên host.
+
+### 18.2. Chuẩn bị image và kiểm tra cấu hình không ghi DB
+
+Từ **root dự án**, dùng hàm `dc` đã định nghĩa ở mục 4 (hoặc bản có GUI override ở
+mục 9.2 nếu stack đang dùng override đó). Mỗi terminal mới cần định nghĩa lại hàm.
+Chạy lần lượt, chỉ tiếp tục khi lệnh trước thành công. Dùng được trong Bash và
+PowerShell 7.3+:
+
+```text
+dc config --quiet
+dc build backend frontend
+dc ps --all
+dc run --rm --no-deps --entrypoint python backend -m scripts.indexes validate
+```
+
+`validate` chỉ đọc JSON; không kết nối hoặc tạo index trong DB. Với catalog hiện tại,
+kết quả cần có `result: PASS`, `desired_revision: index-v1`, `counts.postgresql: 98`
+và `counts.mongodb: 19`. PostgreSQL gồm 61 index ứng dụng/ETL và 37 index của
+PK/UNIQUE trong danh mục; số index con của partition được quản lý riêng.
+Không cần sửa các con số vào file JSON nếu chúng khác sau một revision mới có chủ đích.
+
+Image chứa `catalog.json`, `catalog.schema.json`, `releases.json`, snapshots và SQL
+ở `/opt/database`. `dc build` đóng gói code/JSON mới nhưng chưa thay container đang
+chạy; `dc run` tạo container một lần từ image vừa build. Không mount riêng catalog
+mới vào image đang thiếu snapshot/SQL tương ứng.
+
+Sau khi PG và Mongo đã sẵn sàng (mục 5.1–5.2), xem kế hoạch chỉ đọc:
+
+```text
+dc run --rm --no-deps --entrypoint python backend -m scripts.plan_indexes --engine all
+```
+
+Ý nghĩa kết quả:
+
+| Giá trị | Cách hiểu |
+|---|---|
+| `matched` | Index thực tế khớp định nghĩa mong muốn |
+| `missing` | Chưa có index; plan chỉ báo, chưa tạo |
+| `conflict` | Cùng tên nhưng khác khóa/options, tên trường sai hoặc có định nghĩa tương đương dưới tên khác; cần xử lý trước apply |
+| `unmanaged` | Index ngoài danh mục, chẳng hạn `_id_`; công cụ không tự xóa |
+| Plan `result: PASS` | Không có conflict; **vẫn có thể còn `missing`**, chưa chứng minh triển khai hoàn tất |
+
+Nếu muốn giữ báo cáo ngay trên host, dùng stdout redirect. Ví dụ Bash:
+
+```bash
+mkdir -p docs/evidence
+dc run --rm -T --no-deps --entrypoint python backend -m scripts.plan_indexes --engine all > docs/evidence/index_plan_local.json
+```
+
+PowerShell 7.3+:
+
+```powershell
+New-Item -ItemType Directory -Force docs/evidence | Out-Null
+dc run --rm -T --no-deps --entrypoint python backend -m scripts.plan_indexes --engine all > docs/evidence/index_plan_local.json
+```
+
+Kiểm exit code và đọc `result` trong file. Dùng `--output /tmp/plan.json` bên trong
+container `--rm` sẽ tạo file trong container và mất khi container bị xóa; đường dẫn
+`docs/...` trong container cũng không tự trỏ tới thư mục docs trên host.
+
+### 18.3. Tiếp nhận cấu hình hiện tại trên DB đã qua 007 và chạy ứng dụng
+
+Điều kiện: đã build image mới, PostgreSQL có lịch sử migration 001–007, Mongo replica
+set/users đã init, plan không có conflict. Giữ nguyên `catalog.json` revision `index-v1`
+khi thực hiện luồng này. Nếu DB chưa đủ điều kiện, quay lại mục 5 cho DB mới hoặc
+quy trình bảo trì mục 10 cho DB hiện hữu.
+
+Các lệnh sau có ghi metadata/index Mongo; kiểm tra đúng project/env trước khi chạy.
+Thực hiện lần lượt trong Bash hoặc PowerShell 7.3+:
+
+```text
+dc run --rm --no-deps mongo-schema-init
+dc run --rm --no-deps --entrypoint python backend -m scripts.apply_indexes --engine postgresql
+dc run --rm --no-deps --entrypoint python backend -m scripts.verify_indexes --engine all
+dc run --rm --no-deps --entrypoint python backend -m scripts.verify_indexes --engine all --desired
+```
+
+- `mongo-schema-init` dùng tài khoản quản trị Mongo của job Compose để cập nhật
+  validators, bổ sung index còn thiếu và ghi snapshot `_index_catalog_state`.
+  Không thay job này bằng `init_mongo` trong container dùng user ứng dụng có ít quyền hơn.
+- PostgreSQL hiện tại đã có các index tương ứng sau 007; apply đối soát và không cần
+  sinh migration 008 chỉ để chuyển cách khai báo sang JSON. Nếu kết quả khác dự kiến,
+  dừng và đọc báo cáo trước khi nâng tiếp.
+- `verify` không có `--desired` kiểm theo snapshot **đã áp** của từng DB. Thêm
+  `--desired` để kiểm theo catalog **đang muốn áp**. Hai lệnh đều phải `PASS` nếu
+  muốn kết luận cấu hình hiện tại đã triển khai đầy đủ.
+
+Nếu chỉ kiểm chứng một stack đã init thành công, chạy hai lệnh verify, không cần
+chạy lại toàn bộ init. CLI trả exit code 1 khi `FAIL`; không tiếp tục bỏ qua lỗi.
+
+Sau khi các bước thành công, cập nhật các container thường trực để chúng dùng code
+và env mới. Chạy tuần tự, backend khỏe rồi mới tạo lại worker/frontend:
+
+```text
+dc up -d --no-deps --force-recreate --wait --wait-timeout 180 backend
+dc up -d --no-deps --force-recreate --wait --wait-timeout 120 etl-worker
+dc up -d --no-deps --force-recreate --wait --wait-timeout 90 frontend
+dc ps --all
+```
+
+Chạy checker từ root:
+
+```bash
+python3 deploy/scripts/check-data-stack.py --resilience --day6
+```
+
+PowerShell 7.3+:
+
+```powershell
+py -3 deploy/scripts/check-data-stack.py --resilience --day6
+```
+
+Checker đánh giá stack, không thay hai lệnh verify index ở trên. Mở
+http://localhost:58080, tải lại bằng Ctrl+Shift+R. Luồng này giữ nguyên dữ liệu,
+không chạy lại seed SQL và không dùng `down --volumes`.
+
+### 18.4. Khi cần thay đổi định nghĩa index trong JSON
+
+Các file cần đi cùng nhau:
+
+| File | Vai trò |
+|---|---|
+| `database/indexing/catalog.json` | Cấu hình mong muốn: trường, thứ tự key, chiều, loại/options |
+| `database/indexing/catalog.schema.json` | Schema hỗ trợ editor/kiểm tra cấu hình; không phải dữ liệu sản phẩm |
+| `database/indexing/snapshots/*.json` | Bản cấu hình được đóng băng theo revision |
+| `database/indexing/releases.json` | Gắn revision/hash với migration PostgreSQL |
+| `database/04_migrations/*.sql` | DDL PostgreSQL thực sự được migration runner áp |
+| JSON trong `docs/evidence/`, `docs/benchmark/` | Kết quả chạy/đo, không phải đầu vào tạo index |
+
+Không sửa migration 001–007 hoặc snapshot đã phát hành. Luồng bổ sung PostgreSQL index:
+
+1. Làm trên worktree và DB kiểm thử đã qua các migration hiện có; chuẩn bị Python
+   native theo mục 12.1 và cấu hình `backend/.env` trỏ đúng DB kiểm thử.
+2. Sửa catalog, đặt revision mới, ví dụ `index-v2`. Xem ví dụ đúng định dạng ở
+   [hướng dẫn JSON](HUONG_DAN_INDEXING_JSON.md); không chép một index demo vào DB thật
+   chỉ để đạt đủ số lượng.
+3. Từ `backend/`, dùng Python của venv để validate, plan và sinh artifact:
+
+   **Linux / WSL — Bash**
+
+   ```bash
+   .venv/bin/python -m scripts.indexes validate
+   .venv/bin/python -m scripts.plan_indexes --engine postgresql
+   .venv/bin/python -m scripts.generate_index_migration
+   ```
+
+   **Windows — PowerShell 7.3+**
+
+   ```powershell
+   & .\.venv\Scripts\python.exe -m scripts.indexes validate
+   if ($LASTEXITCODE -ne 0) { throw "Catalog khong hop le." }
+   & .\.venv\Scripts\python.exe -m scripts.plan_indexes --engine postgresql
+   if ($LASTEXITCODE -ne 0) { throw "Plan that bai." }
+   & .\.venv\Scripts\python.exe -m scripts.generate_index_migration
+   if ($LASTEXITCODE -ne 0) { throw "Sinh migration that bai." }
+   ```
+
+   Chỉ chạy lệnh tiếp nếu lệnh trước thành công. Generator đọc DB nhưng ghi SQL,
+   snapshot và release binding vào worktree. Vì vậy không chạy generator trong
+   container runtime rồi kỳ vọng file mới xuất hiện ở source host.
+4. Review các artifact cùng nhau. Khi bổ sung index đầu tiên sau 007, tên SQL có
+   dạng `008_indexes_index-v2.sql`; công cụ chọn số tiếp theo thực tế. Nếu không đổi
+   PostgreSQL index, generator có thể trả `generated: false`, không sinh SQL giả.
+5. Kiểm thử trên DB riêng; khi triển khai vào DB hiện hữu, thực hiện backup/thử restore
+   và dừng nguồn ghi theo quy trình bảo trì mục 10. Build lại image từ bộ artifact
+   đã review trước khi apply. Index build có thể giữ lock, không mặc định là DDL online.
+6. Từ root, sau build, chạy lần lượt:
+
+   ```text
+   dc run --rm --no-deps --entrypoint python backend -m scripts.plan_indexes --engine all
+   dc run --rm --no-deps --entrypoint python backend -m scripts.apply_indexes --engine all
+   dc run --rm --no-deps --entrypoint python backend -m scripts.verify_indexes --engine all
+   dc run --rm --no-deps --entrypoint python backend -m scripts.verify_indexes --engine all --desired
+   ```
+
+   Sau đó mở lại/cập nhật ứng dụng theo mục 18.3. `apply --engine all` preflight cả
+   hai DB, nhưng không có transaction chung cho PostgreSQL và Mongo. Nếu lỗi giữa
+   chừng, kiểm kết quả từng engine rồi plan lại; không reset dữ liệu để thử lại.
+
+Nếu chỉ bổ sung index Mongo, không cần SQL PostgreSQL mới; dùng plan/apply với
+`--engine mongodb`, sau đó verify Mongo với cả snapshot đã áp và `--desired`.
+Đổi khóa/chiều/unique/TTL của index cùng tên cần migration/quy trình riêng; công cụ
+hiện tại chủ yếu tự động bổ sung index, không tự drop/rebuild index gây conflict.
+
+### 18.5. Chạy unit test indexing và xử lý lỗi `email-validator`
+
+Log ngày 03/11/2026 có **44 passed, 9 failed**. Cả 9 lỗi đều xảy ra khi import
+document contract: `index_mongo` → `app.schemas.documents` → `app.schemas.__init__`
+→ các model có `EmailStr` → thiếu module `email_validator`. Đây là lỗi dependencies
+của Python đang chạy, chưa phải kết quả cho thấy index trong DB sai. Package này đã
+khai báo trong `requirements.txt` và các lock file; không cần thêm dependency mới.
+
+Terminal `(base)` đang dùng Python 3.14 không tự có đủ thư viện backend. Cờ
+`--noconftest` chỉ ngăn nạp `conftest.py`, không ngăn các import runtime của test.
+Chuẩn bị **Python 3.13 riêng của dự án** thay vì cài rời từng package vào base.
+Unit test này không cần sửa `.env`, không cần PG/Mongo/MinIO và không cần chạy API.
+
+**Cách A — chạy native, từ `backend/`**, sau khi đã có Python 3.13. Nếu `.venv` đã tồn
+tại, kiểm tra `.venv/bin/python --version` (Windows: `.venv\Scripts\python.exe --version`)
+trước. Tái sử dụng nếu đúng 3.13; nếu khác phiên bản, chọn thư mục venv mới, chẳng hạn
+`.venv-indexing`, và thay đường dẫn trong các lệnh. Không tạo đè môi trường Python khác.
+
+Linux / WSL — Bash:
+
+```bash
+python3.13 -m venv .venv
+.venv/bin/python -m pip install --only-binary=:all: --require-hashes -r requirements-dev.lock
+.venv/bin/python -m pip check
+.venv/bin/python -c 'import sys, email_validator, pydantic, pytest; print(sys.executable); print(sys.version)'
+.venv/bin/python -m pytest --noconftest -o addopts= tests/test_index_config.py -q
+```
+
+Chạy từng lệnh, dừng nếu cài dependencies hoặc kiểm tra import lỗi.
+
+Windows — PowerShell 7.3+:
+
+```powershell
+py -3.13 -m venv .venv
+if ($LASTEXITCODE -ne 0) { throw "Can Python 3.13 de tao venv." }
+& .\.venv\Scripts\python.exe -m pip install --only-binary=:all: --require-hashes -r requirements-dev.lock
+if ($LASTEXITCODE -ne 0) { throw "Cai dependencies that bai." }
+& .\.venv\Scripts\python.exe -m pip check
+if ($LASTEXITCODE -ne 0) { throw "Dependencies chua nhat quan." }
+& .\.venv\Scripts\python.exe -c 'import sys, email_validator, pydantic, pytest; print(sys.executable); print(sys.version)'
+if ($LASTEXITCODE -ne 0) { throw "Import runtime that bai." }
+& .\.venv\Scripts\python.exe -m pytest --noconftest -o addopts= tests/test_index_config.py -q
+if ($LASTEXITCODE -ne 0) { throw "Unit test indexing that bai." }
+```
+
+`python -m pip check` phải báo không có dependency lỗi; kết quả hiện tại cần
+**53 passed**. Chạy `python -m pip ...` và `python -m pytest ...` bằng đúng executable
+đã in ra. Cài package ở venv A không sửa được test đang chạy ở Conda/base B.
+
+**Cách B — không có Python 3.13 trên host: dùng Docker.** Từ root, đã định nghĩa `dc`
+và build backend ở mục 18.2. Runtime image không chứa pytest/test source, nên mount
+đúng file và cài bộ dev vào venv tạm của container:
+
+Linux / WSL — Bash:
+
+```bash
+dc run --rm -T --no-deps \
+  --volume "${PWD}/backend/tests:/app/tests:ro" \
+  --volume "${PWD}/backend/pytest.ini:/app/pytest.ini:ro" \
+  --volume "${PWD}/backend/requirements-dev.lock:/tmp/requirements-dev.lock:ro" \
+  --entrypoint sh backend -c 'python -m venv --system-site-packages /tmp/index-test-venv && /tmp/index-test-venv/bin/python -m pip install --require-hashes -r /tmp/requirements-dev.lock && /tmp/index-test-venv/bin/python -m pytest --noconftest -o addopts= -o cache_dir=/tmp/index-pytest-cache tests/test_index_config.py -q'
+```
+
+Windows — PowerShell 7.3+:
+
+```powershell
+dc run --rm -T --no-deps `
+  --volume "${PWD}/backend/tests:/app/tests:ro" `
+  --volume "${PWD}/backend/pytest.ini:/app/pytest.ini:ro" `
+  --volume "${PWD}/backend/requirements-dev.lock:/tmp/requirements-dev.lock:ro" `
+  --entrypoint sh backend -c 'python -m venv --system-site-packages /tmp/index-test-venv && /tmp/index-test-venv/bin/python -m pip install --require-hashes -r /tmp/requirements-dev.lock && /tmp/index-test-venv/bin/python -m pytest --noconftest -o addopts= -o cache_dir=/tmp/index-pytest-cache tests/test_index_config.py -q'
+```
+
+Docker cần truy cập package registry để cài dependencies dev. Venv này bị xóa cùng
+container; không cài vào Conda, không sửa image runtime và không ghi DB. Giữ nguyên
+đường dẫn unit test, không thay bằng toàn bộ `tests/` trên cấu hình DB đang dùng.
+
+Test tích hợp DB thật là bước riêng: xem mục 6 của
+[hướng dẫn JSON](HUONG_DAN_INDEXING_JSON.md). Nó cần PG/Mongo kiểm thử riêng, quyền
+tạo/xóa DB và biến opt-in; 53 unit test qua không chứng minh DB thật đã áp index.
+
+### 18.6. Lỗi indexing thường gặp và bước tiếp theo
+
+| Lỗi / hiện tượng | Xử lý |
+|---|---|
+| `No module named 'email_validator'` | Dùng đủ quy trình 18.5; kiểm `sys.executable`, cài lock file bằng Python đó |
+| `python3.13: command not found` hoặc launcher không tìm thấy 3.13 | Dùng Docker ở 18.5 cách B, hoặc cài Python 3.13 trước khi tạo venv; không tự đổi backend sang Python base |
+| `No module named scripts.indexes` | Host: chạy từ `backend/`. Docker: build lại từ root; `restart` không nạp source mới |
+| Không thấy `/opt/database/indexing/catalog.json` | Kiểm đang dùng đúng Dockerfile/build context root; build bộ code + database cùng nhau |
+| `failed_engine: postgresql`, `OperationalError` | Kiểm PG khỏe, DB/user/password, host/port và lịch sử migration; backend host đọc `.env`, Compose đọc env riêng |
+| `failed_engine: mongodb`, `ServerSelectionTimeoutError` | Kiểm PRIMARY/quorum/auth; hostname nội bộ chỉ dùng trong Docker, kết nối host xem mục 9.2 |
+| `No applied index snapshot; migrate through 007 first` | Kiểm/nâng migration qua quy trình bảo trì; không tự thêm row vào `schema_migrations` |
+| Mongo chưa có snapshot đã áp | Chạy job `mongo-schema-init` bằng image mới sau khi plan không conflict; hoặc apply Mongo để ghi snapshot nếu validators đã sẵn sàng |
+| Plan có `conflict` | Đọc `name`, `reasons`, `expected`, `actual`; xác định migration thay đổi có chủ đích, không tự drop index |
+| `Generate and review a migration ... before PostgreSQL apply` | JSON có thay đổi chưa được đóng băng: sinh SQL/snapshot/release trên worktree rồi build lại image |
+| Checksum/hash mismatch | Khôi phục đúng bộ artifact đã phát hành; không sửa checksum DB hoặc snapshot lịch sử để lách kiểm tra |
+| `verify` PASS nhưng `verify --desired` FAIL | Snapshot đang chạy vẫn đúng, nhưng catalog mong muốn chưa triển khai hết; plan và xử lý phần thiếu/conflict |
+| `plan` PASS nhưng `verify --desired` FAIL | Plan có thể PASS khi index còn missing; phải apply đúng quy trình rồi verify lại |
+| `--output` không tạo file trên host | File đang ở container tạm; dùng redirect với `-T` như mục 18.2 hoặc mount thư mục output có quyền ghi |
+
+Nếu CLI chỉ báo lỗi tổng quát, dùng `dc ps --all`, `dc logs --tail 100 pg-primary mongo1`
+và `dc logs --tail 100 backend mongo-schema-init` để phân biệt lỗi kết nối/quyền/schema.
+Lệnh `dc run --rm` in lỗi trực tiếp ở terminal rồi xóa container, nên cần giữ output
+của lần chạy đó. Không đăng URI có password hoặc nội dung `.env` khi gửi log.
+
+Các số đo indexing v2/007 ở mục trước là bằng chứng lịch sử. Sửa JSON cấu hình không
+tự làm truy vấn nhanh hơn; cần index vật lý được áp và đo trên workload phù hợp.

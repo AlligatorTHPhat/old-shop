@@ -1962,3 +1962,10 @@ bên dưới để truy vết nguyên nhân đạt/chưa đạt.
   [product metadata](../backend/app/services/product_metadata.py),
   [storage](../backend/app/services/storage.py),
   [Compose](../deploy/docker-compose.distributed.yml).
+
+
+## Bổ sung 03/11/2026: cấu hình index bằng JSON
+
+Đã triển khai cấu hình cho cả PostgreSQL và MongoDB tại `database/indexing/catalog.json`.
+Xem [Hướng dẫn indexing JSON](HUONG_DAN_INDEXING_JSON.md) để validate, plan, sinh migration, apply và verify snapshot đã áp.
+Các bước và số đo indexing v2/007 ở trên được giữ làm tài liệu lịch sử; không thay migration 001–007.

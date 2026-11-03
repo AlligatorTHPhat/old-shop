@@ -1,0 +1,4346 @@
+{
+  "result": "PASS",
+  "command": "verify",
+  "engines": {
+    "postgresql": {
+      "revision": "index-v1",
+      "sha256": "dbf2ea661587a0329c87962fb5483fe58fbadffc4884a740d4417c9dbae7135a",
+      "indexes": [
+        {
+          "name": "category_name_key",
+          "schema": "public",
+          "table": "category",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "name"
+            ],
+            "expressions": [
+              "name"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "category_pkey",
+          "schema": "public",
+          "table": "category",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "category_id"
+            ],
+            "expressions": [
+              "category_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_category_created_at",
+          "schema": "public",
+          "table": "category",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at"
+            ],
+            "expressions": [
+              "created_at"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_category_is_active",
+          "schema": "public",
+          "table": "category",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "is_active"
+            ],
+            "expressions": [
+              "is_active"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_category_name_active",
+          "schema": "public",
+          "table": "category",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "name"
+            ],
+            "expressions": [
+              "name"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_category_parent",
+          "schema": "public",
+          "table": "category",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "parent_id"
+            ],
+            "expressions": [
+              "parent_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "contact_info_pkey",
+          "schema": "public",
+          "table": "contact_info",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "contact_id"
+            ],
+            "expressions": [
+              "contact_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_contact_info_default",
+          "schema": "public",
+          "table": "contact_info",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "is_default"
+            ],
+            "expressions": [
+              "is_default"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_contact_info_user",
+          "schema": "public",
+          "table": "contact_info",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "user_id"
+            ],
+            "expressions": [
+              "user_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "etl_outbox_pkey",
+          "schema": "public",
+          "table": "etl_outbox",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "event_id"
+            ],
+            "expressions": [
+              "event_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_etl_outbox_entity_pending",
+          "schema": "public",
+          "table": "etl_outbox",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "entity_type",
+              "entity_key",
+              "event_id"
+            ],
+            "expressions": [
+              "entity_type",
+              "entity_key",
+              "event_id"
+            ],
+            "flags": [
+              0,
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              "",
+              ""
+            ],
+            "predicate": "(status <> 'done'::text)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_etl_outbox_pending",
+          "schema": "public",
+          "table": "etl_outbox",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "available_at",
+              "event_id"
+            ],
+            "expressions": [
+              "available_at",
+              "event_id"
+            ],
+            "flags": [
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": "(status = ANY (ARRAY['pending'::text, 'dead'::text]))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_etl_outbox_pending_event",
+          "schema": "public",
+          "table": "etl_outbox",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "event_id",
+              "available_at"
+            ],
+            "expressions": [
+              "event_id",
+              "available_at"
+            ],
+            "flags": [
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": "(status = ANY (ARRAY['pending'::text, 'dead'::text]))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "etl_runs_pkey",
+          "schema": "public",
+          "table": "etl_runs",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "run_id"
+            ],
+            "expressions": [
+              "run_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_etl_runs_aggregate_success",
+          "schema": "public",
+          "table": "etl_runs",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "ended_at"
+            ],
+            "expressions": [
+              "ended_at"
+            ],
+            "flags": [
+              3
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "((status = 'success'::text) AND (details ? 'aggregate'::text))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_etl_runs_started",
+          "schema": "public",
+          "table": "etl_runs",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "started_at"
+            ],
+            "expressions": [
+              "started_at"
+            ],
+            "flags": [
+              3
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "etl_state_pkey",
+          "schema": "public",
+          "table": "etl_state",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "name"
+            ],
+            "expressions": [
+              "name"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "etl_time_origin_pkey",
+          "schema": "public",
+          "table": "etl_time_origin",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "source_table",
+              "source_key",
+              "field_name"
+            ],
+            "expressions": [
+              "source_table",
+              "source_key",
+              "field_name"
+            ],
+            "flags": [
+              0,
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              "",
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_media_deletions_due",
+          "schema": "public",
+          "table": "media_deletions",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "available_at",
+              "deletion_id"
+            ],
+            "expressions": [
+              "available_at",
+              "deletion_id"
+            ],
+            "flags": [
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": "(status = 'pending'::text)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "media_deletions_pkey",
+          "schema": "public",
+          "table": "media_deletions",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "deletion_id"
+            ],
+            "expressions": [
+              "deletion_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "media_deletions_url_path_key",
+          "schema": "public",
+          "table": "media_deletions",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "url_path"
+            ],
+            "expressions": [
+              "url_path"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_order_voucher_lookup",
+          "schema": "public",
+          "table": "order",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "voucher_id"
+            ],
+            "expressions": [
+              "voucher_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": [
+            {
+              "name": "order_h0_voucher_id_idx",
+              "table": "order_h0",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h1_voucher_id_idx",
+              "table": "order_h1",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h2_voucher_id_idx",
+              "table": "order_h2",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h3_voucher_id_idx",
+              "table": "order_h3",
+              "valid": true,
+              "reasons": []
+            }
+          ]
+        },
+        {
+          "name": "order_day4_new_buyer_id_idx",
+          "schema": "public",
+          "table": "order",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "buyer_id"
+            ],
+            "expressions": [
+              "buyer_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": [
+            {
+              "name": "order_h0_buyer_id_idx",
+              "table": "order_h0",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h1_buyer_id_idx",
+              "table": "order_h1",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h2_buyer_id_idx",
+              "table": "order_h2",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h3_buyer_id_idx",
+              "table": "order_h3",
+              "valid": true,
+              "reasons": []
+            }
+          ]
+        },
+        {
+          "name": "order_day4_new_buyer_id_order_date_idx",
+          "schema": "public",
+          "table": "order",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "buyer_id",
+              "order_date"
+            ],
+            "expressions": [
+              "buyer_id",
+              "order_date"
+            ],
+            "flags": [
+              0,
+              3
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": [
+            {
+              "name": "order_h0_buyer_id_order_date_idx",
+              "table": "order_h0",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h1_buyer_id_order_date_idx",
+              "table": "order_h1",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h2_buyer_id_order_date_idx",
+              "table": "order_h2",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h3_buyer_id_order_date_idx",
+              "table": "order_h3",
+              "valid": true,
+              "reasons": []
+            }
+          ]
+        },
+        {
+          "name": "order_day4_new_order_date_idx",
+          "schema": "public",
+          "table": "order",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "order_date"
+            ],
+            "expressions": [
+              "order_date"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": [
+            {
+              "name": "order_h0_order_date_idx",
+              "table": "order_h0",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h1_order_date_idx",
+              "table": "order_h1",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h2_order_date_idx",
+              "table": "order_h2",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h3_order_date_idx",
+              "table": "order_h3",
+              "valid": true,
+              "reasons": []
+            }
+          ]
+        },
+        {
+          "name": "order_day4_new_order_status_idx",
+          "schema": "public",
+          "table": "order",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "order_status"
+            ],
+            "expressions": [
+              "order_status"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": [
+            {
+              "name": "order_h0_order_status_idx",
+              "table": "order_h0",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h1_order_status_idx",
+              "table": "order_h1",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h2_order_status_idx",
+              "table": "order_h2",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h3_order_status_idx",
+              "table": "order_h3",
+              "valid": true,
+              "reasons": []
+            }
+          ]
+        },
+        {
+          "name": "order_day4_new_pkey",
+          "schema": "public",
+          "table": "order",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "order_id"
+            ],
+            "expressions": [
+              "order_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": [
+            {
+              "name": "order_h0_pkey",
+              "table": "order_h0",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h1_pkey",
+              "table": "order_h1",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h2_pkey",
+              "table": "order_h2",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "order_h3_pkey",
+              "table": "order_h3",
+              "valid": true,
+              "reasons": []
+            }
+          ]
+        },
+        {
+          "name": "idx_order_detail_order",
+          "schema": "public",
+          "table": "order_detail",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "order_id"
+            ],
+            "expressions": [
+              "order_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_order_detail_product_order",
+          "schema": "public",
+          "table": "order_detail",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "product_id",
+              "order_id"
+            ],
+            "expressions": [
+              "product_id",
+              "order_id"
+            ],
+            "flags": [
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "order_detail_pkey",
+          "schema": "public",
+          "table": "order_detail",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "order_detail_id"
+            ],
+            "expressions": [
+              "order_detail_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "payment_method_method_name_key",
+          "schema": "public",
+          "table": "payment_method",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "method_name"
+            ],
+            "expressions": [
+              "method_name"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "payment_method_pkey",
+          "schema": "public",
+          "table": "payment_method",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "payment_method_id"
+            ],
+            "expressions": [
+              "payment_method_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_catalogue",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "category_id",
+              "created_at"
+            ],
+            "expressions": [
+              "category_id",
+              "created_at"
+            ],
+            "flags": [
+              0,
+              3
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_category",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "category_id"
+            ],
+            "expressions": [
+              "category_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_created_at",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at"
+            ],
+            "expressions": [
+              "created_at"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_description_trgm",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "gin",
+            "unique": false,
+            "columns": [
+              "description"
+            ],
+            "expressions": [
+              "description"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              "public.gin_trgm_ops"
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_price",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "price"
+            ],
+            "expressions": [
+              "price"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_seller",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "seller_id"
+            ],
+            "expressions": [
+              "seller_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_status",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "status"
+            ],
+            "expressions": [
+              "status"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_title",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "gin",
+            "unique": false,
+            "columns": [
+              null
+            ],
+            "expressions": [
+              "to_tsvector('english'::regconfig, title::text)"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_title_trgm",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "gin",
+            "unique": false,
+            "columns": [
+              "title"
+            ],
+            "expressions": [
+              "title"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              "public.gin_trgm_ops"
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_visible_date_id",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at",
+              "product_id"
+            ],
+            "expressions": [
+              "created_at",
+              "product_id"
+            ],
+            "flags": [
+              3,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "product_pkey",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "product_id"
+            ],
+            "expressions": [
+              "product_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_image_product",
+          "schema": "public",
+          "table": "product_image",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "product_id"
+            ],
+            "expressions": [
+              "product_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_image_url",
+          "schema": "public",
+          "table": "product_image",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "image_url"
+            ],
+            "expressions": [
+              "image_url"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "product_image_pkey",
+          "schema": "public",
+          "table": "product_image",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "image_id"
+            ],
+            "expressions": [
+              "image_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "report_daily_sales_pkey",
+          "schema": "public",
+          "table": "report_daily_sales",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "report_date",
+              "seller_id",
+              "category_id"
+            ],
+            "expressions": [
+              "report_date",
+              "seller_id",
+              "category_id"
+            ],
+            "flags": [
+              0,
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              "",
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_review_buyer",
+          "schema": "public",
+          "table": "review",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "buyer_id"
+            ],
+            "expressions": [
+              "buyer_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_review_product",
+          "schema": "public",
+          "table": "review",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "product_id"
+            ],
+            "expressions": [
+              "product_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_review_rating",
+          "schema": "public",
+          "table": "review",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "rating"
+            ],
+            "expressions": [
+              "rating"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "review_pkey",
+          "schema": "public",
+          "table": "review",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "review_id"
+            ],
+            "expressions": [
+              "review_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_role_created_at",
+          "schema": "public",
+          "table": "role",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at"
+            ],
+            "expressions": [
+              "created_at"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_role_name",
+          "schema": "public",
+          "table": "role",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "role_name"
+            ],
+            "expressions": [
+              "role_name"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "role_pkey",
+          "schema": "public",
+          "table": "role",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "role_id"
+            ],
+            "expressions": [
+              "role_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "role_role_name_key",
+          "schema": "public",
+          "table": "role",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "role_name"
+            ],
+            "expressions": [
+              "role_name"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "shopping_cart_pkey",
+          "schema": "public",
+          "table": "shopping_cart",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "cart_id"
+            ],
+            "expressions": [
+              "cart_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "shopping_cart_user_id_key",
+          "schema": "public",
+          "table": "shopping_cart",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "user_id"
+            ],
+            "expressions": [
+              "user_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_shopping_cart_item_cart",
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "cart_id"
+            ],
+            "expressions": [
+              "cart_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_shopping_cart_item_product",
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "product_id"
+            ],
+            "expressions": [
+              "product_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "shopping_cart_item_pkey",
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "cart_item_id"
+            ],
+            "expressions": [
+              "cart_item_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "uq_cart_product",
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "cart_id",
+              "product_id"
+            ],
+            "expressions": [
+              "cart_id",
+              "product_id"
+            ],
+            "flags": [
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_system_feedback_created_at",
+          "schema": "public",
+          "table": "system_feedback",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at"
+            ],
+            "expressions": [
+              "created_at"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_system_feedback_status",
+          "schema": "public",
+          "table": "system_feedback",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "status"
+            ],
+            "expressions": [
+              "status"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_system_feedback_user",
+          "schema": "public",
+          "table": "system_feedback",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "user_id"
+            ],
+            "expressions": [
+              "user_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "system_feedback_pkey",
+          "schema": "public",
+          "table": "system_feedback",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "feedback_id"
+            ],
+            "expressions": [
+              "feedback_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_system_log_action",
+          "schema": "public",
+          "table": "system_log",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "action"
+            ],
+            "expressions": [
+              "action"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": [
+            {
+              "name": "system_log_202611_action_idx",
+              "table": "system_log_202611",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202612_action_idx",
+              "table": "system_log_202612",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202701_action_idx",
+              "table": "system_log_202701",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202702_action_idx",
+              "table": "system_log_202702",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_default_action_idx",
+              "table": "system_log_default",
+              "valid": true,
+              "reasons": []
+            }
+          ]
+        },
+        {
+          "name": "idx_system_log_created_at",
+          "schema": "public",
+          "table": "system_log",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at"
+            ],
+            "expressions": [
+              "created_at"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": [
+            {
+              "name": "system_log_202611_created_at_idx",
+              "table": "system_log_202611",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202612_created_at_idx",
+              "table": "system_log_202612",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202701_created_at_idx",
+              "table": "system_log_202701",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202702_created_at_idx",
+              "table": "system_log_202702",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_default_created_at_idx",
+              "table": "system_log_default",
+              "valid": true,
+              "reasons": []
+            }
+          ]
+        },
+        {
+          "name": "idx_system_log_user",
+          "schema": "public",
+          "table": "system_log",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "user_id"
+            ],
+            "expressions": [
+              "user_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": [
+            {
+              "name": "system_log_202611_user_id_idx",
+              "table": "system_log_202611",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202612_user_id_idx",
+              "table": "system_log_202612",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202701_user_id_idx",
+              "table": "system_log_202701",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202702_user_id_idx",
+              "table": "system_log_202702",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_default_user_id_idx",
+              "table": "system_log_default",
+              "valid": true,
+              "reasons": []
+            }
+          ]
+        },
+        {
+          "name": "system_log_day4_new_pkey",
+          "schema": "public",
+          "table": "system_log",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "log_id",
+              "created_at"
+            ],
+            "expressions": [
+              "log_id",
+              "created_at"
+            ],
+            "flags": [
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": [
+            {
+              "name": "system_log_202611_pkey",
+              "table": "system_log_202611",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202612_pkey",
+              "table": "system_log_202612",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202701_pkey",
+              "table": "system_log_202701",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_202702_pkey",
+              "table": "system_log_202702",
+              "valid": true,
+              "reasons": []
+            },
+            {
+              "name": "system_log_default_pkey",
+              "table": "system_log_default",
+              "valid": true,
+              "reasons": []
+            }
+          ]
+        },
+        {
+          "name": "idx_transaction_fraud_score",
+          "schema": "public",
+          "table": "transaction",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "fraud_score"
+            ],
+            "expressions": [
+              "fraud_score"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_transaction_order",
+          "schema": "public",
+          "table": "transaction",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "order_id"
+            ],
+            "expressions": [
+              "order_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_transaction_status",
+          "schema": "public",
+          "table": "transaction",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "transaction_status"
+            ],
+            "expressions": [
+              "transaction_status"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_transaction_user",
+          "schema": "public",
+          "table": "transaction",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "user_id"
+            ],
+            "expressions": [
+              "user_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "transaction_pkey",
+          "schema": "public",
+          "table": "transaction",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "transaction_id"
+            ],
+            "expressions": [
+              "transaction_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "transaction_reference_number_key",
+          "schema": "public",
+          "table": "transaction",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "reference_number"
+            ],
+            "expressions": [
+              "reference_number"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_user_created_at",
+          "schema": "public",
+          "table": "user_core",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at"
+            ],
+            "expressions": [
+              "created_at"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_user_email_active",
+          "schema": "public",
+          "table": "user_core",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "email"
+            ],
+            "expressions": [
+              "email"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_user_email_verified",
+          "schema": "public",
+          "table": "user_core",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "email_verified"
+            ],
+            "expressions": [
+              "email_verified"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_user_is_active",
+          "schema": "public",
+          "table": "user_core",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "is_active"
+            ],
+            "expressions": [
+              "is_active"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_user_username_active",
+          "schema": "public",
+          "table": "user_core",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "username"
+            ],
+            "expressions": [
+              "username"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "user_email_key",
+          "schema": "public",
+          "table": "user_core",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "email"
+            ],
+            "expressions": [
+              "email"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "user_pkey",
+          "schema": "public",
+          "table": "user_core",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "user_id"
+            ],
+            "expressions": [
+              "user_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "user_username_key",
+          "schema": "public",
+          "table": "user_core",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "username"
+            ],
+            "expressions": [
+              "username"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_user_profile_avatar_url",
+          "schema": "public",
+          "table": "user_profile",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "avatar_url"
+            ],
+            "expressions": [
+              "avatar_url"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "user_profile_pkey",
+          "schema": "public",
+          "table": "user_profile",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "user_id"
+            ],
+            "expressions": [
+              "user_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_user_role_role_user",
+          "schema": "public",
+          "table": "user_role",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "role_id",
+              "user_id"
+            ],
+            "expressions": [
+              "role_id",
+              "user_id"
+            ],
+            "flags": [
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "user_role_pkey",
+          "schema": "public",
+          "table": "user_role",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "user_id",
+              "role_id"
+            ],
+            "expressions": [
+              "user_id",
+              "role_id"
+            ],
+            "flags": [
+              0,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "user_secret_pkey",
+          "schema": "public",
+          "table": "user_secret",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "user_id"
+            ],
+            "expressions": [
+              "user_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "user_secret_random_key_key",
+          "schema": "public",
+          "table": "user_secret",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "random_key"
+            ],
+            "expressions": [
+              "random_key"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "user_wallet_pkey",
+          "schema": "public",
+          "table": "user_wallet",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "user_id"
+            ],
+            "expressions": [
+              "user_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_violation_log_created_at",
+          "schema": "public",
+          "table": "violation_log",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at"
+            ],
+            "expressions": [
+              "created_at"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_violation_log_user",
+          "schema": "public",
+          "table": "violation_log",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "user_id"
+            ],
+            "expressions": [
+              "user_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "violation_log_pkey",
+          "schema": "public",
+          "table": "violation_log",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "log_id"
+            ],
+            "expressions": [
+              "log_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_voucher_code_active",
+          "schema": "public",
+          "table": "voucher",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "code"
+            ],
+            "expressions": [
+              "code"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_active = true)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_voucher_created_at",
+          "schema": "public",
+          "table": "voucher",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at"
+            ],
+            "expressions": [
+              "created_at"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_voucher_valid_to",
+          "schema": "public",
+          "table": "voucher",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "valid_to"
+            ],
+            "expressions": [
+              "valid_to"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_active = true)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "voucher_code_key",
+          "schema": "public",
+          "table": "voucher",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "code"
+            ],
+            "expressions": [
+              "code"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "voucher_pkey",
+          "schema": "public",
+          "table": "voucher",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "voucher_id"
+            ],
+            "expressions": [
+              "voucher_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        }
+      ],
+      "unmanaged": [
+        {
+          "schema": "public",
+          "table": "schema_migrations",
+          "name": "schema_migrations_pkey",
+          "constraint_owned": true,
+          "attached": false
+        }
+      ]
+    },
+    "mongodb": {
+      "revision": "index-v1",
+      "sha256": "6463e4f9ef0dda68af1632b4a7a060508d73e9e1da4fff2ae5dc9acf140db60e",
+      "indexes": [
+        {
+          "collection": "product_details",
+          "name": "product_id_1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "product_id",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "product_id",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "product_details",
+          "name": "category_id_1_attributes.brand_1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "category_id",
+                1
+              ],
+              [
+                "attributes.brand",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "category_id",
+                1
+              ],
+              [
+                "attributes.brand",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "product_details",
+          "name": "idx_product_attributes",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "attributes.$**",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "attributes.$**",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "product_details",
+          "name": "idx_live_product_image_key",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "images.key",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": {
+              "deleted": false
+            },
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "images.key",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": {
+              "deleted": false
+            },
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "product_details",
+          "name": "description_text_tags_text",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "_fts",
+                "text"
+              ],
+              [
+                "_ftsx",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null,
+            "weights": {
+              "description": 1,
+              "tags": 1
+            },
+            "default_language": "english",
+            "language_override": "language",
+            "textIndexVersion": 3
+          },
+          "actual": {
+            "keys": [
+              [
+                "_fts",
+                "text"
+              ],
+              [
+                "_ftsx",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null,
+            "weights": {
+              "description": 1,
+              "tags": 1
+            },
+            "default_language": "english",
+            "language_override": "language",
+            "textIndexVersion": 3
+          }
+        },
+        {
+          "collection": "reviews",
+          "name": "review_id_1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "review_id",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "review_id",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "reviews",
+          "name": "product_id_1_created_at_-1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "product_id",
+                1
+              ],
+              [
+                "created_at",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "product_id",
+                1
+              ],
+              [
+                "created_at",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "reviews",
+          "name": "type_1_status_1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "type",
+                1
+              ],
+              [
+                "status",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": {
+              "type": "report",
+              "status": "pending"
+            },
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "type",
+                1
+              ],
+              [
+                "status",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": {
+              "type": "report",
+              "status": "pending"
+            },
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "order_snapshots",
+          "name": "order_id_1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "order_id",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "order_id",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "order_snapshots",
+          "name": "buyer.id_1_order_date_-1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "buyer.id",
+                1
+              ],
+              [
+                "order_date",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "buyer.id",
+                1
+              ],
+              [
+                "order_date",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "order_snapshots",
+          "name": "order_status_1_order_date_-1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "order_status",
+                1
+              ],
+              [
+                "order_date",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "order_status",
+                1
+              ],
+              [
+                "order_date",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "system_logs",
+          "name": "log_id_1_created_at_1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "log_id",
+                1
+              ],
+              [
+                "created_at",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "log_id",
+                1
+              ],
+              [
+                "created_at",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "system_logs",
+          "name": "created_at_1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "created_at",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": 7776000,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "created_at",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": 7776000,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "system_logs",
+          "name": "action_1_actor_id_1_created_at_-1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "action",
+                1
+              ],
+              [
+                "actor_id",
+                1
+              ],
+              [
+                "created_at",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "action",
+                1
+              ],
+              [
+                "actor_id",
+                1
+              ],
+              [
+                "created_at",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "violation_logs",
+          "name": "log_id_1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "log_id",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "log_id",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "violation_logs",
+          "name": "target_user_id_1_created_at_-1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "target_user_id",
+                1
+              ],
+              [
+                "created_at",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "target_user_id",
+                1
+              ],
+              [
+                "created_at",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "contact_messages",
+          "name": "feedback_id_1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "feedback_id",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "feedback_id",
+                1
+              ]
+            ],
+            "unique": true,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "contact_messages",
+          "name": "status_1_created_at_-1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "status",
+                1
+              ],
+              [
+                "created_at",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "status",
+                1
+              ],
+              [
+                "created_at",
+                -1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        },
+        {
+          "collection": "etl_errors",
+          "name": "resolved_1_last_at_1",
+          "status": "matched",
+          "reasons": [],
+          "expected": {
+            "keys": [
+              [
+                "resolved",
+                1
+              ],
+              [
+                "last_at",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          },
+          "actual": {
+            "keys": [
+              [
+                "resolved",
+                1
+              ],
+              [
+                "last_at",
+                1
+              ]
+            ],
+            "unique": false,
+            "sparse": false,
+            "hidden": false,
+            "partial": null,
+            "ttl": null,
+            "collation": null,
+            "wildcardProjection": null
+          }
+        }
+      ],
+      "unmanaged": [
+        {
+          "collection": "contact_messages",
+          "name": "_id_",
+          "managed_by": "database"
+        },
+        {
+          "collection": "etl_errors",
+          "name": "_id_",
+          "managed_by": "database"
+        },
+        {
+          "collection": "order_snapshots",
+          "name": "_id_",
+          "managed_by": "database"
+        },
+        {
+          "collection": "product_details",
+          "name": "_id_",
+          "managed_by": "database"
+        },
+        {
+          "collection": "reviews",
+          "name": "_id_",
+          "managed_by": "database"
+        },
+        {
+          "collection": "system_logs",
+          "name": "_id_",
+          "managed_by": "database"
+        },
+        {
+          "collection": "violation_logs",
+          "name": "_id_",
+          "managed_by": "database"
+        }
+      ]
+    }
+  }
+}

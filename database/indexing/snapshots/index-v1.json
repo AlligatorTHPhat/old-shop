@@ -1,0 +1,2052 @@
+{
+  "schema_version": 1,
+  "revision": "index-v1",
+  "postgresql": [
+    {
+      "name": "category_name_key",
+      "schema": "public",
+      "table": "category",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "name",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "category_pkey",
+      "schema": "public",
+      "table": "category",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "category_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_category_created_at",
+      "schema": "public",
+      "table": "category",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "created_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_category_is_active",
+      "schema": "public",
+      "table": "category",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "is_active",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_category_name_active",
+      "schema": "public",
+      "table": "category",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "name",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_category_parent",
+      "schema": "public",
+      "table": "category",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "parent_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "contact_info_pkey",
+      "schema": "public",
+      "table": "contact_info",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "contact_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_contact_info_default",
+      "schema": "public",
+      "table": "contact_info",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "is_default",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_contact_info_user",
+      "schema": "public",
+      "table": "contact_info",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "etl_outbox_pkey",
+      "schema": "public",
+      "table": "etl_outbox",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "event_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_etl_outbox_entity_pending",
+      "schema": "public",
+      "table": "etl_outbox",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "entity_type",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "entity_key",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "event_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "status",
+        "op": "ne",
+        "value": "done"
+      }
+    },
+    {
+      "name": "idx_etl_outbox_pending",
+      "schema": "public",
+      "table": "etl_outbox",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "available_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "event_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "status",
+        "op": "in",
+        "value": [
+          "pending",
+          "dead"
+        ]
+      }
+    },
+    {
+      "name": "idx_etl_outbox_pending_event",
+      "schema": "public",
+      "table": "etl_outbox",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "event_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "available_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "status",
+        "op": "in",
+        "value": [
+          "pending",
+          "dead"
+        ]
+      }
+    },
+    {
+      "name": "etl_runs_pkey",
+      "schema": "public",
+      "table": "etl_runs",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "run_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_etl_runs_aggregate_success",
+      "schema": "public",
+      "table": "etl_runs",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "ended_at",
+          "order": "DESC",
+          "nulls": "FIRST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "all": [
+          {
+            "column": "status",
+            "op": "eq",
+            "value": "success"
+          },
+          {
+            "column": "details",
+            "op": "has_key",
+            "value": "aggregate"
+          }
+        ]
+      }
+    },
+    {
+      "name": "idx_etl_runs_started",
+      "schema": "public",
+      "table": "etl_runs",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "started_at",
+          "order": "DESC",
+          "nulls": "FIRST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "etl_state_pkey",
+      "schema": "public",
+      "table": "etl_state",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "name",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "etl_time_origin_pkey",
+      "schema": "public",
+      "table": "etl_time_origin",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "source_table",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "source_key",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "field_name",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_media_deletions_due",
+      "schema": "public",
+      "table": "media_deletions",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "available_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "deletion_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "status",
+        "op": "eq",
+        "value": "pending"
+      }
+    },
+    {
+      "name": "media_deletions_pkey",
+      "schema": "public",
+      "table": "media_deletions",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "deletion_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "media_deletions_url_path_key",
+      "schema": "public",
+      "table": "media_deletions",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "url_path",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_order_voucher_lookup",
+      "schema": "public",
+      "table": "order",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "voucher_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "order_day4_new_buyer_id_idx",
+      "schema": "public",
+      "table": "order",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "buyer_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "order_day4_new_buyer_id_order_date_idx",
+      "schema": "public",
+      "table": "order",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "buyer_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "order_date",
+          "order": "DESC",
+          "nulls": "FIRST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "order_day4_new_order_date_idx",
+      "schema": "public",
+      "table": "order",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "order_date",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "order_day4_new_order_status_idx",
+      "schema": "public",
+      "table": "order",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "order_status",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "order_day4_new_pkey",
+      "schema": "public",
+      "table": "order",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "order_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_order_detail_order",
+      "schema": "public",
+      "table": "order_detail",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "order_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_order_detail_product_order",
+      "schema": "public",
+      "table": "order_detail",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "product_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "order_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "order_detail_pkey",
+      "schema": "public",
+      "table": "order_detail",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "order_detail_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "payment_method_method_name_key",
+      "schema": "public",
+      "table": "payment_method",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "method_name",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "payment_method_pkey",
+      "schema": "public",
+      "table": "payment_method",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "payment_method_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_product_catalogue",
+      "schema": "public",
+      "table": "product",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "category_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "created_at",
+          "order": "DESC",
+          "nulls": "FIRST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "all": [
+          {
+            "column": "status",
+            "op": "eq",
+            "value": 1
+          },
+          {
+            "column": "is_deleted",
+            "op": "eq",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "idx_product_category",
+      "schema": "public",
+      "table": "product",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "category_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_product_created_at",
+      "schema": "public",
+      "table": "product",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "created_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_product_description_trgm",
+      "schema": "public",
+      "table": "product",
+      "method": "gin",
+      "unique": false,
+      "keys": [
+        {
+          "column": "description",
+          "opclass": "gin_trgm_ops"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "all": [
+          {
+            "column": "status",
+            "op": "eq",
+            "value": 1
+          },
+          {
+            "column": "is_deleted",
+            "op": "eq",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "idx_product_price",
+      "schema": "public",
+      "table": "product",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "price",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_product_seller",
+      "schema": "public",
+      "table": "product",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "seller_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_product_status",
+      "schema": "public",
+      "table": "product",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "status",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_product_title",
+      "schema": "public",
+      "table": "product",
+      "method": "gin",
+      "unique": false,
+      "keys": [
+        {
+          "column": "title",
+          "expression": "tsvector",
+          "config": "english"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_product_title_trgm",
+      "schema": "public",
+      "table": "product",
+      "method": "gin",
+      "unique": false,
+      "keys": [
+        {
+          "column": "title",
+          "opclass": "gin_trgm_ops"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "all": [
+          {
+            "column": "status",
+            "op": "eq",
+            "value": 1
+          },
+          {
+            "column": "is_deleted",
+            "op": "eq",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "idx_product_visible_date_id",
+      "schema": "public",
+      "table": "product",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "created_at",
+          "order": "DESC",
+          "nulls": "FIRST"
+        },
+        {
+          "column": "product_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "all": [
+          {
+            "column": "status",
+            "op": "eq",
+            "value": 1
+          },
+          {
+            "column": "is_deleted",
+            "op": "eq",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "product_pkey",
+      "schema": "public",
+      "table": "product",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "product_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_product_image_product",
+      "schema": "public",
+      "table": "product_image",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "product_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_product_image_url",
+      "schema": "public",
+      "table": "product_image",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "image_url",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "product_image_pkey",
+      "schema": "public",
+      "table": "product_image",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "image_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "report_daily_sales_pkey",
+      "schema": "public",
+      "table": "report_daily_sales",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "report_date",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "seller_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "category_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_review_buyer",
+      "schema": "public",
+      "table": "review",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "buyer_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_review_product",
+      "schema": "public",
+      "table": "review",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "product_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_review_rating",
+      "schema": "public",
+      "table": "review",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "rating",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "review_pkey",
+      "schema": "public",
+      "table": "review",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "review_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_role_created_at",
+      "schema": "public",
+      "table": "role",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "created_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_role_name",
+      "schema": "public",
+      "table": "role",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "role_name",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "role_pkey",
+      "schema": "public",
+      "table": "role",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "role_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "role_role_name_key",
+      "schema": "public",
+      "table": "role",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "role_name",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "shopping_cart_pkey",
+      "schema": "public",
+      "table": "shopping_cart",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "cart_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "shopping_cart_user_id_key",
+      "schema": "public",
+      "table": "shopping_cart",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_shopping_cart_item_cart",
+      "schema": "public",
+      "table": "shopping_cart_item",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "cart_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_shopping_cart_item_product",
+      "schema": "public",
+      "table": "shopping_cart_item",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "product_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "shopping_cart_item_pkey",
+      "schema": "public",
+      "table": "shopping_cart_item",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "cart_item_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "uq_cart_product",
+      "schema": "public",
+      "table": "shopping_cart_item",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "cart_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "product_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_system_feedback_created_at",
+      "schema": "public",
+      "table": "system_feedback",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "created_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_system_feedback_status",
+      "schema": "public",
+      "table": "system_feedback",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "status",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_system_feedback_user",
+      "schema": "public",
+      "table": "system_feedback",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "system_feedback_pkey",
+      "schema": "public",
+      "table": "system_feedback",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "feedback_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_system_log_action",
+      "schema": "public",
+      "table": "system_log",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "action",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_system_log_created_at",
+      "schema": "public",
+      "table": "system_log",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "created_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_system_log_user",
+      "schema": "public",
+      "table": "system_log",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "system_log_day4_new_pkey",
+      "schema": "public",
+      "table": "system_log",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "log_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "created_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_transaction_fraud_score",
+      "schema": "public",
+      "table": "transaction",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "fraud_score",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_transaction_order",
+      "schema": "public",
+      "table": "transaction",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "order_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_transaction_status",
+      "schema": "public",
+      "table": "transaction",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "transaction_status",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_transaction_user",
+      "schema": "public",
+      "table": "transaction",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "transaction_pkey",
+      "schema": "public",
+      "table": "transaction",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "transaction_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "transaction_reference_number_key",
+      "schema": "public",
+      "table": "transaction",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "reference_number",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_user_created_at",
+      "schema": "public",
+      "table": "user_core",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "created_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_user_email_active",
+      "schema": "public",
+      "table": "user_core",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "email",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_user_email_verified",
+      "schema": "public",
+      "table": "user_core",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "email_verified",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_user_is_active",
+      "schema": "public",
+      "table": "user_core",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "is_active",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "idx_user_username_active",
+      "schema": "public",
+      "table": "user_core",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "username",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_deleted",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "name": "user_email_key",
+      "schema": "public",
+      "table": "user_core",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "email",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "user_pkey",
+      "schema": "public",
+      "table": "user_core",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "user_username_key",
+      "schema": "public",
+      "table": "user_core",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "username",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_user_profile_avatar_url",
+      "schema": "public",
+      "table": "user_profile",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "avatar_url",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "user_profile_pkey",
+      "schema": "public",
+      "table": "user_profile",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_user_role_role_user",
+      "schema": "public",
+      "table": "user_role",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "role_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "user_role_pkey",
+      "schema": "public",
+      "table": "user_role",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "role_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "user_secret_pkey",
+      "schema": "public",
+      "table": "user_secret",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "user_secret_random_key_key",
+      "schema": "public",
+      "table": "user_secret",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "random_key",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "user_wallet_pkey",
+      "schema": "public",
+      "table": "user_wallet",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_violation_log_created_at",
+      "schema": "public",
+      "table": "violation_log",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "created_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_violation_log_user",
+      "schema": "public",
+      "table": "violation_log",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "user_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "violation_log_pkey",
+      "schema": "public",
+      "table": "violation_log",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "log_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "idx_voucher_code_active",
+      "schema": "public",
+      "table": "voucher",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "code",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_active",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "name": "idx_voucher_created_at",
+      "schema": "public",
+      "table": "voucher",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "created_at",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application"
+    },
+    {
+      "name": "idx_voucher_valid_to",
+      "schema": "public",
+      "table": "voucher",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "valid_to",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "application",
+      "predicate": {
+        "column": "is_active",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "name": "voucher_code_key",
+      "schema": "public",
+      "table": "voucher",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "code",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    },
+    {
+      "name": "voucher_pkey",
+      "schema": "public",
+      "table": "voucher",
+      "method": "btree",
+      "unique": true,
+      "keys": [
+        {
+          "column": "voucher_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "managed_by": "constraint"
+    }
+  ],
+  "mongodb": [
+    {
+      "collection": "product_details",
+      "keys": [
+        [
+          "product_id",
+          1
+        ]
+      ],
+      "options": {
+        "unique": true,
+        "name": "product_id_1"
+      }
+    },
+    {
+      "collection": "product_details",
+      "keys": [
+        [
+          "category_id",
+          1
+        ],
+        [
+          "attributes.brand",
+          1
+        ]
+      ],
+      "options": {
+        "name": "category_id_1_attributes.brand_1"
+      }
+    },
+    {
+      "collection": "product_details",
+      "keys": [
+        [
+          "attributes.$**",
+          1
+        ]
+      ],
+      "options": {
+        "name": "idx_product_attributes"
+      }
+    },
+    {
+      "collection": "product_details",
+      "keys": [
+        [
+          "images.key",
+          1
+        ]
+      ],
+      "options": {
+        "name": "idx_live_product_image_key",
+        "partialFilterExpression": {
+          "deleted": false
+        }
+      }
+    },
+    {
+      "collection": "product_details",
+      "keys": [
+        [
+          "description",
+          "text"
+        ],
+        [
+          "tags",
+          "text"
+        ]
+      ],
+      "options": {
+        "name": "description_text_tags_text"
+      }
+    },
+    {
+      "collection": "reviews",
+      "keys": [
+        [
+          "review_id",
+          1
+        ]
+      ],
+      "options": {
+        "unique": true,
+        "name": "review_id_1"
+      }
+    },
+    {
+      "collection": "reviews",
+      "keys": [
+        [
+          "product_id",
+          1
+        ],
+        [
+          "created_at",
+          -1
+        ]
+      ],
+      "options": {
+        "name": "product_id_1_created_at_-1"
+      }
+    },
+    {
+      "collection": "reviews",
+      "keys": [
+        [
+          "type",
+          1
+        ],
+        [
+          "status",
+          1
+        ]
+      ],
+      "options": {
+        "partialFilterExpression": {
+          "type": "report",
+          "status": "pending"
+        },
+        "name": "type_1_status_1"
+      }
+    },
+    {
+      "collection": "order_snapshots",
+      "keys": [
+        [
+          "order_id",
+          1
+        ]
+      ],
+      "options": {
+        "unique": true,
+        "name": "order_id_1"
+      }
+    },
+    {
+      "collection": "order_snapshots",
+      "keys": [
+        [
+          "buyer.id",
+          1
+        ],
+        [
+          "order_date",
+          -1
+        ]
+      ],
+      "options": {
+        "name": "buyer.id_1_order_date_-1"
+      }
+    },
+    {
+      "collection": "order_snapshots",
+      "keys": [
+        [
+          "order_status",
+          1
+        ],
+        [
+          "order_date",
+          -1
+        ]
+      ],
+      "options": {
+        "name": "order_status_1_order_date_-1"
+      }
+    },
+    {
+      "collection": "system_logs",
+      "keys": [
+        [
+          "log_id",
+          1
+        ],
+        [
+          "created_at",
+          1
+        ]
+      ],
+      "options": {
+        "unique": true,
+        "name": "log_id_1_created_at_1"
+      }
+    },
+    {
+      "collection": "system_logs",
+      "keys": [
+        [
+          "created_at",
+          1
+        ]
+      ],
+      "options": {
+        "expireAfterSeconds": 7776000,
+        "name": "created_at_1"
+      }
+    },
+    {
+      "collection": "system_logs",
+      "keys": [
+        [
+          "action",
+          1
+        ],
+        [
+          "actor_id",
+          1
+        ],
+        [
+          "created_at",
+          -1
+        ]
+      ],
+      "options": {
+        "name": "action_1_actor_id_1_created_at_-1"
+      }
+    },
+    {
+      "collection": "violation_logs",
+      "keys": [
+        [
+          "log_id",
+          1
+        ]
+      ],
+      "options": {
+        "unique": true,
+        "name": "log_id_1"
+      }
+    },
+    {
+      "collection": "violation_logs",
+      "keys": [
+        [
+          "target_user_id",
+          1
+        ],
+        [
+          "created_at",
+          -1
+        ]
+      ],
+      "options": {
+        "name": "target_user_id_1_created_at_-1"
+      }
+    },
+    {
+      "collection": "contact_messages",
+      "keys": [
+        [
+          "feedback_id",
+          1
+        ]
+      ],
+      "options": {
+        "unique": true,
+        "name": "feedback_id_1"
+      }
+    },
+    {
+      "collection": "contact_messages",
+      "keys": [
+        [
+          "status",
+          1
+        ],
+        [
+          "created_at",
+          -1
+        ]
+      ],
+      "options": {
+        "name": "status_1_created_at_-1"
+      }
+    },
+    {
+      "collection": "etl_errors",
+      "keys": [
+        [
+          "resolved",
+          1
+        ],
+        [
+          "last_at",
+          1
+        ]
+      ],
+      "options": {
+        "name": "resolved_1_last_at_1"
+      }
+    }
+  ]
+}

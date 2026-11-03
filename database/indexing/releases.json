@@ -1,0 +1,16 @@
+[
+  {
+    "migration": "007",
+    "revision": "index-v1",
+    "sha256": "dbf2ea661587a0329c87962fb5483fe58fbadffc4884a740d4417c9dbae7135a",
+    "baseline_migrations": {
+      "005": "3385e1085552dcae5f905986abe0c1225de71a166564ac42b7b6c2a161f88d66",
+      "001": "6260a735840a9414d9c1edd45e14cf3beaa5f00dae4f424b51e1156c8558fff5",
+      "003": "afda323b0323bb3e7d67ef59010d56ee07fa7ee7e848174406a28c1e0473e4e2",
+      "002": "352a6ee022f0064fdb2e17d99ff17f3ac0d128eb1e0d6de40f426ae0d75b8af7",
+      "004": "16739b49ad7f35dc1d397d034a37abea29e700ddf8c5c97abbb73fafddfe2fb8",
+      "007": "b6baebc7d52bd14dd9a41a620f72be379f4d69f35e76303b03cb00798b4acb6e",
+      "006": "a199c5984ce6a7540634e6f55b1727a7e7b14fa2e7477defcd6d3a099df466b6"
+    }
+  }
+]

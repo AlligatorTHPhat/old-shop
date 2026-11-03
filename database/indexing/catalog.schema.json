@@ -1,0 +1,376 @@
+{
+  "$defs": {
+    "JsonValue": {},
+    "MongoIndex": {
+      "additionalProperties": false,
+      "properties": {
+        "collection": {
+          "pattern": "^[a-z_][a-z0-9_]{0,62}$",
+          "title": "Collection",
+          "type": "string"
+        },
+        "keys": {
+          "items": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Keys",
+          "type": "array"
+        },
+        "options": {
+          "$ref": "#/$defs/MongoOptions"
+        }
+      },
+      "required": [
+        "collection",
+        "keys",
+        "options"
+      ],
+      "title": "MongoIndex",
+      "type": "object"
+    },
+    "MongoOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 127,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.$-]+$",
+          "title": "Name",
+          "type": "string"
+        },
+        "unique": {
+          "default": false,
+          "title": "Unique",
+          "type": "boolean"
+        },
+        "sparse": {
+          "default": false,
+          "title": "Sparse",
+          "type": "boolean"
+        },
+        "hidden": {
+          "default": false,
+          "title": "Hidden",
+          "type": "boolean"
+        },
+        "partialFilterExpression": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/JsonValue"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Partialfilterexpression"
+        },
+        "expireAfterSeconds": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expireafterseconds"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "MongoOptions",
+      "type": "object"
+    },
+    "PGIndex": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "pattern": "^[a-z_][a-z0-9_]{0,62}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "schema": {
+          "const": "public",
+          "default": "public",
+          "title": "Schema",
+          "type": "string"
+        },
+        "table": {
+          "pattern": "^[a-z_][a-z0-9_]{0,62}$",
+          "title": "Table",
+          "type": "string"
+        },
+        "method": {
+          "default": "btree",
+          "enum": [
+            "btree",
+            "gin"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "unique": {
+          "default": false,
+          "title": "Unique",
+          "type": "boolean"
+        },
+        "keys": {
+          "items": {
+            "$ref": "#/$defs/PGKey"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Keys",
+          "type": "array"
+        },
+        "predicate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Predicate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "managed_by": {
+          "default": "application",
+          "enum": [
+            "application",
+            "constraint"
+          ],
+          "title": "Managed By",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "table",
+        "keys"
+      ],
+      "title": "PGIndex",
+      "type": "object"
+    },
+    "PGKey": {
+      "additionalProperties": false,
+      "properties": {
+        "column": {
+          "pattern": "^[a-z_][a-z0-9_]{0,62}$",
+          "title": "Column",
+          "type": "string"
+        },
+        "expression": {
+          "anyOf": [
+            {
+              "const": "tsvector",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expression"
+        },
+        "config": {
+          "anyOf": [
+            {
+              "enum": [
+                "english",
+                "simple"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Config"
+        },
+        "order": {
+          "anyOf": [
+            {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Order"
+        },
+        "nulls": {
+          "anyOf": [
+            {
+              "enum": [
+                "FIRST",
+                "LAST"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nulls"
+        },
+        "opclass": {
+          "anyOf": [
+            {
+              "const": "gin_trgm_ops",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Opclass"
+        }
+      },
+      "required": [
+        "column"
+      ],
+      "title": "PGKey",
+      "type": "object"
+    },
+    "Predicate": {
+      "additionalProperties": false,
+      "properties": {
+        "all": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Predicate"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "All"
+        },
+        "any": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Predicate"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Any"
+        },
+        "column": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z_][a-z0-9_]{0,62}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Column"
+        },
+        "op": {
+          "anyOf": [
+            {
+              "enum": [
+                "eq",
+                "ne",
+                "lt",
+                "le",
+                "gt",
+                "ge",
+                "in",
+                "has_key"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Op"
+        },
+        "value": {
+          "$ref": "#/$defs/JsonValue",
+          "default": null
+        }
+      },
+      "title": "Predicate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "revision": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$",
+      "title": "Revision",
+      "type": "string"
+    },
+    "postgresql": {
+      "items": {
+        "$ref": "#/$defs/PGIndex"
+      },
+      "title": "Postgresql",
+      "type": "array"
+    },
+    "mongodb": {
+      "items": {
+        "$ref": "#/$defs/MongoIndex"
+      },
+      "title": "Mongodb",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "revision",
+    "postgresql",
+    "mongodb"
+  ],
+  "title": "IndexCatalog",
+  "type": "object"
+}

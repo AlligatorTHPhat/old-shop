@@ -88,6 +88,10 @@ def run_migrations(directory: Path | None = None) -> list[str]:
         checksums = {p.name.split("_", 1)[0]: hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
         if any(checksums.get(version) != checksum for version, checksum in history.items()):
             raise RuntimeError("Applied migration checksum mismatch; do not edit migration history")
+        from app.services.index_releases import validate_migration_snapshot
+
+        for path in files:
+            validate_migration_snapshot(path, DATABASE_DIR)
         with connection.cursor() as cursor:
             cursor.execute("""CREATE TABLE IF NOT EXISTS schema_migrations(
                 version varchar(3) PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,

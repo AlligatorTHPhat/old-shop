@@ -1,0 +1,151 @@
+{
+  "result": "PASS",
+  "scope": "Implementation validation on isolated PostgreSQL/MongoDB test servers",
+  "generated_at": "2026-11-03T19:55:58.802422+07:00",
+  "revision": "index-v1",
+  "normalized_catalog_sha256": "dbf2ea661587a0329c87962fb5483fe58fbadffc4884a740d4417c9dbae7135a",
+  "inventory": {
+    "postgresql_application_roots": 61,
+    "postgresql_constraint_roots": 37,
+    "mongodb_application_etl": 19
+  },
+  "environment": {
+    "python": "3.14.6",
+    "pydantic": "2.14.2",
+    "psycopg2": "2.9.13",
+    "pymongo": "4.19.0",
+    "postgresql": "16.15",
+    "mongodb": "8.0.32",
+    "dependencies": "Local test environment under /tmp; not the locked production container"
+  },
+  "tests": {
+    "passed": 92,
+    "skipped": 31,
+    "new_unit_contract_compiler_packaging_path_tests": 53,
+    "new_real_database_scenarios": 2,
+    "existing_regressions_passed": 37,
+    "skipped_scope": "Existing opt-in integration tests requiring additional media/Day5 environments; disabled in this run",
+    "log": "docs/evidence/index_config_tests.txt"
+  },
+  "cli": {
+    "validate": {
+      "result": "PASS",
+      "engines": {}
+    },
+    "plan": {
+      "result": "PASS",
+      "engines": {
+        "postgresql": {
+          "revision": "index-v1",
+          "matched": 98,
+          "created": 0,
+          "partition_indexes": 44
+        },
+        "mongodb": {
+          "revision": "index-v1",
+          "matched": 19,
+          "created": 0,
+          "partition_indexes": 0
+        }
+      }
+    },
+    "apply": {
+      "result": "PASS",
+      "engines": {
+        "postgresql": {
+          "revision": "index-v1",
+          "matched": 98,
+          "created": 0,
+          "partition_indexes": 44
+        },
+        "mongodb": {
+          "revision": "index-v1",
+          "matched": 19,
+          "created": 0,
+          "partition_indexes": 0
+        }
+      }
+    },
+    "apply_repeat": {
+      "result": "PASS",
+      "engines": {
+        "postgresql": {
+          "revision": "index-v1",
+          "matched": 98,
+          "created": 0,
+          "partition_indexes": 44
+        },
+        "mongodb": {
+          "revision": "index-v1",
+          "matched": 19,
+          "created": 0,
+          "partition_indexes": 0
+        }
+      }
+    },
+    "verify": {
+      "result": "PASS",
+      "engines": {
+        "postgresql": {
+          "revision": "index-v1",
+          "matched": 98,
+          "created": 0,
+          "partition_indexes": 44
+        },
+        "mongodb": {
+          "revision": "index-v1",
+          "matched": 19,
+          "created": 0,
+          "partition_indexes": 0
+        }
+      }
+    },
+    "generate_noop": {
+      "generated": false,
+      "reason": "No PostgreSQL index changes"
+    }
+  },
+  "historical_migration_checksums_001_007": "UNCHANGED",
+  "verified_scenarios": [
+    "Post-007 parity including constraints, B-tree, GIN/trigram, tsvector, order/null ordering and partition children",
+    "JSON addition -> frozen snapshot -> generated 008 SQL -> migration runner -> catalog verification on UUID test database",
+    "DDL failure rolls back created index and migration history row",
+    "Changed or removed migration snapshot/header binding rejected",
+    "Mongo initial bootstrap, repeated apply, text/wildcard/partial/TTL, unique violations and sparse JSON addition",
+    "Changed TTL blocked without collMod/drop; removed declaration leaves physical index unmanaged",
+    "Applied Mongo/PostgreSQL verification does not require a valid desired catalog",
+    "Mongo dotted paths checked against document models while dynamic attributes remain open"
+  ],
+  "docker_config_packaging": {
+    "result": "PASS",
+    "scope": "Docker COPY database and .dockerignore packaging probe; not a full backend runtime image build",
+    "files": [
+      {
+        "path": "opt/database/indexing/catalog.json",
+        "sha256": "fc4c2002573da86f91b3ca916e189c89fbb05e42bbeaf0fbdb896116d9ee71fe"
+      },
+      {
+        "path": "opt/database/indexing/catalog.schema.json",
+        "sha256": "3d820a4fc50363f6292b930860d60451d9545a7e7219bf3b3134a506b43e8dd9"
+      },
+      {
+        "path": "opt/database/indexing/releases.json",
+        "sha256": "bcda86bbdedfcae416a9052ca9f24bbc117bd28f87ef35d6f752369a1e2bd00f"
+      },
+      {
+        "path": "opt/database/indexing/snapshots/index-v1.json",
+        "sha256": "fc4c2002573da86f91b3ca916e189c89fbb05e42bbeaf0fbdb896116d9ee71fe"
+      }
+    ]
+  },
+  "benchmark": {
+    "path": "docs/benchmark/index_config/mongo/summary.json",
+    "documents_per_collection": 10000,
+    "planner": "Natural optimizer choice; no hint",
+    "note": "Measurements use indexes loaded from JSON. Declaration-format conversion itself does not change physical query speed."
+  },
+  "limits": [
+    "No full locked backend runtime image build or tagged ZIP release was produced",
+    "No production/application database was migrated by this implementation session"
+  ]
+}
