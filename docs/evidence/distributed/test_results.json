@@ -1,0 +1,1006 @@
+{
+  "started_at": "2026-11-04T10:53:16.079079+00:00",
+  "scope": "M1, one host / two virtual IPs",
+  "physical_hosts_verified": false,
+  "checks": {
+    "T01": {
+      "status": "PASS",
+      "seconds": 0.46,
+      "detail": {
+        "database": "oldshop_2",
+        "role": "b_reader",
+        "client_address": "172.29.82.11/32",
+        "server_address": "172.29.82.12/32",
+        "site_id": "B",
+        "remote_title": "Site B product 1"
+      }
+    },
+    "T02": {
+      "status": "PASS",
+      "seconds": 2.476,
+      "detail": {
+        "insert_visible": [
+          {
+            "product_id": 100002,
+            "title": "Verification product"
+          }
+        ],
+        "same_transaction_price": "123.00",
+        "new_transaction_price": "456.00"
+      }
+    },
+    "T03": {
+      "status": "PASS",
+      "seconds": 7.752,
+      "detail": {
+        "A_update": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table product\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_insert": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table product\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_delete": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table product\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_secret": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table user_secret\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_wallet": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table user_wallet\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_full_users": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for view users_full\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_site_change": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table site_config\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_function_bypass": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for function create_user_with_hash\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_writer_identity": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table site_config\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_writer_mapping": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table seller_site\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "B_update": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table product\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "B_insert": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table product\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "B_delete": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table product\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "B_secret": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table user_secret\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "B_wallet": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table user_wallet\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "B_full_users": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for view users_full\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "B_site_change": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table site_config\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "B_function_bypass": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for function create_user_with_hash\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "B_writer_identity": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table site_config\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "B_writer_mapping": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table seller_site\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_to_B_update": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table product\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "A_to_B_delete": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table product\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "foreign_update": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table product\nCONTEXT:  remote SQL command: UPDATE public.product SET price = price WHERE ((product_id = 2))\nLOCATION:  pgfdw_report_error, connection.c:944"
+        },
+        "global_write": {
+          "expected_sqlstate": "55000",
+          "error": "ERROR:  55000: cannot update view \"v_product\"\nDETAIL:  Views containing UNION, INTERSECT, or EXCEPT are not automatically updatable.\nHINT:  To enable updating the view, provide an INSTEAD OF UPDATE trigger or an unconditional ON UPDATE DO INSTEAD rule.\nLOCATION:  rewriteTargetView, rewriteHandler.c:3199"
+        },
+        "global_table_write": {
+          "expected_sqlstate": "42501",
+          "error": "ERROR:  42501: permission denied for table product\nLOCATION:  aclcheck_error, aclchk.c:2812"
+        },
+        "unapproved_source": {
+          "rejected": true,
+          "error": "psql: error: connection to server at \"172.29.82.11\", port 5432 failed: FATAL:  pg_hba.conf rejects connection for host \"172.29.82.12\", user \"b_reader\", database \"oldshop_1\", no encryption"
+        }
+      }
+    },
+    "T04": {
+      "status": "PASS",
+      "seconds": 14.791,
+      "detail": {
+        "local_read_write": "PASS",
+        "remote_error": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3394",
+        "failure_seconds": 10.253822372998911
+      }
+    },
+    "T05": {
+      "status": "PASS",
+      "seconds": 6.167,
+      "detail": {
+        "A_duplicate_pk": {
+          "expected_sqlstate": "23505",
+          "error": "ERROR:  23505: duplicate key value violates unique constraint \"product_pkey\"\nDETAIL:  Key (product_id)=(1) already exists.\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_pkey\nLOCATION:  _bt_check_unique, nbtinsert.c:666"
+        },
+        "A_missing_category": {
+          "expected_sqlstate": "23503",
+          "error": "ERROR:  23503: insert or update on table \"product\" violates foreign key constraint \"product_category_id_fkey\"\nDETAIL:  Key (category_id)=(999999) is not present in table \"category\".\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_category_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2608"
+        },
+        "A_negative_price": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: new row for relation \"product\" violates check constraint \"product_price_check\"\nDETAIL:  Failing row contains (1, 101, 1, Site A product 1, null, -1.00, 10, 0, null, 1, null, null, f, 2026-11-02 00:00:00, null, null, null, null, null, 0, 1, A).\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_price_check\nLOCATION:  ExecConstraints, execMain.c:2109"
+        },
+        "A_negative_stock": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: new row for relation \"product\" violates check constraint \"product_quantity_check\"\nDETAIL:  Failing row contains (1, 101, 1, Site A product 1, null, 100.00, -1, 0, null, 1, null, null, f, 2026-11-02 00:00:00, 2026-11-04 10:53:42.884397, null, null, null, null, 0, 1, A).\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_quantity_check\nLOCATION:  ExecConstraints, execMain.c:2109"
+        },
+        "A_wrong_site": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: product_wrong_site\nCONTEXT:  PL/pgSQL function public.enforce_product_site() line 6 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+        },
+        "A_wrong_id": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: product_wrong_id_allocation\nCONTEXT:  PL/pgSQL function public.enforce_product_site() line 9 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+        },
+        "A_seller_fk": {
+          "expected_sqlstate": "23503",
+          "error": "ERROR:  23503: insert or update on table \"product\" violates foreign key constraint \"product_seller_id_fkey\"\nDETAIL:  Key (seller_id)=(999999) is not present in table \"user_core\".\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_seller_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2608"
+        },
+        "A_seller_site_fk": {
+          "expected_sqlstate": "23503",
+          "error": "ERROR:  23503: insert or update on table \"product\" violates foreign key constraint \"product_seller_site_fkey\"\nDETAIL:  Key (seller_id, site_id)=(202, A) is not present in table \"seller_site\".\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_seller_site_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2608"
+        },
+        "A_missing_product": {
+          "expected_sqlstate": "23503",
+          "error": "ERROR:  23503: insert or update on table \"product_image\" violates foreign key constraint \"product_image_product_id_fkey\"\nDETAIL:  Key (product_id)=(999999) is not present in table \"product\".\nSCHEMA NAME:  public\nTABLE NAME:  product_image\nCONSTRAINT NAME:  product_image_product_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2608"
+        },
+        "A_remote_parent": {
+          "expected_sqlstate": "23503",
+          "error": "ERROR:  23503: insert or update on table \"product_image\" violates foreign key constraint \"product_image_product_id_fkey\"\nDETAIL:  Key (product_id)=(2) is not present in table \"product\".\nSCHEMA NAME:  public\nTABLE NAME:  product_image\nCONSTRAINT NAME:  product_image_product_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2608"
+        },
+        "A_wrong_image_id": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: image_wrong_id_allocation\nCONTEXT:  PL/pgSQL function public.enforce_image_site() line 6 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+        },
+        "A_ownership_change": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: product_ownership_immutable\nCONTEXT:  PL/pgSQL function public.enforce_product_site() line 13 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+        },
+        "B_duplicate_pk": {
+          "expected_sqlstate": "23505",
+          "error": "ERROR:  23505: duplicate key value violates unique constraint \"product_pkey\"\nDETAIL:  Key (product_id)=(2) already exists.\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_pkey\nLOCATION:  _bt_check_unique, nbtinsert.c:666"
+        },
+        "B_missing_category": {
+          "expected_sqlstate": "23503",
+          "error": "ERROR:  23503: insert or update on table \"product\" violates foreign key constraint \"product_category_id_fkey\"\nDETAIL:  Key (category_id)=(999999) is not present in table \"category\".\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_category_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2608"
+        },
+        "B_negative_price": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: new row for relation \"product\" violates check constraint \"product_price_check\"\nDETAIL:  Failing row contains (2, 202, 1, Site B product 1, null, -1.00, 10, 0, null, 1, null, null, f, 2026-11-02 00:00:00, null, null, null, null, null, 0, 1, B).\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_price_check\nLOCATION:  ExecConstraints, execMain.c:2109"
+        },
+        "B_negative_stock": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: new row for relation \"product\" violates check constraint \"product_quantity_check\"\nDETAIL:  Failing row contains (2, 202, 1, Site B product 1, null, 200.00, -1, 0, null, 1, null, null, f, 2026-11-02 00:00:00, 2026-11-04 10:53:46.000414, null, null, null, null, 0, 1, B).\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_quantity_check\nLOCATION:  ExecConstraints, execMain.c:2109"
+        },
+        "B_wrong_site": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: product_wrong_site\nCONTEXT:  PL/pgSQL function public.enforce_product_site() line 6 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+        },
+        "B_wrong_id": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: product_wrong_id_allocation\nCONTEXT:  PL/pgSQL function public.enforce_product_site() line 9 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+        },
+        "B_seller_fk": {
+          "expected_sqlstate": "23503",
+          "error": "ERROR:  23503: insert or update on table \"product\" violates foreign key constraint \"product_seller_id_fkey\"\nDETAIL:  Key (seller_id)=(999999) is not present in table \"user_core\".\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_seller_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2608"
+        },
+        "B_seller_site_fk": {
+          "expected_sqlstate": "23503",
+          "error": "ERROR:  23503: insert or update on table \"product\" violates foreign key constraint \"product_seller_site_fkey\"\nDETAIL:  Key (seller_id, site_id)=(101, B) is not present in table \"seller_site\".\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_seller_site_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2608"
+        },
+        "B_missing_product": {
+          "expected_sqlstate": "23503",
+          "error": "ERROR:  23503: insert or update on table \"product_image\" violates foreign key constraint \"product_image_product_id_fkey\"\nDETAIL:  Key (product_id)=(999999) is not present in table \"product\".\nSCHEMA NAME:  public\nTABLE NAME:  product_image\nCONSTRAINT NAME:  product_image_product_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2608"
+        },
+        "B_remote_parent": {
+          "expected_sqlstate": "23503",
+          "error": "ERROR:  23503: insert or update on table \"product_image\" violates foreign key constraint \"product_image_product_id_fkey\"\nDETAIL:  Key (product_id)=(1) is not present in table \"product\".\nSCHEMA NAME:  public\nTABLE NAME:  product_image\nCONSTRAINT NAME:  product_image_product_id_fkey\nLOCATION:  ri_ReportViolation, ri_triggers.c:2608"
+        },
+        "B_wrong_image_id": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: image_wrong_id_allocation\nCONTEXT:  PL/pgSQL function public.enforce_image_site() line 6 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+        },
+        "B_ownership_change": {
+          "expected_sqlstate": "23514",
+          "error": "ERROR:  23514: product_ownership_immutable\nCONTEXT:  PL/pgSQL function public.enforce_product_site() line 13 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897"
+        }
+      }
+    },
+    "T06": {
+      "status": "PASS",
+      "seconds": 2.288,
+      "detail": {
+        "product": {
+          "A": 5,
+          "B": 5,
+          "global": 10,
+          "full_row_sha256": "4f90cb399c5f9e9d8bc0b7fe0b954c220bf33d4f178a1bc4c9a658e72f8315e3"
+        },
+        "product_image": {
+          "A": 8,
+          "B": 8,
+          "global": 16,
+          "full_row_sha256": "bc79784302df3f14a23c285153ed74d1299bf80a6253a79e5ea883d97a928dce"
+        }
+      }
+    },
+    "T07": {
+      "status": "PASS",
+      "seconds": 1.543,
+      "detail": {
+        "category": 3,
+        "seller_site": 6
+      }
+    },
+    "T08": {
+      "status": "PASS",
+      "seconds": 2.045,
+      "detail": {
+        "queries": [
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4",
+          "Q5",
+          "Q6"
+        ],
+        "detail_without_images": "PASS"
+      }
+    },
+    "T09": {
+      "status": "PASS",
+      "seconds": 0.458,
+      "detail": {
+        "concurrent_writers": 4,
+        "allocated_unique_ids": 40,
+        "writes_rolled_back": true
+      }
+    },
+    "T10": {
+      "status": "PASS",
+      "seconds": 4.46,
+      "detail": {
+        "B_local_read_write_with_A_down": true
+      }
+    },
+    "T11": {
+      "status": "PASS",
+      "seconds": 21.404,
+      "detail": {
+        "bootstrap_idempotent": true,
+        "clean_rebuild_verified": true,
+        "fresh_queries": [
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4",
+          "Q5",
+          "Q6"
+        ],
+        "fresh_inventory": {
+          "physical_hosts_verified": false,
+          "topology": "two independent PostgreSQL containers on one Docker host",
+          "project": "oldshop-sites-rebuild-27a9460c",
+          "sites": {
+            "A": {
+              "database": "oldshop_1",
+              "role": "site_admin",
+              "server_address": "127.0.0.1/32",
+              "postgres": "PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+              "site_id": "A",
+              "products": 5,
+              "images": 8,
+              "migrations": [
+                "001",
+                "002",
+                "003",
+                "004",
+                "005",
+                "006",
+                "007"
+              ]
+            },
+            "B": {
+              "database": "oldshop_2",
+              "role": "site_admin",
+              "server_address": "127.0.0.1/32",
+              "postgres": "PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+              "site_id": "B",
+              "products": 5,
+              "images": 8,
+              "migrations": [
+                "001",
+                "002",
+                "003",
+                "004",
+                "005",
+                "006",
+                "007"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "T12": {
+      "status": "PASS",
+      "seconds": 5.657,
+      "detail": {
+        "local": {
+          "samples_ms": [
+            0.324,
+            0.461,
+            0.305,
+            0.359,
+            0.458,
+            0.285,
+            0.517
+          ],
+          "median_ms": 0.359,
+          "p95_ms": 0.517,
+          "plan": {
+            "Plan": {
+              "Node Type": "Aggregate",
+              "Strategy": "Plain",
+              "Partial Mode": "Simple",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 1.06,
+              "Total Cost": 1.07,
+              "Plan Rows": 1,
+              "Plan Width": 8,
+              "Actual Startup Time": 0.031,
+              "Actual Total Time": 0.032,
+              "Actual Rows": 1,
+              "Actual Loops": 1,
+              "Output": [
+                "count(*)"
+              ],
+              "Plans": [
+                {
+                  "Node Type": "Seq Scan",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Relation Name": "product",
+                  "Schema": "public",
+                  "Alias": "product",
+                  "Startup Cost": 0.0,
+                  "Total Cost": 1.05,
+                  "Plan Rows": 5,
+                  "Plan Width": 0,
+                  "Actual Startup Time": 0.019,
+                  "Actual Total Time": 0.022,
+                  "Actual Rows": 5,
+                  "Actual Loops": 1,
+                  "Output": [
+                    "product_id",
+                    "seller_id",
+                    "category_id",
+                    "title",
+                    "description",
+                    "price",
+                    "quantity",
+                    "view_count",
+                    "video_url",
+                    "status",
+                    "reject_reason",
+                    "approved_by",
+                    "is_deleted",
+                    "created_at",
+                    "updated_at",
+                    "sold_at",
+                    "weight_grams",
+                    "dimensions",
+                    "condition_rating",
+                    "warranty_months",
+                    "transfer_method",
+                    "site_id"
+                  ]
+                }
+              ]
+            },
+            "Planning Time": 3.857,
+            "Triggers": [],
+            "Execution Time": 0.517
+          }
+        },
+        "remote": {
+          "samples_ms": [
+            23.337,
+            22.116,
+            22.871,
+            23.45,
+            24.548,
+            23.478,
+            26.237
+          ],
+          "median_ms": 23.45,
+          "p95_ms": 26.237,
+          "plan": {
+            "Plan": {
+              "Node Type": "Foreign Scan",
+              "Operation": "Select",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 108.53,
+              "Total Cost": 152.69,
+              "Plan Rows": 1,
+              "Plan Width": 8,
+              "Actual Startup Time": 4.228,
+              "Actual Total Time": 4.231,
+              "Actual Rows": 1,
+              "Actual Loops": 1,
+              "Output": [
+                "(count(*))"
+              ],
+              "Relations": "Aggregate on (site_b.product)",
+              "Remote SQL": "SELECT count(*) FROM public.product"
+            },
+            "Planning Time": 2.02,
+            "Triggers": [],
+            "Execution Time": 26.237
+          }
+        },
+        "global": {
+          "samples_ms": [
+            23.232,
+            25.017,
+            23.511,
+            28.903,
+            22.994,
+            22.812,
+            22.898
+          ],
+          "median_ms": 23.232,
+          "p95_ms": 28.903,
+          "plan": {
+            "Plan": {
+              "Node Type": "Aggregate",
+              "Strategy": "Plain",
+              "Partial Mode": "Simple",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 239.07,
+              "Total Cost": 239.08,
+              "Plan Rows": 1,
+              "Plan Width": 8,
+              "Actual Startup Time": 3.76,
+              "Actual Total Time": 3.763,
+              "Actual Rows": 1,
+              "Actual Loops": 1,
+              "Output": [
+                "count(*)"
+              ],
+              "Plans": [
+                {
+                  "Node Type": "Append",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Startup Cost": 0.0,
+                  "Total Cost": 230.53,
+                  "Plan Rows": 3418,
+                  "Plan Width": 0,
+                  "Actual Startup Time": 0.022,
+                  "Actual Total Time": 3.753,
+                  "Actual Rows": 10,
+                  "Actual Loops": 1,
+                  "Subplans Removed": 0,
+                  "Plans": [
+                    {
+                      "Node Type": "Seq Scan",
+                      "Parent Relationship": "Member",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Relation Name": "product",
+                      "Schema": "public",
+                      "Alias": "product",
+                      "Startup Cost": 0.0,
+                      "Total Cost": 1.05,
+                      "Plan Rows": 5,
+                      "Plan Width": 0,
+                      "Actual Startup Time": 0.021,
+                      "Actual Total Time": 0.023,
+                      "Actual Rows": 5,
+                      "Actual Loops": 1
+                    },
+                    {
+                      "Node Type": "Foreign Scan",
+                      "Operation": "Select",
+                      "Parent Relationship": "Member",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Relation Name": "product",
+                      "Schema": "site_b",
+                      "Alias": "product_1",
+                      "Startup Cost": 100.0,
+                      "Total Cost": 212.39,
+                      "Plan Rows": 3413,
+                      "Plan Width": 0,
+                      "Actual Startup Time": 3.723,
+                      "Actual Total Time": 3.725,
+                      "Actual Rows": 5,
+                      "Actual Loops": 1,
+                      "Remote SQL": "SELECT NULL FROM public.product"
+                    }
+                  ]
+                }
+              ]
+            },
+            "Planning Time": 3.631,
+            "Triggers": [],
+            "Execution Time": 22.898
+          }
+        },
+        "limitations": "Seed-scale, one Docker host; p95 uses nearest rank (7 samples), not a capacity benchmark."
+      }
+    }
+  },
+  "queries": {
+    "Q1": {
+      "sql": "SELECT product_id, title, site_id FROM site_b.product ORDER BY product_id\n",
+      "parameters": {
+        "from_date": "2026-11-01",
+        "to_date": "2026-12-01",
+        "product_id": 4
+      },
+      "expected": [
+        {
+          "product_id": 2,
+          "title": "Site B product 1",
+          "site_id": "B"
+        },
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "site_id": "B"
+        },
+        {
+          "product_id": 6,
+          "title": "Site B product 3",
+          "site_id": "B"
+        },
+        {
+          "product_id": 8,
+          "title": "Site B product 4",
+          "site_id": "B"
+        },
+        {
+          "product_id": 10,
+          "title": "Site B product 5",
+          "site_id": "B"
+        }
+      ],
+      "actual": [
+        {
+          "product_id": 2,
+          "title": "Site B product 1",
+          "site_id": "B"
+        },
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "site_id": "B"
+        },
+        {
+          "product_id": 6,
+          "title": "Site B product 3",
+          "site_id": "B"
+        },
+        {
+          "product_id": 8,
+          "title": "Site B product 4",
+          "site_id": "B"
+        },
+        {
+          "product_id": 10,
+          "title": "Site B product 5",
+          "site_id": "B"
+        }
+      ]
+    },
+    "Q2": {
+      "sql": "SELECT p.product_id, p.title, c.name AS category_name, p.site_id\nFROM v_product p JOIN v_category c USING (category_id)\nWHERE NOT p.is_deleted ORDER BY p.product_id\n",
+      "parameters": {
+        "from_date": "2026-11-01",
+        "to_date": "2026-12-01",
+        "product_id": 4
+      },
+      "expected": [
+        {
+          "product_id": 1,
+          "title": "Site A product 1",
+          "category_name": "Electronics",
+          "site_id": "A"
+        },
+        {
+          "product_id": 2,
+          "title": "Site B product 1",
+          "category_name": "Electronics",
+          "site_id": "B"
+        },
+        {
+          "product_id": 3,
+          "title": "Site A product 2",
+          "category_name": "Books",
+          "site_id": "A"
+        },
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "category_name": "Books",
+          "site_id": "B"
+        },
+        {
+          "product_id": 5,
+          "title": "Site A product 3",
+          "category_name": "Electronics",
+          "site_id": "A"
+        },
+        {
+          "product_id": 6,
+          "title": "Site B product 3",
+          "category_name": "Electronics",
+          "site_id": "B"
+        },
+        {
+          "product_id": 9,
+          "title": "Site A product 5",
+          "category_name": "Electronics",
+          "site_id": "A"
+        },
+        {
+          "product_id": 10,
+          "title": "Site B product 5",
+          "category_name": "Electronics",
+          "site_id": "B"
+        }
+      ],
+      "actual": [
+        {
+          "product_id": 1,
+          "title": "Site A product 1",
+          "category_name": "Electronics",
+          "site_id": "A"
+        },
+        {
+          "product_id": 2,
+          "title": "Site B product 1",
+          "category_name": "Electronics",
+          "site_id": "B"
+        },
+        {
+          "product_id": 3,
+          "title": "Site A product 2",
+          "category_name": "Books",
+          "site_id": "A"
+        },
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "category_name": "Books",
+          "site_id": "B"
+        },
+        {
+          "product_id": 5,
+          "title": "Site A product 3",
+          "category_name": "Electronics",
+          "site_id": "A"
+        },
+        {
+          "product_id": 6,
+          "title": "Site B product 3",
+          "category_name": "Electronics",
+          "site_id": "B"
+        },
+        {
+          "product_id": 9,
+          "title": "Site A product 5",
+          "category_name": "Electronics",
+          "site_id": "A"
+        },
+        {
+          "product_id": 10,
+          "title": "Site B product 5",
+          "category_name": "Electronics",
+          "site_id": "B"
+        }
+      ]
+    },
+    "Q3": {
+      "sql": "SELECT p.product_id, p.title, p.site_id, i.image_id, i.image_url\nFROM v_product p LEFT JOIN v_product_image i USING (product_id)\nWHERE p.product_id = :'product_id'::integer ORDER BY i.image_id\n",
+      "parameters": {
+        "from_date": "2026-11-01",
+        "to_date": "2026-12-01",
+        "product_id": 4
+      },
+      "expected": [
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "site_id": "B",
+          "image_id": 2,
+          "image_url": "/media/products/site-b/fixture-2.png"
+        },
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "site_id": "B",
+          "image_id": 4,
+          "image_url": "/media/products/site-b/fixture-4.png"
+        },
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "site_id": "B",
+          "image_id": 6,
+          "image_url": "/media/products/site-b/fixture-6.png"
+        },
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "site_id": "B",
+          "image_id": 8,
+          "image_url": "/media/products/site-b/fixture-8.png"
+        }
+      ],
+      "actual": [
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "site_id": "B",
+          "image_id": 2,
+          "image_url": "/media/products/site-b/fixture-2.png"
+        },
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "site_id": "B",
+          "image_id": 4,
+          "image_url": "/media/products/site-b/fixture-4.png"
+        },
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "site_id": "B",
+          "image_id": 6,
+          "image_url": "/media/products/site-b/fixture-6.png"
+        },
+        {
+          "product_id": 4,
+          "title": "Site B product 2",
+          "site_id": "B",
+          "image_id": 8,
+          "image_url": "/media/products/site-b/fixture-8.png"
+        }
+      ]
+    },
+    "Q4": {
+      "sql": "SELECT c.category_id, c.name, count(p.product_id) AS product_count\nFROM v_category c LEFT JOIN v_product p ON p.category_id = c.category_id AND NOT p.is_deleted\nGROUP BY c.category_id, c.name ORDER BY c.category_id\n",
+      "parameters": {
+        "from_date": "2026-11-01",
+        "to_date": "2026-12-01",
+        "product_id": 4
+      },
+      "expected": [
+        {
+          "category_id": 1,
+          "name": "Electronics",
+          "product_count": 6
+        },
+        {
+          "category_id": 2,
+          "name": "Books",
+          "product_count": 2
+        },
+        {
+          "category_id": 3,
+          "name": "Empty category",
+          "product_count": 0
+        }
+      ],
+      "actual": [
+        {
+          "category_id": 1,
+          "name": "Electronics",
+          "product_count": 6
+        },
+        {
+          "category_id": 2,
+          "name": "Books",
+          "product_count": 2
+        },
+        {
+          "category_id": 3,
+          "name": "Empty category",
+          "product_count": 0
+        }
+      ]
+    },
+    "Q5": {
+      "sql": "SELECT c.category_id, c.name, count(p.product_id) AS product_count, avg(p.price) AS average_price\nFROM v_category c LEFT JOIN v_product p ON p.category_id = c.category_id AND NOT p.is_deleted\n    AND p.created_at >= :'from_date'::timestamp AND p.created_at < :'to_date'::timestamp\nGROUP BY c.category_id, c.name ORDER BY c.category_id\n",
+      "parameters": {
+        "from_date": "2026-11-01",
+        "to_date": "2026-12-01",
+        "product_id": 4
+      },
+      "expected": [
+        {
+          "category_id": 1,
+          "name": "Electronics",
+          "product_count": 4,
+          "average_price": 300
+        },
+        {
+          "category_id": 2,
+          "name": "Books",
+          "product_count": 2,
+          "average_price": 300
+        },
+        {
+          "category_id": 3,
+          "name": "Empty category",
+          "product_count": 0,
+          "average_price": null
+        }
+      ],
+      "actual": [
+        {
+          "category_id": 1,
+          "name": "Electronics",
+          "product_count": 4,
+          "average_price": 300.0
+        },
+        {
+          "category_id": 2,
+          "name": "Books",
+          "product_count": 2,
+          "average_price": 300.0
+        },
+        {
+          "category_id": 3,
+          "name": "Empty category",
+          "product_count": 0,
+          "average_price": null
+        }
+      ]
+    },
+    "Q6": {
+      "sql": "SELECT s.seller_id, s.site_id FROM v_seller_site s\nWHERE NOT EXISTS (\n    SELECT 1 FROM v_product p WHERE p.seller_id = s.seller_id AND NOT p.is_deleted\n        AND p.created_at >= :'from_date'::timestamp AND p.created_at < :'to_date'::timestamp\n) ORDER BY s.seller_id\n",
+      "parameters": {
+        "from_date": "2026-11-01",
+        "to_date": "2026-12-01",
+        "product_id": 4
+      },
+      "expected": [
+        {
+          "seller_id": 103,
+          "site_id": "A"
+        },
+        {
+          "seller_id": 105,
+          "site_id": "A"
+        },
+        {
+          "seller_id": 204,
+          "site_id": "B"
+        },
+        {
+          "seller_id": 206,
+          "site_id": "B"
+        }
+      ],
+      "actual": [
+        {
+          "seller_id": 103,
+          "site_id": "A"
+        },
+        {
+          "seller_id": 105,
+          "site_id": "A"
+        },
+        {
+          "seller_id": 204,
+          "site_id": "B"
+        },
+        {
+          "seller_id": 206,
+          "site_id": "B"
+        }
+      ]
+    }
+  },
+  "finished_at": "2026-11-04T10:54:25.879345+00:00",
+  "status": "PASS",
+  "clean_rebuild_verified": true,
+  "inventory": {
+    "physical_hosts_verified": false,
+    "topology": "two independent PostgreSQL containers on one Docker host",
+    "project": "oldshop-sites",
+    "sites": {
+      "A": {
+        "database": "oldshop_1",
+        "role": "site_admin",
+        "server_address": "127.0.0.1/32",
+        "postgres": "PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+        "site_id": "A",
+        "products": 5,
+        "images": 8,
+        "migrations": [
+          "001",
+          "002",
+          "003",
+          "004",
+          "005",
+          "006",
+          "007"
+        ]
+      },
+      "B": {
+        "database": "oldshop_2",
+        "role": "site_admin",
+        "server_address": "127.0.0.1/32",
+        "postgres": "PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+        "site_id": "B",
+        "products": 5,
+        "images": 8,
+        "migrations": [
+          "001",
+          "002",
+          "003",
+          "004",
+          "005",
+          "006",
+          "007"
+        ]
+      }
+    }
+  },
+  "compose_before": "{\"Command\":\"\\\"uvicorn app.catalog…\\\"\",\"CreatedAt\":\"2026-11-04 17:16:17 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"ede627845523\",\"Image\":\"oldshop-data-backend:day6\",\"Labels\":\"com.docker.compose.project=oldshop-sites,com.docker.compose.project.working_dir=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites,com.docker.compose.project.config_files=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-a.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-b.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.catalog.yml,com.docker.compose.project.environment_file=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/.env,com.docker.compose.service=catalogue,com.docker.compose.version=5.5.0,com.docker.compose.config-hash=63575fcb4dbfb6378454d3a5f357002365778e894219215b4597c6d4bea69f18,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.image=sha256:9abb089adee5c4bc3b8f3b340114eba5a322f78d5845206b9d31e418061db209,com.docker.compose.oneoff=False\",\"LocalVolumes\":\"1\",\"Mounts\":\"/home/phat/Doc…,71c324527e1909…\",\"Name\":\"oldshop-sites-catalogue-1\",\"Names\":\"oldshop-sites-catalogue-1\",\"Networks\":\"oldshop-sites_sites\",\"Ports\":\"127.0.0.1:56480-\\u003e8000/tcp\",\"Project\":\"oldshop-sites\",\"Publishers\":[{\"URL\":\"127.0.0.1\",\"TargetPort\":8000,\"PublishedPort\":56480,\"Protocol\":\"tcp\"}],\"RunningFor\":\"36 minutes ago\",\"Service\":\"catalogue\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 36 minutes (healthy)\"}\n{\"Command\":\"\\\"docker-entrypoint.s…\\\"\",\"CreatedAt\":\"2026-11-04 17:04:04 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"f8b274e19215\",\"Image\":\"postgres:16-alpine\",\"Labels\":\"com.docker.compose.service=pg-a,com.docker.compose.version=5.5.0,com.docker.compose.depends_on=,com.docker.compose.image=sha256:cbf42f0edc946c0bc1b8eeed62403734e1f25dc67a3491455d07a92fdb558b28,com.docker.compose.project=oldshop-sites,com.docker.compose.config-hash=8719453cb34e96f6c7dd3b9062d4302b08fd7d360f03753ebf234252e667fc5a,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-a.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-b.yml,com.docker.compose.project.environment_file=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/.env,com.docker.compose.project.working_dir=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites\",\"LocalVolumes\":\"1\",\"Mounts\":\"oldshop-sites_…\",\"Name\":\"oldshop-sites-pg-a-1\",\"Names\":\"oldshop-sites-pg-a-1\",\"Networks\":\"oldshop-sites_sites\",\"Ports\":\"127.0.0.1:56431-\\u003e5432/tcp\",\"Project\":\"oldshop-sites\",\"Publishers\":[{\"URL\":\"127.0.0.1\",\"TargetPort\":5432,\"PublishedPort\":56431,\"Protocol\":\"tcp\"}],\"RunningFor\":\"49 minutes ago\",\"Service\":\"pg-a\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 33 minutes (healthy)\"}\n{\"Command\":\"\\\"docker-entrypoint.s…\\\"\",\"CreatedAt\":\"2026-11-04 17:04:04 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"639d1837dc82\",\"Image\":\"postgres:16-alpine\",\"Labels\":\"com.docker.compose.image=sha256:cbf42f0edc946c0bc1b8eeed62403734e1f25dc67a3491455d07a92fdb558b28,com.docker.compose.oneoff=False,com.docker.compose.project=oldshop-sites,com.docker.compose.project.environment_file=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/.env,com.docker.compose.config-hash=67385d8bcbd8f8b831bab1ca7516ef524670a2647a89d0bb43a29b9ac134a39f,com.docker.compose.container-number=1,com.docker.compose.project.config_files=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-a.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-b.yml,com.docker.compose.project.working_dir=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites,com.docker.compose.service=pg-b,com.docker.compose.version=5.5.0,com.docker.compose.depends_on=\",\"LocalVolumes\":\"1\",\"Mounts\":\"oldshop-sites_…\",\"Name\":\"oldshop-sites-pg-b-1\",\"Names\":\"oldshop-sites-pg-b-1\",\"Networks\":\"oldshop-sites_sites\",\"Ports\":\"127.0.0.1:56432-\\u003e5432/tcp\",\"Project\":\"oldshop-sites\",\"Publishers\":[{\"URL\":\"127.0.0.1\",\"TargetPort\":5432,\"PublishedPort\":56432,\"Protocol\":\"tcp\"}],\"RunningFor\":\"49 minutes ago\",\"Service\":\"pg-b\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 33 minutes (healthy)\"}\n",
+  "source_sha256": "ee8d0ee977566e2c695ee59823bcdac476f0c4a08f8eb6afa8a4275e5f292229"
+}

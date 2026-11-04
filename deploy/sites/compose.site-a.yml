@@ -1,0 +1,29 @@
+name: oldshop-sites
+services:
+  pg-a:
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
+    environment:
+      POSTGRES_USER: site_admin
+      POSTGRES_PASSWORD: ${SITE_A_ADMIN_PASSWORD:?Run sites.py prepare}
+      POSTGRES_DB: ${SITE_A_DB_NAME:-oldshop_1}
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    command: [postgres, -c, shared_buffers=128MB, -c, max_connections=50, -c, timezone=UTC]
+    ports: ["${SITE_A_BIND_IP:-127.0.0.1}:${SITE_A_PORT:-56431}:5432"]
+    volumes: [site_a_pg:/var/lib/postgresql/data]
+    networks:
+      sites:
+        ipv4_address: ${SITE_A_VIRTUAL_IP:-172.29.82.11}
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U site_admin -d "$$POSTGRES_DB"']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    mem_limit: 512m
+    restart: unless-stopped
+networks:
+  sites:
+    ipam:
+      config:
+        - subnet: ${SITES_SUBNET:-172.29.82.0/24}
+volumes:
+  site_a_pg:

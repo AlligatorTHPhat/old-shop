@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "verified_at": "2026-11-04T10:17:01.810789+00:00",
+  "physical_hosts_verified": false,
+  "checks": [
+    "global pagination",
+    "category/search/sort before pagination",
+    "parameter binding",
+    "image batching and empty images",
+    "pending/deleted product visibility",
+    "input validation",
+    "read-only HTTP and SQL",
+    "no view-count mutation",
+    "503 on A or B outage",
+    "recovery"
+  ],
+  "product_ids": [
+    1,
+    2,
+    3,
+    4,
+    9,
+    10
+  ],
+  "b_down_response": {
+    "detail": "Distributed catalogue is unavailable"
+  },
+  "scope": "Optional read-only gateway; existing commerce API, Mongo and checkout are unchanged"
+}

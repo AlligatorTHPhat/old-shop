@@ -31,6 +31,12 @@ provide host fault tolerance or automatic PG promotion. Mongo8 is the default im
 kernel was verified with Mongo7.0.43 instead. Caddy, payment/helpdesk integrations and the
 production observability stack are documented separately in [deployment](docs/deployment.md).
 
+**Two-site PostgreSQL catalogue:** [setup and verification](docs/HUONG_DAN_CSDL_PHAN_TAN.md)
+provides independent `oldshop_1` / `oldshop_2` databases, seller-based product fragments,
+derived image fragments, read-only FDW, global views and an optional catalogue gateway.
+The verified topology uses two virtual IPs on one Docker host. Commerce checkout and
+the existing Mongo/MinIO stack remain on their existing architecture.
+
 **Day 7 handoff:** [report source](docs/report/07_report.md),
 [18-slide outline and speaker notes](docs/report/07_slides.md),
 [demo/rebuild instructions](docs/report/07_demo_script.md), [Q&A](docs/report/07_qa.md),

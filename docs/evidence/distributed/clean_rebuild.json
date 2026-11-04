@@ -1,0 +1,55 @@
+{
+  "bootstrap_idempotent": true,
+  "clean_rebuild_verified": true,
+  "fresh_queries": [
+    "Q1",
+    "Q2",
+    "Q3",
+    "Q4",
+    "Q5",
+    "Q6"
+  ],
+  "fresh_inventory": {
+    "physical_hosts_verified": false,
+    "topology": "two independent PostgreSQL containers on one Docker host",
+    "project": "oldshop-sites-rebuild-27a9460c",
+    "sites": {
+      "A": {
+        "database": "oldshop_1",
+        "role": "site_admin",
+        "server_address": "127.0.0.1/32",
+        "postgres": "PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+        "site_id": "A",
+        "products": 5,
+        "images": 8,
+        "migrations": [
+          "001",
+          "002",
+          "003",
+          "004",
+          "005",
+          "006",
+          "007"
+        ]
+      },
+      "B": {
+        "database": "oldshop_2",
+        "role": "site_admin",
+        "server_address": "127.0.0.1/32",
+        "postgres": "PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+        "site_id": "B",
+        "products": 5,
+        "images": 8,
+        "migrations": [
+          "001",
+          "002",
+          "003",
+          "004",
+          "005",
+          "006",
+          "007"
+        ]
+      }
+    }
+  }
+}

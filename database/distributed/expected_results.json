@@ -1,0 +1,171 @@
+{
+  "parameters": {
+    "from_date": "2026-11-01",
+    "to_date": "2026-12-01",
+    "product_id": 4
+  },
+  "queries": {
+    "Q1": [
+      {
+        "product_id": 2,
+        "title": "Site B product 1",
+        "site_id": "B"
+      },
+      {
+        "product_id": 4,
+        "title": "Site B product 2",
+        "site_id": "B"
+      },
+      {
+        "product_id": 6,
+        "title": "Site B product 3",
+        "site_id": "B"
+      },
+      {
+        "product_id": 8,
+        "title": "Site B product 4",
+        "site_id": "B"
+      },
+      {
+        "product_id": 10,
+        "title": "Site B product 5",
+        "site_id": "B"
+      }
+    ],
+    "Q2": [
+      {
+        "product_id": 1,
+        "title": "Site A product 1",
+        "category_name": "Electronics",
+        "site_id": "A"
+      },
+      {
+        "product_id": 2,
+        "title": "Site B product 1",
+        "category_name": "Electronics",
+        "site_id": "B"
+      },
+      {
+        "product_id": 3,
+        "title": "Site A product 2",
+        "category_name": "Books",
+        "site_id": "A"
+      },
+      {
+        "product_id": 4,
+        "title": "Site B product 2",
+        "category_name": "Books",
+        "site_id": "B"
+      },
+      {
+        "product_id": 5,
+        "title": "Site A product 3",
+        "category_name": "Electronics",
+        "site_id": "A"
+      },
+      {
+        "product_id": 6,
+        "title": "Site B product 3",
+        "category_name": "Electronics",
+        "site_id": "B"
+      },
+      {
+        "product_id": 9,
+        "title": "Site A product 5",
+        "category_name": "Electronics",
+        "site_id": "A"
+      },
+      {
+        "product_id": 10,
+        "title": "Site B product 5",
+        "category_name": "Electronics",
+        "site_id": "B"
+      }
+    ],
+    "Q3": [
+      {
+        "product_id": 4,
+        "title": "Site B product 2",
+        "site_id": "B",
+        "image_id": 2,
+        "image_url": "/media/products/site-b/fixture-2.png"
+      },
+      {
+        "product_id": 4,
+        "title": "Site B product 2",
+        "site_id": "B",
+        "image_id": 4,
+        "image_url": "/media/products/site-b/fixture-4.png"
+      },
+      {
+        "product_id": 4,
+        "title": "Site B product 2",
+        "site_id": "B",
+        "image_id": 6,
+        "image_url": "/media/products/site-b/fixture-6.png"
+      },
+      {
+        "product_id": 4,
+        "title": "Site B product 2",
+        "site_id": "B",
+        "image_id": 8,
+        "image_url": "/media/products/site-b/fixture-8.png"
+      }
+    ],
+    "Q4": [
+      {
+        "category_id": 1,
+        "name": "Electronics",
+        "product_count": 6
+      },
+      {
+        "category_id": 2,
+        "name": "Books",
+        "product_count": 2
+      },
+      {
+        "category_id": 3,
+        "name": "Empty category",
+        "product_count": 0
+      }
+    ],
+    "Q5": [
+      {
+        "category_id": 1,
+        "name": "Electronics",
+        "product_count": 4,
+        "average_price": 300
+      },
+      {
+        "category_id": 2,
+        "name": "Books",
+        "product_count": 2,
+        "average_price": 300
+      },
+      {
+        "category_id": 3,
+        "name": "Empty category",
+        "product_count": 0,
+        "average_price": null
+      }
+    ],
+    "Q6": [
+      {
+        "seller_id": 103,
+        "site_id": "A"
+      },
+      {
+        "seller_id": 105,
+        "site_id": "A"
+      },
+      {
+        "seller_id": 204,
+        "site_id": "B"
+      },
+      {
+        "seller_id": 206,
+        "site_id": "B"
+      }
+    ]
+  }
+}

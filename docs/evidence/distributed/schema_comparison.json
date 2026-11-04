@@ -1,0 +1,3728 @@
+{
+  "equal": true,
+  "common_contract": {
+    "columns": [
+      {
+        "relname": "category",
+        "attname": "category_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('category_category_id_seq'::regclass)"
+      },
+      {
+        "relname": "category",
+        "attname": "name",
+        "type": "character varying(100)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "category",
+        "attname": "description",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "category",
+        "attname": "parent_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "category",
+        "attname": "is_active",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "true"
+      },
+      {
+        "relname": "category",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "category",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "category",
+        "attname": "updated_at",
+        "type": "timestamp without time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "contact_info",
+        "attname": "contact_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('contact_info_contact_id_seq'::regclass)"
+      },
+      {
+        "relname": "contact_info",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "contact_info",
+        "attname": "full_name",
+        "type": "character varying(100)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "contact_info",
+        "attname": "phone_number",
+        "type": "character varying(15)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "contact_info",
+        "attname": "address",
+        "type": "character varying(255)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "contact_info",
+        "attname": "province",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "contact_info",
+        "attname": "district",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "contact_info",
+        "attname": "ward",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "contact_info",
+        "attname": "is_default",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "contact_info",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "contact_info",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "contact_info",
+        "attname": "updated_at",
+        "type": "timestamp without time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "distributed_installation",
+        "attname": "singleton",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "true"
+      },
+      {
+        "relname": "distributed_installation",
+        "attname": "version",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "distributed_installation",
+        "attname": "source_sha256",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "distributed_installation",
+        "attname": "fixture_version",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "event_id",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": "nextval('etl_outbox_event_id_seq'::regclass)"
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "source_table",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "source_key",
+        "type": "jsonb",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "entity_type",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "entity_key",
+        "type": "jsonb",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "operation",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "created_at",
+        "type": "timestamp with time zone",
+        "attnotnull": true,
+        "default_value": "clock_timestamp()"
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "available_at",
+        "type": "timestamp with time zone",
+        "attnotnull": true,
+        "default_value": "clock_timestamp()"
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "status",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": "'pending'::text"
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "attempts",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "processed_at",
+        "type": "timestamp with time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "last_error_code",
+        "type": "character varying(80)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "etl_outbox",
+        "attname": "last_run_id",
+        "type": "uuid",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "etl_runs",
+        "attname": "run_id",
+        "type": "uuid",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_runs",
+        "attname": "mode",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_runs",
+        "attname": "started_at",
+        "type": "timestamp with time zone",
+        "attnotnull": true,
+        "default_value": "clock_timestamp()"
+      },
+      {
+        "relname": "etl_runs",
+        "attname": "ended_at",
+        "type": "timestamp with time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "etl_runs",
+        "attname": "status",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": "'running'::text"
+      },
+      {
+        "relname": "etl_runs",
+        "attname": "rows_in",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "etl_runs",
+        "attname": "rows_out",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "etl_runs",
+        "attname": "errors",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "etl_runs",
+        "attname": "details",
+        "type": "jsonb",
+        "attnotnull": true,
+        "default_value": "'{}'::jsonb"
+      },
+      {
+        "relname": "etl_state",
+        "attname": "name",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_state",
+        "attname": "value",
+        "type": "jsonb",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_state",
+        "attname": "updated_at",
+        "type": "timestamp with time zone",
+        "attnotnull": true,
+        "default_value": "clock_timestamp()"
+      },
+      {
+        "relname": "etl_time_origin",
+        "attname": "source_table",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_time_origin",
+        "attname": "source_key",
+        "type": "jsonb",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_time_origin",
+        "attname": "field_name",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_time_origin",
+        "attname": "source_value",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_time_origin",
+        "attname": "source_zone",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "etl_time_origin",
+        "attname": "recorded_at",
+        "type": "timestamp with time zone",
+        "attnotnull": true,
+        "default_value": "clock_timestamp()"
+      },
+      {
+        "relname": "media_deletions",
+        "attname": "deletion_id",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": "nextval('media_deletions_deletion_id_seq'::regclass)"
+      },
+      {
+        "relname": "media_deletions",
+        "attname": "url_path",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "media_deletions",
+        "attname": "status",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": "'pending'::text"
+      },
+      {
+        "relname": "media_deletions",
+        "attname": "attempts",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "media_deletions",
+        "attname": "available_at",
+        "type": "timestamp with time zone",
+        "attnotnull": true,
+        "default_value": "clock_timestamp()"
+      },
+      {
+        "relname": "media_deletions",
+        "attname": "created_at",
+        "type": "timestamp with time zone",
+        "attnotnull": true,
+        "default_value": "clock_timestamp()"
+      },
+      {
+        "relname": "media_deletions",
+        "attname": "processed_at",
+        "type": "timestamp with time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "media_deletions",
+        "attname": "last_error_code",
+        "type": "character varying(80)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order",
+        "attname": "order_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('order_order_id_seq'::regclass)"
+      },
+      {
+        "relname": "order",
+        "attname": "buyer_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order",
+        "attname": "contact_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order",
+        "attname": "payment_method_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order",
+        "attname": "voucher_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order",
+        "attname": "order_date",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "order",
+        "attname": "total_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order",
+        "attname": "shipping_fee",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "order",
+        "attname": "discount_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "order",
+        "attname": "final_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order",
+        "attname": "order_status",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "order",
+        "attname": "shipping_address",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order",
+        "attname": "tracking_number",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order",
+        "attname": "notes",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "order_detail",
+        "attname": "order_detail_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('order_detail_order_detail_id_seq'::regclass)"
+      },
+      {
+        "relname": "order_detail",
+        "attname": "order_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_detail",
+        "attname": "product_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_detail",
+        "attname": "quantity",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_detail",
+        "attname": "price_at_purchase",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_detail",
+        "attname": "subtotal",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h0",
+        "attname": "order_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('order_order_id_seq'::regclass)"
+      },
+      {
+        "relname": "order_h0",
+        "attname": "buyer_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h0",
+        "attname": "contact_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h0",
+        "attname": "payment_method_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h0",
+        "attname": "voucher_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h0",
+        "attname": "order_date",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "order_h0",
+        "attname": "total_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h0",
+        "attname": "shipping_fee",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h0",
+        "attname": "discount_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h0",
+        "attname": "final_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h0",
+        "attname": "order_status",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h0",
+        "attname": "shipping_address",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h0",
+        "attname": "tracking_number",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h0",
+        "attname": "notes",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h0",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "order_h1",
+        "attname": "order_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('order_order_id_seq'::regclass)"
+      },
+      {
+        "relname": "order_h1",
+        "attname": "buyer_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h1",
+        "attname": "contact_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h1",
+        "attname": "payment_method_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h1",
+        "attname": "voucher_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h1",
+        "attname": "order_date",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "order_h1",
+        "attname": "total_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h1",
+        "attname": "shipping_fee",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h1",
+        "attname": "discount_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h1",
+        "attname": "final_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h1",
+        "attname": "order_status",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h1",
+        "attname": "shipping_address",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h1",
+        "attname": "tracking_number",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h1",
+        "attname": "notes",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h1",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "order_h2",
+        "attname": "order_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('order_order_id_seq'::regclass)"
+      },
+      {
+        "relname": "order_h2",
+        "attname": "buyer_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h2",
+        "attname": "contact_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h2",
+        "attname": "payment_method_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h2",
+        "attname": "voucher_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h2",
+        "attname": "order_date",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "order_h2",
+        "attname": "total_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h2",
+        "attname": "shipping_fee",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h2",
+        "attname": "discount_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h2",
+        "attname": "final_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h2",
+        "attname": "order_status",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h2",
+        "attname": "shipping_address",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h2",
+        "attname": "tracking_number",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h2",
+        "attname": "notes",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h2",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "order_h3",
+        "attname": "order_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('order_order_id_seq'::regclass)"
+      },
+      {
+        "relname": "order_h3",
+        "attname": "buyer_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h3",
+        "attname": "contact_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h3",
+        "attname": "payment_method_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h3",
+        "attname": "voucher_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h3",
+        "attname": "order_date",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "order_h3",
+        "attname": "total_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h3",
+        "attname": "shipping_fee",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h3",
+        "attname": "discount_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h3",
+        "attname": "final_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "order_h3",
+        "attname": "order_status",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "order_h3",
+        "attname": "shipping_address",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h3",
+        "attname": "tracking_number",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h3",
+        "attname": "notes",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "order_h3",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "payment_method",
+        "attname": "payment_method_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('payment_method_payment_method_id_seq'::regclass)"
+      },
+      {
+        "relname": "payment_method",
+        "attname": "method_name",
+        "type": "character varying(50)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "payment_method",
+        "attname": "is_online",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "payment_method",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "product",
+        "attname": "product_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('product_product_id_seq'::regclass)"
+      },
+      {
+        "relname": "product",
+        "attname": "seller_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "category_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "title",
+        "type": "character varying(255)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "description",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "price",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "quantity",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "view_count",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "product",
+        "attname": "video_url",
+        "type": "character varying(500)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "status",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "product",
+        "attname": "reject_reason",
+        "type": "character varying(500)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "approved_by",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "product",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "product",
+        "attname": "updated_at",
+        "type": "timestamp without time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "sold_at",
+        "type": "timestamp without time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "weight_grams",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "dimensions",
+        "type": "character varying(50)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "condition_rating",
+        "type": "smallint",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product",
+        "attname": "warranty_months",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "product",
+        "attname": "transfer_method",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": "1"
+      },
+      {
+        "relname": "product",
+        "attname": "site_id",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": "local_site()"
+      },
+      {
+        "relname": "product_image",
+        "attname": "image_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('product_image_image_id_seq'::regclass)"
+      },
+      {
+        "relname": "product_image",
+        "attname": "product_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "product_image",
+        "attname": "image_url",
+        "type": "character varying(500)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "product_image",
+        "attname": "alt_text",
+        "type": "character varying(255)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product_image",
+        "attname": "is_primary",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "product_image",
+        "attname": "display_order",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "product_image",
+        "attname": "uploaded_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "product_image",
+        "attname": "content_type",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "product_image",
+        "attname": "size_bytes",
+        "type": "bigint",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "report_daily_sales",
+        "attname": "report_date",
+        "type": "date",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "report_daily_sales",
+        "attname": "seller_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "report_daily_sales",
+        "attname": "category_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "report_daily_sales",
+        "attname": "orders_count",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "report_daily_sales",
+        "attname": "item_quantity",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "report_daily_sales",
+        "attname": "gross_sales_vnd",
+        "type": "numeric(30,0)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "report_daily_sales",
+        "attname": "refreshed_at",
+        "type": "timestamp with time zone",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "report_daily_sales",
+        "attname": "run_id",
+        "type": "uuid",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "review",
+        "attname": "review_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('review_review_id_seq'::regclass)"
+      },
+      {
+        "relname": "review",
+        "attname": "product_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "review",
+        "attname": "buyer_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "review",
+        "attname": "rating",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "review",
+        "attname": "title",
+        "type": "character varying(255)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "review",
+        "attname": "content",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "review",
+        "attname": "is_verified_purchase",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "review",
+        "attname": "helpful_count",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "review",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "review",
+        "attname": "updated_at",
+        "type": "timestamp without time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "review",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "role",
+        "attname": "role_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('role_role_id_seq'::regclass)"
+      },
+      {
+        "relname": "role",
+        "attname": "role_name",
+        "type": "character varying(50)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "role",
+        "attname": "description",
+        "type": "character varying(255)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "role",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "role",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "role",
+        "attname": "updated_at",
+        "type": "timestamp without time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "schema_migrations",
+        "attname": "version",
+        "type": "character varying(3)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "schema_migrations",
+        "attname": "applied_at",
+        "type": "timestamp with time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "schema_migrations",
+        "attname": "checksum",
+        "type": "character(64)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "seller_site",
+        "attname": "seller_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "seller_site",
+        "attname": "site_id",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "shopping_cart",
+        "attname": "cart_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('shopping_cart_cart_id_seq'::regclass)"
+      },
+      {
+        "relname": "shopping_cart",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "shopping_cart",
+        "attname": "last_updated",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "shopping_cart_item",
+        "attname": "cart_item_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('shopping_cart_item_cart_item_id_seq'::regclass)"
+      },
+      {
+        "relname": "shopping_cart_item",
+        "attname": "cart_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "shopping_cart_item",
+        "attname": "product_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "shopping_cart_item",
+        "attname": "quantity",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "shopping_cart_item",
+        "attname": "added_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "site_config",
+        "attname": "singleton",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "true"
+      },
+      {
+        "relname": "site_config",
+        "attname": "site_id",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "site_config",
+        "attname": "id_remainder",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "system_feedback",
+        "attname": "feedback_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('system_feedback_feedback_id_seq'::regclass)"
+      },
+      {
+        "relname": "system_feedback",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_feedback",
+        "attname": "guest_email",
+        "type": "character varying(255)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_feedback",
+        "attname": "subject",
+        "type": "character varying(200)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "system_feedback",
+        "attname": "content",
+        "type": "text",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "system_feedback",
+        "attname": "status",
+        "type": "smallint",
+        "attnotnull": false,
+        "default_value": "0"
+      },
+      {
+        "relname": "system_feedback",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "system_log",
+        "attname": "log_id",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": "nextval('system_log_log_id_seq'::regclass)"
+      },
+      {
+        "relname": "system_log",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log",
+        "attname": "action",
+        "type": "character varying(100)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "system_log",
+        "attname": "resource_type",
+        "type": "character varying(50)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log",
+        "attname": "resource_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log",
+        "attname": "details",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log",
+        "attname": "ip_address",
+        "type": "character varying(45)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "system_log_202611",
+        "attname": "log_id",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": "nextval('system_log_log_id_seq'::regclass)"
+      },
+      {
+        "relname": "system_log_202611",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202611",
+        "attname": "action",
+        "type": "character varying(100)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202611",
+        "attname": "resource_type",
+        "type": "character varying(50)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202611",
+        "attname": "resource_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202611",
+        "attname": "details",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202611",
+        "attname": "ip_address",
+        "type": "character varying(45)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202611",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "system_log_202612",
+        "attname": "log_id",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": "nextval('system_log_log_id_seq'::regclass)"
+      },
+      {
+        "relname": "system_log_202612",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202612",
+        "attname": "action",
+        "type": "character varying(100)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202612",
+        "attname": "resource_type",
+        "type": "character varying(50)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202612",
+        "attname": "resource_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202612",
+        "attname": "details",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202612",
+        "attname": "ip_address",
+        "type": "character varying(45)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202612",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "system_log_202701",
+        "attname": "log_id",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": "nextval('system_log_log_id_seq'::regclass)"
+      },
+      {
+        "relname": "system_log_202701",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202701",
+        "attname": "action",
+        "type": "character varying(100)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202701",
+        "attname": "resource_type",
+        "type": "character varying(50)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202701",
+        "attname": "resource_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202701",
+        "attname": "details",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202701",
+        "attname": "ip_address",
+        "type": "character varying(45)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202701",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "system_log_202702",
+        "attname": "log_id",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": "nextval('system_log_log_id_seq'::regclass)"
+      },
+      {
+        "relname": "system_log_202702",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202702",
+        "attname": "action",
+        "type": "character varying(100)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202702",
+        "attname": "resource_type",
+        "type": "character varying(50)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202702",
+        "attname": "resource_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202702",
+        "attname": "details",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202702",
+        "attname": "ip_address",
+        "type": "character varying(45)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_202702",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "system_log_default",
+        "attname": "log_id",
+        "type": "bigint",
+        "attnotnull": true,
+        "default_value": "nextval('system_log_log_id_seq'::regclass)"
+      },
+      {
+        "relname": "system_log_default",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_default",
+        "attname": "action",
+        "type": "character varying(100)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_default",
+        "attname": "resource_type",
+        "type": "character varying(50)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_default",
+        "attname": "resource_id",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_default",
+        "attname": "details",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_default",
+        "attname": "ip_address",
+        "type": "character varying(45)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "system_log_default",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "transaction",
+        "attname": "transaction_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('transaction_transaction_id_seq'::regclass)"
+      },
+      {
+        "relname": "transaction",
+        "attname": "order_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "transaction",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "transaction",
+        "attname": "payment_method_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "transaction",
+        "attname": "amount",
+        "type": "numeric(18,4)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "transaction",
+        "attname": "balance_before",
+        "type": "numeric(18,4)",
+        "attnotnull": false,
+        "default_value": "0.0000"
+      },
+      {
+        "relname": "transaction",
+        "attname": "balance_after",
+        "type": "numeric(18,4)",
+        "attnotnull": false,
+        "default_value": "0.0000"
+      },
+      {
+        "relname": "transaction",
+        "attname": "transaction_status",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "transaction",
+        "attname": "fraud_score",
+        "type": "numeric(5,2)",
+        "attnotnull": false,
+        "default_value": "0.00"
+      },
+      {
+        "relname": "transaction",
+        "attname": "reference_number",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "transaction",
+        "attname": "provider_transaction_id",
+        "type": "character varying(100)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "transaction",
+        "attname": "address",
+        "type": "text",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "transaction",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "transaction",
+        "attname": "updated_at",
+        "type": "timestamp without time zone",
+        "attnotnull": false,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "user_core",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('user_user_id_seq'::regclass)"
+      },
+      {
+        "relname": "user_core",
+        "attname": "username",
+        "type": "character varying(50)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "user_core",
+        "attname": "email",
+        "type": "character varying(100)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "user_core",
+        "attname": "is_active",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "true"
+      },
+      {
+        "relname": "user_core",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "user_core",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "user_core",
+        "attname": "updated_at",
+        "type": "timestamp without time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "user_core",
+        "attname": "last_login",
+        "type": "timestamp without time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "user_core",
+        "attname": "email_verified",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "user_core",
+        "attname": "trust_score",
+        "type": "numeric(5,2)",
+        "attnotnull": false,
+        "default_value": "0.0"
+      },
+      {
+        "relname": "user_profile",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "user_profile",
+        "attname": "full_name",
+        "type": "character varying(100)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "user_profile",
+        "attname": "phone_number",
+        "type": "character varying(15)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "user_profile",
+        "attname": "address",
+        "type": "character varying(255)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "user_profile",
+        "attname": "avatar_url",
+        "type": "character varying(500)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "user_role",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "user_role",
+        "attname": "role_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "user_secret",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "user_secret",
+        "attname": "password_hash",
+        "type": "character varying(255)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "user_secret",
+        "attname": "random_key",
+        "type": "character varying(64)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "user_secret",
+        "attname": "email_verification_token",
+        "type": "character varying(255)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "user_secret",
+        "attname": "password_reset_token",
+        "type": "character varying(255)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "user_secret",
+        "attname": "password_reset_expires",
+        "type": "timestamp without time zone",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "user_wallet",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "user_wallet",
+        "attname": "balance",
+        "type": "numeric(18,4)",
+        "attnotnull": true,
+        "default_value": "10000000.00"
+      },
+      {
+        "relname": "violation_log",
+        "attname": "log_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('violation_log_log_id_seq'::regclass)"
+      },
+      {
+        "relname": "violation_log",
+        "attname": "user_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "violation_log",
+        "attname": "reason",
+        "type": "character varying(500)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "violation_log",
+        "attname": "action_taken",
+        "type": "character varying(50)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "violation_log",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      },
+      {
+        "relname": "voucher",
+        "attname": "voucher_id",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "nextval('voucher_voucher_id_seq'::regclass)"
+      },
+      {
+        "relname": "voucher",
+        "attname": "code",
+        "type": "character varying(50)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "voucher",
+        "attname": "description",
+        "type": "character varying(255)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "voucher",
+        "attname": "discount_type",
+        "type": "smallint",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "voucher",
+        "attname": "discount_value",
+        "type": "numeric(18,2)",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "voucher",
+        "attname": "max_usage",
+        "type": "integer",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "voucher",
+        "attname": "usage_count",
+        "type": "integer",
+        "attnotnull": true,
+        "default_value": "0"
+      },
+      {
+        "relname": "voucher",
+        "attname": "min_order_amount",
+        "type": "numeric(18,2)",
+        "attnotnull": false,
+        "default_value": null
+      },
+      {
+        "relname": "voucher",
+        "attname": "valid_from",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "voucher",
+        "attname": "valid_to",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": null
+      },
+      {
+        "relname": "voucher",
+        "attname": "is_active",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "true"
+      },
+      {
+        "relname": "voucher",
+        "attname": "is_deleted",
+        "type": "boolean",
+        "attnotnull": true,
+        "default_value": "false"
+      },
+      {
+        "relname": "voucher",
+        "attname": "created_at",
+        "type": "timestamp without time zone",
+        "attnotnull": true,
+        "default_value": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "constraints": [
+      {
+        "relname": "category",
+        "contype": "f",
+        "definition": "FOREIGN KEY (parent_id) REFERENCES category(category_id)"
+      },
+      {
+        "relname": "category",
+        "contype": "p",
+        "definition": "PRIMARY KEY (category_id)"
+      },
+      {
+        "relname": "category",
+        "contype": "u",
+        "definition": "UNIQUE (name)"
+      },
+      {
+        "relname": "contact_info",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "contact_info",
+        "contype": "p",
+        "definition": "PRIMARY KEY (contact_id)"
+      },
+      {
+        "relname": "distributed_installation",
+        "contype": "c",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "relname": "distributed_installation",
+        "contype": "p",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "relname": "etl_outbox",
+        "contype": "c",
+        "definition": "CHECK ((attempts >= 0))"
+      },
+      {
+        "relname": "etl_outbox",
+        "contype": "c",
+        "definition": "CHECK ((entity_type = ANY (ARRAY['product'::text, 'order'::text, 'review'::text, 'system_log'::text, 'violation_log'::text, 'contact'::text])))"
+      },
+      {
+        "relname": "etl_outbox",
+        "contype": "c",
+        "definition": "CHECK ((operation = ANY (ARRAY['INSERT'::text, 'UPDATE'::text, 'DELETE'::text])))"
+      },
+      {
+        "relname": "etl_outbox",
+        "contype": "c",
+        "definition": "CHECK ((status = ANY (ARRAY['pending'::text, 'done'::text, 'dead'::text])))"
+      },
+      {
+        "relname": "etl_outbox",
+        "contype": "p",
+        "definition": "PRIMARY KEY (event_id)"
+      },
+      {
+        "relname": "etl_runs",
+        "contype": "p",
+        "definition": "PRIMARY KEY (run_id)"
+      },
+      {
+        "relname": "etl_state",
+        "contype": "p",
+        "definition": "PRIMARY KEY (name)"
+      },
+      {
+        "relname": "etl_time_origin",
+        "contype": "p",
+        "definition": "PRIMARY KEY (source_table, source_key, field_name)"
+      },
+      {
+        "relname": "media_deletions",
+        "contype": "c",
+        "definition": "CHECK ((status = ANY (ARRAY['pending'::text, 'done'::text])))"
+      },
+      {
+        "relname": "media_deletions",
+        "contype": "c",
+        "definition": "CHECK ((url_path ~~ '/media/%'::text))"
+      },
+      {
+        "relname": "media_deletions",
+        "contype": "p",
+        "definition": "PRIMARY KEY (deletion_id)"
+      },
+      {
+        "relname": "media_deletions",
+        "contype": "u",
+        "definition": "UNIQUE (url_path)"
+      },
+      {
+        "relname": "order",
+        "contype": "c",
+        "definition": "CHECK ((order_status = ANY (ARRAY[0, 1, 2, 3, 4])))"
+      },
+      {
+        "relname": "order",
+        "contype": "f",
+        "definition": "FOREIGN KEY (buyer_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "order",
+        "contype": "f",
+        "definition": "FOREIGN KEY (contact_id) REFERENCES contact_info(contact_id)"
+      },
+      {
+        "relname": "order",
+        "contype": "f",
+        "definition": "FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id)"
+      },
+      {
+        "relname": "order",
+        "contype": "f",
+        "definition": "FOREIGN KEY (voucher_id) REFERENCES voucher(voucher_id)"
+      },
+      {
+        "relname": "order",
+        "contype": "p",
+        "definition": "PRIMARY KEY (order_id)"
+      },
+      {
+        "relname": "order_detail",
+        "contype": "c",
+        "definition": "CHECK ((quantity > 0))"
+      },
+      {
+        "relname": "order_detail",
+        "contype": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES \"order\"(order_id)"
+      },
+      {
+        "relname": "order_detail",
+        "contype": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES order_h0(order_id)"
+      },
+      {
+        "relname": "order_detail",
+        "contype": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES order_h1(order_id)"
+      },
+      {
+        "relname": "order_detail",
+        "contype": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES order_h2(order_id)"
+      },
+      {
+        "relname": "order_detail",
+        "contype": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES order_h3(order_id)"
+      },
+      {
+        "relname": "order_detail",
+        "contype": "f",
+        "definition": "FOREIGN KEY (product_id) REFERENCES product(product_id)"
+      },
+      {
+        "relname": "order_detail",
+        "contype": "p",
+        "definition": "PRIMARY KEY (order_detail_id)"
+      },
+      {
+        "relname": "order_h0",
+        "contype": "c",
+        "definition": "CHECK ((order_status = ANY (ARRAY[0, 1, 2, 3, 4])))"
+      },
+      {
+        "relname": "order_h0",
+        "contype": "f",
+        "definition": "FOREIGN KEY (buyer_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "order_h0",
+        "contype": "f",
+        "definition": "FOREIGN KEY (contact_id) REFERENCES contact_info(contact_id)"
+      },
+      {
+        "relname": "order_h0",
+        "contype": "f",
+        "definition": "FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id)"
+      },
+      {
+        "relname": "order_h0",
+        "contype": "f",
+        "definition": "FOREIGN KEY (voucher_id) REFERENCES voucher(voucher_id)"
+      },
+      {
+        "relname": "order_h0",
+        "contype": "p",
+        "definition": "PRIMARY KEY (order_id)"
+      },
+      {
+        "relname": "order_h1",
+        "contype": "c",
+        "definition": "CHECK ((order_status = ANY (ARRAY[0, 1, 2, 3, 4])))"
+      },
+      {
+        "relname": "order_h1",
+        "contype": "f",
+        "definition": "FOREIGN KEY (buyer_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "order_h1",
+        "contype": "f",
+        "definition": "FOREIGN KEY (contact_id) REFERENCES contact_info(contact_id)"
+      },
+      {
+        "relname": "order_h1",
+        "contype": "f",
+        "definition": "FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id)"
+      },
+      {
+        "relname": "order_h1",
+        "contype": "f",
+        "definition": "FOREIGN KEY (voucher_id) REFERENCES voucher(voucher_id)"
+      },
+      {
+        "relname": "order_h1",
+        "contype": "p",
+        "definition": "PRIMARY KEY (order_id)"
+      },
+      {
+        "relname": "order_h2",
+        "contype": "c",
+        "definition": "CHECK ((order_status = ANY (ARRAY[0, 1, 2, 3, 4])))"
+      },
+      {
+        "relname": "order_h2",
+        "contype": "f",
+        "definition": "FOREIGN KEY (buyer_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "order_h2",
+        "contype": "f",
+        "definition": "FOREIGN KEY (contact_id) REFERENCES contact_info(contact_id)"
+      },
+      {
+        "relname": "order_h2",
+        "contype": "f",
+        "definition": "FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id)"
+      },
+      {
+        "relname": "order_h2",
+        "contype": "f",
+        "definition": "FOREIGN KEY (voucher_id) REFERENCES voucher(voucher_id)"
+      },
+      {
+        "relname": "order_h2",
+        "contype": "p",
+        "definition": "PRIMARY KEY (order_id)"
+      },
+      {
+        "relname": "order_h3",
+        "contype": "c",
+        "definition": "CHECK ((order_status = ANY (ARRAY[0, 1, 2, 3, 4])))"
+      },
+      {
+        "relname": "order_h3",
+        "contype": "f",
+        "definition": "FOREIGN KEY (buyer_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "order_h3",
+        "contype": "f",
+        "definition": "FOREIGN KEY (contact_id) REFERENCES contact_info(contact_id)"
+      },
+      {
+        "relname": "order_h3",
+        "contype": "f",
+        "definition": "FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id)"
+      },
+      {
+        "relname": "order_h3",
+        "contype": "f",
+        "definition": "FOREIGN KEY (voucher_id) REFERENCES voucher(voucher_id)"
+      },
+      {
+        "relname": "order_h3",
+        "contype": "p",
+        "definition": "PRIMARY KEY (order_id)"
+      },
+      {
+        "relname": "payment_method",
+        "contype": "p",
+        "definition": "PRIMARY KEY (payment_method_id)"
+      },
+      {
+        "relname": "payment_method",
+        "contype": "u",
+        "definition": "UNIQUE (method_name)"
+      },
+      {
+        "relname": "product",
+        "contype": "c",
+        "definition": "CHECK (((condition_rating >= 1) AND (condition_rating <= 10)))"
+      },
+      {
+        "relname": "product",
+        "contype": "c",
+        "definition": "CHECK ((price >= (0)::numeric))"
+      },
+      {
+        "relname": "product",
+        "contype": "c",
+        "definition": "CHECK ((quantity >= 0))"
+      },
+      {
+        "relname": "product",
+        "contype": "c",
+        "definition": "CHECK ((site_id = ANY (ARRAY['A'::text, 'B'::text])))"
+      },
+      {
+        "relname": "product",
+        "contype": "c",
+        "definition": "CHECK ((status = ANY (ARRAY[0, 1, 2, 3])))"
+      },
+      {
+        "relname": "product",
+        "contype": "c",
+        "definition": "CHECK ((transfer_method = ANY (ARRAY[1, 2])))"
+      },
+      {
+        "relname": "product",
+        "contype": "f",
+        "definition": "FOREIGN KEY (approved_by) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "product",
+        "contype": "f",
+        "definition": "FOREIGN KEY (category_id) REFERENCES category(category_id)"
+      },
+      {
+        "relname": "product",
+        "contype": "f",
+        "definition": "FOREIGN KEY (seller_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "product",
+        "contype": "f",
+        "definition": "FOREIGN KEY (seller_id, site_id) REFERENCES seller_site(seller_id, site_id)"
+      },
+      {
+        "relname": "product",
+        "contype": "p",
+        "definition": "PRIMARY KEY (product_id)"
+      },
+      {
+        "relname": "product_image",
+        "contype": "c",
+        "definition": "CHECK ((size_bytes >= 0))"
+      },
+      {
+        "relname": "product_image",
+        "contype": "f",
+        "definition": "FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE"
+      },
+      {
+        "relname": "product_image",
+        "contype": "p",
+        "definition": "PRIMARY KEY (image_id)"
+      },
+      {
+        "relname": "report_daily_sales",
+        "contype": "p",
+        "definition": "PRIMARY KEY (report_date, seller_id, category_id)"
+      },
+      {
+        "relname": "review",
+        "contype": "c",
+        "definition": "CHECK (((rating >= 0) AND (rating <= 5)))"
+      },
+      {
+        "relname": "review",
+        "contype": "f",
+        "definition": "FOREIGN KEY (buyer_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "review",
+        "contype": "f",
+        "definition": "FOREIGN KEY (product_id) REFERENCES product(product_id)"
+      },
+      {
+        "relname": "review",
+        "contype": "p",
+        "definition": "PRIMARY KEY (review_id)"
+      },
+      {
+        "relname": "role",
+        "contype": "p",
+        "definition": "PRIMARY KEY (role_id)"
+      },
+      {
+        "relname": "role",
+        "contype": "u",
+        "definition": "UNIQUE (role_name)"
+      },
+      {
+        "relname": "schema_migrations",
+        "contype": "p",
+        "definition": "PRIMARY KEY (version)"
+      },
+      {
+        "relname": "seller_site",
+        "contype": "c",
+        "definition": "CHECK ((site_id = ANY (ARRAY['A'::text, 'B'::text])))"
+      },
+      {
+        "relname": "seller_site",
+        "contype": "f",
+        "definition": "FOREIGN KEY (seller_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "seller_site",
+        "contype": "p",
+        "definition": "PRIMARY KEY (seller_id)"
+      },
+      {
+        "relname": "seller_site",
+        "contype": "u",
+        "definition": "UNIQUE (seller_id, site_id)"
+      },
+      {
+        "relname": "shopping_cart",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "shopping_cart",
+        "contype": "p",
+        "definition": "PRIMARY KEY (cart_id)"
+      },
+      {
+        "relname": "shopping_cart",
+        "contype": "u",
+        "definition": "UNIQUE (user_id)"
+      },
+      {
+        "relname": "shopping_cart_item",
+        "contype": "c",
+        "definition": "CHECK ((quantity > 0))"
+      },
+      {
+        "relname": "shopping_cart_item",
+        "contype": "f",
+        "definition": "FOREIGN KEY (cart_id) REFERENCES shopping_cart(cart_id)"
+      },
+      {
+        "relname": "shopping_cart_item",
+        "contype": "f",
+        "definition": "FOREIGN KEY (product_id) REFERENCES product(product_id)"
+      },
+      {
+        "relname": "shopping_cart_item",
+        "contype": "p",
+        "definition": "PRIMARY KEY (cart_item_id)"
+      },
+      {
+        "relname": "site_config",
+        "contype": "c",
+        "definition": "CHECK ((((site_id = 'A'::text) AND (id_remainder = 1)) OR ((site_id = 'B'::text) AND (id_remainder = 0))))"
+      },
+      {
+        "relname": "site_config",
+        "contype": "c",
+        "definition": "CHECK ((site_id = ANY (ARRAY['A'::text, 'B'::text])))"
+      },
+      {
+        "relname": "site_config",
+        "contype": "c",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "relname": "site_config",
+        "contype": "p",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "relname": "site_config",
+        "contype": "u",
+        "definition": "UNIQUE (site_id)"
+      },
+      {
+        "relname": "system_feedback",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id) ON DELETE SET NULL"
+      },
+      {
+        "relname": "system_feedback",
+        "contype": "p",
+        "definition": "PRIMARY KEY (feedback_id)"
+      },
+      {
+        "relname": "system_log",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "system_log",
+        "contype": "p",
+        "definition": "PRIMARY KEY (log_id, created_at)"
+      },
+      {
+        "relname": "system_log_202611",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "system_log_202611",
+        "contype": "p",
+        "definition": "PRIMARY KEY (log_id, created_at)"
+      },
+      {
+        "relname": "system_log_202612",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "system_log_202612",
+        "contype": "p",
+        "definition": "PRIMARY KEY (log_id, created_at)"
+      },
+      {
+        "relname": "system_log_202701",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "system_log_202701",
+        "contype": "p",
+        "definition": "PRIMARY KEY (log_id, created_at)"
+      },
+      {
+        "relname": "system_log_202702",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "system_log_202702",
+        "contype": "p",
+        "definition": "PRIMARY KEY (log_id, created_at)"
+      },
+      {
+        "relname": "system_log_default",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "system_log_default",
+        "contype": "p",
+        "definition": "PRIMARY KEY (log_id, created_at)"
+      },
+      {
+        "relname": "transaction",
+        "contype": "c",
+        "definition": "CHECK ((amount >= (0)::numeric))"
+      },
+      {
+        "relname": "transaction",
+        "contype": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES \"order\"(order_id) ON DELETE CASCADE"
+      },
+      {
+        "relname": "transaction",
+        "contype": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES order_h0(order_id) ON DELETE CASCADE"
+      },
+      {
+        "relname": "transaction",
+        "contype": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES order_h1(order_id) ON DELETE CASCADE"
+      },
+      {
+        "relname": "transaction",
+        "contype": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES order_h2(order_id) ON DELETE CASCADE"
+      },
+      {
+        "relname": "transaction",
+        "contype": "f",
+        "definition": "FOREIGN KEY (order_id) REFERENCES order_h3(order_id) ON DELETE CASCADE"
+      },
+      {
+        "relname": "transaction",
+        "contype": "f",
+        "definition": "FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id)"
+      },
+      {
+        "relname": "transaction",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "transaction",
+        "contype": "p",
+        "definition": "PRIMARY KEY (transaction_id)"
+      },
+      {
+        "relname": "transaction",
+        "contype": "u",
+        "definition": "UNIQUE (reference_number)"
+      },
+      {
+        "relname": "user_core",
+        "contype": "p",
+        "definition": "PRIMARY KEY (user_id)"
+      },
+      {
+        "relname": "user_core",
+        "contype": "u",
+        "definition": "UNIQUE (email)"
+      },
+      {
+        "relname": "user_core",
+        "contype": "u",
+        "definition": "UNIQUE (username)"
+      },
+      {
+        "relname": "user_profile",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id) ON DELETE CASCADE"
+      },
+      {
+        "relname": "user_profile",
+        "contype": "p",
+        "definition": "PRIMARY KEY (user_id)"
+      },
+      {
+        "relname": "user_role",
+        "contype": "f",
+        "definition": "FOREIGN KEY (role_id) REFERENCES role(role_id)"
+      },
+      {
+        "relname": "user_role",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "user_role",
+        "contype": "p",
+        "definition": "PRIMARY KEY (user_id, role_id)"
+      },
+      {
+        "relname": "user_secret",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id) ON DELETE CASCADE"
+      },
+      {
+        "relname": "user_secret",
+        "contype": "p",
+        "definition": "PRIMARY KEY (user_id)"
+      },
+      {
+        "relname": "user_secret",
+        "contype": "u",
+        "definition": "UNIQUE (random_key)"
+      },
+      {
+        "relname": "user_wallet",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id) ON DELETE CASCADE"
+      },
+      {
+        "relname": "user_wallet",
+        "contype": "p",
+        "definition": "PRIMARY KEY (user_id)"
+      },
+      {
+        "relname": "violation_log",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES user_core(user_id)"
+      },
+      {
+        "relname": "violation_log",
+        "contype": "p",
+        "definition": "PRIMARY KEY (log_id)"
+      },
+      {
+        "relname": "voucher",
+        "contype": "p",
+        "definition": "PRIMARY KEY (voucher_id)"
+      },
+      {
+        "relname": "voucher",
+        "contype": "u",
+        "definition": "UNIQUE (code)"
+      }
+    ],
+    "indexes": [
+      {
+        "indexdef": "CREATE INDEX idx_category_created_at ON public.category USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_category_is_active ON public.category USING btree (is_active) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_category_parent ON public.category USING btree (parent_id) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_contact_info_default ON public.contact_info USING btree (is_default) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_contact_info_user ON public.contact_info USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_etl_outbox_entity_pending ON public.etl_outbox USING btree (entity_type, entity_key, event_id) WHERE (status <> 'done'::text)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_etl_outbox_pending ON public.etl_outbox USING btree (available_at, event_id) WHERE (status = ANY (ARRAY['pending'::text, 'dead'::text]))"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_etl_outbox_pending_event ON public.etl_outbox USING btree (event_id, available_at) WHERE (status = ANY (ARRAY['pending'::text, 'dead'::text]))"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_etl_runs_aggregate_success ON public.etl_runs USING btree (ended_at DESC) WHERE ((status = 'success'::text) AND (details ? 'aggregate'::text))"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_etl_runs_started ON public.etl_runs USING btree (started_at DESC)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_media_deletions_due ON public.media_deletions USING btree (available_at, deletion_id) WHERE (status = 'pending'::text)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_order_detail_order ON public.order_detail USING btree (order_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_order_detail_product_order ON public.order_detail USING btree (product_id, order_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_order_voucher_lookup ON ONLY public.\"order\" USING btree (voucher_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_catalogue ON public.product USING btree (category_id, created_at DESC) WHERE ((status = 1) AND (is_deleted = false))"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_category ON public.product USING btree (category_id) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_created_at ON public.product USING btree (created_at) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_description_trgm ON public.product USING gin (description gin_trgm_ops) WHERE ((status = 1) AND (is_deleted = false))"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_image_product ON public.product_image USING btree (product_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_image_url ON public.product_image USING btree (image_url)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_price ON public.product USING btree (price) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_seller ON public.product USING btree (seller_id) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_status ON public.product USING btree (status) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_title ON public.product USING gin (to_tsvector('english'::regconfig, (title)::text)) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_title_trgm ON public.product USING gin (title gin_trgm_ops) WHERE ((status = 1) AND (is_deleted = false))"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_product_visible_date_id ON public.product USING btree (created_at DESC, product_id) WHERE ((status = 1) AND (is_deleted = false))"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_review_buyer ON public.review USING btree (buyer_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_review_product ON public.review USING btree (product_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_review_rating ON public.review USING btree (rating)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_role_created_at ON public.role USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_role_name ON public.role USING btree (role_name) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_shopping_cart_item_cart ON public.shopping_cart_item USING btree (cart_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_shopping_cart_item_product ON public.shopping_cart_item USING btree (product_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_system_feedback_created_at ON public.system_feedback USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_system_feedback_status ON public.system_feedback USING btree (status)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_system_feedback_user ON public.system_feedback USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_system_log_action ON ONLY public.system_log USING btree (action)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_system_log_created_at ON ONLY public.system_log USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_system_log_user ON ONLY public.system_log USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_transaction_fraud_score ON public.transaction USING btree (fraud_score)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_transaction_order ON public.transaction USING btree (order_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_transaction_status ON public.transaction USING btree (transaction_status)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_transaction_user ON public.transaction USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_user_created_at ON public.user_core USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_user_email_verified ON public.user_core USING btree (email_verified) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_user_is_active ON public.user_core USING btree (is_active) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_user_profile_avatar_url ON public.user_profile USING btree (avatar_url)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_user_role_role_user ON public.user_role USING btree (role_id, user_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_violation_log_created_at ON public.violation_log USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_violation_log_user ON public.violation_log USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_voucher_created_at ON public.voucher USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX idx_voucher_valid_to ON public.voucher USING btree (valid_to) WHERE (is_active = true)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_day4_new_buyer_id_idx ON ONLY public.\"order\" USING btree (buyer_id) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_day4_new_buyer_id_order_date_idx ON ONLY public.\"order\" USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_day4_new_order_date_idx ON ONLY public.\"order\" USING btree (order_date) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_day4_new_order_status_idx ON ONLY public.\"order\" USING btree (order_status) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h0_buyer_id_idx ON public.order_h0 USING btree (buyer_id) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h0_buyer_id_order_date_idx ON public.order_h0 USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h0_order_date_idx ON public.order_h0 USING btree (order_date) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h0_order_status_idx ON public.order_h0 USING btree (order_status) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h0_voucher_id_idx ON public.order_h0 USING btree (voucher_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h1_buyer_id_idx ON public.order_h1 USING btree (buyer_id) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h1_buyer_id_order_date_idx ON public.order_h1 USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h1_order_date_idx ON public.order_h1 USING btree (order_date) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h1_order_status_idx ON public.order_h1 USING btree (order_status) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h1_voucher_id_idx ON public.order_h1 USING btree (voucher_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h2_buyer_id_idx ON public.order_h2 USING btree (buyer_id) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h2_buyer_id_order_date_idx ON public.order_h2 USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h2_order_date_idx ON public.order_h2 USING btree (order_date) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h2_order_status_idx ON public.order_h2 USING btree (order_status) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h2_voucher_id_idx ON public.order_h2 USING btree (voucher_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h3_buyer_id_idx ON public.order_h3 USING btree (buyer_id) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h3_buyer_id_order_date_idx ON public.order_h3 USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h3_order_date_idx ON public.order_h3 USING btree (order_date) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h3_order_status_idx ON public.order_h3 USING btree (order_status) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE INDEX order_h3_voucher_id_idx ON public.order_h3 USING btree (voucher_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202611_action_idx ON public.system_log_202611 USING btree (action)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202611_created_at_idx ON public.system_log_202611 USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202611_user_id_idx ON public.system_log_202611 USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202612_action_idx ON public.system_log_202612 USING btree (action)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202612_created_at_idx ON public.system_log_202612 USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202612_user_id_idx ON public.system_log_202612 USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202701_action_idx ON public.system_log_202701 USING btree (action)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202701_created_at_idx ON public.system_log_202701 USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202701_user_id_idx ON public.system_log_202701 USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202702_action_idx ON public.system_log_202702 USING btree (action)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202702_created_at_idx ON public.system_log_202702 USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_202702_user_id_idx ON public.system_log_202702 USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_default_action_idx ON public.system_log_default USING btree (action)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_default_created_at_idx ON public.system_log_default USING btree (created_at)"
+      },
+      {
+        "indexdef": "CREATE INDEX system_log_default_user_id_idx ON public.system_log_default USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX category_name_key ON public.category USING btree (name)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX category_pkey ON public.category USING btree (category_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX contact_info_pkey ON public.contact_info USING btree (contact_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX distributed_installation_pkey ON public.distributed_installation USING btree (singleton)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX etl_outbox_pkey ON public.etl_outbox USING btree (event_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX etl_runs_pkey ON public.etl_runs USING btree (run_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX etl_state_pkey ON public.etl_state USING btree (name)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX etl_time_origin_pkey ON public.etl_time_origin USING btree (source_table, source_key, field_name)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX idx_category_name_active ON public.category USING btree (name) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX idx_user_email_active ON public.user_core USING btree (email) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX idx_user_username_active ON public.user_core USING btree (username) WHERE (is_deleted = false)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX idx_voucher_code_active ON public.voucher USING btree (code) WHERE (is_active = true)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX media_deletions_pkey ON public.media_deletions USING btree (deletion_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX media_deletions_url_path_key ON public.media_deletions USING btree (url_path)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX order_day4_new_pkey ON ONLY public.\"order\" USING btree (order_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX order_detail_pkey ON public.order_detail USING btree (order_detail_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX order_h0_pkey ON public.order_h0 USING btree (order_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX order_h1_pkey ON public.order_h1 USING btree (order_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX order_h2_pkey ON public.order_h2 USING btree (order_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX order_h3_pkey ON public.order_h3 USING btree (order_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX payment_method_method_name_key ON public.payment_method USING btree (method_name)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX payment_method_pkey ON public.payment_method USING btree (payment_method_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX product_image_pkey ON public.product_image USING btree (image_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX product_pkey ON public.product USING btree (product_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX report_daily_sales_pkey ON public.report_daily_sales USING btree (report_date, seller_id, category_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX review_pkey ON public.review USING btree (review_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX role_pkey ON public.role USING btree (role_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX role_role_name_key ON public.role USING btree (role_name)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX schema_migrations_pkey ON public.schema_migrations USING btree (version)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX seller_site_pkey ON public.seller_site USING btree (seller_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX seller_site_seller_id_site_id_key ON public.seller_site USING btree (seller_id, site_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX shopping_cart_item_pkey ON public.shopping_cart_item USING btree (cart_item_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX shopping_cart_pkey ON public.shopping_cart USING btree (cart_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX shopping_cart_user_id_key ON public.shopping_cart USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX site_config_pkey ON public.site_config USING btree (singleton)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX site_config_site_id_key ON public.site_config USING btree (site_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX system_feedback_pkey ON public.system_feedback USING btree (feedback_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX system_log_202611_pkey ON public.system_log_202611 USING btree (log_id, created_at)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX system_log_202612_pkey ON public.system_log_202612 USING btree (log_id, created_at)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX system_log_202701_pkey ON public.system_log_202701 USING btree (log_id, created_at)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX system_log_202702_pkey ON public.system_log_202702 USING btree (log_id, created_at)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX system_log_day4_new_pkey ON ONLY public.system_log USING btree (log_id, created_at)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX system_log_default_pkey ON public.system_log_default USING btree (log_id, created_at)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX transaction_pkey ON public.transaction USING btree (transaction_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX transaction_reference_number_key ON public.transaction USING btree (reference_number)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX uq_cart_product ON public.shopping_cart_item USING btree (cart_id, product_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX user_email_key ON public.user_core USING btree (email)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX user_pkey ON public.user_core USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX user_profile_pkey ON public.user_profile USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX user_role_pkey ON public.user_role USING btree (user_id, role_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX user_secret_pkey ON public.user_secret USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX user_secret_random_key_key ON public.user_secret USING btree (random_key)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX user_username_key ON public.user_core USING btree (username)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX user_wallet_pkey ON public.user_wallet USING btree (user_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX violation_log_pkey ON public.violation_log USING btree (log_id)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX voucher_code_key ON public.voucher USING btree (code)"
+      },
+      {
+        "indexdef": "CREATE UNIQUE INDEX voucher_pkey ON public.voucher USING btree (voucher_id)"
+      }
+    ],
+    "triggers": [
+      {
+        "relname": "order",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.\"order\" FOR EACH ROW EXECUTE FUNCTION etl_capture_change('order', 'order_id')"
+      },
+      {
+        "relname": "order_detail",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.order_detail FOR EACH ROW EXECUTE FUNCTION etl_capture_change('order_detail', 'order_detail_id')"
+      },
+      {
+        "relname": "order_detail",
+        "tgname": "trg_no_self_buying",
+        "definition": "CREATE TRIGGER trg_no_self_buying BEFORE INSERT ON public.order_detail FOR EACH ROW EXECUTE FUNCTION check_no_self_buying()"
+      },
+      {
+        "relname": "order_h0",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.order_h0 FOR EACH ROW EXECUTE FUNCTION etl_capture_change('order', 'order_id')"
+      },
+      {
+        "relname": "order_h1",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.order_h1 FOR EACH ROW EXECUTE FUNCTION etl_capture_change('order', 'order_id')"
+      },
+      {
+        "relname": "order_h2",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.order_h2 FOR EACH ROW EXECUTE FUNCTION etl_capture_change('order', 'order_id')"
+      },
+      {
+        "relname": "order_h3",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.order_h3 FOR EACH ROW EXECUTE FUNCTION etl_capture_change('order', 'order_id')"
+      },
+      {
+        "relname": "product",
+        "tgname": "enforce_product_site",
+        "definition": "CREATE TRIGGER enforce_product_site BEFORE INSERT OR UPDATE ON public.product FOR EACH ROW EXECUTE FUNCTION enforce_product_site()"
+      },
+      {
+        "relname": "product",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.product FOR EACH ROW EXECUTE FUNCTION etl_capture_change('product', 'product_id')"
+      },
+      {
+        "relname": "product",
+        "tgname": "trg_update_product_status",
+        "definition": "CREATE TRIGGER trg_update_product_status BEFORE UPDATE ON public.product FOR EACH ROW WHEN ((old.quantity <> new.quantity)) EXECUTE FUNCTION update_product_status_on_quantity()"
+      },
+      {
+        "relname": "product_image",
+        "tgname": "enforce_image_site",
+        "definition": "CREATE TRIGGER enforce_image_site BEFORE INSERT OR UPDATE ON public.product_image FOR EACH ROW EXECUTE FUNCTION enforce_image_site()"
+      },
+      {
+        "relname": "product_image",
+        "tgname": "queue_product_image_cleanup",
+        "definition": "CREATE TRIGGER queue_product_image_cleanup AFTER DELETE OR UPDATE OF image_url ON public.product_image FOR EACH ROW EXECUTE FUNCTION queue_unlinked_media()"
+      },
+      {
+        "relname": "product_image",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.product_image FOR EACH ROW EXECUTE FUNCTION etl_capture_change('product_image', 'image_id')"
+      },
+      {
+        "relname": "review",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.review FOR EACH ROW EXECUTE FUNCTION etl_capture_change('review', 'review_id')"
+      },
+      {
+        "relname": "system_feedback",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.system_feedback FOR EACH ROW EXECUTE FUNCTION etl_capture_change('system_feedback', 'feedback_id')"
+      },
+      {
+        "relname": "system_log",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.system_log FOR EACH ROW EXECUTE FUNCTION etl_capture_change('system_log', 'log_id')"
+      },
+      {
+        "relname": "system_log_202611",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.system_log_202611 FOR EACH ROW EXECUTE FUNCTION etl_capture_change('system_log', 'log_id')"
+      },
+      {
+        "relname": "system_log_202612",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.system_log_202612 FOR EACH ROW EXECUTE FUNCTION etl_capture_change('system_log', 'log_id')"
+      },
+      {
+        "relname": "system_log_202701",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.system_log_202701 FOR EACH ROW EXECUTE FUNCTION etl_capture_change('system_log', 'log_id')"
+      },
+      {
+        "relname": "system_log_202702",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.system_log_202702 FOR EACH ROW EXECUTE FUNCTION etl_capture_change('system_log', 'log_id')"
+      },
+      {
+        "relname": "system_log_default",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.system_log_default FOR EACH ROW EXECUTE FUNCTION etl_capture_change('system_log', 'log_id')"
+      },
+      {
+        "relname": "transaction",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.transaction FOR EACH ROW EXECUTE FUNCTION etl_capture_change('transaction', 'transaction_id')"
+      },
+      {
+        "relname": "user_profile",
+        "tgname": "queue_avatar_cleanup",
+        "definition": "CREATE TRIGGER queue_avatar_cleanup AFTER UPDATE OF avatar_url ON public.user_profile FOR EACH ROW EXECUTE FUNCTION queue_unlinked_media()"
+      },
+      {
+        "relname": "violation_log",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.violation_log FOR EACH ROW EXECUTE FUNCTION etl_capture_change('violation_log', 'log_id')"
+      },
+      {
+        "relname": "voucher",
+        "tgname": "trg_etl_capture",
+        "definition": "CREATE TRIGGER trg_etl_capture AFTER INSERT OR DELETE OR UPDATE ON public.voucher FOR EACH ROW EXECUTE FUNCTION etl_capture_change('voucher', 'voucher_id')"
+      }
+    ],
+    "functions": [
+      {
+        "signature": "apply_voucher_to_order(integer,character varying)",
+        "definition": "CREATE OR REPLACE FUNCTION public.apply_voucher_to_order(p_order_id integer, p_voucher_code character varying)\n RETURNS numeric\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    voucher_record RECORD;\n    order_record RECORD;\n    v_discount_amount DECIMAL(18,2) := 0;\n    final_total DECIMAL(18,2);\nBEGIN\n    -- Get order details\n    SELECT * INTO order_record FROM \"order\" WHERE order_id = p_order_id;\n    IF NOT FOUND THEN\n        RAISE EXCEPTION 'Order not found';\n    END IF;\n\n    -- Get voucher details\n    SELECT * INTO voucher_record FROM voucher WHERE code = p_voucher_code;\n    IF NOT FOUND THEN\n        RAISE EXCEPTION 'Voucher not found';\n    END IF;\n\n    -- Validate voucher\n    IF NOT voucher_record.is_active THEN\n        RAISE EXCEPTION 'Voucher is not active';\n    END IF;\n\n    IF voucher_record.valid_to < CURRENT_TIMESTAMP THEN\n        RAISE EXCEPTION 'Voucher has expired';\n    END IF;\n\n    -- Check if voucher already applied to this order\n    IF order_record.voucher_id IS NOT NULL THEN\n        RAISE EXCEPTION 'Order already has a voucher applied';\n    END IF;\n\n    -- Calculate discount\n    v_discount_amount := calculate_order_total(order_record.total_amount, voucher_record.voucher_id, order_record.shipping_fee)\n                     - order_record.total_amount + order_record.discount_amount;\n\n    -- Update order with voucher\n    UPDATE \"order\"\n    SET voucher_id = voucher_record.voucher_id,\n        discount_amount = v_discount_amount,\n        final_amount = total_amount - v_discount_amount + shipping_fee,\n        updated_at = CURRENT_TIMESTAMP\n    WHERE order_id = p_order_id;\n\n    -- Update voucher usage\n    UPDATE voucher\n    SET usage_count = usage_count + 1\n    WHERE voucher_id = voucher_record.voucher_id;\n\n    -- Log the voucher application\n    PERFORM log_system_action(\n        order_record.buyer_id,\n        'VOUCHER_APPLIED',\n        'order',\n        p_order_id,\n        'Applied voucher ' || p_voucher_code || ' with discount ' || v_discount_amount\n    );\n\n    RETURN v_discount_amount;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "authenticate_user(text,text)",
+        "definition": "CREATE OR REPLACE FUNCTION public.authenticate_user(p_username_or_email text, p_password text)\n RETURNS TABLE(user_id integer, username character varying, email character varying, full_name character varying, is_active boolean, role_name character varying)\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    user_record RECORD;\n    login_successful BOOLEAN := FALSE;\nBEGIN\n    -- Find user by username or email\n    SELECT u.*, r.role_name INTO user_record\n    FROM users_full u\n    JOIN user_role ur ON u.user_id = ur.user_id\n    JOIN role r ON ur.role_id = r.role_id\n    WHERE (u.username = p_username_or_email OR u.email = p_username_or_email)\n    AND u.is_deleted = FALSE;\n\n    -- Check if user exists\n    IF NOT FOUND THEN\n        RAISE EXCEPTION 'Invalid username or password';\n    END IF;\n\n    -- Check if user is active\n    IF NOT user_record.is_active THEN\n        RAISE EXCEPTION 'Account is deactivated';\n    END IF;\n\n    -- Verify password\n    IF verify_password(p_password, user_record.password_hash) THEN\n        login_successful := TRUE;\n\n        -- Update last login\n        UPDATE user_core SET last_login = CURRENT_TIMESTAMP WHERE user_core.user_id = user_record.user_id;\n\n        -- Log successful login\n        PERFORM log_system_action(user_record.user_id, 'LOGIN_SUCCESS', 'user', user_record.user_id, 'Successful login');\n    ELSE\n        -- Log failed login attempt\n        PERFORM log_system_action(user_record.user_id, 'LOGIN_FAILED', 'user', user_record.user_id, 'Failed login attempt');\n\n        RAISE EXCEPTION 'Invalid username or password';\n    END IF;\n\n    -- Return user data\n    RETURN QUERY\n    SELECT\n        user_record.user_id,\n        user_record.username,\n        user_record.email,\n        user_record.full_name,\n        user_record.is_active,\n        user_record.role_name;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "calculate_order_total(numeric,integer,numeric)",
+        "definition": "CREATE OR REPLACE FUNCTION public.calculate_order_total(p_subtotal numeric, p_voucher_id integer DEFAULT NULL::integer, p_shipping_fee numeric DEFAULT 0)\n RETURNS numeric\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    discount_amount DECIMAL(18,2) := 0;\n    voucher_record RECORD;\n    final_total DECIMAL(18,2);\nBEGIN\n    -- Validate inputs\n    IF p_subtotal < 0 THEN\n        RAISE EXCEPTION 'Subtotal cannot be negative';\n    END IF;\n\n    IF p_shipping_fee < 0 THEN\n        RAISE EXCEPTION 'Shipping fee cannot be negative';\n    END IF;\n\n    -- Get voucher details if provided\n    IF p_voucher_id IS NOT NULL THEN\n        SELECT * INTO voucher_record\n        FROM voucher\n        WHERE voucher_id = p_voucher_id\n        AND is_active = TRUE\n        AND valid_to > CURRENT_TIMESTAMP;\n\n        IF NOT FOUND THEN\n            RAISE EXCEPTION 'Invalid or expired voucher';\n        END IF;\n\n        -- Check usage limit\n        IF voucher_record.max_usage IS NOT NULL AND voucher_record.usage_count >= voucher_record.max_usage THEN\n            RAISE EXCEPTION 'Voucher usage limit exceeded';\n        END IF;\n\n        -- Check minimum order value\n        IF p_subtotal < voucher_record.min_order_amount THEN\n            RAISE EXCEPTION 'Order value does not meet voucher minimum requirement of %', voucher_record.min_order_amount;\n        END IF;\n\n        -- Calculate discount\n        IF voucher_record.discount_type = 1 THEN\n            -- Percentage discount\n            discount_amount := p_subtotal * voucher_record.discount_value / 100;\n        ELSE\n            -- Fixed amount discount\n            discount_amount := voucher_record.discount_value;\n        END IF;\n\n        -- Ensure discount doesn't exceed subtotal\n        discount_amount := LEAST(discount_amount, p_subtotal);\n    END IF;\n\n    -- Calculate final total\n    final_total := GREATEST(p_subtotal - discount_amount + p_shipping_fee, 0);\n\n    RETURN final_total;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "calculate_percentage(numeric,numeric)",
+        "definition": "CREATE OR REPLACE FUNCTION public.calculate_percentage(part numeric, total numeric)\n RETURNS numeric\n LANGUAGE plpgsql\n IMMUTABLE SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nBEGIN\n    IF total = 0 THEN\n        RETURN 0;\n    END IF;\n    RETURN ROUND((part / total * 100)::DECIMAL(5,2), 2);\nEND;\n$function$\n"
+      },
+      {
+        "signature": "check_no_self_buying()",
+        "definition": "CREATE OR REPLACE FUNCTION public.check_no_self_buying()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    order_buyer_id INT;\n    product_seller_id INT;\nBEGIN\n    SELECT buyer_id INTO order_buyer_id\n    FROM \"order\"\n    WHERE order_id = NEW.order_id;\n\n    SELECT seller_id INTO product_seller_id\n    FROM product\n    WHERE product_id = NEW.product_id;\n\n    IF order_buyer_id IS NULL OR product_seller_id IS NULL THEN\n        RAISE EXCEPTION 'INVALID_ORDER_OR_PRODUCT: Invalid order or product reference';\n    END IF;\n\n    IF order_buyer_id = product_seller_id THEN\n        PERFORM log_system_action(\n            order_buyer_id,\n            'SELF_BUY_BLOCKED',\n            'order_detail',\n            NEW.order_detail_id,\n            'Attempted to buy own product (product_id: ' || NEW.product_id || ')'\n        );\n        RAISE EXCEPTION 'BUSINESS_RULE_VIOLATION: Sellers cannot buy their own products.';\n    END IF;\n\n    RETURN NEW;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "clean_old_audit_logs(integer)",
+        "definition": "CREATE OR REPLACE FUNCTION public.clean_old_audit_logs(p_days_old integer DEFAULT 90)\n RETURNS integer\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    deleted_count INTEGER;\nBEGIN\n    -- Delete old logs\n    DELETE FROM system_log\n    WHERE created_at < CURRENT_TIMESTAMP - INTERVAL '1 day' * p_days_old;\n\n    GET DIAGNOSTICS deleted_count = ROW_COUNT;\n\n    -- Log the cleanup operation\n    PERFORM log_system_action(\n        NULL,\n        'MAINTENANCE',\n        'system_log',\n        NULL,\n        'Cleaned ' || deleted_count || ' audit log entries older than ' || p_days_old || ' days'\n    );\n\n    RETURN deleted_count;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "create_user_with_hash(character varying,character varying,text,character varying,character varying,character varying)",
+        "definition": "CREATE OR REPLACE FUNCTION public.create_user_with_hash(p_username character varying, p_email character varying, p_password text, p_full_name character varying, p_phone_number character varying DEFAULT NULL::character varying, p_address character varying DEFAULT NULL::character varying)\n RETURNS integer\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    new_user_id INTEGER;\n    email_regex TEXT := '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$';\nBEGIN\n    -- Validate inputs\n    IF p_username IS NULL OR length(trim(p_username)) = 0 THEN\n        RAISE EXCEPTION 'Username cannot be empty';\n    END IF;\n\n    IF p_email IS NULL OR length(trim(p_email)) = 0 THEN\n        RAISE EXCEPTION 'Email cannot be empty';\n    END IF;\n\n    IF p_full_name IS NULL OR length(trim(p_full_name)) = 0 THEN\n        RAISE EXCEPTION 'Full name cannot be empty';\n    END IF;\n\n    -- Validate email format\n    IF NOT (p_email ~ email_regex) THEN\n        RAISE EXCEPTION 'Invalid email format';\n    END IF;\n\n    -- Check for existing username\n    IF EXISTS (SELECT 1 FROM user_core WHERE username = trim(p_username) AND is_deleted = FALSE) THEN\n        RAISE EXCEPTION 'Username already exists';\n    END IF;\n\n    -- Check for existing email\n    IF EXISTS (SELECT 1 FROM user_core WHERE email = trim(p_email) AND is_deleted = FALSE) THEN\n        RAISE EXCEPTION 'Email already exists';\n    END IF;\n\n    INSERT INTO user_core(username,email,email_verified)\n    VALUES(trim(p_username),trim(p_email),FALSE) RETURNING user_id INTO new_user_id;\n    INSERT INTO user_profile(user_id,full_name,phone_number,address)\n    VALUES(new_user_id,trim(p_full_name),NULLIF(trim(p_phone_number),''),NULLIF(trim(p_address),''));\n    INSERT INTO user_secret(user_id,password_hash,random_key)\n    VALUES(new_user_id,hash_password(p_password),generate_random_key());\n    INSERT INTO user_wallet(user_id) VALUES(new_user_id);\n\n    -- Log user creation\n    PERFORM log_system_action(new_user_id, 'USER_CREATED', 'user', new_user_id, 'User account created');\n\n    RETURN new_user_id;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "enforce_image_site()",
+        "definition": "CREATE OR REPLACE FUNCTION public.enforce_image_site()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog'\nAS $function$\nDECLARE remainder smallint;\nBEGIN\n    SELECT id_remainder INTO STRICT remainder FROM public.site_config WHERE singleton;\n    IF NEW.image_id <= 0 OR mod(NEW.image_id, 2) <> remainder THEN\n        RAISE EXCEPTION 'image_wrong_id_allocation' USING ERRCODE = '23514';\n    END IF;\n    IF TG_OP = 'UPDATE' AND (NEW.image_id, NEW.product_id) IS DISTINCT FROM (OLD.image_id, OLD.product_id) THEN\n        RAISE EXCEPTION 'image_ownership_immutable' USING ERRCODE = '23514';\n    END IF;\n    RETURN NEW;\nEND $function$\n"
+      },
+      {
+        "signature": "enforce_product_site()",
+        "definition": "CREATE OR REPLACE FUNCTION public.enforce_product_site()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog'\nAS $function$\nDECLARE config public.site_config%ROWTYPE;\nBEGIN\n    SELECT * INTO STRICT config FROM public.site_config WHERE singleton;\n    IF NEW.site_id <> config.site_id THEN\n        RAISE EXCEPTION 'product_wrong_site' USING ERRCODE = '23514';\n    END IF;\n    IF NEW.product_id <= 0 OR mod(NEW.product_id, 2) <> config.id_remainder THEN\n        RAISE EXCEPTION 'product_wrong_id_allocation' USING ERRCODE = '23514';\n    END IF;\n    IF TG_OP = 'UPDATE' AND (NEW.product_id, NEW.seller_id, NEW.site_id)\n        IS DISTINCT FROM (OLD.product_id, OLD.seller_id, OLD.site_id) THEN\n        RAISE EXCEPTION 'product_ownership_immutable' USING ERRCODE = '23514';\n    END IF;\n    RETURN NEW;\nEND $function$\n"
+      },
+      {
+        "signature": "etl_capture_change()",
+        "definition": "CREATE OR REPLACE FUNCTION public.etl_capture_change()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n table_name text := TG_ARGV[0]; id_column text := TG_ARGV[1];\n before_row jsonb; after_row jsonb; source_key jsonb; old_key jsonb; new_key jsonb;\n fields text[] := '{}'; field text; zone text; targets jsonb := '[]';\n candidate jsonb; target jsonb; related record; source_id bigint;\nBEGIN\n IF TG_OP<>'INSERT' THEN before_row:=to_jsonb(OLD); END IF;\n IF TG_OP<>'DELETE' THEN after_row:=to_jsonb(NEW); END IF;\n old_key:=jsonb_build_object(id_column,before_row->id_column);\n new_key:=jsonb_build_object(id_column,after_row->id_column);\n IF table_name='system_log' THEN\n  old_key:=old_key||jsonb_build_object('created_at',before_row->'created_at');\n  new_key:=new_key||jsonb_build_object('created_at',after_row->'created_at');\n END IF;\n fields:=CASE table_name WHEN 'product' THEN ARRAY['created_at','updated_at']\n  WHEN 'order' THEN ARRAY['order_date'] WHEN 'review' THEN ARRAY['created_at','updated_at']\n  WHEN 'system_log' THEN ARRAY['created_at'] WHEN 'violation_log' THEN ARRAY['created_at']\n  WHEN 'system_feedback' THEN ARRAY['created_at'] ELSE '{}'::text[] END;\n IF TG_OP<>'DELETE' THEN\n  FOREACH field IN ARRAY fields LOOP\n   IF after_row->>field IS NULL THEN CONTINUE; END IF;\n   zone:=NULL;\n   IF TG_OP='UPDATE' AND after_row->>field IS NOT DISTINCT FROM before_row->>field THEN\n    SELECT source_zone INTO zone FROM etl_time_origin\n     WHERE source_table=table_name AND etl_time_origin.source_key=old_key AND field_name=field\n      AND source_value=(before_row->>field)::timestamp;\n   END IF;\n   -- An unchanged legacy value without provenance is deliberately not guessed.\n   IF zone IS NULL AND TG_OP='UPDATE' AND after_row->>field IS NOT DISTINCT FROM before_row->>field THEN\n    CONTINUE;\n   END IF;\n   INSERT INTO etl_time_origin(source_table,source_key,field_name,source_value,source_zone)\n    VALUES(table_name,new_key,field,(after_row->>field)::timestamp,COALESCE(zone,current_setting('TimeZone')))\n    ON CONFLICT ON CONSTRAINT etl_time_origin_pkey DO UPDATE SET\n     source_value=excluded.source_value,source_zone=excluded.source_zone,recorded_at=clock_timestamp();\n  END LOOP;\n END IF;\n FOR candidate IN SELECT value FROM jsonb_array_elements(jsonb_build_array(before_row,after_row))\n  WHERE value<>'null'::jsonb LOOP\n  source_id:=(candidate->>id_column)::bigint;\n  IF table_name IN ('product','order','review','violation_log','system_feedback','system_log') THEN\n   target:=jsonb_build_object('id',source_id);\n   IF table_name='system_log' THEN target:=target||jsonb_build_object('created_at',candidate->'created_at'); END IF;\n   targets:=targets||jsonb_build_array(jsonb_build_object('entity',CASE table_name\n    WHEN 'system_feedback' THEN 'contact' ELSE table_name END,'key',target));\n  ELSIF table_name='product_image' THEN\n   targets:=targets||jsonb_build_array(jsonb_build_object('entity','product','key',jsonb_build_object('id',candidate->'product_id')));\n  ELSIF table_name IN ('order_detail','transaction') THEN\n   targets:=targets||jsonb_build_array(jsonb_build_object('entity','order','key',jsonb_build_object('id',candidate->'order_id')));\n  END IF;\n  -- Rebuild snapshots whose CURRENT dimensions/voucher metadata changed, not historical prices.\n  IF table_name='product' THEN\n   FOR related IN SELECT DISTINCT order_id FROM order_detail WHERE product_id=source_id LOOP\n    targets:=targets||jsonb_build_array(jsonb_build_object('entity','order','key',jsonb_build_object('id',related.order_id)));\n   END LOOP;\n  ELSIF table_name='voucher' THEN\n   FOR related IN SELECT order_id FROM \"order\" WHERE voucher_id=source_id LOOP\n    targets:=targets||jsonb_build_array(jsonb_build_object('entity','order','key',jsonb_build_object('id',related.order_id)));\n   END LOOP;\n  END IF;\n END LOOP;\n source_key:=CASE WHEN TG_OP='DELETE' THEN old_key ELSE new_key END;\n FOR target IN SELECT DISTINCT value FROM jsonb_array_elements(targets) LOOP\n  INSERT INTO etl_outbox(source_table,source_key,entity_type,entity_key,operation)\n   VALUES(table_name,source_key,target->>'entity',target->'key',TG_OP);\n END LOOP;\n RETURN COALESCE(NEW,OLD);\nEND $function$\n"
+      },
+      {
+        "signature": "format_currency(numeric)",
+        "definition": "CREATE OR REPLACE FUNCTION public.format_currency(amount numeric)\n RETURNS text\n LANGUAGE plpgsql\n IMMUTABLE SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nBEGIN\n    RETURN TO_CHAR(amount, 'FM999,999,999,990') || ' VND';\nEND;\n$function$\n"
+      },
+      {
+        "signature": "generate_password_reset_token()",
+        "definition": "CREATE OR REPLACE FUNCTION public.generate_password_reset_token()\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    token TEXT;\nBEGIN\n    -- Generate 32 bytes of random data, base64url encoded\n    token := encode(gen_random_bytes(32), 'base64');\n    -- Make URL-safe by replacing problematic characters\n    token := replace(replace(token, '+', '-'), '/', '_');\n    -- Remove padding\n    token := rtrim(token, '=');\n\n    RETURN token;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "generate_random_key()",
+        "definition": "CREATE OR REPLACE FUNCTION public.generate_random_key()\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    random_key TEXT;\nBEGIN\n    -- Generate 32 bytes (256 bits) of random data\n    random_key := encode(gen_random_bytes(32), 'hex');\n\n    RETURN random_key;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "generate_transaction_code()",
+        "definition": "CREATE OR REPLACE FUNCTION public.generate_transaction_code()\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    timestamp_part TEXT;\n    random_part TEXT;\nBEGIN\n    -- Get timestamp part\n    timestamp_part := TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD_HH24MISS');\n\n    -- Generate 4 random digits\n    random_part := LPAD(FLOOR(RANDOM() * 10000)::TEXT, 4, '0');\n\n    RETURN 'TXN_' || timestamp_part || '_' || random_part;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "generic_audit_trigger()",
+        "definition": "CREATE OR REPLACE FUNCTION public.generic_audit_trigger()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    action_type VARCHAR(10);\n    record_id INT;\n    change_description TEXT;\nBEGIN\n    -- Determine action type\n    IF TG_OP = 'INSERT' THEN\n        action_type := 'INSERT';\n        record_id := NEW.id;\n        change_description := 'Record created';\n    ELSIF TG_OP = 'UPDATE' THEN\n        action_type := 'UPDATE';\n        record_id := NEW.id;\n        change_description := 'Record updated';\n    ELSIF TG_OP = 'DELETE' THEN\n        action_type := 'DELETE';\n        record_id := OLD.id;\n        change_description := 'Record deleted';\n    ELSE\n        RETURN COALESCE(NEW, OLD);\n    END IF;\n\n    -- Log the change (user_id will be NULL for system/auto operations)\n    PERFORM log_system_action(NULL, action_type, TG_TABLE_NAME, record_id, change_description);\n\n    RETURN COALESCE(NEW, OLD);\nEND;\n$function$\n"
+      },
+      {
+        "signature": "get_audit_trail(character varying,integer,integer)",
+        "definition": "CREATE OR REPLACE FUNCTION public.get_audit_trail(p_table_name character varying, p_record_id integer, p_limit integer DEFAULT 50)\n RETURNS TABLE(log_id bigint, user_id integer, username character varying, action_type character varying, description text, log_time timestamp without time zone)\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nBEGIN\n    RETURN QUERY\n    SELECT\n        sl.log_id,\n        sl.user_id,\n        u.username,\n        sl.action,\n        sl.details,\n        sl.created_at\n    FROM system_log sl\n    LEFT JOIN user_core u ON sl.user_id = u.user_id\n    WHERE sl.resource_type = LOWER(trim(p_table_name))\n    AND sl.resource_id = p_record_id\n    ORDER BY sl.created_at DESC\n    LIMIT p_limit;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "get_database_stats()",
+        "definition": "CREATE OR REPLACE FUNCTION public.get_database_stats()\n RETURNS TABLE(table_name text, row_count bigint, size_pretty text)\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nBEGIN\n    RETURN QUERY\n    SELECT\n        t.table_name::TEXT,\n        c.row_count,\n        pg_size_pretty(pg_total_relation_size(t.table_schema || '.' || t.table_name))::TEXT\n    FROM information_schema.tables t\n    LEFT JOIN (\n        SELECT schemaname, tablename, n_tup_ins - n_tup_del as row_count\n        FROM pg_stat_user_tables\n    ) c ON t.table_schema = c.schemaname AND t.table_name = c.tablename\n    WHERE t.table_schema = 'public'\n    AND t.table_type = 'BASE TABLE'\n    ORDER BY c.row_count DESC NULLS LAST;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "get_order_status_text(smallint)",
+        "definition": "CREATE OR REPLACE FUNCTION public.get_order_status_text(p_status smallint)\n RETURNS text\n LANGUAGE plpgsql\n IMMUTABLE SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nBEGIN\n    RETURN CASE p_status\n        WHEN 0 THEN 'Pending'\n        WHEN 1 THEN 'Confirmed'\n        WHEN 2 THEN 'Shipping'\n        WHEN 3 THEN 'Delivered'\n        WHEN 4 THEN 'Cancelled'\n        ELSE 'Unknown'\n    END;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "get_product_average_rating(integer)",
+        "definition": "CREATE OR REPLACE FUNCTION public.get_product_average_rating(p_product_id integer)\n RETURNS numeric\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    avg_rating DECIMAL(3,2);\nBEGIN\n    SELECT COALESCE(AVG(rating)::DECIMAL(3,2), 0)\n    INTO avg_rating\n    FROM review\n    WHERE product_id = p_product_id AND is_deleted = FALSE;\n\n    RETURN avg_rating;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "get_product_status_text(smallint)",
+        "definition": "CREATE OR REPLACE FUNCTION public.get_product_status_text(p_status smallint)\n RETURNS text\n LANGUAGE plpgsql\n IMMUTABLE SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nBEGIN\n    RETURN CASE p_status\n        WHEN 0 THEN 'Pending Review'\n        WHEN 1 THEN 'Active'\n        WHEN 2 THEN 'Rejected'\n        WHEN 3 THEN 'Sold Out'\n        ELSE 'Unknown'\n    END;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "get_seller_total_revenue(integer)",
+        "definition": "CREATE OR REPLACE FUNCTION public.get_seller_total_revenue(p_seller_id integer)\n RETURNS numeric\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    total_revenue DECIMAL(18,2);\nBEGIN\n    SELECT COALESCE(SUM(od.price_at_purchase * od.quantity), 0)\n    INTO total_revenue\n    FROM order_detail od\n    JOIN product p ON od.product_id = p.product_id\n    JOIN \"order\" o ON od.order_id = o.order_id\n    WHERE p.seller_id = p_seller_id\n      AND o.order_status IN (1, 2, 3) -- Confirmed, Shipping, Delivered\n      AND o.is_deleted = FALSE;\n\n    RETURN total_revenue;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "get_user_total_spending(integer)",
+        "definition": "CREATE OR REPLACE FUNCTION public.get_user_total_spending(p_user_id integer)\n RETURNS numeric\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    total_spent DECIMAL(18,2);\nBEGIN\n    SELECT COALESCE(SUM(final_amount), 0)\n    INTO total_spent\n    FROM \"order\"\n    WHERE buyer_id = p_user_id\n    AND order_status IN (1, 2, 3) -- Confirmed, Shipping, Delivered\n    AND is_deleted = FALSE;\n\n    RETURN total_spent;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "hash_password(text)",
+        "definition": "CREATE OR REPLACE FUNCTION public.hash_password(password text)\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    hashed_password TEXT;\nBEGIN\n    -- Validate input\n    IF password IS NULL OR length(trim(password)) = 0 THEN\n        RAISE EXCEPTION 'Password cannot be empty';\n    END IF;\n\n    IF length(password) < 6 THEN\n        RAISE EXCEPTION 'Password must be at least 6 characters long';\n    END IF;\n\n    -- Hash the password\n    hashed_password := crypt(password, gen_salt('bf', 8));\n\n    RETURN hashed_password;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "local_site()",
+        "definition": "CREATE OR REPLACE FUNCTION public.local_site()\n RETURNS text\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO 'pg_catalog'\nAS $function$ SELECT site_id FROM public.site_config WHERE singleton $function$\n"
+      },
+      {
+        "signature": "log_system_action(integer,character varying,character varying,integer,text)",
+        "definition": "CREATE OR REPLACE FUNCTION public.log_system_action(p_user_id integer DEFAULT NULL::integer, p_action_type character varying DEFAULT 'UNKNOWN'::character varying, p_table_name character varying DEFAULT 'unknown'::character varying, p_record_id integer DEFAULT NULL::integer, p_description text DEFAULT NULL::text)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    client_ip INET;\n    user_agent TEXT;\nBEGIN\n    -- Get client information from session variables if available\n    BEGIN\n        client_ip := inet_client_addr();\n        user_agent := current_setting('request.header.user-agent', TRUE);\n    EXCEPTION\n        WHEN OTHERS THEN\n            client_ip := NULL;\n            user_agent := NULL;\n    END;\n\n    -- Insert audit log\n    INSERT INTO system_log (\n        user_id,\n        action,\n        resource_type,\n        resource_id,\n        details,\n        ip_address,\n        created_at\n    )\n    VALUES (\n        p_user_id,\n        UPPER(trim(p_action_type)),\n        LOWER(trim(p_table_name)),\n        p_record_id,\n        CASE\n            WHEN p_description IS NOT NULL THEN trim(p_description)\n            WHEN client_ip IS NOT NULL THEN 'IP: ' || client_ip::TEXT\n            ELSE 'System action'\n        END,\n        client_ip::VARCHAR(45),\n        CURRENT_TIMESTAMP\n    );\nEND;\n$function$\n"
+      },
+      {
+        "signature": "log_user_login(integer,inet,text)",
+        "definition": "CREATE OR REPLACE FUNCTION public.log_user_login(p_user_id integer, p_ip_address inet DEFAULT NULL::inet, p_user_agent text DEFAULT NULL::text)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    login_description TEXT;\nBEGIN\n    -- Update last login timestamp\n    UPDATE user_core\n    SET last_login = CURRENT_TIMESTAMP\n    WHERE user_id = p_user_id AND is_deleted = FALSE;\n\n    -- Build login description\n    login_description := 'User login';\n    IF p_ip_address IS NOT NULL THEN\n        login_description := login_description || ' from IP: ' || p_ip_address::TEXT;\n    END IF;\n    IF p_user_agent IS NOT NULL THEN\n        login_description := login_description || ' using: ' || substring(p_user_agent, 1, 100);\n    END IF;\n\n    -- Log the login event\n    PERFORM log_system_action(p_user_id, 'LOGIN', 'user', p_user_id, login_description);\nEND;\n$function$\n"
+      },
+      {
+        "signature": "log_user_logout(integer)",
+        "definition": "CREATE OR REPLACE FUNCTION public.log_user_logout(p_user_id integer)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nBEGIN\n    PERFORM log_system_action(p_user_id, 'LOGOUT', 'user', p_user_id, 'User logout');\nEND;\n$function$\n"
+      },
+      {
+        "signature": "queue_unlinked_media()",
+        "definition": "CREATE OR REPLACE FUNCTION public.queue_unlinked_media()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE old_url text;\nBEGIN\n IF TG_TABLE_NAME='product_image' THEN\n  old_url:=OLD.image_url;\n  IF TG_OP='UPDATE' AND NEW.image_url IS NOT DISTINCT FROM OLD.image_url THEN RETURN NEW; END IF;\n ELSE\n  old_url:=OLD.avatar_url;\n  IF NEW.avatar_url IS NOT DISTINCT FROM OLD.avatar_url THEN RETURN NEW; END IF;\n  -- Seed/shared avatars are retained. Only immutable user uploads are collected automatically.\n  IF old_url !~ '^/media/users/[0-9]+/avatar-[0-9a-f]{32}\\.[a-z]+$' THEN RETURN NEW; END IF;\n END IF;\n IF old_url LIKE '/media/%' THEN\n  INSERT INTO media_deletions(url_path) VALUES(old_url)\n   ON CONFLICT(url_path) DO UPDATE SET status='pending',available_at=clock_timestamp(),\n     processed_at=NULL,last_error_code=NULL;\n END IF;\n IF TG_OP='DELETE' THEN RETURN OLD; END IF;\n RETURN NEW;\nEND $function$\n"
+      },
+      {
+        "signature": "update_product_status_on_quantity()",
+        "definition": "CREATE OR REPLACE FUNCTION public.update_product_status_on_quantity()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nBEGIN\n    -- Only process if quantity actually changed\n    IF NEW.quantity != OLD.quantity THEN\n        -- Mark as sold out if quantity reaches 0\n        IF NEW.quantity = 0 AND OLD.quantity > 0 THEN\n            NEW.status := 3; -- Sold Out\n            NEW.sold_at := CURRENT_TIMESTAMP;\n\n            -- Log the status change\n            PERFORM log_system_action(\n                NULL,\n                'PRODUCT_SOLD_OUT',\n                'product',\n                NEW.product_id,\n                'Product marked as sold out (quantity: 0)'\n            );\n        END IF;\n\n        -- Update timestamp\n        NEW.updated_at := CURRENT_TIMESTAMP;\n    END IF;\n\n    RETURN NEW;\nEND;\n$function$\n"
+      },
+      {
+        "signature": "verify_password(text,text)",
+        "definition": "CREATE OR REPLACE FUNCTION public.verify_password(password text, hashed_password text)\n RETURNS boolean\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\nDECLARE\n    is_valid BOOLEAN := FALSE;\nBEGIN\n    -- Validate inputs\n    IF password IS NULL OR hashed_password IS NULL THEN\n        RETURN FALSE;\n    END IF;\n\n    -- Verify password\n    IF crypt(password, hashed_password) = hashed_password THEN\n        is_valid := TRUE;\n    END IF;\n\n    RETURN is_valid;\nEND;\n$function$\n"
+      }
+    ],
+    "common_views": [
+      {
+        "viewname": "site_identity",
+        "definition": " SELECT site_id,\n    id_remainder\n   FROM site_config;"
+      },
+      {
+        "viewname": "users_full",
+        "definition": " SELECT c.user_id,\n    c.username,\n    c.email,\n    s.password_hash,\n    s.random_key,\n    p.full_name,\n    p.phone_number,\n    p.address,\n    w.balance,\n    c.is_active,\n    c.is_deleted,\n    c.created_at,\n    c.updated_at,\n    c.last_login,\n    c.email_verified,\n    s.email_verification_token,\n    s.password_reset_token,\n    s.password_reset_expires,\n    c.trust_score,\n    p.avatar_url\n   FROM (((user_core c\n     JOIN user_profile p USING (user_id))\n     JOIN user_secret s USING (user_id))\n     JOIN user_wallet w USING (user_id));"
+      }
+    ]
+  }
+}

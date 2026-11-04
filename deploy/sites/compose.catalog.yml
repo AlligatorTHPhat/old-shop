@@ -1,0 +1,26 @@
+services:
+  catalogue:
+    profiles: [catalogue]
+    image: ${BACKEND_IMAGE:-oldshop-data-backend:day6}
+    build:
+      context: ../..
+      dockerfile: backend/Dockerfile
+    entrypoint: [uvicorn, app.catalogue_gateway:app, --host, 0.0.0.0, --port, "8000"]
+    environment:
+      DISTRIBUTED_CATALOG_URL: postgresql://global_reader:${SITE_A_GLOBAL_PASSWORD}@pg-a:5432/${SITE_A_DB_NAME:-oldshop_1}
+    volumes:
+      - ../../backend/app/catalogue_gateway.py:/app/app/catalogue_gateway.py:ro
+    ports: ["127.0.0.1:${CATALOGUE_PORT:-56480}:8000"]
+    networks:
+      sites:
+        ipv4_address: ${CATALOGUE_VIRTUAL_IP:-172.29.82.20}
+    mem_limit: 256m
+    depends_on:
+      pg-a:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, curl, --fail, --silent, http://localhost:8000/health]
+      interval: 5s
+      timeout: 3s
+      retries: 20
