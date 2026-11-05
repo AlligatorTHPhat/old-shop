@@ -36,6 +36,7 @@ provides independent `oldshop_1` / `oldshop_2` databases, seller-based product f
 derived image fragments, read-only FDW, global views and an optional catalogue gateway.
 The verified topology uses two virtual IPs on one Docker host. Commerce checkout and
 the existing Mongo/MinIO stack remain on their existing architecture.
+For two physical hosts, see the [Tailscale guide for Windows and Linux](docs/HUONG_DAN_TAILSCALE_WINDOWS_LINUX.md).
 
 **Day 7 handoff:** [report source](docs/report/07_report.md),
 [18-slide outline and speaker notes](docs/report/07_slides.md),

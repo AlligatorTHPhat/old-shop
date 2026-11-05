@@ -173,6 +173,8 @@ Mỗi file kết quả có phạm vi/giới hạn; không dùng evidence một h
 
 ## 7. Chuyển sang hai máy qua LAN/VPN
 
+Hướng dẫn từng bước cho cả Windows/Linux: [Kết nối hai site bằng Tailscale](HUONG_DAN_TAILSCALE_WINDOWS_LINUX.md). Tài liệu đó dùng cấu hình/project VPN riêng và có phương án TCP Serve để giữ PostgreSQL chỉ publish ở localhost; các bước dưới đây mô tả phương án publish trực tiếp ra IP LAN/VPN.
+
 Khi có máy B, giữ nguyên schema/fixture và làm theo thứ tự:
 
 1. Checkout cùng phiên bản repository trên hai máy; tạo `.env` riêng bằng `prepare` ở mỗi máy. Không sao chép toàn bộ password quản trị A sang B hoặc ngược lại.
