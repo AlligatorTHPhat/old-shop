@@ -5,142 +5,250 @@
   "frontend_tests": 15,
   "day6_failure_scenarios": 9,
   "pg_benchmark": {
-    "database": "day4_bench_20261029_final",
+    "source": "current_application_database",
+    "database": "oldshop",
     "postgresql": "PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
-    "cache": "warmup + median of 3, same database, no forced planner",
-    "generated": {
-      "users": 1000,
-      "products": 50000,
-      "orders": 100000,
-      "reviews": 100000,
-      "logs": 100000
+    "transaction_read_only": "on",
+    "isolation": "REPEATABLE READ",
+    "rows": {
+      "category": 8,
+      "contact_info": 15,
+      "etl_outbox": 2040,
+      "etl_runs": 283,
+      "etl_state": 3,
+      "etl_time_origin": 1784,
+      "media_deletions": 0,
+      "order": 31,
+      "order_detail": 31,
+      "payment_method": 5,
+      "product": 1001,
+      "product_image": 2001,
+      "report_daily_sales": 2,
+      "review": 0,
+      "role": 3,
+      "schema_migrations": 7,
+      "shopping_cart": 13,
+      "shopping_cart_item": 0,
+      "system_feedback": 0,
+      "system_log": 0,
+      "transaction": 31,
+      "user_core": 15,
+      "user_profile": 15,
+      "user_role": 15,
+      "user_secret": 15,
+      "user_wallet": 15,
+      "violation_log": 11,
+      "voucher": 4
     },
-    "migration_seconds": 11.474594043999787,
-    "applied": [
-      "001",
-      "002",
-      "003",
-      "004"
-    ],
-    "users_after": 1015,
-    "before": {
-      "catalogue": {
-        "median_execution_ms": 0.261
+    "migrations": [
+      {
+        "version": "001",
+        "checksum": "6260a735840a9414d9c1edd45e14cf3beaa5f00dae4f424b51e1156c8558fff5"
       },
-      "search": {
-        "median_execution_ms": 316.562
+      {
+        "version": "002",
+        "checksum": "352a6ee022f0064fdb2e17d99ff17f3ac0d128eb1e0d6de40f426ae0d75b8af7"
       },
-      "buyer_history": {
-        "median_execution_ms": 0.73
+      {
+        "version": "003",
+        "checksum": "afda323b0323bb3e7d67ef59010d56ee07fa7ee7e848174406a28c1e0473e4e2"
       },
-      "seller_orders": {
-        "median_execution_ms": 44.052
+      {
+        "version": "004",
+        "checksum": "16739b49ad7f35dc1d397d034a37abea29e700ddf8c5c97abbb73fafddfe2fb8"
       },
-      "review_history": {
-        "median_execution_ms": 0.085
+      {
+        "version": "005",
+        "checksum": "3385e1085552dcae5f905986abe0c1225de71a166564ac42b7b6c2a161f88d66"
       },
-      "reports": {
-        "median_execution_ms": 0.145
+      {
+        "version": "006",
+        "checksum": "a199c5984ce6a7540634e6f55b1727a7e7b14fa2e7477defcd6d3a099df466b6"
       },
-      "cart_lookup": {
-        "median_execution_ms": 0.048
-      },
-      "order_pk_pruning": {
-        "median_execution_ms": 0.05
-      },
-      "log_month_pruning": {
-        "median_execution_ms": 4.41
-      },
-      "index_bytes": 35225600,
-      "rows": {
-        "product": 50016,
-        "order": 100030,
-        "system_log": 100000
+      {
+        "version": "007",
+        "checksum": "b6baebc7d52bd14dd9a41a620f72be379f4d69f35e76303b03cb00798b4acb6e"
       }
-    },
-    "after": {
+    ],
+    "index_bytes": 3489792,
+    "samples": 5,
+    "warmups": 1,
+    "cases": {
       "catalogue": {
-        "median_execution_ms": 0.166
+        "status": "measured",
+        "median_execution_ms": 0.347,
+        "median_planning_ms": 0.535,
+        "returned_rows": [
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "catalogue_category": {
+        "status": "measured",
+        "median_execution_ms": 0.599,
+        "median_planning_ms": 0.356,
+        "returned_rows": [
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
       },
       "search": {
-        "median_execution_ms": 0.372
+        "status": "measured",
+        "median_execution_ms": 5.111,
+        "median_planning_ms": 1.603,
+        "returned_rows": [
+          45,
+          45,
+          45,
+          45,
+          45
+        ]
       },
       "buyer_history": {
-        "median_execution_ms": 0.436
+        "status": "measured",
+        "median_execution_ms": 0.119,
+        "median_planning_ms": 0.465,
+        "returned_rows": [
+          20,
+          20,
+          20,
+          20,
+          20
+        ]
       },
       "seller_orders": {
-        "median_execution_ms": 17.521
+        "status": "measured",
+        "median_execution_ms": 0.383,
+        "median_planning_ms": 1.103,
+        "returned_rows": [
+          16,
+          16,
+          16,
+          16,
+          16
+        ]
       },
       "review_history": {
-        "median_execution_ms": 0.158
+        "status": "skipped",
+        "reason": "No active reviews"
       },
       "reports": {
-        "median_execution_ms": 0.327
+        "status": "skipped",
+        "reason": "No active reports (rating=0)"
       },
       "cart_lookup": {
-        "median_execution_ms": 0.114
+        "status": "skipped",
+        "reason": "shopping_cart_item is empty"
       },
       "order_pk_pruning": {
-        "median_execution_ms": 0.088
+        "status": "measured",
+        "median_execution_ms": 0.02,
+        "median_planning_ms": 0.138,
+        "returned_rows": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
       },
       "log_month_pruning": {
-        "median_execution_ms": 4.582
+        "status": "skipped",
+        "reason": "system_log is empty"
       },
-      "index_bytes": 58736640,
-      "rows": {
-        "product": 50016,
-        "order": 100030,
-        "system_log": 100000
+      "product_images": {
+        "status": "measured",
+        "median_execution_ms": 0.081,
+        "median_planning_ms": 0.06,
+        "returned_rows": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      "etl_status": {
+        "status": "measured",
+        "median_execution_ms": 0.061,
+        "median_planning_ms": 0.051,
+        "returned_rows": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "etl_poll_selection": {
+        "status": "measured",
+        "median_execution_ms": 0.07,
+        "median_planning_ms": 0.257,
+        "returned_rows": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
       }
     }
   },
   "mongo_benchmark": {
-    "generated_per_collection": 10000,
+    "source": "current_application_database",
+    "database": "oldshop",
+    "version": "8.0.32",
+    "read_only_commands": true,
+    "consistency": "Sequential reads; no shared snapshot with PostgreSQL or across Mongo commands",
+    "counts_before": {
+      "contact_messages": 0,
+      "order_snapshots": 31,
+      "product_details": 1001,
+      "reviews": 0,
+      "system_logs": 0,
+      "violation_logs": 11
+    },
+    "counts_after": {
+      "contact_messages": 0,
+      "order_snapshots": 31,
+      "product_details": 1001,
+      "reviews": 0,
+      "system_logs": 0,
+      "violation_logs": 11
+    },
+    "counts_unchanged": true,
+    "samples": 5,
+    "warmups": 1,
     "cases": {
       "product_details": {
-        "before": {
-          "nReturned": 20,
-          "totalKeysExamined": 0,
-          "totalDocsExamined": 192,
-          "executionTimeMillis": 4
-        },
-        "after": {
-          "nReturned": 20,
-          "totalKeysExamined": 20,
-          "totalDocsExamined": 20,
-          "executionTimeMillis": 2
-        }
+        "status": "measured",
+        "median_executionTimeMillis": 0,
+        "median_totalDocsExamined": 1,
+        "median_totalKeysExamined": 1,
+        "median_nReturned": 1
       },
       "reviews": {
-        "before": {
-          "nReturned": 10,
-          "totalKeysExamined": 0,
-          "totalDocsExamined": 10000,
-          "executionTimeMillis": 83
-        },
-        "after": {
-          "nReturned": 10,
-          "totalKeysExamined": 10,
-          "totalDocsExamined": 10,
-          "executionTimeMillis": 2
-        }
+        "status": "skipped",
+        "reason": "No existing document/attribute for this query"
       },
       "order_snapshots": {
-        "before": {
-          "nReturned": 10,
-          "totalKeysExamined": 0,
-          "totalDocsExamined": 10000,
-          "executionTimeMillis": 20
-        },
-        "after": {
-          "nReturned": 10,
-          "totalKeysExamined": 10,
-          "totalDocsExamined": 10,
-          "executionTimeMillis": 1
-        }
+        "status": "measured",
+        "median_executionTimeMillis": 0,
+        "median_totalDocsExamined": 20,
+        "median_totalKeysExamined": 20,
+        "median_nReturned": 20
+      },
+      "attribute_search": {
+        "status": "skipped",
+        "reason": "No existing document/attribute for this query"
       }
-    },
-    "version": "7.0.43"
+    }
   },
   "sources": [
     "docs/evidence/day6_stack.json",
@@ -149,5 +257,72 @@
     "docs/evidence/day6_backend_tests.txt",
     "docs/evidence/day6_final_tests.txt",
     "docs/evidence/day6_status_regression.txt"
-  ]
+  ],
+  "benchmark_manifest": {
+    "started_at": "2026-11-05T13:27:11.991229+07:00",
+    "finished_at": "2026-11-05T13:27:12.358006+07:00",
+    "dataset": "Existing seeded application databases, including changes made after seeding",
+    "generated_rows": 0,
+    "mutations": [],
+    "seed_sql_sha256": {
+      "database/03_seeds/category/seed.sql": "17cedd23cdcf3c4ba5a064b5df69bbf5d37e46fb46d4ad613154683434b34f2e",
+      "database/03_seeds/contact_info/seed.sql": "4b7508875cbaaf8db1c638bd8214679eb88e40b26ff3da1af6aa9068cf87fe1e",
+      "database/03_seeds/order/seed.sql": "2902404a16ad78a49101e02c59a1fb19a5446f8e7a980cc32dffc6fae5b56975",
+      "database/03_seeds/payment_method/seed.sql": "c3acfb0c55c85dbea09a07679305ea8d013bbc02204854db9c377ebc8e7c276f",
+      "database/03_seeds/product/seed.sql": "11b05a548ee92ecc85576f79dd4d3d10f9915184739061f2124c5fd072d16dd5",
+      "database/03_seeds/product_images/seed.sql": "ebc73e7de25a84dc2ea9799a3c7056bdfd70b9e75a7eaf774e8bdd3f4af04029",
+      "database/03_seeds/role/seed.sql": "0135f52eb8fe4a91c2e1e865b3240a213f0e8acdcc91063c7dc1d1c7b99300fa",
+      "database/03_seeds/shopping_cart/seed.sql": "e68935937f1991c351bb3664bd190faec78a3efc1e2f92322e608af1870c5c79",
+      "database/03_seeds/user/seed.sql": "1b5c88abf173fd777480528e384e209fc904b4f714ddeaf2a386fe0d8a7c37ce",
+      "database/03_seeds/violation_logs/seed.sql": "c646a4688b94150c9f63064fffe3aa373eb4f8e4d8eaf95d9152267a7218133f",
+      "database/03_seeds/voucher/seed.sql": "01e3ee35c0e942cf48238caf32943cf105dfad3b3f7dd58154178b9cecfbd64f"
+    },
+    "runner_sha256": "ea43f58b405da10288ba698d39bfc4985177bec308d5edc02e53a385955bd356",
+    "pg_rows": {
+      "category": 8,
+      "contact_info": 15,
+      "etl_outbox": 2040,
+      "etl_runs": 283,
+      "etl_state": 3,
+      "etl_time_origin": 1784,
+      "media_deletions": 0,
+      "order": 31,
+      "order_detail": 31,
+      "payment_method": 5,
+      "product": 1001,
+      "product_image": 2001,
+      "report_daily_sales": 2,
+      "review": 0,
+      "role": 3,
+      "schema_migrations": 7,
+      "shopping_cart": 13,
+      "shopping_cart_item": 0,
+      "system_feedback": 0,
+      "system_log": 0,
+      "transaction": 31,
+      "user_core": 15,
+      "user_profile": 15,
+      "user_role": 15,
+      "user_secret": 15,
+      "user_wallet": 15,
+      "violation_log": 11,
+      "voucher": 4
+    },
+    "mongo_counts": {
+      "contact_messages": 0,
+      "order_snapshots": 31,
+      "product_details": 1001,
+      "reviews": 0,
+      "system_logs": 0,
+      "violation_logs": 11
+    },
+    "limitations": [
+      "Current indexes only; no before/after optimization comparison",
+      "Server execution time, not HTTP latency or concurrent throughput",
+      "Mongo integer millisecond resolution; zero is not zero work",
+      "No writes, ANALYZE, migrations, index changes, ETL or seeding performed",
+      "Running application/worker can change data between stores or commands"
+    ]
+  },
+  "benchmark_note": "Current application data; historical report/test dates are independent of this measurement."
 }

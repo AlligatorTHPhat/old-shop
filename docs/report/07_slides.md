@@ -96,23 +96,17 @@ Lời dẫn: Ví dụ minh họa, không phải ảnh chụp dữ liệu nguồn
 Lời dẫn: Không replace document toàn bộ khi ETL. Moderation/evidence/attachment metadata cần giữ khi rebuild.
 
 
-## 11. PostgreSQL: đo cả kết quả bất lợi
+## 11. PostgreSQL: dữ liệu hiện tại
 
+Lời dẫn: DB đang chạy: 1.001 product, 2.001 ảnh, 31 order. Một warmup, năm EXPLAIN, median thời gian phía DB. Transaction chỉ đọc, không sinh dữ liệu hay đổi index. Bảng rỗng được bỏ qua; không có before/after hoặc SLA HTTP.
 
-
-Lời dẫn: Median ba lượt, warmup, cùng DB riêng; 50.016 product / 100.030 order. ILIKE 316,562→0,372 ms. Review/cart/PK/log không chứng minh nhanh hơn. Index bytes 35.225.600→58.736.640. Trục log; không dùng số text plan thay median.
-
-![PostgreSQL: đo cả kết quả bất lợi](assets/07_pg_benchmark.svg)
-
+![PostgreSQL: dữ liệu hiện tại](assets/07_pg_benchmark.svg)
 
 ## 12. MongoDB: documents examined
 
-
-
-Lời dẫn: Mongo7.0.43, 10.000 document/collection; before chỉ _id. Product192→20, review10000→10, snapshot10000→10. Một lượt mỗi pha, không tuyên bố Mongo8 đã test.
+Lời dẫn: Mongo8.0.32: 1.001 product_details, 31 order_snapshots; review và thuộc tính phù hợp chưa có. Đo năm explain với index hiện tại; 0 ms là giới hạn độ phân giải. Không sinh document hoặc so sánh trước/sau.
 
 ![MongoDB: documents examined](assets/07_mongo_benchmark.svg)
-
 
 ## 13. ETL: transaction → outbox → projection
 

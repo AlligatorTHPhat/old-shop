@@ -5,7 +5,7 @@ và ETL. Mỗi nhóm lệnh có hai bản: **Linux/WSL dùng Bash**, **Windows d
 Chỉ chạy bản tương ứng với terminal của bạn, không chạy cả hai bản liên tiếp.
 Các lệnh chạy từ **thư mục gốc dự án**, trừ khi có ghi đổi thư mục.
 Cập nhật indexing ngày 01/11/2026: mã nguồn có migration 001–007.
-DB hiện hữu chỉ có 007 sau khi bạn tự áp dụng; xem [runbook indexing v2](benchmark/indexing_v2/README.md).
+DB hiện hữu chỉ có 007 sau khi bạn tự áp dụng; xem [runbook indexing v2](runbooks/indexing_v2.md).
 Cập nhật 03/11/2026: cấu hình index nằm ở `database/indexing/catalog.json`.
 **Để chạy indexing JSON trên stack đang có, xem mục 18.2–18.3; để xử lý lỗi
 `email-validator` khi chạy pytest, xem mục 18.5.** Không cần chạy pytest để khởi động website.
@@ -777,11 +777,11 @@ secret, đổi major Mongo hoặc chuyển storage là thao tác riêng cần k�
 
 Bản cập nhật có `007_indexing_v2.sql` (9 index PostgreSQL) và M01 MongoDB. Không thêm
 bảng/cột, không đổi seed hoặc PK/UNIQUE; schema vẫn 28 bảng logic/222 cột. Không sửa file
-migration đã áp hoặc reseed DB đang dùng. [Kết quả đo và kiểm thử](benchmark/indexing_v2/2026-11-01/README.md)
+migration đã áp hoặc reseed DB đang dùng. [Kết quả đo dữ liệu hiện tại](benchmark/README.md)
 được tạo trên môi trường riêng; DB của bạn chưa tự nhận thay đổi này.
 
 - Backend chạy trực tiếp: dùng cấu hình kết nối trong `backend/.env`, làm backup/thử
-  restore và dừng nguồn ghi, rồi chạy runner theo [hướng dẫn tự áp](benchmark/indexing_v2/README.md).
+  restore và dừng nguồn ghi, rồi chạy runner theo [hướng dẫn tự áp](runbooks/indexing_v2.md).
 - Stack Compose chính đã qua 006: dùng `bash deploy/scripts/apply-indexing-v2.sh`
   (thêm `--resilience` nếu đang dùng profile đó). Script backup/thử restore, migrate,
   ANALYZE, init index Mongo và kiểm postflight/reconcile trước khi mở lại ứng dụng.
@@ -1133,7 +1133,7 @@ reset DB hoặc xóa volume. Backend được khởi động trước; frontend 
 Kiểm chứng: đăng một sản phẩm bằng user, chuyển sang moderator và bấm **Tải lại** ở
 tab chờ duyệt. Sản phẩm mới đứng đầu; chuyển đến trang cuối, kiểm tổng số và thử tìm tên
 sản phẩm nằm ngoài 100 bản ghi đầu. Kiểm tiếp hai tab đã duyệt và từ chối.
-Xem [bằng chứng kiểm thử](benchmark/moderator_pagination_tests.txt).
+Xem [bằng chứng kiểm thử](evidence/moderator_pagination_tests.txt).
 
 
 ## 18. Cấu hình và chạy indexing JSON

@@ -592,27 +592,18 @@ Bằng chứng triển khai JSON tại [index_config_validation.json](../evidenc
 
 Sau lỗi thiếu dependencies khi dùng Conda base, bộ 53 unit test indexing đã được chạy lại thành công bằng Python 3.13 và dependencies khóa trong container riêng; CLI validate cũng PASS. Hai lượt kiểm tra có môi trường khác nhau, không gộp chúng thành một lượt end-to-end duy nhất.
 
-Benchmark Mongo đọc cấu hình JSON sử dụng 10.000 document trên mỗi collection thử nghiệm. Kết quả lưu trong [summary.json](../benchmark/index_config/mongo/summary.json):
+Benchmark hiện tại đo trực tiếp dữ liệu ứng dụng đã seed và thay đổi phát sinh:
+1.001 sản phẩm, 2.001 ảnh, 31 đơn; Mongo có 1.001 product_details và 31 order_snapshots.
+Review, giỏ hàng chi tiết và log rỗng; không sinh thêm bản ghi hoặc metadata brand/RAM.
 
-| Truy vấn | Documents examined trước → sau | Số document trả về trước/sau | Execution time trước → sau |
-|---|---:|---:|---:|
-| Product theo category và `attributes.brand`, limit 20 | 192 → 20 | 20 / 20 | 4 → 8 ms |
-| Review theo product, sort thời gian | 10.000 → 10 | 10 / 10 | 12 → 4 ms |
-| Order snapshot theo buyer, sort thời gian | 10.000 → 10 | 10 / 10 | 16 → 4 ms |
+Kết quả tại [README benchmark](../benchmark/README.md),
+[PostgreSQL](../benchmark/pg/summary.json) và [MongoDB](../benchmark/mongo/summary.json).
+Một warmup và năm mẫu mỗi truy vấn; giữ nguyên index. PG dùng transaction READ ONLY,
+REPEATABLE READ; Mongo dùng lệnh đọc tuần tự. Không có phép so sánh trước/sau,
+không sử dụng kết quả fixture lớn cũ để chứng minh hiệu năng của DB hiện tại.
 
-Số document cần xét giảm trong cả ba trường hợp. Riêng product, thời gian mẫu sau index cao hơn trước; không che giấu kết quả này hoặc suy ra mọi truy vấn đều nhanh hơn. Đây là một explain mỗi pha, có độ phân giải thời gian hạn chế; chưa đủ để kết luận latency ổn định. Chi tiết phương pháp tại [README benchmark JSON](../benchmark/index_config/README.md).
-
-Benchmark PostgreSQL cho việc lựa chọn index v2 lưu tại [báo cáo ngày 01/11/2026](../benchmark/indexing_v2/2026-11-01/README.md). Ví dụ các ứng viên đo riêng trên fixture lớn:
-
-| Truy vấn | Median thời gian trước → sau | Mục đích index |
-|---|---:|---|
-| Q02_all | 1,086 → 0,213 ms | Danh sách sản phẩm theo thứ tự thời gian/ID |
-| Q15_image_missing | 52,626 → 0,069 ms | Tra cứu tham chiếu URL ảnh |
-| Q14_status | 21,227 → 0,157 ms | Lấy lần chạy ETL gần nhất |
-
-Các số này thuộc thí nghiệm lịch sử trên môi trường riêng, không phải thời gian cam kết cho DB hiện tại. Việc chuyển cùng định nghĩa index sang JSON không tự thay đổi hiệu suất vật lý.
-
-Các file `before_*.json`, `after_*.json` và `summary.json` dưới `docs/benchmark/` là kết quả chạy công cụ đo, không phải khai báo tạo index. Script chọn workload và cách đo được viết sẵn, nhưng chỉ số kết quả được thu từ lần chạy DB, không phải giá trị hardcode dùng thay phép đo. Khi muốn biết hiệu suất hiện tại phải chạy lại benchmark phù hợp và lưu bằng chứng mới.
+Các file plan và summary là output chạy công cụ đo, không phải cấu hình tạo index.
+Việc chuyển cùng định nghĩa index sang JSON không tự thay đổi hiệu suất vật lý.
 
 ## 4. Kế hoạch hoàn thiện sản phẩm
 

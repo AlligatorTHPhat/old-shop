@@ -320,109 +320,51 @@ def diagrams():
 
 
 def charts(pg, mongo):
-    plt.rcParams.update(
-        {
-            "font.family": "DejaVu Sans",
-            "font.size": 12,
-            "axes.unicode_minus": False,
-            "mathtext.fontset": "dejavusans",
-        }
-    )
+    """Render only current-data measurements; empty workloads remain skipped."""
+    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 11, "axes.unicode_minus": False})
+    cases = {name: case for name, case in pg["cases"].items() if case["status"] == "measured"}
     fig, ax = plt.subplots(figsize=(11.3, 5.8), layout="constrained")
-    for i, key in enumerate(LABELS):
-        before = pg["before"][key]["median_execution_ms"]
-        after = pg["after"][key]["median_execution_ms"]
-        ax.plot([before, after], [i, i], color="#C2CDD5", linewidth=2)
-        ax.scatter(
-            before,
-            i,
-            color="#DE763C",
-            s=65,
-            label="Trước" if i == 0 else None,
-            zorder=3,
-        )
-        ax.scatter(
-            after,
-            i,
-            color="#008F86",
-            marker="D",
-            s=55,
-            label="Sau" if i == 0 else None,
-            zorder=3,
-        )
-        ax.annotate(
-            f"{before:g} → {after:g}",
-            (max(before, after) * 1.15, i),
-            fontsize=10,
-            va="center",
-        )
-    ax.set(
-        yticks=range(len(LABELS)),
-        yticklabels=list(LABELS.values()),
-        xscale="log",
-        xlim=(0.025, 3500),
-        xlabel="Execution Time (ms) — trung vị 3 lượt, trục log; thấp hơn là tốt hơn",
-    )
+    ax.barh(list(cases), [case["median_execution_ms"] for case in cases.values()], color="#008F86")
+    ax.set(xlabel="Execution Time (ms) — median 5 EXPLAIN, dữ liệu hiện tại",
+           title="PostgreSQL: index hiện có, không so sánh trước/sau")
     ax.invert_yaxis()
     ax.grid(axis="x", alpha=0.2)
-    ax.legend(loc="lower right")
-    ax.spines[["top", "right"]].set_visible(False)
     fig.savefig(ASSETS / "07_pg_benchmark.svg")
     plt.close(fig)
-    cases = mongo["cases"]
+    cases = {name: case for name, case in mongo["cases"].items() if case["status"] == "measured"}
     fig, ax = plt.subplots(figsize=(11.3, 5.5), layout="constrained")
-    for i, (name, data) in enumerate(cases.items()):
-        b = data["before"]["totalDocsExamined"]
-        a = data["after"]["totalDocsExamined"]
-        ax.plot([a, b], [i, i], color="#C2CDD5", linewidth=3)
-        ax.scatter(b, i, color="#DE763C", s=100, label="Trước" if i == 0 else None)
-        ax.scatter(
-            a, i, color="#008F86", marker="D", s=90, label="Sau" if i == 0 else None
-        )
-        ax.text(b * 1.1, i, f"{b:,} → {a:,}", va="center", fontsize=13)
-    ax.set(
-        yticks=range(3),
-        yticklabels=list(cases),
-        xscale="log",
-        xlim=(5, 60000),
-        ylim=(2.6, -0.6),
-        xlabel="Documents examined — 10.000 document/collection, một explain/pha",
-    )
-    ax.legend(loc="lower right")
+    ax.barh(list(cases), [case["median_totalDocsExamined"] for case in cases.values()], color="#008F86")
+    ax.set(xlabel="Documents examined — median 5 EXPLAIN, dữ liệu hiện tại",
+           title="MongoDB: index hiện có; ca không có dữ liệu được bỏ qua")
+    ax.invert_yaxis()
     ax.grid(axis="x", alpha=0.2)
-    ax.spines[["top", "right"]].set_visible(False)
     fig.savefig(ASSETS / "07_mongo_benchmark.svg")
     plt.close(fig)
 
 
 def expand_report(pg, mongo):
-    pgtable = "| Query | Trước (ms) | Sau (ms) |\n|---|---:|---:|\n" + "".join(
-        f"| {label} | {pg['before'][key]['median_execution_ms']:.3f} | {pg['after'][key]['median_execution_ms']:.3f} |\n"
-        for key, label in LABELS.items()
-    )
-    mtable = (
-        "| Collection | Docs trước → sau | Returned | ms trước → sau |\n|---|---:|---:|---:|\n"
-        + "".join(
-            f"| {name} | {d['before']['totalDocsExamined']} → {d['after']['totalDocsExamined']} | {d['after']['nReturned']} | {d['before']['executionTimeMillis']} → {d['after']['executionTimeMillis']} |\n"
-            for name, d in mongo["cases"].items()
-        )
-    )
+    pgtable = "| Truy vấn | Median thực thi (ms) | Dòng trả về / trạng thái |\n|---|---:|---|\n"
+    for name, case in pg["cases"].items():
+        if case["status"] == "measured":
+            pgtable += f"| {name} | {case['median_execution_ms']:.3f} | {case['returned_rows'][0]} |\n"
+        else:
+            pgtable += f"| {name} | — | Bỏ qua: {case['reason']} |\n"
+    mtable = "| Truy vấn | Median ms | Docs examined | Keys examined | Returned |\n|---|---:|---:|---:|---:|\n"
+    for name, case in mongo["cases"].items():
+        if case["status"] == "measured":
+            mtable += (f"| {name} | {case['median_executionTimeMillis']:g} | {case['median_totalDocsExamined']:g} "
+                       f"| {case['median_totalKeysExamined']:g} | {case['median_nReturned']:g} |\n")
+        else:
+            mtable += f"| {name} | — | — | — | Bỏ qua: {case['reason']} |\n"
     path = REPORT / "07_report.md"
     source = path.read_text()
-    for name, value in [
-        ("PG_BENCHMARK_TABLE", pgtable),
-        ("MONGO_BENCHMARK_TABLE", mtable),
-    ]:
+    for name, value in [("PG_BENCHMARK_TABLE", pgtable), ("MONGO_BENCHMARK_TABLE", mtable)]:
         block = f"<!-- BEGIN {name} -->\n{value}<!-- END {name} -->"
         if "{{" + name + "}}" in source:
             source = source.replace("{{" + name + "}}", block)
         else:
-            source = re.sub(
-                f"<!-- BEGIN {name} -->.*?<!-- END {name} -->",
-                lambda _, value=block: value,
-                source,
-                flags=re.DOTALL,
-            )
+            source = re.sub(f"<!-- BEGIN {name} -->.*?<!-- END {name} -->",
+                            lambda _, value=block: value, source, flags=re.DOTALL)
     path.write_text(source)
     return source
 
@@ -682,7 +624,8 @@ def main():
     OUT.mkdir(exist_ok=True, parents=True)
     pg = json.loads((ROOT / "docs/benchmark/pg/summary.json").read_text())
     mongo = json.loads((ROOT / "docs/benchmark/mongo/summary.json").read_text())
-    assert len(pg["before"]) >= 9 and mongo["version"] == "7.0.43"
+    assert pg["source"] == mongo["source"] == "current_application_database"
+    manifest = json.loads((ROOT / "docs/benchmark/manifest.json").read_text())
     facts = {
         "report_date": "2026-10-30",
         "scope": "One-host MVP, migrations 001–006; no remote CI/Mongo8 claim",
@@ -691,6 +634,8 @@ def main():
         "day6_failure_scenarios": 9,
         "pg_benchmark": pg,
         "mongo_benchmark": mongo,
+        "benchmark_manifest": manifest,
+        "benchmark_note": "Current application data; historical test/report dates are independent.",
         "sources": [
             "docs/evidence/day6_stack.json",
             "docs/evidence/day6_rollout.json",

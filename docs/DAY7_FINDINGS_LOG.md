@@ -39,9 +39,9 @@ bằng Git. Không xuất thêm sơ đồ PNG. PNG là ảnh chụp browser th�
   token, địa chỉ hay raw contact/violation vào đầu ra: `evidence/day7_mongo_demo.json`.
 - Số **146 backend / 15 frontend / 9 scenario** là bằng chứng Ngày 6, qua nhiều lượt;
   không chạy lại toàn bộ suite hoặc tuyên bố remote CI trong Ngày 7.
-- Chart PG lấy median ba lượt từ `benchmark/pg/summary.json`; chart Mongo lấy một lượt
-  explain mỗi pha trên Mongo7.0.43. Phân biệt benchmark 100k với pruning trên seed nhỏ.
-  Ghi cả query chậm hơn và index bytes tăng; không suy ra SLA hoặc mức tăng tốc toàn hệ.
+- Cập nhật chart ngày 05/11/2026 từ phép đo dữ liệu ứng dụng hiện tại: PG/Mongo đều
+  có một warmup và năm explain. Không sinh dữ liệu, không so sánh trước/sau hoặc suy ra SLA.
+  Chi tiết tại `benchmark/README.md`; phần lịch sử kiểm thử Ngày 7 giữ nguyên thời điểm.
 
 ## Tổng duyệt và video
 

@@ -13,9 +13,9 @@ thiết kế phân mảnh, bổ sung MongoDB và MinIO, tối ưu chỉ mục, �
 một máy, có profile replication để thực nghiệm lỗi dịch vụ; chưa phải hệ thống chịu mất máy.
 
 Kết quả Ngày 6 đã kiểm chứng: 146 trường hợp backend khác nhau, 15 test frontend và
-9 kịch bản lỗi/phục hồi đạt; schema 001–006 và 64 path API cũ được giữ. Benchmark ILIKE
-trên dữ liệu thử có trung vị 316,562 → 0,372 ms, đồng thời ghi nhận một số truy vấn chậm hơn
-và chi phí dung lượng index tăng. Các số đo là thực nghiệm cục bộ, không phải SLA production.
+9 kịch bản lỗi/phục hồi đạt; schema 001–006 và 64 path API cũ được giữ ở thời điểm đó.
+Phần benchmark đã cập nhật ngày 05/11/2026 bằng phép đo chỉ đọc trên DB hiện tại:
+1.001 sản phẩm, 2.001 ảnh, 31 đơn; không sinh dữ liệu, không có so sánh trước/sau.
 
 Nguồn chính: docs/DAY6_FINDINGS_LOG.md; docs/evidence/day6_stack.json;
 docs/benchmark/pg/summary.json. Bằng chứng tổng duyệt mới nằm trong docs/evidence/day7_*.
@@ -212,54 +212,58 @@ TTL chạy nền nên không hứa xóa đúng từng giây tại mốc hết h�
 | Mongo product/category/brand | Compound category_id/attributes.brand; wildcard attributes | Truy vấn field động; wildcard không bao phủ mọi tổ hợp |
 | Mongo review/order history | product_id/created_at; buyer.id/order_date | Phù hợp filter/sort; unique khóa nguồn chống nhân bản |
 
-### 5.2 Phương pháp đo PostgreSQL
+### 5.2 PostgreSQL trên dữ liệu hiện tại
 
-Đo Ngày 4 trên PostgreSQL 16.15, DB riêng day4_bench_20261029_final: 50.016 product,
-100.030 order, 100.000 log, 100.000 review. Trước/sau trên cùng DB, ANALYZE và warmup,
-trung vị ba lượt EXPLAIN ANALYZE BUFFERS; không ép planner, không xóa index baseline để
-làm chậm giả. Lượt text thêm dùng để đọc plan có thể khác trung vị; không trộn số text
-316,549/0,385 ms với số median trong bảng dưới.
+Đo trực tiếp DB `oldshop` đang chạy, PostgreSQL 16.15, migrations 001–007:
+1.001 product, 2.001 product_image, 31 order. Một warmup và năm mẫu EXPLAIN ANALYZE
+BUFFERS trong transaction chỉ đọc REPEATABLE READ. Tham số lấy từ bản ghi hiện có;
+không tạo dữ liệu benchmark, không đổi index hoặc ANALYZE.
 
-![Thời gian PG, trục log, gồm cả truy vấn chậm hơn](assets/07_pg_benchmark.svg)
+![PostgreSQL trên dữ liệu hiện tại](assets/07_pg_benchmark.svg)
 
 <!-- BEGIN PG_BENCHMARK_TABLE -->
-| Query | Trước (ms) | Sau (ms) |
-|---|---:|---:|
-| Catalogue | 0.261 | 0.166 |
-| ILIKE search | 316.562 | 0.372 |
-| Lịch sử buyer | 0.730 | 0.436 |
-| Đơn seller | 44.052 | 17.521 |
-| Review history | 0.085 | 0.158 |
-| Report rating=0 | 0.145 | 0.327 |
-| Cart lookup | 0.048 | 0.114 |
-| Order PK | 0.050 | 0.088 |
-| Log theo tháng | 4.410 | 4.582 |
+| Truy vấn | Median thực thi (ms) | Dòng trả về / trạng thái |
+|---|---:|---|
+| catalogue | 0.347 | 100 |
+| catalogue_category | 0.599 | 100 |
+| search | 5.111 | 45 |
+| buyer_history | 0.119 | 20 |
+| seller_orders | 0.383 | 16 |
+| review_history | — | Bỏ qua: No active reviews |
+| reports | — | Bỏ qua: No active reports (rating=0) |
+| cart_lookup | — | Bỏ qua: shopping_cart_item is empty |
+| order_pk_pruning | 0.020 | 1 |
+| log_month_pruning | — | Bỏ qua: system_log is empty |
+| product_images | 0.081 | 2 |
+| etl_status | 0.061 | 1 |
+| etl_poll_selection | 0.070 | 0 |
 <!-- END PG_BENCHMARK_TABLE -->
 
-Dung lượng index vật lý tăng 35.225.600 → 58.736.640 byte. Migration ở tập benchmark mất
-11,47 giây, không gồm toàn bộ backup/restore/startup. Review/report/cart/PK/log không có
-bằng chứng nhanh hơn trong workload này; partition pruning là bằng chứng định tuyến, không
-đồng nghĩa có lợi ích latency. Chưa đo throughput ghi đồng thời hoặc ETL 100k order.
+Các truy vấn chọn cột đại diện, không phải latency ORM/HTTP. Review, report, giỏ hàng
+và log không có dữ liệu phù hợp nên bỏ qua. ETL poll trả 0 event đến hạn; chưa đo tải backlog.
+Không có baseline trước tối ưu, không suy ra tỷ lệ tăng tốc.
 
-### 5.3 MongoDB và ý nghĩa số liệu
+### 5.3 MongoDB trên dữ liệu hiện tại
 
-MongoDB 7.0.43, mỗi collection tạm có 10.000 document. Pha trước chỉ có _id index;
-pha sau thêm index ứng dụng. Một explain executionStats mỗi pha, không hint; ưu tiên
-docs examined vì milliseconds dễ nhiễu.
+MongoDB 8.0.32, 1.001 product_details và 31 order_snapshots; review rỗng, chưa có
+thuộc tính scalar phù hợp. Một warmup và năm explain mỗi truy vấn, không đổi index.
 
-![MongoDB documents examined trước/sau, trục log](assets/07_mongo_benchmark.svg)
+![MongoDB trên dữ liệu hiện tại](assets/07_mongo_benchmark.svg)
 
 <!-- BEGIN MONGO_BENCHMARK_TABLE -->
-| Collection | Docs trước → sau | Returned | ms trước → sau |
-|---|---:|---:|---:|
-| product_details | 192 → 20 | 20 | 4 → 2 |
-| reviews | 10000 → 10 | 10 | 83 → 2 |
-| order_snapshots | 10000 → 10 | 10 | 20 → 1 |
+| Truy vấn | Median ms | Docs examined | Keys examined | Returned |
+|---|---:|---:|---:|---:|
+| product_details | 0 | 1 | 1 | 1 |
+| reviews | — | — | — | Bỏ qua: No existing document/attribute for this query |
+| order_snapshots | 0 | 20 | 20 | 20 |
+| attribute_search | — | — | — | Bỏ qua: No existing document/attribute for this query |
 <!-- END MONGO_BENCHMARK_TABLE -->
 
-Nguồn đo: docs/benchmark/pg/summary.json, docs/benchmark/mongo/summary.json và các file
-before_*/after_*.json/.txt. Collection benchmark tạm đã dọn; không dùng số đo Mongo7 để
-tuyên bố Mongo8 đã được kiểm chứng. Số liệu benchmark không phải số liệu của seed demo nhỏ.
+0 ms phản ánh độ phân giải nguyên millisecond. Các lệnh Mongo không chung snapshot
+với PG; ứng dụng/worker vẫn chạy. Đây là dữ liệu seed đã nạp và thay đổi sau seed,
+không phải dữ liệu benchmark được sinh thêm.
+Nguồn và giới hạn: [README benchmark](../benchmark/README.md),
+[PG summary](../benchmark/pg/summary.json), [Mongo summary](../benchmark/mongo/summary.json).
 
 ## 6. ETL và kiểm tra chất lượng
 

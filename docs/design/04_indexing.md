@@ -2,8 +2,8 @@
 
 > Cập nhật 01/11/2026: thiết kế Ngày 4 bên dưới là bằng chứng lịch sử. Phần bổ sung
 > đã có [migration 007](../../database/04_migrations/007_indexing_v2.sql),
-> [quyết định/benchmark indexing v2](../benchmark/indexing_v2/2026-11-01/README.md)
-> và [runbook tự áp dụng](../benchmark/indexing_v2/README.md). DB đang dùng chỉ thay đổi
+> [benchmark dữ liệu hiện tại](../benchmark/README.md)
+> và [runbook tự áp dụng](../runbooks/indexing_v2.md). DB đang dùng chỉ thay đổi
 > sau khi chủ dự án tự chạy runner.
 
 

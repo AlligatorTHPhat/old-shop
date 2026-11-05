@@ -264,10 +264,9 @@ Các đường dẫn có nhãn **Thêm** dưới đây là đề xuất, chưa �
 
 Các file cần rà phụ thuộc trước khi sửa:
 
-- [`benchmark_mongo_indexing_v2.py`](../backend/scripts/benchmark_mongo_indexing_v2.py)
-  và [`archive_day4.py`](../backend/scripts/archive_day4.py) đang import `INDEXES`.
-- [`benchmark_indexing_selected.py`](../backend/scripts/benchmark_indexing_selected.py)
-  dùng `SPECS` từ verifier; không biến kết quả lịch sử thành bằng chứng cho manifest mới.
+- [`archive_day4.py`](../backend/scripts/archive_day4.py) đang import `INDEXES`.
+- [`benchmark_current.py`](../backend/scripts/benchmark_current.py) đọc trực tiếp dữ liệu
+  ứng dụng; các bộ sinh fixture benchmark lớn cũ đã được gỡ.
 - [`test_indexing_v2.py`](../backend/tests/test_indexing_v2.py) và
   [`test_day4_migrations.py`](../backend/tests/test_day4_migrations.py) kiểm migration,
   checksum, rollback và index; cần giữ các bảo đảm này.

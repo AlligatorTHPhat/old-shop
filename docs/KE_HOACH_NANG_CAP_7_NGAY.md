@@ -365,8 +365,8 @@ Collection + validator được tạo bằng script; upload/đọc ảnh qua Min
 ### 📦 Sản phẩm đầu ra
 `database/04_migrations/001_indexes.sql`, `002_partitioning.sql`, `003_vertical_split.sql`, `004_media_metadata.sql`, `backend/scripts/migrate.py`, `docs/design/04_indexing.md`, `docs/benchmark/` (ảnh/log EXPLAIN trước–sau)
 
-**Kết quả thực hiện 29/10:** 96/96 test PASS, 9 truy vấn PG trước/sau trên 100.030 đơn và
-50.016 sản phẩm, 3 Mongo executionStats. Đã áp vào stack local sau backup/restore và đối soát
+**Kết quả thực hiện 29/10:** 96/96 test PASS. Benchmark fixture lớn đã được gỡ và thay
+bằng phép đo chỉ đọc dữ liệu ứng dụng hiện tại. Đã áp vào stack local sau backup/restore và đối soát
 đúng 18 bảng nguồn; readiness và replication đều PASS. Xem
 [DAY4_FINDINGS_LOG.md](DAY4_FINDINGS_LOG.md), [04_indexing.md](design/04_indexing.md),
 [benchmark/evidence](benchmark/README.md).

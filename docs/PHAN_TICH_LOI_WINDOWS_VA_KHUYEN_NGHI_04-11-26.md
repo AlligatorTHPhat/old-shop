@@ -449,9 +449,13 @@ Giữ [catalog.json](../database/indexing/catalog.json) làm khai báo; PG áp q
 | Mongo reviews product/date, snapshots buyer.id/date | Compound theo equality rồi thời gian. | Lịch sử review/đơn; thứ tự khóa phải theo query thực. |
 | Mongo `system_logs.created_at` | TTL 7.776.000 giây ≈ 90 ngày. | Retention bản sao Mongo; không phải xóa chính xác tại một giây, không phải retention PG. |
 
-Evidence 03/11 kiểm kê **61 application + 37 constraint root PG, 19 Mongo**. Evidence indexing v2 01/11 đo riêng từng ứng viên và cả gói; ví dụ Q02_all median `1,086 → 0,213 ms`, Q13_retry `182,075 → 0,112 ms` là trial ở workload cụ thể, không phải tốc độ toàn website hoặc máy Windows hiện tại. [Phương pháp và giới hạn benchmark](benchmark/indexing_v2/2026-11-01/README.md).
+Evidence 03/11 kiểm kê **61 application + 37 constraint root PG, 19 Mongo**.
+Các kết quả fixture lớn cũ đã được gỡ. [Benchmark hiện tại](benchmark/README.md) đo trực
+tiếp dữ liệu ứng dụng ngày 05/11/2026, không tạo thêm bản ghi hoặc thay index.
 
-Khi cập nhật PPT, chọn 2–3 query đại diện, ghi kích thước tập dữ liệu, phiên bản/limit, query plan, median trước/sau, dung lượng index và tác động ghi/WAL. Không chạy benchmark 100k trong lúc chẩn đoán Docker Desktop; dùng clone/test stack khi cần đo lại. Giữ lịch sử 001–007; thay đổi tương lai cần migration/revision mới và review, không sửa checksum cũ.
+Khi cập nhật PPT, ghi kích thước dữ liệu, phiên bản, query plan và median hiện tại.
+Không trình bày phép đo này như so sánh trước/sau hoặc kết quả máy Windows chưa được đo.
+Giữ lịch sử 001–007; thay đổi index tương lai cần migration/revision mới, không sửa checksum cũ.
 
 ### 5.5. Kế hoạch hoàn thiện sản phẩm — yêu cầu 5
 

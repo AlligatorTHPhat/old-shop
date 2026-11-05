@@ -54,12 +54,8 @@ không tự chốt D7 timezone hoặc D8 mã transaction. **Đã triển khai, k
 - Kiểm thử checksum bị sửa → từ chối; DDL lỗi → rollback cả bảng/history; baseline lệch →
   từ chối; rerun → no-op; PK/FK/self-buy/cart uniqueness; OTP/profile/wallet/đăng ký/role;
   monthly overflow di chuyển; MinIO upload/API/metadata/ảnh legacy.
-- Benchmark: 100.030 orders, 50.016 products, 100.000 logs, 100.000 review; 9 truy vấn PG.
-  Search 316,562 → 0,372 ms; seller orders 44,052 → 17,521 ms; không phải mọi truy vấn nhanh hơn.
-  Full migration đo 11,47 giây, chưa tính backup/startup.
-- Hash order PK chỉ đọc order_h3; log tháng chỉ đọc system_log_202603. Lịch sử buyer vẫn
-  merge cả bốn hash partition. Index tăng 35.225.600 → 58.736.640 bytes.
-- Mongo explain ba query: documents examined 192→20, 10.000→10 và 10.000→10.
+- Kết quả hiệu năng trên fixture lớn đã được gỡ. Dữ liệu đo hiện tại nằm tại
+  [benchmark/README.md](benchmark/README.md), lấy trực tiếp từ DB ứng dụng, không sinh thêm dòng.
 
 ## Áp dụng local có bảo trì
 
@@ -73,12 +69,12 @@ Sau đó migrate versions **001–004**, backfill metadata **32 ảnh**, không 
 đối soát lại 18 bảng giữ nguyên digest/count nguồn: 15 user, 30 order, 30 transaction,
 16 product, 32 product_image và các bảng khác. Nâng backend, restart Nginx để cập nhật DNS.
 Readiness **database=up, mongo=up, minio=up**; giữ profile PG replica/Mongo ba member.
-Kiểm tra cuối [stack](benchmark/day4_stack.json) PASS, replica streaming/async đã replay WAL
-và có đủ 30 đơn. [Chạy lại](benchmark/day4_repeat.txt): applied=[], metadata updated=0.
+Kiểm tra cuối [stack](evidence/day4_stack.json) PASS, replica streaming/async đã replay WAL
+và có đủ 30 đơn. [Chạy lại](evidence/day4_repeat.txt): applied=[], metadata updated=0.
 
 Backup private: `deploy/backups/day4_20261029_183835/` (ignored).
 DB restore giữ lại: `day4_restore_20261029_183835`.
-[Log áp dụng](benchmark/day4_apply.txt), [log test](benchmark/day4_tests.txt).
+[Log áp dụng](evidence/day4_apply.txt), [log test](evidence/day4_tests.txt).
 Không reset/reseed/drop database ứng dụng. Không chạm lab03-mongo hoặc minio-local.
 
 ## Giới hạn còn lại

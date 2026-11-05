@@ -218,7 +218,7 @@ xung đột TTL không làm sửa DB, và snapshot applied khác desired chưa �
 Để trình bày theo Lab03: mở JSON chỉ thứ tự khóa ghép và options, chạy validate/plan,
 thêm index thử nghiệm trên DB riêng, apply, mở kết quả verify và EXPLAIN tự nhiên.
 Các script benchmark Mongo hiện có import `INDEXES` nên dùng trực tiếp cấu hình JSON;
-ví dụ `python -m scripts.benchmark_mongo_day4 --output /tmp/index-json-benchmark`.
+ví dụ `python -m scripts.benchmark_current --output /tmp/oldshop-current-benchmark`.
 Chúng dùng collection tạm riêng. JSON trong output là bằng chứng đo, khác JSON đầu vào.
 Không dùng số đo Lab03 để tuyên bố hiệu năng OldShop; chuyển định dạng khai báo nhưng
 giữ nguyên index vật lý không tự làm truy vấn nhanh hơn.

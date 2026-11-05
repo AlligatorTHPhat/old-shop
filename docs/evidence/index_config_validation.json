@@ -139,10 +139,9 @@
     ]
   },
   "benchmark": {
-    "path": "docs/benchmark/index_config/mongo/summary.json",
-    "documents_per_collection": 10000,
-    "planner": "Natural optimizer choice; no hint",
-    "note": "Measurements use indexes loaded from JSON. Declaration-format conversion itself does not change physical query speed."
+    "path": "docs/benchmark/mongo/summary.json",
+    "scope": "Current application data; replaces the retired synthetic benchmark.",
+    "note": "Current measurements do not constitute a before/after test of the configuration migration."
   },
   "limits": [
     "No full locked backend runtime image build or tagged ZIP release was produced",

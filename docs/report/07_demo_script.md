@@ -42,7 +42,7 @@ Không truyền tên `oldshop-data`, không dùng `.env.data` thật; không xó
 | 1:55–2:30 | Trang sản phẩm thật, thông số/ảnh | “Frontend hiển thị dữ liệu hợp nhất qua contract bổ sung. Ảnh vẫn dùng /media gateway, không đưa credential S3 ra browser.” |
 | 2:30–3:05 | MinIO console thật trong project demo | “Bucket private giữ byte object; PG giữ quan hệ ảnh. Key UUID khác filename cũ; không suy product_id từ filename.” |
 | 3:05–3:50 | Full ETL hai lượt, count/quality/metadata | “At least once: write Mongo xong mới ACK. Upsert theo key và partial update khiến replay không nhân bản, không xóa attributes/tags.” |
-| 3:50–4:35 | EXPLAIN PK hiện hành + chart nguồn Ngày 4 | “Query seed minh họa pruning, không phải benchmark 100k. Chart là median ba lượt đã lưu; một số query không nhanh hơn, dung lượng index tăng.” |
+| 3:50–4:35 | EXPLAIN PK hiện hành + chart dữ liệu hiện tại | “Chart là median năm lượt EXPLAIN trên DB ứng dụng, không sinh thêm dữ liệu. Giữ index hiện có, không có phép so sánh trước/sau; bảng rỗng được bỏ qua.” |
 | 4:35–5:20 | Dừng mongo2, query app/replica set | “Một member đang dừng. Các member còn lại đủ quorum, API sản phẩm vẫn phục vụ. Đây là lỗi dịch vụ trong cùng host.” |
 | 5:20–6:05 | Mở mongo2, chờ SECONDARY/ready, tổng kết | “Phục hồi cần chờ topology, không chỉ ping container. Mongo8, remote CI và HA đa máy chưa được chứng minh.” |
 

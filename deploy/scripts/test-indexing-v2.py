@@ -1,4 +1,4 @@
-"""Run indexing benchmarks/regressions in an isolated PG/Mongo8/MinIO Compose project.
+"""Run indexing regressions in an isolated PG/Mongo8/MinIO Compose project.
 
 No application credentials are read. --state can resume the private test stack;
 --cleanup removes only the project recorded by this runner. Evidence has no secrets.
@@ -237,9 +237,7 @@ def tests(state):
                 "ruff",
                 "check",
                 "--no-cache",
-                "scripts/benchmark_indexing_v2.py",
-                "scripts/benchmark_mongo_indexing_v2.py",
-                "scripts/benchmark_indexing_selected.py",
+                "scripts/benchmark_current.py",
                 "scripts/verify_indexing_v2.py",
                 "tests/test_indexing_v2.py",
             ],
@@ -322,7 +320,7 @@ def restore_rehearsal(state):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--phase", choices=("prepare", "benchmarks", "tests"), default="benchmarks"
+        "--phase", choices=("prepare", "tests"), default="tests"
     )
     parser.add_argument("--evidence", type=Path, required=True)
     parser.add_argument("--state", type=Path, required=True)
@@ -346,62 +344,7 @@ def main():
             return
         if not args.reuse:
             setup(state)
-        if args.phase == "benchmarks":
-            database = "indexing_v2_" + state["stamp"]
-            execute(
-                state,
-                [
-                    "python",
-                    "-m",
-                    "scripts.benchmark_indexing_v2",
-                    "--output",
-                    "/evidence/pg",
-                ],
-                database=database,
-            )
-            execute(
-                state,
-                [
-                    "python",
-                    "-m",
-                    "scripts.benchmark_mongo_indexing_v2",
-                    "--output",
-                    "/evidence/mongo",
-                ],
-                database=database,
-            )
-            execute(
-                state,
-                [
-                    "python",
-                    "-m",
-                    "scripts.benchmark_indexing_selected",
-                    "--output",
-                    "/evidence/selected",
-                ],
-                database=database,
-            )
-            execute(state, ["python", "-m", "scripts.init_mongo"], database=database)
-            with (Path(state["evidence"]) / "postflight.json").open("w") as output:
-                execute(
-                    state,
-                    ["python", "-m", "scripts.verify_indexing_v2", "--mongo"],
-                    database=database,
-                    output=output,
-                )
-            execute(
-                state,
-                [
-                    "python",
-                    "-m",
-                    "scripts.benchmark_indexing_selected",
-                    "--approved-write-clone",
-                    "--output",
-                    "/evidence/approved_writes",
-                ],
-                database=database,
-            )
-        elif args.phase == "tests":
+        if args.phase == "tests":
             tests(state)
         print(
             json.dumps(

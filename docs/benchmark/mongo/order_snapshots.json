@@ -1,0 +1,1084 @@
+{
+  "command": {
+    "find": "order_snapshots",
+    "filter": {
+      "buyer.id": 7,
+      "deleted": false
+    },
+    "limit": 20,
+    "projection": {
+      "_id": 1
+    },
+    "maxTimeMS": 5000,
+    "sort": {
+      "order_date": -1
+    }
+  },
+  "runs": [
+    {
+      "explainVersion": "1",
+      "queryPlanner": {
+        "namespace": "oldshop.order_snapshots",
+        "parsedQuery": {
+          "$and": [
+            {
+              "buyer.id": {
+                "$eq": 7
+              }
+            },
+            {
+              "deleted": {
+                "$eq": false
+              }
+            }
+          ]
+        },
+        "indexFilterSet": false,
+        "queryHash": "1B6D947D",
+        "planCacheShapeHash": "1B6D947D",
+        "planCacheKey": "89C2C44A",
+        "optimizationTimeMillis": 0,
+        "maxIndexedOrSolutionsReached": false,
+        "maxIndexedAndSolutionsReached": false,
+        "maxScansToExplodeReached": false,
+        "prunedSimilarIndexes": false,
+        "winningPlan": {
+          "isCached": false,
+          "stage": "LIMIT",
+          "limitAmount": 20,
+          "inputStage": {
+            "stage": "PROJECTION_SIMPLE",
+            "transformBy": {
+              "_id": 1
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "filter": {
+                "deleted": {
+                  "$eq": false
+                }
+              },
+              "inputStage": {
+                "stage": "IXSCAN",
+                "keyPattern": {
+                  "buyer.id": 1,
+                  "order_date": -1
+                },
+                "indexName": "buyer.id_1_order_date_-1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "buyer.id": [],
+                  "order_date": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "buyer.id": [
+                    "[7, 7]"
+                  ],
+                  "order_date": [
+                    "[MaxKey, MinKey]"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "rejectedPlans": []
+      },
+      "executionStats": {
+        "executionSuccess": true,
+        "nReturned": 20,
+        "executionTimeMillis": 0,
+        "totalKeysExamined": 20,
+        "totalDocsExamined": 20,
+        "executionStages": {
+          "isCached": false,
+          "stage": "LIMIT",
+          "nReturned": 20,
+          "executionTimeMillisEstimate": 0,
+          "works": 21,
+          "advanced": 20,
+          "needTime": 0,
+          "needYield": 0,
+          "saveState": 0,
+          "restoreState": 0,
+          "isEOF": 1,
+          "limitAmount": 20,
+          "inputStage": {
+            "stage": "PROJECTION_SIMPLE",
+            "nReturned": 20,
+            "executionTimeMillisEstimate": 0,
+            "works": 20,
+            "advanced": 20,
+            "needTime": 0,
+            "needYield": 0,
+            "saveState": 0,
+            "restoreState": 0,
+            "isEOF": 0,
+            "transformBy": {
+              "_id": 1
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "filter": {
+                "deleted": {
+                  "$eq": false
+                }
+              },
+              "nReturned": 20,
+              "executionTimeMillisEstimate": 0,
+              "works": 20,
+              "advanced": 20,
+              "needTime": 0,
+              "needYield": 0,
+              "saveState": 0,
+              "restoreState": 0,
+              "isEOF": 0,
+              "docsExamined": 20,
+              "alreadyHasObj": 0,
+              "inputStage": {
+                "stage": "IXSCAN",
+                "nReturned": 20,
+                "executionTimeMillisEstimate": 0,
+                "works": 20,
+                "advanced": 20,
+                "needTime": 0,
+                "needYield": 0,
+                "saveState": 0,
+                "restoreState": 0,
+                "isEOF": 0,
+                "keyPattern": {
+                  "buyer.id": 1,
+                  "order_date": -1
+                },
+                "indexName": "buyer.id_1_order_date_-1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "buyer.id": [],
+                  "order_date": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "buyer.id": [
+                    "[7, 7]"
+                  ],
+                  "order_date": [
+                    "[MaxKey, MinKey]"
+                  ]
+                },
+                "keysExamined": 20,
+                "seeks": 1,
+                "dupsTested": 0,
+                "dupsDropped": 0
+              }
+            }
+          }
+        }
+      },
+      "queryShapeHash": "0925F97F0A414572AF7DAF1B2988719565B07C86B38D8E14FD4AE70E799FBE3A",
+      "command": {
+        "find": "order_snapshots",
+        "filter": {
+          "buyer.id": 7,
+          "deleted": false
+        },
+        "limit": 20,
+        "projection": {
+          "_id": 1
+        },
+        "maxTimeMS": 5000,
+        "sort": {
+          "order_date": -1
+        },
+        "$db": "oldshop"
+      },
+      "serverInfo": {
+        "host": "83db0527e345",
+        "port": 27017,
+        "version": "8.0.32",
+        "gitVersion": "f9eb55a7cc900f33a722a5b32a0fdbf54385c749"
+      },
+      "serverParameters": {
+        "internalQueryFacetBufferSizeBytes": 104857600,
+        "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+        "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+        "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+        "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+        "internalQueryProhibitBlockingMergeOnMongoS": 0,
+        "internalQueryMaxAddToSetBytes": 104857600,
+        "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+        "internalQueryFrameworkControl": "trySbeRestricted",
+        "internalQueryPlannerIgnoreIndexWithCollationForRegex": 1
+      },
+      "ok": 1.0,
+      "$clusterTime": {
+        "clusterTime": "Timestamp(1793860031, 1)",
+        "signature": {
+          "hash": "b'\"m]\\x88\\xbf8\\xc9B\\x7f\\xa6\\xe1\\xdc\\x88J\\xfan\\xa2Wq\\xc2'",
+          "keyId": 7704301112815255558
+        }
+      },
+      "operationTime": "Timestamp(1793860031, 1)"
+    },
+    {
+      "explainVersion": "1",
+      "queryPlanner": {
+        "namespace": "oldshop.order_snapshots",
+        "parsedQuery": {
+          "$and": [
+            {
+              "buyer.id": {
+                "$eq": 7
+              }
+            },
+            {
+              "deleted": {
+                "$eq": false
+              }
+            }
+          ]
+        },
+        "indexFilterSet": false,
+        "queryHash": "1B6D947D",
+        "planCacheShapeHash": "1B6D947D",
+        "planCacheKey": "89C2C44A",
+        "optimizationTimeMillis": 0,
+        "maxIndexedOrSolutionsReached": false,
+        "maxIndexedAndSolutionsReached": false,
+        "maxScansToExplodeReached": false,
+        "prunedSimilarIndexes": false,
+        "winningPlan": {
+          "isCached": false,
+          "stage": "LIMIT",
+          "limitAmount": 20,
+          "inputStage": {
+            "stage": "PROJECTION_SIMPLE",
+            "transformBy": {
+              "_id": 1
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "filter": {
+                "deleted": {
+                  "$eq": false
+                }
+              },
+              "inputStage": {
+                "stage": "IXSCAN",
+                "keyPattern": {
+                  "buyer.id": 1,
+                  "order_date": -1
+                },
+                "indexName": "buyer.id_1_order_date_-1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "buyer.id": [],
+                  "order_date": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "buyer.id": [
+                    "[7, 7]"
+                  ],
+                  "order_date": [
+                    "[MaxKey, MinKey]"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "rejectedPlans": []
+      },
+      "executionStats": {
+        "executionSuccess": true,
+        "nReturned": 20,
+        "executionTimeMillis": 0,
+        "totalKeysExamined": 20,
+        "totalDocsExamined": 20,
+        "executionStages": {
+          "isCached": false,
+          "stage": "LIMIT",
+          "nReturned": 20,
+          "executionTimeMillisEstimate": 0,
+          "works": 21,
+          "advanced": 20,
+          "needTime": 0,
+          "needYield": 0,
+          "saveState": 0,
+          "restoreState": 0,
+          "isEOF": 1,
+          "limitAmount": 20,
+          "inputStage": {
+            "stage": "PROJECTION_SIMPLE",
+            "nReturned": 20,
+            "executionTimeMillisEstimate": 0,
+            "works": 20,
+            "advanced": 20,
+            "needTime": 0,
+            "needYield": 0,
+            "saveState": 0,
+            "restoreState": 0,
+            "isEOF": 0,
+            "transformBy": {
+              "_id": 1
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "filter": {
+                "deleted": {
+                  "$eq": false
+                }
+              },
+              "nReturned": 20,
+              "executionTimeMillisEstimate": 0,
+              "works": 20,
+              "advanced": 20,
+              "needTime": 0,
+              "needYield": 0,
+              "saveState": 0,
+              "restoreState": 0,
+              "isEOF": 0,
+              "docsExamined": 20,
+              "alreadyHasObj": 0,
+              "inputStage": {
+                "stage": "IXSCAN",
+                "nReturned": 20,
+                "executionTimeMillisEstimate": 0,
+                "works": 20,
+                "advanced": 20,
+                "needTime": 0,
+                "needYield": 0,
+                "saveState": 0,
+                "restoreState": 0,
+                "isEOF": 0,
+                "keyPattern": {
+                  "buyer.id": 1,
+                  "order_date": -1
+                },
+                "indexName": "buyer.id_1_order_date_-1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "buyer.id": [],
+                  "order_date": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "buyer.id": [
+                    "[7, 7]"
+                  ],
+                  "order_date": [
+                    "[MaxKey, MinKey]"
+                  ]
+                },
+                "keysExamined": 20,
+                "seeks": 1,
+                "dupsTested": 0,
+                "dupsDropped": 0
+              }
+            }
+          }
+        }
+      },
+      "queryShapeHash": "0925F97F0A414572AF7DAF1B2988719565B07C86B38D8E14FD4AE70E799FBE3A",
+      "command": {
+        "find": "order_snapshots",
+        "filter": {
+          "buyer.id": 7,
+          "deleted": false
+        },
+        "limit": 20,
+        "projection": {
+          "_id": 1
+        },
+        "maxTimeMS": 5000,
+        "sort": {
+          "order_date": -1
+        },
+        "$db": "oldshop"
+      },
+      "serverInfo": {
+        "host": "83db0527e345",
+        "port": 27017,
+        "version": "8.0.32",
+        "gitVersion": "f9eb55a7cc900f33a722a5b32a0fdbf54385c749"
+      },
+      "serverParameters": {
+        "internalQueryFacetBufferSizeBytes": 104857600,
+        "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+        "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+        "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+        "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+        "internalQueryProhibitBlockingMergeOnMongoS": 0,
+        "internalQueryMaxAddToSetBytes": 104857600,
+        "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+        "internalQueryFrameworkControl": "trySbeRestricted",
+        "internalQueryPlannerIgnoreIndexWithCollationForRegex": 1
+      },
+      "ok": 1.0,
+      "$clusterTime": {
+        "clusterTime": "Timestamp(1793860031, 1)",
+        "signature": {
+          "hash": "b'\"m]\\x88\\xbf8\\xc9B\\x7f\\xa6\\xe1\\xdc\\x88J\\xfan\\xa2Wq\\xc2'",
+          "keyId": 7704301112815255558
+        }
+      },
+      "operationTime": "Timestamp(1793860031, 1)"
+    },
+    {
+      "explainVersion": "1",
+      "queryPlanner": {
+        "namespace": "oldshop.order_snapshots",
+        "parsedQuery": {
+          "$and": [
+            {
+              "buyer.id": {
+                "$eq": 7
+              }
+            },
+            {
+              "deleted": {
+                "$eq": false
+              }
+            }
+          ]
+        },
+        "indexFilterSet": false,
+        "queryHash": "1B6D947D",
+        "planCacheShapeHash": "1B6D947D",
+        "planCacheKey": "89C2C44A",
+        "optimizationTimeMillis": 0,
+        "maxIndexedOrSolutionsReached": false,
+        "maxIndexedAndSolutionsReached": false,
+        "maxScansToExplodeReached": false,
+        "prunedSimilarIndexes": false,
+        "winningPlan": {
+          "isCached": false,
+          "stage": "LIMIT",
+          "limitAmount": 20,
+          "inputStage": {
+            "stage": "PROJECTION_SIMPLE",
+            "transformBy": {
+              "_id": 1
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "filter": {
+                "deleted": {
+                  "$eq": false
+                }
+              },
+              "inputStage": {
+                "stage": "IXSCAN",
+                "keyPattern": {
+                  "buyer.id": 1,
+                  "order_date": -1
+                },
+                "indexName": "buyer.id_1_order_date_-1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "buyer.id": [],
+                  "order_date": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "buyer.id": [
+                    "[7, 7]"
+                  ],
+                  "order_date": [
+                    "[MaxKey, MinKey]"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "rejectedPlans": []
+      },
+      "executionStats": {
+        "executionSuccess": true,
+        "nReturned": 20,
+        "executionTimeMillis": 0,
+        "totalKeysExamined": 20,
+        "totalDocsExamined": 20,
+        "executionStages": {
+          "isCached": false,
+          "stage": "LIMIT",
+          "nReturned": 20,
+          "executionTimeMillisEstimate": 0,
+          "works": 21,
+          "advanced": 20,
+          "needTime": 0,
+          "needYield": 0,
+          "saveState": 0,
+          "restoreState": 0,
+          "isEOF": 1,
+          "limitAmount": 20,
+          "inputStage": {
+            "stage": "PROJECTION_SIMPLE",
+            "nReturned": 20,
+            "executionTimeMillisEstimate": 0,
+            "works": 20,
+            "advanced": 20,
+            "needTime": 0,
+            "needYield": 0,
+            "saveState": 0,
+            "restoreState": 0,
+            "isEOF": 0,
+            "transformBy": {
+              "_id": 1
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "filter": {
+                "deleted": {
+                  "$eq": false
+                }
+              },
+              "nReturned": 20,
+              "executionTimeMillisEstimate": 0,
+              "works": 20,
+              "advanced": 20,
+              "needTime": 0,
+              "needYield": 0,
+              "saveState": 0,
+              "restoreState": 0,
+              "isEOF": 0,
+              "docsExamined": 20,
+              "alreadyHasObj": 0,
+              "inputStage": {
+                "stage": "IXSCAN",
+                "nReturned": 20,
+                "executionTimeMillisEstimate": 0,
+                "works": 20,
+                "advanced": 20,
+                "needTime": 0,
+                "needYield": 0,
+                "saveState": 0,
+                "restoreState": 0,
+                "isEOF": 0,
+                "keyPattern": {
+                  "buyer.id": 1,
+                  "order_date": -1
+                },
+                "indexName": "buyer.id_1_order_date_-1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "buyer.id": [],
+                  "order_date": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "buyer.id": [
+                    "[7, 7]"
+                  ],
+                  "order_date": [
+                    "[MaxKey, MinKey]"
+                  ]
+                },
+                "keysExamined": 20,
+                "seeks": 1,
+                "dupsTested": 0,
+                "dupsDropped": 0
+              }
+            }
+          }
+        }
+      },
+      "queryShapeHash": "0925F97F0A414572AF7DAF1B2988719565B07C86B38D8E14FD4AE70E799FBE3A",
+      "command": {
+        "find": "order_snapshots",
+        "filter": {
+          "buyer.id": 7,
+          "deleted": false
+        },
+        "limit": 20,
+        "projection": {
+          "_id": 1
+        },
+        "maxTimeMS": 5000,
+        "sort": {
+          "order_date": -1
+        },
+        "$db": "oldshop"
+      },
+      "serverInfo": {
+        "host": "83db0527e345",
+        "port": 27017,
+        "version": "8.0.32",
+        "gitVersion": "f9eb55a7cc900f33a722a5b32a0fdbf54385c749"
+      },
+      "serverParameters": {
+        "internalQueryFacetBufferSizeBytes": 104857600,
+        "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+        "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+        "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+        "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+        "internalQueryProhibitBlockingMergeOnMongoS": 0,
+        "internalQueryMaxAddToSetBytes": 104857600,
+        "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+        "internalQueryFrameworkControl": "trySbeRestricted",
+        "internalQueryPlannerIgnoreIndexWithCollationForRegex": 1
+      },
+      "ok": 1.0,
+      "$clusterTime": {
+        "clusterTime": "Timestamp(1793860031, 1)",
+        "signature": {
+          "hash": "b'\"m]\\x88\\xbf8\\xc9B\\x7f\\xa6\\xe1\\xdc\\x88J\\xfan\\xa2Wq\\xc2'",
+          "keyId": 7704301112815255558
+        }
+      },
+      "operationTime": "Timestamp(1793860031, 1)"
+    },
+    {
+      "explainVersion": "1",
+      "queryPlanner": {
+        "namespace": "oldshop.order_snapshots",
+        "parsedQuery": {
+          "$and": [
+            {
+              "buyer.id": {
+                "$eq": 7
+              }
+            },
+            {
+              "deleted": {
+                "$eq": false
+              }
+            }
+          ]
+        },
+        "indexFilterSet": false,
+        "queryHash": "1B6D947D",
+        "planCacheShapeHash": "1B6D947D",
+        "planCacheKey": "89C2C44A",
+        "optimizationTimeMillis": 0,
+        "maxIndexedOrSolutionsReached": false,
+        "maxIndexedAndSolutionsReached": false,
+        "maxScansToExplodeReached": false,
+        "prunedSimilarIndexes": false,
+        "winningPlan": {
+          "isCached": false,
+          "stage": "LIMIT",
+          "limitAmount": 20,
+          "inputStage": {
+            "stage": "PROJECTION_SIMPLE",
+            "transformBy": {
+              "_id": 1
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "filter": {
+                "deleted": {
+                  "$eq": false
+                }
+              },
+              "inputStage": {
+                "stage": "IXSCAN",
+                "keyPattern": {
+                  "buyer.id": 1,
+                  "order_date": -1
+                },
+                "indexName": "buyer.id_1_order_date_-1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "buyer.id": [],
+                  "order_date": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "buyer.id": [
+                    "[7, 7]"
+                  ],
+                  "order_date": [
+                    "[MaxKey, MinKey]"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "rejectedPlans": []
+      },
+      "executionStats": {
+        "executionSuccess": true,
+        "nReturned": 20,
+        "executionTimeMillis": 0,
+        "totalKeysExamined": 20,
+        "totalDocsExamined": 20,
+        "executionStages": {
+          "isCached": false,
+          "stage": "LIMIT",
+          "nReturned": 20,
+          "executionTimeMillisEstimate": 0,
+          "works": 21,
+          "advanced": 20,
+          "needTime": 0,
+          "needYield": 0,
+          "saveState": 0,
+          "restoreState": 0,
+          "isEOF": 1,
+          "limitAmount": 20,
+          "inputStage": {
+            "stage": "PROJECTION_SIMPLE",
+            "nReturned": 20,
+            "executionTimeMillisEstimate": 0,
+            "works": 20,
+            "advanced": 20,
+            "needTime": 0,
+            "needYield": 0,
+            "saveState": 0,
+            "restoreState": 0,
+            "isEOF": 0,
+            "transformBy": {
+              "_id": 1
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "filter": {
+                "deleted": {
+                  "$eq": false
+                }
+              },
+              "nReturned": 20,
+              "executionTimeMillisEstimate": 0,
+              "works": 20,
+              "advanced": 20,
+              "needTime": 0,
+              "needYield": 0,
+              "saveState": 0,
+              "restoreState": 0,
+              "isEOF": 0,
+              "docsExamined": 20,
+              "alreadyHasObj": 0,
+              "inputStage": {
+                "stage": "IXSCAN",
+                "nReturned": 20,
+                "executionTimeMillisEstimate": 0,
+                "works": 20,
+                "advanced": 20,
+                "needTime": 0,
+                "needYield": 0,
+                "saveState": 0,
+                "restoreState": 0,
+                "isEOF": 0,
+                "keyPattern": {
+                  "buyer.id": 1,
+                  "order_date": -1
+                },
+                "indexName": "buyer.id_1_order_date_-1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "buyer.id": [],
+                  "order_date": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "buyer.id": [
+                    "[7, 7]"
+                  ],
+                  "order_date": [
+                    "[MaxKey, MinKey]"
+                  ]
+                },
+                "keysExamined": 20,
+                "seeks": 1,
+                "dupsTested": 0,
+                "dupsDropped": 0
+              }
+            }
+          }
+        }
+      },
+      "queryShapeHash": "0925F97F0A414572AF7DAF1B2988719565B07C86B38D8E14FD4AE70E799FBE3A",
+      "command": {
+        "find": "order_snapshots",
+        "filter": {
+          "buyer.id": 7,
+          "deleted": false
+        },
+        "limit": 20,
+        "projection": {
+          "_id": 1
+        },
+        "maxTimeMS": 5000,
+        "sort": {
+          "order_date": -1
+        },
+        "$db": "oldshop"
+      },
+      "serverInfo": {
+        "host": "83db0527e345",
+        "port": 27017,
+        "version": "8.0.32",
+        "gitVersion": "f9eb55a7cc900f33a722a5b32a0fdbf54385c749"
+      },
+      "serverParameters": {
+        "internalQueryFacetBufferSizeBytes": 104857600,
+        "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+        "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+        "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+        "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+        "internalQueryProhibitBlockingMergeOnMongoS": 0,
+        "internalQueryMaxAddToSetBytes": 104857600,
+        "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+        "internalQueryFrameworkControl": "trySbeRestricted",
+        "internalQueryPlannerIgnoreIndexWithCollationForRegex": 1
+      },
+      "ok": 1.0,
+      "$clusterTime": {
+        "clusterTime": "Timestamp(1793860031, 1)",
+        "signature": {
+          "hash": "b'\"m]\\x88\\xbf8\\xc9B\\x7f\\xa6\\xe1\\xdc\\x88J\\xfan\\xa2Wq\\xc2'",
+          "keyId": 7704301112815255558
+        }
+      },
+      "operationTime": "Timestamp(1793860031, 1)"
+    },
+    {
+      "explainVersion": "1",
+      "queryPlanner": {
+        "namespace": "oldshop.order_snapshots",
+        "parsedQuery": {
+          "$and": [
+            {
+              "buyer.id": {
+                "$eq": 7
+              }
+            },
+            {
+              "deleted": {
+                "$eq": false
+              }
+            }
+          ]
+        },
+        "indexFilterSet": false,
+        "queryHash": "1B6D947D",
+        "planCacheShapeHash": "1B6D947D",
+        "planCacheKey": "89C2C44A",
+        "optimizationTimeMillis": 0,
+        "maxIndexedOrSolutionsReached": false,
+        "maxIndexedAndSolutionsReached": false,
+        "maxScansToExplodeReached": false,
+        "prunedSimilarIndexes": false,
+        "winningPlan": {
+          "isCached": false,
+          "stage": "LIMIT",
+          "limitAmount": 20,
+          "inputStage": {
+            "stage": "PROJECTION_SIMPLE",
+            "transformBy": {
+              "_id": 1
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "filter": {
+                "deleted": {
+                  "$eq": false
+                }
+              },
+              "inputStage": {
+                "stage": "IXSCAN",
+                "keyPattern": {
+                  "buyer.id": 1,
+                  "order_date": -1
+                },
+                "indexName": "buyer.id_1_order_date_-1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "buyer.id": [],
+                  "order_date": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "buyer.id": [
+                    "[7, 7]"
+                  ],
+                  "order_date": [
+                    "[MaxKey, MinKey]"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "rejectedPlans": []
+      },
+      "executionStats": {
+        "executionSuccess": true,
+        "nReturned": 20,
+        "executionTimeMillis": 0,
+        "totalKeysExamined": 20,
+        "totalDocsExamined": 20,
+        "executionStages": {
+          "isCached": false,
+          "stage": "LIMIT",
+          "nReturned": 20,
+          "executionTimeMillisEstimate": 0,
+          "works": 21,
+          "advanced": 20,
+          "needTime": 0,
+          "needYield": 0,
+          "saveState": 0,
+          "restoreState": 0,
+          "isEOF": 1,
+          "limitAmount": 20,
+          "inputStage": {
+            "stage": "PROJECTION_SIMPLE",
+            "nReturned": 20,
+            "executionTimeMillisEstimate": 0,
+            "works": 20,
+            "advanced": 20,
+            "needTime": 0,
+            "needYield": 0,
+            "saveState": 0,
+            "restoreState": 0,
+            "isEOF": 0,
+            "transformBy": {
+              "_id": 1
+            },
+            "inputStage": {
+              "stage": "FETCH",
+              "filter": {
+                "deleted": {
+                  "$eq": false
+                }
+              },
+              "nReturned": 20,
+              "executionTimeMillisEstimate": 0,
+              "works": 20,
+              "advanced": 20,
+              "needTime": 0,
+              "needYield": 0,
+              "saveState": 0,
+              "restoreState": 0,
+              "isEOF": 0,
+              "docsExamined": 20,
+              "alreadyHasObj": 0,
+              "inputStage": {
+                "stage": "IXSCAN",
+                "nReturned": 20,
+                "executionTimeMillisEstimate": 0,
+                "works": 20,
+                "advanced": 20,
+                "needTime": 0,
+                "needYield": 0,
+                "saveState": 0,
+                "restoreState": 0,
+                "isEOF": 0,
+                "keyPattern": {
+                  "buyer.id": 1,
+                  "order_date": -1
+                },
+                "indexName": "buyer.id_1_order_date_-1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "buyer.id": [],
+                  "order_date": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "buyer.id": [
+                    "[7, 7]"
+                  ],
+                  "order_date": [
+                    "[MaxKey, MinKey]"
+                  ]
+                },
+                "keysExamined": 20,
+                "seeks": 1,
+                "dupsTested": 0,
+                "dupsDropped": 0
+              }
+            }
+          }
+        }
+      },
+      "queryShapeHash": "0925F97F0A414572AF7DAF1B2988719565B07C86B38D8E14FD4AE70E799FBE3A",
+      "command": {
+        "find": "order_snapshots",
+        "filter": {
+          "buyer.id": 7,
+          "deleted": false
+        },
+        "limit": 20,
+        "projection": {
+          "_id": 1
+        },
+        "maxTimeMS": 5000,
+        "sort": {
+          "order_date": -1
+        },
+        "$db": "oldshop"
+      },
+      "serverInfo": {
+        "host": "83db0527e345",
+        "port": 27017,
+        "version": "8.0.32",
+        "gitVersion": "f9eb55a7cc900f33a722a5b32a0fdbf54385c749"
+      },
+      "serverParameters": {
+        "internalQueryFacetBufferSizeBytes": 104857600,
+        "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+        "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+        "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+        "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+        "internalQueryProhibitBlockingMergeOnMongoS": 0,
+        "internalQueryMaxAddToSetBytes": 104857600,
+        "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+        "internalQueryFrameworkControl": "trySbeRestricted",
+        "internalQueryPlannerIgnoreIndexWithCollationForRegex": 1
+      },
+      "ok": 1.0,
+      "$clusterTime": {
+        "clusterTime": "Timestamp(1793860031, 1)",
+        "signature": {
+          "hash": "b'\"m]\\x88\\xbf8\\xc9B\\x7f\\xa6\\xe1\\xdc\\x88J\\xfan\\xa2Wq\\xc2'",
+          "keyId": 7704301112815255558
+        }
+      },
+      "operationTime": "Timestamp(1793860031, 1)"
+    }
+  ]
+}

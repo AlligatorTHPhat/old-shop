@@ -1,48 +1,50 @@
 {
-  "generated_per_collection": 10000,
+  "source": "current_application_database",
+  "database": "oldshop",
+  "version": "8.0.32",
+  "read_only_commands": true,
+  "consistency": "Sequential reads; no shared snapshot with PostgreSQL or across Mongo commands",
+  "counts_before": {
+    "contact_messages": 0,
+    "order_snapshots": 31,
+    "product_details": 1001,
+    "reviews": 0,
+    "system_logs": 0,
+    "violation_logs": 11
+  },
+  "counts_after": {
+    "contact_messages": 0,
+    "order_snapshots": 31,
+    "product_details": 1001,
+    "reviews": 0,
+    "system_logs": 0,
+    "violation_logs": 11
+  },
+  "counts_unchanged": true,
+  "samples": 5,
+  "warmups": 1,
   "cases": {
     "product_details": {
-      "before": {
-        "nReturned": 20,
-        "totalKeysExamined": 0,
-        "totalDocsExamined": 192,
-        "executionTimeMillis": 4
-      },
-      "after": {
-        "nReturned": 20,
-        "totalKeysExamined": 20,
-        "totalDocsExamined": 20,
-        "executionTimeMillis": 2
-      }
+      "status": "measured",
+      "median_executionTimeMillis": 0,
+      "median_totalDocsExamined": 1,
+      "median_totalKeysExamined": 1,
+      "median_nReturned": 1
     },
     "reviews": {
-      "before": {
-        "nReturned": 10,
-        "totalKeysExamined": 0,
-        "totalDocsExamined": 10000,
-        "executionTimeMillis": 83
-      },
-      "after": {
-        "nReturned": 10,
-        "totalKeysExamined": 10,
-        "totalDocsExamined": 10,
-        "executionTimeMillis": 2
-      }
+      "status": "skipped",
+      "reason": "No existing document/attribute for this query"
     },
     "order_snapshots": {
-      "before": {
-        "nReturned": 10,
-        "totalKeysExamined": 0,
-        "totalDocsExamined": 10000,
-        "executionTimeMillis": 20
-      },
-      "after": {
-        "nReturned": 10,
-        "totalKeysExamined": 10,
-        "totalDocsExamined": 10,
-        "executionTimeMillis": 1
-      }
+      "status": "measured",
+      "median_executionTimeMillis": 0,
+      "median_totalDocsExamined": 20,
+      "median_totalKeysExamined": 20,
+      "median_nReturned": 20
+    },
+    "attribute_search": {
+      "status": "skipped",
+      "reason": "No existing document/attribute for this query"
     }
-  },
-  "version": "7.0.43"
+  }
 }

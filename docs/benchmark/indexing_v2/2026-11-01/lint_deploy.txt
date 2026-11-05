@@ -1,3 +1,0 @@
-deploy/scripts/test-indexing-v2.py: All checks passed!
-deploy/scripts/check-data-stack.py: All checks passed!
-apply-indexing-v2.sh: bash -n PASS

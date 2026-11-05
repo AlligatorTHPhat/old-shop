@@ -3,8 +3,8 @@
 **Ngày lập:** 01/11/2026. **Căn cứ:** mã nguồn `database/`, migration `001`–`006`,
 truy vấn backend/ETL và benchmark đã lưu. **Trạng thái thực hiện:** đã có migration 007 (9 index PostgreSQL), M01 MongoDB,
 benchmark và kiểm thử trên môi trường tách biệt. **Chưa áp vào DB người dùng** theo lựa chọn
-của người dùng. [Quyết định đủ 16 ứng viên và bằng chứng](benchmark/indexing_v2/2026-11-01/README.md),
-[hướng dẫn tự áp dụng](benchmark/indexing_v2/README.md).
+của người dùng. [Phép đo dữ liệu hiện tại](benchmark/README.md),
+[hướng dẫn tự áp dụng](runbooks/indexing_v2.md).
 
 Nội dung thiết kế bên dưới giữ mốc baseline 001–006 để đối chiếu. Các DDL `Ixx` là danh
 sách ứng viên lịch sử; chỉ I02/I04/I05/I07/I08/I09/I10/I11/I12 được đưa vào 007. I01/I03/
@@ -537,7 +537,7 @@ FK voucher theo số liệu. Giữ các index cơ sở từ 001 trong giai đo�
 Đề xuất tổ chức đầu ra khi triển khai thật:
 
 ```text
-docs/benchmark/indexing_v2/<ngay-do>/
+docs/benchmark/<lan-do-moi>/
   environment.json
   inventory.csv
   workload.md
@@ -549,7 +549,7 @@ docs/benchmark/indexing_v2/<ngay-do>/
 database/04_migrations/<version_moi>_indexing_v2.sql
 ```
 
-Đã tạo `007_indexing_v2.sql` theo tập index được chọn sau đo; không sửa 001–006. Các đường dẫn output thực tế được liệt kê trong báo cáo ngày 01/11/2026.
+Đã tạo `007_indexing_v2.sql` theo tập index được chọn sau đo; không sửa 001–006. Output hiện tại được mô tả trong README benchmark; kết quả fixture cũ đã gỡ.
 
 ## 11. Kế hoạch benchmark và tiêu chí chọn index
 
@@ -604,14 +604,9 @@ Một ứng viên không đạt có thể bị loại; không tạo migration ch
 
 ### 11.4. Bằng chứng cũ chỉ dùng làm baseline tham khảo
 
-[Benchmark Ngày 4](benchmark/README.md) đã ghi PG 50.016 product/100.030 order, search
-316,562 → 0,372 ms, seller order 44,052 → 17,521 ms; cũng ghi query review/cart/pruning
-không nhanh hơn và index vật lý tăng 35.225.600 → 58.736.640 byte.
-Đây là phép đo lịch sử trên môi trường riêng; không chuyển thành cam kết hiện tại.
-
-Mongo benchmark cũ chạy 7.0.43; môi trường người dùng là 8.0.32 nên phải lưu phiên bản
-mới khi đo lại. Không đổi nhãn các JSON cũ thành Mongo 8. Dữ liệu seed mới 1.000 product
-khác workload lớn cũ nên không so thời gian hai bộ trực tiếp để kết luận regression.
+[Benchmark hiện tại](benchmark/README.md) dùng dữ liệu DB ứng dụng, không sinh fixture lớn.
+Kết quả cũ trên dữ liệu tạo thêm đã được gỡ. Những kế hoạch thí nghiệm trong tài liệu này
+là thiết kế tham khảo, không phải kết quả đo trên dữ liệu hiện tại.
 
 ## 12. Truy vấn khảo sát và EXPLAIN mẫu
 
@@ -783,8 +778,9 @@ khác cột/predicate. So pg_get_indexdef, dependency và validity trước khi 
 | Ảnh dùng chung | Xóa một liên kết không xóa object vẫn được sản phẩm khác tham chiếu |
 | Mongo | executionStats và chi phí update metadata/ảnh; không chỉ số index |
 
-Bảng quyết định sau đo: xem [báo cáo thực hiện](benchmark/indexing_v2/2026-11-01/README.md),
-bao gồm đủ I01–I14 và M01/M02, bytes/chi phí ghi và các trường hợp hoãn.
+Các mã I01–I14 và M01/M02 trong tài liệu là ứng viên thiết kế lịch sử.
+[Benchmark hiện tại](benchmark/README.md) chỉ đo dữ liệu ứng dụng với index đang có;
+không còn bảng so sánh các ứng viên hoặc kết quả chi phí ghi trên fixture lớn cũ.
 
 ## 14. Nhánh tùy chọn: tự lập trình cấu trúc dữ liệu indexing
 

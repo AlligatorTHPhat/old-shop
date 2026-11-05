@@ -1,81 +1,111 @@
-# Benchmark Ngày 4 — 29/10/2026
+# Đo dữ liệu hiện tại của OldShop
 
-Đo thực trên PostgreSQL 16.15, Docker một máy, schema baseline v0 rồi migrate trên **cùng
-một DB riêng** `day4_bench_20261029_final`. Có warmup trước mỗi truy vấn, trung vị ba lượt
-EXPLAIN ANALYZE BUFFERS FORMAT JSON; một lượt text bổ sung để đọc plan. Không ép planner,
-không xóa index cũ, ANALYZE cả trước/sau. Giới hạn backend/PG theo Compose và các container
-khác chạy cùng máy nên thời gian có nhiễu/cache/scheduling; không suy ra SLA hoặc tải production.
+Thời điểm bắt đầu: **2026-11-05T13:27:11.991229+07:00** (giờ Việt Nam).
+Nguồn: PostgreSQL `oldshop` và MongoDB `oldshop` đang phục vụ dự án.
+Đây là dữ liệu seed đã nạp và các thay đổi phát sinh khi dùng ứng dụng, không phải
+bộ dữ liệu benchmark được tạo thêm. Runner không sinh bất kỳ dòng/document nào.
 
-Dữ liệu tổng: **50.016 products, 100.030 orders, 100.000 system_log**, 100.000 review,
-50.000 cart item; trong đó sinh mới 50.000 products/100.000 orders/1.000 users.
-Buyer và seller giả thuộc hai nhóm tách biệt để trigger self-buy không bị bỏ qua;
-phân bố 500 seller, 500 buyer, dữ liệu ngày cố định trong năm 2026, không có dữ liệu cá nhân thật.
-Migration và copy đối soát ở quy mô này mất **11,47 giây**; đây không phải toàn thời gian bảo trì,
-vì backup/restore/startup còn tốn thêm thời gian.
+## Dữ liệu được đo
 
-## PostgreSQL: trung vị Execution Time (ms)
+| Dữ liệu | PostgreSQL | MongoDB |
+|---|---:|---:|
+| Sản phẩm / product_details | 1001 | 1001 |
+| Ảnh sản phẩm | 2001 | Nhúng trong product_details |
+| Đơn hàng / order_snapshots | 31 | 31 |
+| Review | 0 | 0 |
+| Log hệ thống | 0 | 0 |
+| Giỏ hàng / chi tiết giỏ | 13 / 0 | Không lưu |
+| Vi phạm / violation_logs | 11 | 11 |
 
-| Truy vấn | Trước | Sau | Plan / đánh giá |
-|---|---:|---:|---|
-| Catalogue category + mới nhất | 0,261 | 0,166 | idx_product_catalogue, lấy 20 dòng |
-| ILIKE title OR description | 316,562 | 0,372 | Seq Scan → BitmapOr hai GIN trigram |
-| Lịch sử buyer | 0,730 | 0,436 | Merge Append bốn B-tree buyer/date, không hash-prune theo buyer |
-| Đơn seller | 44,052 | 17,521 | Index Only Scan idx_order_detail_product_order |
-| Review theo product | 0,085 | 0,158 | Vẫn dùng index baseline; không có bằng chứng cần composite mới |
-| Report rating=0 | 0,145 | 0,327 | Vẫn dùng idx_review_rating; loại đề xuất partial mới |
-| Lookup cart/product | 0,048 | 0,114 | uq_cart_product; lý do chính là tính duy nhất, không chứng minh nhanh hơn |
-| Order theo PK | 0,050 | 0,088 | Chỉ order_h3, prune ba phần còn lại; chưa có lợi ích thời gian ở workload nhỏ |
-| Log tháng 03/2026 | 4,410 | 4,582 | Chỉ system_log_202603; Seq Scan hợp lý khi đọc cả tháng, chưa nhanh hơn |
+Seed nguồn hiện có 1.000 sản phẩm và 30 đơn; DB đang chạy có thêm dữ liệu phát sinh.
+Không reset DB về seed để khớp con số. Số đếm của đủ 28 bảng logic nằm trong
+[pg/summary.json](pg/summary.json); số document từng collection trước/sau đo nằm trong
+[mongo/summary.json](mongo/summary.json). Các partition không bị cộng đếm hai lần.
 
-Tổng dung lượng index vật lý: **35.225.600 → 58.736.640 byte**. GIN/B-tree bổ sung và
-partition có chi phí dung lượng, WAL/ghi; chưa đo throughput ghi dưới tải đồng thời.
-Không chỉ báo các truy vấn nhanh hơn. Index review mới được thử ở bản nháp, rồi bỏ vì planner
-chọn index baseline; các file trước/sau ở đây đều từ **bản migration cuối**.
+## Phương pháp
 
-[summary.json](pg/summary.json) giữ số đo máy đọc. Mỗi truy vấn có `before_*.txt`,
-`after_*.txt` và JSON đủ ba lượt, gồm Buffers, Planning Time, Execution Time.
-Ví dụ: [search trước](pg/before_search.txt), [search sau](pg/after_search.txt),
-[order prune](pg/after_order_pk_pruning.txt), [log prune](pg/after_log_month_pruning.txt).
+- PostgreSQL 16.15, migrations 001–007 đang có sẵn;
+  MongoDB 8.0.32, giữ nguyên toàn bộ index hiện có.
+- Một lượt warmup, năm lượt EXPLAIN cho mỗi truy vấn; báo cáo median thời gian thực thi phía DB.
+- PostgreSQL dùng một transaction REPEATABLE READ, READ ONLY (`transaction_read_only=on`).
+- Mongo chỉ count/find/listIndexes/explain/buildInfo. Không chung snapshot giữa hai DB
+  hoặc các lệnh Mongo; worker vẫn hoạt động. Số document trước/sau bằng nhau không
+  chứng minh nội dung mọi document bất biến.
+- Tham số category, product, buyer, seller và từ khóa lấy từ bản ghi đang tồn tại.
+  Các câu SQL là truy vấn đọc đại diện, chọn một số cột; chưa đo đầy đủ ORM, HTTP hay trình duyệt.
+- Không tạo/xóa index, migrate, ANALYZE, seed, full ETL hoặc ghi dữ liệu nghiệp vụ.
+- Bảng rỗng và thuộc tính chưa có được ghi **skipped**, không thêm dữ liệu cho đủ ca đo.
+- ETL poll chỉ đo SELECT chọn event, bỏ khóa/claim/ACK; hàng đợi không có event đến hạn
+  trong lần này nên kết quả không đại diện cho backlog lớn.
 
-## MongoDB: executionStats
+## PostgreSQL
 
-Mongo **7.0.43** theo ngoại lệ kernel đã thống nhất từ Ngày 2. Mỗi collection tạm có
-10.000 document, validator cùng hợp đồng Ngày 3; trước chỉ _id, sau thêm index ứng dụng.
-Một lượt explain mỗi pha, không hint; milliseconds chỉ tham khảo, docs examined là bằng chứng chính.
+| Truy vấn | Median thực thi (ms) | Dòng trả về / trạng thái |
+|---|---:|---|
+| catalogue | 0.347 | 100 |
+| catalogue_category | 0.599 | 100 |
+| search | 5.111 | 45 |
+| buyer_history | 0.119 | 20 |
+| seller_orders | 0.383 | 16 |
+| review_history | — | Bỏ qua: No active reviews |
+| reports | — | Bỏ qua: No active reports (rating=0) |
+| cart_lookup | — | Bỏ qua: shopping_cart_item is empty |
+| order_pk_pruning | 0.020 | 1 |
+| log_month_pruning | — | Bỏ qua: system_log is empty |
+| product_images | 0.081 | 2 |
+| etl_status | 0.061 | 1 |
+| etl_poll_selection | 0.070 | 0 |
 
-| Query | Docs examined trước → sau | Keys sau | Returned | Milliseconds trước → sau |
+Dung lượng index vật lý hiện tại: **3,489,792 bytes**. Không có mốc trước/sau.
+File `pg/<truy_van>.json` chứa SQL, tham số và đủ năm plan ANALYZE/BUFFERS;
+file `.txt` chứa SQL đã gắn tham số và plan JSON của mẫu có thời gian ở giữa để đọc.
+`pg/indexes.json` lưu định nghĩa index hiện có.
+
+## MongoDB
+
+| Truy vấn | Median ms | Docs examined | Keys examined | Returned |
 |---|---:|---:|---:|---:|
-| product_details category/brand, limit 20 | 192 → 20 | 20 | 20 | 4 → 2 |
-| reviews product/date | 10.000 → 10 | 10 | 10 | 83 → 2 |
-| order_snapshots buyer/order_date | 10.000 → 10 | 10 | 10 | 20 → 1 |
+| product_details | 0 | 1 | 1 | 1 |
+| reviews | — | — | — | Bỏ qua: No existing document/attribute for this query |
+| order_snapshots | 0 | 20 | 20 | 20 |
+| attribute_search | — | — | — | Bỏ qua: No existing document/attribute for this query |
 
-[Mongo summary](mongo/summary.json), sáu file explain trong `mongo/`. Collection tạm
-được xóa sau đo; không seed dữ liệu giả vào collection thật. Không tuyên bố kết quả Mongo 8.
+`mongo/<truy_van>.json` chứa lệnh explain và đủ năm kết quả; `mongo/indexes.json`
+lưu index hiện có. **0 ms là độ phân giải nguyên millisecond, không có nghĩa truy vấn
+không mất thời gian.** Không so trực tiếp độ chính xác thời gian Mongo với PG.
 
-## Lặp lại
+## Đọc kết quả và giới hạn
 
-Chạy từ root sau khi build image day4 và stack dữ liệu đã healthy:
+Đây là ảnh chụp hiệu năng trên lượng dữ liệu hiện tại. Không có phép đo trước/sau tối ưu,
+không công bố tỷ lệ tăng tốc, p95 HTTP, throughput đồng thời hoặc SLA.
+Các kết quả trước/sau trên dữ liệu giả lập đã được xóa khỏi thư mục này;
+các bộ sinh dữ liệu benchmark lớn cũng đã được gỡ khỏi CLI đo hiện tại.
+Log kiểm thử tính năng và triển khai lịch sử nằm ở `docs/evidence/`, không dùng làm
+số đo hiệu năng của bộ dữ liệu hiện tại. Hướng dẫn vận hành migration vẫn nằm tại
+[runbook indexing v2](../runbooks/indexing_v2.md).
+
+[manifest.json](manifest.json) ghi thời điểm, giới hạn, SHA-256 runner và các file seed SQL
+trong image được dùng. Hash seed ghi nhận nguồn, không khẳng định DB chưa bị thay đổi sau seed.
+
+## Chạy lại
+
+Từ `backend/`, dùng môi trường Python/dependencies và cấu hình kết nối của backend:
 
 ```bash
-bash deploy/scripts/test-day4.sh
-# Đổi DB_NAME sang tên mới mỗi lượt; script từ chối DB đã tồn tại.
-docker compose --env-file deploy/.env.data -f deploy/docker-compose.distributed.yml run --rm --no-deps --user "$(id -u):$(id -g)" -e DB_NAME=day4_bench_new_run -v "$PWD/docs/benchmark:/evidence" --entrypoint python backend -m scripts.benchmark_day4 --output /evidence/pg_new_run
-docker compose --env-file deploy/.env.data -f deploy/docker-compose.distributed.yml run --rm --no-deps --user "$(id -u):$(id -g)" -v "$PWD/docs/benchmark:/evidence" --entrypoint python backend -m scripts.benchmark_mongo_day4 --output /evidence/mongo_new_run
+python -m scripts.benchmark_current --output ../docs/benchmark/lan-do-moi
 ```
 
-DB benchmark/test được giữ cho việc xem xét, không tự reset. Script chỉ tạo DB có prefix
-`day4_bench_`; các bảng thật không bị truncate. Không chạy nhiều benchmark/maintenance cùng lúc.
+Output phải là thư mục **chưa tồn tại** để không ghi đè bằng chứng cũ. Cần kết nối được
+cả PostgreSQL và MongoDB; script không tạo DB hoặc tự nạp seed. Có thể dùng
+`--source-root /duong/dan/repository` nếu chạy script từ vị trí khác.
 
-## Bằng chứng kiểm thử và áp dụng
+Để đo qua backend Docker đang chạy (thay tên container nếu dùng project khác), không cần build lại:
 
-- [96/96 tests PASS](day4_tests.txt), gồm 24 test Ngày 3 và 15 test Ngày 4; không skip.
-- [Maintenance, backup/restore và migrate](day4_apply.txt).
-- [Trạng thái stack và replication](day4_stack.json).
-- Snapshot so sánh 18 bảng nguồn bằng count + digest mọi cột v0; user khôi phục qua users_full.
-  Backup chứa dữ liệu nhạy cảm ở deploy/backups, không chép vào thư mục evidence.
+```bash
+docker cp backend/scripts/benchmark_current.py oldshop-data-backend-1:/tmp/oldshop-benchmark-current.py
+docker exec -e PYTHONPATH=/app oldshop-data-backend-1 python /tmp/oldshop-benchmark-current.py --source-root /opt --output /tmp/oldshop-current-new-run
+docker cp oldshop-data-backend-1:/tmp/oldshop-current-new-run docs/benchmark/lan-do-moi
+```
 
-## Indexing v2 (01/11/2026)
-
-[Quyết định I01–I14, M01/M02 và số liệu mới](indexing_v2/2026-11-01/README.md),
-[runner tái lập và hướng dẫn tự áp migration 007](indexing_v2/README.md). Đây là lần đo
-riêng trên baseline 001–006; bằng chứng Ngày 4/5/6 phía trên giữ nguyên mốc lịch sử.
+Thư mục `/tmp/oldshop-current-new-run` trong container và `lan-do-moi` trên host phải mới.
+Đo một lần mỗi lúc; kết quả thay đổi theo cache, dữ liệu ứng dụng và tải máy.

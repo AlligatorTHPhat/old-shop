@@ -1,8 +1,0 @@
-{
-  "result": "PASS",
-  "test_project_removed": true,
-  "test_named_volumes_removed": true,
-  "private_state_removed": true,
-  "existing_mongo_minio_running_unchanged": true,
-  "user_database_migration_executed": false
-}

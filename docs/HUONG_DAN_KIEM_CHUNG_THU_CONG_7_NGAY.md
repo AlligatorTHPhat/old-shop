@@ -16,8 +16,8 @@ kiểm chứng**. Có nhiều container hoặc partition trên một máy chưa 
 
 **Trạng thái indexing:** mã nguồn đã có 007 và M01 MongoDB, nhưng lần thực hiện trước
 chỉ áp trên stack kiểm thử riêng. Không mặc định DB của bạn đã nâng cấp. Xem
-[runbook tự áp dụng](benchmark/indexing_v2/README.md) và
-[bằng chứng thử nghiệm 01/11/2026](benchmark/indexing_v2/2026-11-01/README.md).
+[runbook tự áp dụng](runbooks/indexing_v2.md) và
+[benchmark dữ liệu hiện tại](benchmark/README.md).
 
 ## Mục lục
 
@@ -785,27 +785,21 @@ SELECT pg_size_pretty(pg_indexes_size('product')) AS product_index_size;
 Ở quy mô 1.000 sản phẩm/30 đơn, planner có thể chọn Seq Scan. Không tắt seqscan, không
 DROP index để dựng kết quả trước/sau trên database đang dùng.
 
-Để kiểm bằng chứng của kế hoạch, mở [benchmark README](benchmark/README.md),
-`benchmark/pg/{before,after}_*.txt`, `benchmark/pg/summary.json` và
-`benchmark/mongo/summary.json`. Đối chiếu:
+Để kiểm kết quả hiện tại, mở [benchmark README](benchmark/README.md),
+`benchmark/pg/summary.json`, `benchmark/mongo/summary.json` và các file plan cùng tên truy vấn.
+Lần đo 05/11/2026 đọc trực tiếp DB ứng dụng: 1.001 sản phẩm, 31 đơn, MongoDB 8.0.32.
+Một warmup, năm mẫu mỗi truy vấn, giữ nguyên index; không có phép so sánh trước/sau.
+Các bảng review, cart item, log rỗng được ghi skipped; không sinh dữ liệu để đo thay.
 
-- Bộ PG lịch sử có 50.016 sản phẩm/100.030 đơn, khác seed 1.000 hiện tại.
-- Có chín query PG và ba query Mongo; một số query không nhanh hơn sau index.
-- Search PG lịch sử 316,562 → 0,372 ms; đó là số đo lưu lại, không phải kết quả máy bạn.
-- Index vật lý lịch sử tăng 35.225.600 → 58.736.640 byte, có chi phí ghi/dung lượng.
-- Mongo benchmark lịch sử là Mongo 7.0.43; muốn tuyên bố Mongo 8 phải đo mới trên DB/
-  collection benchmark riêng. Hướng tái lập có trong README benchmark; không cần tạo
-  100.000 dòng vào DB ứng dụng để làm bài kiểm thủ công này.
-
-**Bằng chứng cần lưu:** catalog index, hai cây partition, plan pruning, năm count user,
-Mongo explain và bảng so sánh lịch sử có ghi rõ môi trường.
+**Bằng chứng cần lưu:** số dòng thực tế, phiên bản/schema/index, SQL/filter, raw plan và
+median từ các mẫu. Không suy ra latency HTTP hoặc throughput đồng thời.
 
 ### 5.6. Indexing v2: kiểm 007 và M01 trên DB thực tế
 
 Trước hết đọc lịch sử ở 2.1. SQL 007 và M01 là hai bước riêng: áp migration PostgreSQL
 không tự tạo index Mongo. Nếu PG chưa áp 007 hoặc Mongo chưa khởi tạo source có M01,
 ghi rõ phần chưa triển khai, không dùng số liệu stack thử nghiệm làm kết quả của DB này.
-Việc tự áp dụng thực hiện riêng theo [runbook indexing v2](benchmark/indexing_v2/README.md).
+Việc tự áp dụng thực hiện riêng theo [runbook indexing v2](runbooks/indexing_v2.md).
 
 **A. PostgreSQL — có đủ 9 index logical và đúng cấu trúc không?**
 
@@ -933,24 +927,10 @@ dc run --rm --no-deps --entrypoint python backend -m scripts.verify_indexing_v2 
 Chỉ dùng postflight này khi đã áp 007 **và** khởi tạo M01; cần PASS cho checksum, key order,
 predicate, validity, cây voucher và M01. Lệnh chỉ đọc, không tự tạo index hay cập nhật DB.
 
-[Bằng chứng indexing v2](benchmark/indexing_v2/2026-11-01/README.md) có 147 kiểm thử đạt,
-PG 16.15/Mongo 8.0.32, 36 biến thể query và phép đo đọc/ghi riêng. Đây là kết quả của
-stack thử nghiệm đã dọn, không phải một lượt kiểm trên DB bạn đang dùng. Gói được chọn là
-I02/I04/I05/I07/I08/I09/I10/I11/I12 và M01; các ứng viên khác có lý do hoãn.
-
-Khi nghiệm thu hiệu năng, xem cả median/p95, buffers/docs examined, bytes và WAL. Một số
-phép ghi vượt ngưỡng rà soát 10% (ví dụ retry/counter update); báo cáo đã ghi đánh đổi và
-biến thiên giữa các lần đo. Không kết luận mọi thao tác đều nhanh hơn. Muốn đo trước/sau
-mới thì dùng runner/DB tải riêng theo runbook, không DROP index hay tạo 100k dòng vào DB hiện tại.
-
-**Bằng chứng cần lưu thêm:** trạng thái 006/007 và M01 thực tế, 9 định nghĩa index,
-cây voucher, plan PG/Mongo và bảng chi phí có nhãn môi trường/thời gian rõ ràng.
-
-## 6. Ngày 5: ETL và đối soát
-
-ETL hiện tại là Python đọc PG → chuẩn hóa → upsert Mongo, đồng bộ/kiểm ảnh MinIO và
-xây `report_daily_sales` trên **PG primary**. Nó không chuyển quyền quyết định giá,
-tồn kho hoặc số dư sang Mongo.
+[Benchmark hiện tại](benchmark/README.md) đo trên dữ liệu ứng dụng và index đang có.
+Các hồ sơ fixture lớn trước đây đã được gỡ; không dùng chúng làm bằng chứng cho DB này.
+Khi nghiệm thu, đối chiếu số dòng, plan, buffers/docs examined và môi trường chạy.
+Không DROP index hay tạo thêm dữ liệu vào DB hiện tại để dựng so sánh trước/sau.
 
 ### 6.1. Quan sát lịch chạy, backlog và kiểm chất lượng
 
@@ -1949,8 +1929,8 @@ bên dưới để truy vết nguyên nhân đạt/chưa đạt.
 - [Kế hoạch 7 ngày](KE_HOACH_NANG_CAP_7_NGAY.md), [decisions](decisions.md),
   [hướng dẫn cấu hình/chạy](HUONG_DAN_CAU_HINH_VA_CHAY_HE_THONG.md).
 - [Kế hoạch indexing](KE_HOACH_THIET_KE_INDEXING.md),
-  [runbook 007/M01](benchmark/indexing_v2/README.md),
-  [bằng chứng indexing v2](benchmark/indexing_v2/2026-11-01/README.md).
+  [runbook 007/M01](runbooks/indexing_v2.md),
+  [bằng chứng indexing v2](benchmark/README.md).
 - [Thiết kế JSON](design/03_json_design.md), [index/phân mảnh](design/04_indexing.md),
   [ETL](design/05_etl.md), [tích hợp và giới hạn](design/06_completion_plan.md).
 - [SQL demo ngắn](report/demo_pgadmin.sql), [Mongo demo ngắn](report/demo_mongo.js),
