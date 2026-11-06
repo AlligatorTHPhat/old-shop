@@ -1,11 +1,11 @@
 {
-  "started_at": "2026-11-04T10:53:16.079079+00:00",
+  "started_at": "2026-11-05T06:56:24.229252+00:00",
   "scope": "M1, one host / two virtual IPs",
   "physical_hosts_verified": false,
   "checks": {
     "T01": {
       "status": "PASS",
-      "seconds": 0.46,
+      "seconds": 0.276,
       "detail": {
         "database": "oldshop_2",
         "role": "b_reader",
@@ -17,7 +17,7 @@
     },
     "T02": {
       "status": "PASS",
-      "seconds": 2.476,
+      "seconds": 1.656,
       "detail": {
         "insert_visible": [
           {
@@ -31,7 +31,7 @@
     },
     "T03": {
       "status": "PASS",
-      "seconds": 7.752,
+      "seconds": 9.35,
       "detail": {
         "A_update": {
           "expected_sqlstate": "42501",
@@ -141,16 +141,16 @@
     },
     "T04": {
       "status": "PASS",
-      "seconds": 14.791,
+      "seconds": 15.474,
       "detail": {
         "local_read_write": "PASS",
         "remote_error": "ERROR:  57014: canceling statement due to statement timeout\nLOCATION:  ProcessInterrupts, postgres.c:3394",
-        "failure_seconds": 10.253822372998911
+        "failure_seconds": 10.377040338998995
       }
     },
     "T05": {
       "status": "PASS",
-      "seconds": 6.167,
+      "seconds": 9.818,
       "detail": {
         "A_duplicate_pk": {
           "expected_sqlstate": "23505",
@@ -166,7 +166,7 @@
         },
         "A_negative_stock": {
           "expected_sqlstate": "23514",
-          "error": "ERROR:  23514: new row for relation \"product\" violates check constraint \"product_quantity_check\"\nDETAIL:  Failing row contains (1, 101, 1, Site A product 1, null, 100.00, -1, 0, null, 1, null, null, f, 2026-11-02 00:00:00, 2026-11-04 10:53:42.884397, null, null, null, null, 0, 1, A).\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_quantity_check\nLOCATION:  ExecConstraints, execMain.c:2109"
+          "error": "ERROR:  23514: new row for relation \"product\" violates check constraint \"product_quantity_check\"\nDETAIL:  Failing row contains (1, 101, 1, Site A product 1, null, 100.00, -1, 0, null, 1, null, null, f, 2026-11-02 00:00:00, 2026-11-05 06:56:52.7491, null, null, null, null, 0, 1, A).\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_quantity_check\nLOCATION:  ExecConstraints, execMain.c:2109"
         },
         "A_wrong_site": {
           "expected_sqlstate": "23514",
@@ -214,7 +214,7 @@
         },
         "B_negative_stock": {
           "expected_sqlstate": "23514",
-          "error": "ERROR:  23514: new row for relation \"product\" violates check constraint \"product_quantity_check\"\nDETAIL:  Failing row contains (2, 202, 1, Site B product 1, null, 200.00, -1, 0, null, 1, null, null, f, 2026-11-02 00:00:00, 2026-11-04 10:53:46.000414, null, null, null, null, 0, 1, B).\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_quantity_check\nLOCATION:  ExecConstraints, execMain.c:2109"
+          "error": "ERROR:  23514: new row for relation \"product\" violates check constraint \"product_quantity_check\"\nDETAIL:  Failing row contains (2, 202, 1, Site B product 1, null, 200.00, -1, 0, null, 1, null, null, f, 2026-11-02 00:00:00, 2026-11-05 06:56:57.429791, null, null, null, null, 0, 1, B).\nSCHEMA NAME:  public\nTABLE NAME:  product\nCONSTRAINT NAME:  product_quantity_check\nLOCATION:  ExecConstraints, execMain.c:2109"
         },
         "B_wrong_site": {
           "expected_sqlstate": "23514",
@@ -252,7 +252,7 @@
     },
     "T06": {
       "status": "PASS",
-      "seconds": 2.288,
+      "seconds": 3.962,
       "detail": {
         "product": {
           "A": 5,
@@ -270,7 +270,7 @@
     },
     "T07": {
       "status": "PASS",
-      "seconds": 1.543,
+      "seconds": 1.967,
       "detail": {
         "category": 3,
         "seller_site": 6
@@ -278,7 +278,7 @@
     },
     "T08": {
       "status": "PASS",
-      "seconds": 2.045,
+      "seconds": 2.379,
       "detail": {
         "queries": [
           "Q1",
@@ -293,7 +293,7 @@
     },
     "T09": {
       "status": "PASS",
-      "seconds": 0.458,
+      "seconds": 0.577,
       "detail": {
         "concurrent_writers": 4,
         "allocated_unique_ids": 40,
@@ -302,14 +302,14 @@
     },
     "T10": {
       "status": "PASS",
-      "seconds": 4.46,
+      "seconds": 5.47,
       "detail": {
         "B_local_read_write_with_A_down": true
       }
     },
     "T11": {
       "status": "PASS",
-      "seconds": 21.404,
+      "seconds": 30.321,
       "detail": {
         "bootstrap_idempotent": true,
         "clean_rebuild_verified": true,
@@ -324,7 +324,7 @@
         "fresh_inventory": {
           "physical_hosts_verified": false,
           "topology": "two independent PostgreSQL containers on one Docker host",
-          "project": "oldshop-sites-rebuild-27a9460c",
+          "project": "oldshop-sites-rebuild-fa605e64",
           "sites": {
             "A": {
               "database": "oldshop_1",
@@ -368,20 +368,20 @@
     },
     "T12": {
       "status": "PASS",
-      "seconds": 5.657,
+      "seconds": 7.029,
       "detail": {
         "local": {
           "samples_ms": [
-            0.324,
-            0.461,
-            0.305,
-            0.359,
-            0.458,
-            0.285,
-            0.517
+            0.286,
+            0.437,
+            0.444,
+            1.882,
+            0.712,
+            0.512,
+            0.336
           ],
-          "median_ms": 0.359,
-          "p95_ms": 0.517,
+          "median_ms": 0.444,
+          "p95_ms": 1.882,
           "plan": {
             "Plan": {
               "Node Type": "Aggregate",
@@ -393,8 +393,8 @@
               "Total Cost": 1.07,
               "Plan Rows": 1,
               "Plan Width": 8,
-              "Actual Startup Time": 0.031,
-              "Actual Total Time": 0.032,
+              "Actual Startup Time": 0.027,
+              "Actual Total Time": 0.029,
               "Actual Rows": 1,
               "Actual Loops": 1,
               "Output": [
@@ -414,7 +414,7 @@
                   "Plan Rows": 5,
                   "Plan Width": 0,
                   "Actual Startup Time": 0.019,
-                  "Actual Total Time": 0.022,
+                  "Actual Total Time": 0.02,
                   "Actual Rows": 5,
                   "Actual Loops": 1,
                   "Output": [
@@ -444,23 +444,23 @@
                 }
               ]
             },
-            "Planning Time": 3.857,
+            "Planning Time": 3.9,
             "Triggers": [],
-            "Execution Time": 0.517
+            "Execution Time": 0.336
           }
         },
         "remote": {
           "samples_ms": [
-            23.337,
-            22.116,
-            22.871,
-            23.45,
-            24.548,
-            23.478,
-            26.237
+            31.653,
+            34.035,
+            30.992,
+            32.917,
+            32.827,
+            33.33,
+            37.264
           ],
-          "median_ms": 23.45,
-          "p95_ms": 26.237,
+          "median_ms": 32.917,
+          "p95_ms": 37.264,
           "plan": {
             "Plan": {
               "Node Type": "Foreign Scan",
@@ -471,8 +471,8 @@
               "Total Cost": 152.69,
               "Plan Rows": 1,
               "Plan Width": 8,
-              "Actual Startup Time": 4.228,
-              "Actual Total Time": 4.231,
+              "Actual Startup Time": 7.72,
+              "Actual Total Time": 7.723,
               "Actual Rows": 1,
               "Actual Loops": 1,
               "Output": [
@@ -481,23 +481,23 @@
               "Relations": "Aggregate on (site_b.product)",
               "Remote SQL": "SELECT count(*) FROM public.product"
             },
-            "Planning Time": 2.02,
+            "Planning Time": 2.273,
             "Triggers": [],
-            "Execution Time": 26.237
+            "Execution Time": 37.264
           }
         },
         "global": {
           "samples_ms": [
-            23.232,
-            25.017,
-            23.511,
-            28.903,
-            22.994,
-            22.812,
-            22.898
+            38.746,
+            29.939,
+            32.184,
+            33.524,
+            36.778,
+            28.459,
+            25.649
           ],
-          "median_ms": 23.232,
-          "p95_ms": 28.903,
+          "median_ms": 32.184,
+          "p95_ms": 38.746,
           "plan": {
             "Plan": {
               "Node Type": "Aggregate",
@@ -509,8 +509,8 @@
               "Total Cost": 239.08,
               "Plan Rows": 1,
               "Plan Width": 8,
-              "Actual Startup Time": 3.76,
-              "Actual Total Time": 3.763,
+              "Actual Startup Time": 4.119,
+              "Actual Total Time": 4.122,
               "Actual Rows": 1,
               "Actual Loops": 1,
               "Output": [
@@ -526,8 +526,8 @@
                   "Total Cost": 230.53,
                   "Plan Rows": 3418,
                   "Plan Width": 0,
-                  "Actual Startup Time": 0.022,
-                  "Actual Total Time": 3.753,
+                  "Actual Startup Time": 0.03,
+                  "Actual Total Time": 4.11,
                   "Actual Rows": 10,
                   "Actual Loops": 1,
                   "Subplans Removed": 0,
@@ -544,8 +544,8 @@
                       "Total Cost": 1.05,
                       "Plan Rows": 5,
                       "Plan Width": 0,
-                      "Actual Startup Time": 0.021,
-                      "Actual Total Time": 0.023,
+                      "Actual Startup Time": 0.029,
+                      "Actual Total Time": 0.03,
                       "Actual Rows": 5,
                       "Actual Loops": 1
                     },
@@ -562,8 +562,8 @@
                       "Total Cost": 212.39,
                       "Plan Rows": 3413,
                       "Plan Width": 0,
-                      "Actual Startup Time": 3.723,
-                      "Actual Total Time": 3.725,
+                      "Actual Startup Time": 4.072,
+                      "Actual Total Time": 4.075,
                       "Actual Rows": 5,
                       "Actual Loops": 1,
                       "Remote SQL": "SELECT NULL FROM public.product"
@@ -572,9 +572,9 @@
                 }
               ]
             },
-            "Planning Time": 3.631,
+            "Planning Time": 3.96,
             "Triggers": [],
-            "Execution Time": 22.898
+            "Execution Time": 25.649
           }
         },
         "limitations": "Seed-scale, one Docker host; p95 uses nearest rank (7 samples), not a capacity benchmark."
@@ -955,7 +955,7 @@
       ]
     }
   },
-  "finished_at": "2026-11-04T10:54:25.879345+00:00",
+  "finished_at": "2026-11-05T06:57:52.817984+00:00",
   "status": "PASS",
   "clean_rebuild_verified": true,
   "inventory": {
@@ -1001,6 +1001,6 @@
       }
     }
   },
-  "compose_before": "{\"Command\":\"\\\"uvicorn app.catalog…\\\"\",\"CreatedAt\":\"2026-11-04 17:16:17 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"ede627845523\",\"Image\":\"oldshop-data-backend:day6\",\"Labels\":\"com.docker.compose.project=oldshop-sites,com.docker.compose.project.working_dir=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites,com.docker.compose.project.config_files=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-a.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-b.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.catalog.yml,com.docker.compose.project.environment_file=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/.env,com.docker.compose.service=catalogue,com.docker.compose.version=5.5.0,com.docker.compose.config-hash=63575fcb4dbfb6378454d3a5f357002365778e894219215b4597c6d4bea69f18,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.image=sha256:9abb089adee5c4bc3b8f3b340114eba5a322f78d5845206b9d31e418061db209,com.docker.compose.oneoff=False\",\"LocalVolumes\":\"1\",\"Mounts\":\"/home/phat/Doc…,71c324527e1909…\",\"Name\":\"oldshop-sites-catalogue-1\",\"Names\":\"oldshop-sites-catalogue-1\",\"Networks\":\"oldshop-sites_sites\",\"Ports\":\"127.0.0.1:56480-\\u003e8000/tcp\",\"Project\":\"oldshop-sites\",\"Publishers\":[{\"URL\":\"127.0.0.1\",\"TargetPort\":8000,\"PublishedPort\":56480,\"Protocol\":\"tcp\"}],\"RunningFor\":\"36 minutes ago\",\"Service\":\"catalogue\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 36 minutes (healthy)\"}\n{\"Command\":\"\\\"docker-entrypoint.s…\\\"\",\"CreatedAt\":\"2026-11-04 17:04:04 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"f8b274e19215\",\"Image\":\"postgres:16-alpine\",\"Labels\":\"com.docker.compose.service=pg-a,com.docker.compose.version=5.5.0,com.docker.compose.depends_on=,com.docker.compose.image=sha256:cbf42f0edc946c0bc1b8eeed62403734e1f25dc67a3491455d07a92fdb558b28,com.docker.compose.project=oldshop-sites,com.docker.compose.config-hash=8719453cb34e96f6c7dd3b9062d4302b08fd7d360f03753ebf234252e667fc5a,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-a.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-b.yml,com.docker.compose.project.environment_file=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/.env,com.docker.compose.project.working_dir=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites\",\"LocalVolumes\":\"1\",\"Mounts\":\"oldshop-sites_…\",\"Name\":\"oldshop-sites-pg-a-1\",\"Names\":\"oldshop-sites-pg-a-1\",\"Networks\":\"oldshop-sites_sites\",\"Ports\":\"127.0.0.1:56431-\\u003e5432/tcp\",\"Project\":\"oldshop-sites\",\"Publishers\":[{\"URL\":\"127.0.0.1\",\"TargetPort\":5432,\"PublishedPort\":56431,\"Protocol\":\"tcp\"}],\"RunningFor\":\"49 minutes ago\",\"Service\":\"pg-a\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 33 minutes (healthy)\"}\n{\"Command\":\"\\\"docker-entrypoint.s…\\\"\",\"CreatedAt\":\"2026-11-04 17:04:04 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"639d1837dc82\",\"Image\":\"postgres:16-alpine\",\"Labels\":\"com.docker.compose.image=sha256:cbf42f0edc946c0bc1b8eeed62403734e1f25dc67a3491455d07a92fdb558b28,com.docker.compose.oneoff=False,com.docker.compose.project=oldshop-sites,com.docker.compose.project.environment_file=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/.env,com.docker.compose.config-hash=67385d8bcbd8f8b831bab1ca7516ef524670a2647a89d0bb43a29b9ac134a39f,com.docker.compose.container-number=1,com.docker.compose.project.config_files=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-a.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-b.yml,com.docker.compose.project.working_dir=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites,com.docker.compose.service=pg-b,com.docker.compose.version=5.5.0,com.docker.compose.depends_on=\",\"LocalVolumes\":\"1\",\"Mounts\":\"oldshop-sites_…\",\"Name\":\"oldshop-sites-pg-b-1\",\"Names\":\"oldshop-sites-pg-b-1\",\"Networks\":\"oldshop-sites_sites\",\"Ports\":\"127.0.0.1:56432-\\u003e5432/tcp\",\"Project\":\"oldshop-sites\",\"Publishers\":[{\"URL\":\"127.0.0.1\",\"TargetPort\":5432,\"PublishedPort\":56432,\"Protocol\":\"tcp\"}],\"RunningFor\":\"49 minutes ago\",\"Service\":\"pg-b\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 33 minutes (healthy)\"}\n",
+  "compose_before": "{\"Command\":\"\\\"uvicorn app.catalog…\\\"\",\"CreatedAt\":\"2026-11-04 17:16:17 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"ede627845523\",\"Image\":\"sha256:1c86abed798347221a52c7f7cb3f4470d53ba765961c163edb256063d2a56efa\",\"Labels\":\"com.docker.compose.depends_on=,com.docker.compose.image=sha256:9abb089adee5c4bc3b8f3b340114eba5a322f78d5845206b9d31e418061db209,com.docker.compose.project=oldshop-sites,com.docker.compose.project.config_files=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-a.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-b.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.catalog.yml,com.docker.compose.project.working_dir=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites,com.docker.compose.version=5.5.0,com.docker.compose.oneoff=False,com.docker.compose.project.environment_file=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/.env,com.docker.compose.service=catalogue,com.docker.compose.config-hash=63575fcb4dbfb6378454d3a5f357002365778e894219215b4597c6d4bea69f18,com.docker.compose.container-number=1\",\"LocalVolumes\":\"1\",\"Mounts\":\"/home/phat/Doc…,71c324527e1909…\",\"Name\":\"oldshop-sites-catalogue-1\",\"Names\":\"oldshop-sites-catalogue-1\",\"Networks\":\"oldshop-sites_sites\",\"Ports\":\"127.0.0.1:56480-\\u003e8000/tcp\",\"Project\":\"oldshop-sites\",\"Publishers\":[{\"URL\":\"127.0.0.1\",\"TargetPort\":8000,\"PublishedPort\":56480,\"Protocol\":\"tcp\"}],\"RunningFor\":\"21 hours ago\",\"Service\":\"catalogue\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 3 hours (healthy)\"}\n{\"Command\":\"\\\"docker-entrypoint.s…\\\"\",\"CreatedAt\":\"2026-11-04 17:04:04 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"f8b274e19215\",\"Image\":\"postgres:16-alpine\",\"Labels\":\"com.docker.compose.container-number=1,com.docker.compose.image=sha256:cbf42f0edc946c0bc1b8eeed62403734e1f25dc67a3491455d07a92fdb558b28,com.docker.compose.oneoff=False,com.docker.compose.project=oldshop-sites,com.docker.compose.project.environment_file=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/.env,com.docker.compose.version=5.5.0,com.docker.compose.depends_on=,com.docker.compose.project.config_files=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-a.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-b.yml,com.docker.compose.project.working_dir=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites,com.docker.compose.service=pg-a,com.docker.compose.config-hash=8719453cb34e96f6c7dd3b9062d4302b08fd7d360f03753ebf234252e667fc5a\",\"LocalVolumes\":\"1\",\"Mounts\":\"oldshop-sites_…\",\"Name\":\"oldshop-sites-pg-a-1\",\"Names\":\"oldshop-sites-pg-a-1\",\"Networks\":\"oldshop-sites_sites\",\"Ports\":\"127.0.0.1:56431-\\u003e5432/tcp\",\"Project\":\"oldshop-sites\",\"Publishers\":[{\"URL\":\"127.0.0.1\",\"TargetPort\":5432,\"PublishedPort\":56431,\"Protocol\":\"tcp\"}],\"RunningFor\":\"21 hours ago\",\"Service\":\"pg-a\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 3 hours (healthy)\"}\n{\"Command\":\"\\\"docker-entrypoint.s…\\\"\",\"CreatedAt\":\"2026-11-04 17:04:04 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"639d1837dc82\",\"Image\":\"postgres:16-alpine\",\"Labels\":\"com.docker.compose.service=pg-b,com.docker.compose.config-hash=67385d8bcbd8f8b831bab1ca7516ef524670a2647a89d0bb43a29b9ac134a39f,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.project=oldshop-sites,com.docker.compose.project.config_files=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-a.yml,/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/compose.site-b.yml,com.docker.compose.project.environment_file=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites/.env,com.docker.compose.project.working_dir=/home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/deploy/sites,com.docker.compose.version=5.5.0,com.docker.compose.image=sha256:cbf42f0edc946c0bc1b8eeed62403734e1f25dc67a3491455d07a92fdb558b28,com.docker.compose.oneoff=False\",\"LocalVolumes\":\"1\",\"Mounts\":\"oldshop-sites_…\",\"Name\":\"oldshop-sites-pg-b-1\",\"Names\":\"oldshop-sites-pg-b-1\",\"Networks\":\"oldshop-sites_sites\",\"Ports\":\"127.0.0.1:56432-\\u003e5432/tcp\",\"Project\":\"oldshop-sites\",\"Publishers\":[{\"URL\":\"127.0.0.1\",\"TargetPort\":5432,\"PublishedPort\":56432,\"Protocol\":\"tcp\"}],\"RunningFor\":\"21 hours ago\",\"Service\":\"pg-b\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 3 hours (healthy)\"}\n",
   "source_sha256": "ee8d0ee977566e2c695ee59823bcdac476f0c4a08f8eb6afa8a4275e5f292229"
 }

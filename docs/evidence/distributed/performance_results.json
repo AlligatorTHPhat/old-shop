@@ -1,16 +1,16 @@
 {
   "local": {
     "samples_ms": [
-      0.324,
-      0.461,
-      0.305,
-      0.359,
-      0.458,
-      0.285,
-      0.517
+      0.286,
+      0.437,
+      0.444,
+      1.882,
+      0.712,
+      0.512,
+      0.336
     ],
-    "median_ms": 0.359,
-    "p95_ms": 0.517,
+    "median_ms": 0.444,
+    "p95_ms": 1.882,
     "plan": {
       "Plan": {
         "Node Type": "Aggregate",
@@ -22,8 +22,8 @@
         "Total Cost": 1.07,
         "Plan Rows": 1,
         "Plan Width": 8,
-        "Actual Startup Time": 0.031,
-        "Actual Total Time": 0.032,
+        "Actual Startup Time": 0.027,
+        "Actual Total Time": 0.029,
         "Actual Rows": 1,
         "Actual Loops": 1,
         "Output": [
@@ -43,7 +43,7 @@
             "Plan Rows": 5,
             "Plan Width": 0,
             "Actual Startup Time": 0.019,
-            "Actual Total Time": 0.022,
+            "Actual Total Time": 0.02,
             "Actual Rows": 5,
             "Actual Loops": 1,
             "Output": [
@@ -73,23 +73,23 @@
           }
         ]
       },
-      "Planning Time": 3.857,
+      "Planning Time": 3.9,
       "Triggers": [],
-      "Execution Time": 0.517
+      "Execution Time": 0.336
     }
   },
   "remote": {
     "samples_ms": [
-      23.337,
-      22.116,
-      22.871,
-      23.45,
-      24.548,
-      23.478,
-      26.237
+      31.653,
+      34.035,
+      30.992,
+      32.917,
+      32.827,
+      33.33,
+      37.264
     ],
-    "median_ms": 23.45,
-    "p95_ms": 26.237,
+    "median_ms": 32.917,
+    "p95_ms": 37.264,
     "plan": {
       "Plan": {
         "Node Type": "Foreign Scan",
@@ -100,8 +100,8 @@
         "Total Cost": 152.69,
         "Plan Rows": 1,
         "Plan Width": 8,
-        "Actual Startup Time": 4.228,
-        "Actual Total Time": 4.231,
+        "Actual Startup Time": 7.72,
+        "Actual Total Time": 7.723,
         "Actual Rows": 1,
         "Actual Loops": 1,
         "Output": [
@@ -110,23 +110,23 @@
         "Relations": "Aggregate on (site_b.product)",
         "Remote SQL": "SELECT count(*) FROM public.product"
       },
-      "Planning Time": 2.02,
+      "Planning Time": 2.273,
       "Triggers": [],
-      "Execution Time": 26.237
+      "Execution Time": 37.264
     }
   },
   "global": {
     "samples_ms": [
-      23.232,
-      25.017,
-      23.511,
-      28.903,
-      22.994,
-      22.812,
-      22.898
+      38.746,
+      29.939,
+      32.184,
+      33.524,
+      36.778,
+      28.459,
+      25.649
     ],
-    "median_ms": 23.232,
-    "p95_ms": 28.903,
+    "median_ms": 32.184,
+    "p95_ms": 38.746,
     "plan": {
       "Plan": {
         "Node Type": "Aggregate",
@@ -138,8 +138,8 @@
         "Total Cost": 239.08,
         "Plan Rows": 1,
         "Plan Width": 8,
-        "Actual Startup Time": 3.76,
-        "Actual Total Time": 3.763,
+        "Actual Startup Time": 4.119,
+        "Actual Total Time": 4.122,
         "Actual Rows": 1,
         "Actual Loops": 1,
         "Output": [
@@ -155,8 +155,8 @@
             "Total Cost": 230.53,
             "Plan Rows": 3418,
             "Plan Width": 0,
-            "Actual Startup Time": 0.022,
-            "Actual Total Time": 3.753,
+            "Actual Startup Time": 0.03,
+            "Actual Total Time": 4.11,
             "Actual Rows": 10,
             "Actual Loops": 1,
             "Subplans Removed": 0,
@@ -173,8 +173,8 @@
                 "Total Cost": 1.05,
                 "Plan Rows": 5,
                 "Plan Width": 0,
-                "Actual Startup Time": 0.021,
-                "Actual Total Time": 0.023,
+                "Actual Startup Time": 0.029,
+                "Actual Total Time": 0.03,
                 "Actual Rows": 5,
                 "Actual Loops": 1
               },
@@ -191,8 +191,8 @@
                 "Total Cost": 212.39,
                 "Plan Rows": 3413,
                 "Plan Width": 0,
-                "Actual Startup Time": 3.723,
-                "Actual Total Time": 3.725,
+                "Actual Startup Time": 4.072,
+                "Actual Total Time": 4.075,
                 "Actual Rows": 5,
                 "Actual Loops": 1,
                 "Remote SQL": "SELECT NULL FROM public.product"
@@ -201,9 +201,9 @@
           }
         ]
       },
-      "Planning Time": 3.631,
+      "Planning Time": 3.96,
       "Triggers": [],
-      "Execution Time": 22.898
+      "Execution Time": 25.649
     }
   },
   "limitations": "Seed-scale, one Docker host; p95 uses nearest rank (7 samples), not a capacity benchmark."

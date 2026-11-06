@@ -12,7 +12,7 @@
   "fresh_inventory": {
     "physical_hosts_verified": false,
     "topology": "two independent PostgreSQL containers on one Docker host",
-    "project": "oldshop-sites-rebuild-27a9460c",
+    "project": "oldshop-sites-rebuild-fa605e64",
     "sites": {
       "A": {
         "database": "oldshop_1",

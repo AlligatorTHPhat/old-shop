@@ -1,662 +1,927 @@
-# BÁO CÁO GIẢI PHÁP VÀ KIẾN TRÚC CƠ SỞ DỮ LIỆU OLDSHOP
+# BÁO CÁO KIẾN TRÚC VÀ KIỂM CHỨNG CƠ SỞ DỮ LIỆU OLDSHOP
 
-**Phạm vi:** kiến trúc dữ liệu ứng dụng OldShop, cấu hình indexing bằng JSON và phần triển khai phân mảnh danh mục trên hai site PostgreSQL độc lập.
+**Dự án:** OldShop — Epic-Ecommerce-FastAPI.
 
-**Thời điểm tổng hợp:** 04/11/2026.
+**Ngày rà soát:** 05/11/2026, giờ Việt Nam.
 
-**Căn cứ:** mã nguồn, cấu hình triển khai và các bằng chứng kiểm thử/benchmark đang lưu trong repository.
+**Phạm vi:** PostgreSQL, MongoDB, MinIO, Docker, ETL, phân tán danh mục hai site và indexing. Báo cáo đối chiếu các tệp hiện có; lần rà soát này không triển khai hệ thống, chạy lại benchmark hoặc thay đổi dữ liệu.
 
-Báo cáo phân biệt phần đã triển khai, kết quả kiểm thử đã lưu và công việc dự kiến. Lần cập nhật tài liệu này không thực hiện thêm một lượt kiểm thử database hoặc triển khai trên máy mới.
+## 1. Giới thiệu và phương pháp đánh giá
 
-| Yêu cầu | Nội dung trong báo cáo |
+### 1.1. Bài toán và mục tiêu kiến trúc
+
+OldShop phục vụ mua bán đồ cũ. Một tài khoản có thể vừa đăng bán vừa mua hàng; moderator kiểm duyệt tin đăng, admin quản lý tài khoản và hoạt động hệ thống. Luồng chính là tài khoản → tin đăng/media → giỏ hàng → đơn hàng/chi tiết đơn → giao dịch và báo cáo.
+
+Giá, tồn kho, ví và quan hệ đơn hàng cần ràng buộc và transaction. Thuộc tính thay đổi theo danh mục cần object linh hoạt; ảnh/video cần lưu byte file ngoài bảng nghiệp vụ. Dự án vì vậy kết hợp PostgreSQL, MongoDB và MinIO, dùng ETL tạo bản đọc/tổng hợp. Module phân tán danh mục sử dụng hai PostgreSQL độc lập, chạy riêng với ứng dụng thương mại hiện hữu.
+
+Mục tiêu báo cáo là giải thích quyết định thiết kế và xác định bằng chứng cho từng kết quả. Có mã nguồn, đã từng kiểm chứng và đang hoạt động tại thời điểm đọc là ba nhận định khác nhau.
+
+### 1.2. Quy ước trạng thái và nguồn
+
+| Trạng thái | Tiêu chí |
 |---|---|
-| 1. Tổng hợp thiết kế dữ liệu | Mục 2 và 3.1: thành phần, nhóm dữ liệu, ERD và nguồn dữ liệu có thẩm quyền. |
-| 2. Thiết kế hệ thống phân tán | Mục 3.2: sơ đồ hai site, phân mảnh/phân bổ, tái tạo dữ liệu, truy vấn và giới hạn kiểm chứng. |
-| 3. Thiết kế cấu trúc JSON | Mục 3.1.2: trường, kiểu dữ liệu, collection và document minh họa. |
-| 4. Thiết kế indexing | Mục 3.3: workload, trường/loại index, lý do và bằng chứng đo. |
-| 5. Kế hoạch hoàn thiện sản phẩm | Mục 4: tiến độ, việc còn lại, phân công theo vai trò và thời hạn đề xuất. |
+| **Đã thiết kế** | Có đặc tả/sơ đồ, chưa tìm thấy triển khai tương ứng. |
+| **Đã cấu hình/triển khai** | Có code, DDL hoặc cấu hình thực hiện chức năng; chưa mặc định đã chạy thành công. |
+| **Đã kiểm chứng** | Có kết quả thực thi lưu trong repository, với phạm vi, phiên bản và chỉ số cụ thể. |
+| **Chưa đủ bằng chứng** | Thiếu kết quả hoặc kết quả chỉ chứng minh một phần của nhận định. |
 
-## 1. Bài toán OldShop và định hướng giải pháp cơ sở dữ liệu
+Đường dẫn trong dấu mã tính từ gốc dự án; liên kết Markdown tính từ báo cáo. Ưu tiên SQL/migration/code để xác định chức năng và output thực thi để xác định kết quả. Tài liệu mô tả không thay thế output bị thiếu. Evidence ngày 30/10 và benchmark ngày 05/11 có dữ liệu/phiên bản khác nhau, không được ghép thành một lượt kiểm thử. Không công bố credential hoặc backup chứa dữ liệu cá nhân.
 
-### 1.1. Mô tả bài toán
+### 1.3. Đối chiếu sáu yêu cầu
 
-OldShop là hệ thống thương mại điện tử dành cho việc mua bán đồ cũ. Một người dùng có thể vừa mua sản phẩm của người khác, vừa đăng bán sản phẩm của mình. Vì hàng hóa do nhiều người dùng tự đăng, hệ thống cần cơ chế kiểm duyệt trước khi đưa sản phẩm ra danh sách bán công khai.
-
-Hệ thống có ba nhóm vai trò chính:
-
-| Vai trò | Trách nhiệm nghiệp vụ |
+| Yêu cầu | Phần đáp ứng |
 |---|---|
-| Admin | Quản lý người dùng, theo dõi và xử lý tài khoản theo quyền được cấp |
-| Moderator | Xem sản phẩm người dùng đăng, duyệt hoặc từ chối sản phẩm |
-| User | Quản lý tin đăng của bản thân, cung cấp mô tả/ảnh/video và mua hàng của người dùng khác |
+| 1. Tổng hợp thiết kế dữ liệu | Chương 2–3: ownership, bảng/khóa/quan hệ, document và media. |
+| 2. Thiết kế hệ thống phân tán | Chương 2, 4: container, replication, phân mảnh, FDW, chịu lỗi. |
+| 3. Thiết kế JSON | Mục 3.2 và Chương 5: kiểu, required/default, ví dụ, validator, ETL. |
+| 4. Thiết kế indexing | Chương 6: danh mục, cơ sở lựa chọn, cấu hình JSON, kết quả đo. |
+| 5. Kế hoạch hoàn thiện | Chương 8: trạng thái, ưu tiên, điều kiện nghiệm thu; không giao người hoặc đặt deadline mới. |
+| 6. Tổng hợp phục vụ báo cáo/thuyết trình | Sơ đồ, bảng, kết luận và phụ lục kiểm chứng trong tài liệu; không tạo Word/PPT hoặc kịch bản. |
 
-Luồng nghiệp vụ tiêu biểu: user đăng sản phẩm → moderator kiểm duyệt → sản phẩm được duyệt xuất hiện để mua → người mua tạo đơn → hệ thống xử lý các thay đổi liên quan đến đơn hàng, tồn kho và giao dịch. Việc đăng sản phẩm và việc mua hàng thuộc cùng một tài khoản, không cần tách thành hai loại tài khoản người mua/người bán độc lập.
+## 2. Tổng quan các thành phần và kiến trúc Docker
 
-### 1.2. Các vấn đề dữ liệu cần giải quyết
+### 2.1. Vai trò và quyền sở hữu dữ liệu
 
-OldShop phát sinh đồng thời nhiều loại dữ liệu có yêu cầu lưu trữ khác nhau:
-
-| Nhóm dữ liệu | Ví dụ | Yêu cầu |
+| Thành phần | Dữ liệu và trách nhiệm | Đường truy cập chính |
 |---|---|---|
-| Dữ liệu nghiệp vụ có cấu trúc | User, role, giá, số lượng, trạng thái duyệt, đơn hàng, thanh toán | Quan hệ rõ ràng, ràng buộc khóa và xử lý giao dịch |
-| Dữ liệu bán cấu trúc | Thuộc tính theo loại hàng, tags, danh sách tham chiếu ảnh, document đơn hàng | Cho phép object/array lồng nhau và các khóa thuộc tính thay đổi |
-| Nội dung phi cấu trúc | Ảnh sản phẩm, avatar, video MP4, file đính kèm | Lưu và truy xuất nội dung file bằng object key |
-| Dữ liệu phục vụ vận hành | Sự kiện đồng bộ, lần chạy ETL, lỗi, báo cáo tổng hợp | Có khả năng theo dõi, retry và đối soát |
+| PostgreSQL primary, DB `oldshop` | Nguồn chuẩn tài khoản/quyền, giá, stock, cart, order, payment, PII; outbox, ETL state, aggregate. | FastAPI qua `backend/app/core/database.py`; ETL qua kết nối PG. |
+| PostgreSQL standby | Bản sao WAL bất đồng bộ của primary. | Chưa triển khai routing commerce tự động hoặc tự promote. |
+| MongoDB `oldshop-rs` | Nguồn chuẩn attributes/tags; sáu nhóm bản đọc và lỗi ETL. | `backend/app/services/mongo.py`, `product_metadata.py`. |
+| MinIO single-node | Byte ảnh, MP4 upload, avatar, attachment theo cấu hình bucket. | `backend/app/services/storage.py`, media gateway và ETL. |
+| Site A/B, DB `oldshop_1`/`oldshop_2` | Fragment danh mục theo site của seller; reference data nạp tại cả hai. | Gateway riêng `backend/app/catalogue_gateway.py` đọc view tại A. |
 
-Ví dụ, điện thoại có RAM và dung lượng lưu trữ; quần áo có kích thước và chất liệu. Nếu mọi thuộc tính đều trở thành cột cố định trong bảng `product`, schema sẽ khó mở rộng. Ngược lại, nếu toàn bộ dữ liệu đơn hàng và tồn kho chỉ là document linh hoạt, việc bảo vệ các quan hệ và giao dịch nghiệp vụ sẽ phức tạp hơn.
+Một trường có thể xuất hiện ở nhiều kho nhưng chỉ có một nguồn ghi chuẩn. Description, giá/stock và quan hệ ảnh vẫn do PG quản lý; Mongo nhận projection. Attributes/tags được giữ khi ETL chạy lại. Không chuyển số dư, mật khẩu/token hoặc địa chỉ khách hàng sang bản đọc chỉ vì Mongo có schema linh hoạt.
 
-Khi số lượng tin đăng tăng, hệ thống còn phải tránh quét toàn bộ dữ liệu cho mỗi lần xem danh sách, tra cứu ảnh hoặc xử lý hàng đợi ETL. Việc bổ sung index phải dựa trên truy vấn thực tế và có bằng chứng đo, vì mỗi index cũng làm tăng dung lượng và chi phí ghi.
+### 2.2. Sơ đồ kiến trúc tổng thể
 
-### 1.3. Giải pháp đề xuất và đã triển khai
-
-OldShop sử dụng phối hợp ba công nghệ lưu trữ:
-
-- **PostgreSQL:** nguồn dữ liệu chuẩn cho các trường nghiệp vụ/giao dịch và quan hệ có cấu trúc.
-- **MongoDB:** nguồn chuẩn cho thuộc tính động/tags và nơi lưu các document bản đọc được ETL tạo từ dữ liệu cho phép của PostgreSQL.
-- **MinIO:** nơi lưu nội dung thực của file; PostgreSQL/MongoDB giữ các tham chiếu theo quyền sở hữu dữ liệu.
-
-FastAPI cung cấp API để người dùng thao tác với các kho này thông qua ứng dụng. ETL tạo và cập nhật các bản đọc/tổng hợp. Index được thiết kế theo workload và quản lý thêm bằng catalog JSON. Hạ tầng Docker có PostgreSQL standby và MongoDB replica set để mô phỏng nhiều node, trong phạm vi một máy chủ.
-
-Phần mở rộng phân tán có hai PostgreSQL độc lập: site A lưu sản phẩm do nhóm seller A quản lý, site B lưu sản phẩm do nhóm seller B quản lý. Site A dùng `postgres_fdw` và view hợp nhất để đọc danh mục ở cả hai site. Module này chạy riêng với ứng dụng thương mại hiện hữu; đã có gateway đọc danh mục, còn luồng giỏ hàng, thanh toán và đồng bộ Mongo/media đa site chưa được tích hợp.
-
-Giải pháp này là tích hợp nhiều hệ lưu trữ ở tầng ứng dụng và đồng bộ dữ liệu. Không có một bộ máy truy vấn SQL chung hay một transaction ACID duy nhất bao trùm cả PostgreSQL, MongoDB và MinIO.
-
-## 2. Kiến trúc hệ thống cơ sở dữ liệu
-
-### 2.1. Các thành phần và hướng kết nối
-
-```text
-Trình duyệt: Admin / Moderator / User
-                   |
-            Angular + Nginx
-                   |
-                FastAPI
-          /        |        \
- PostgreSQL     MongoDB     MinIO
-   primary     replica set  single-node
-      |
-      +-- WAL bất đồng bộ --> PostgreSQL standby
-      |
-      +-- dữ liệu nguồn + outbox --> ETL worker
-                                      |
-                         +------------+------------+
-                         |            |            |
-                      MongoDB    Báo cáo trên PG   MinIO
-                     bản đọc      ACK/đối soát    media/cleanup
+```mermaid
+flowchart TB
+    Browser[Trình duyệt] --> Web[frontend: Angular và Nginx]
+    Web --> API[backend: FastAPI]
+    API --> PG[(pg-primary: oldshop)]
+    API --> RS[(MongoDB oldshop-rs)]
+    API --> Object[(MinIO single-node)]
+    PG -->|WAL async, resilience| Standby[(pg-replica)]
+    PG --> Outbox[etl_outbox cùng transaction nguồn]
+    Outbox --> Worker[etl-worker]
+    Worker -->|partial upsert| RS
+    Worker -->|ACK, quality, aggregate| PG
+    Worker -->|copy và cleanup media| Object
+    Gateway[Catalogue gateway riêng] --> A[(Site A: oldshop_1)]
+    A -->|postgres_fdw: đọc lúc query| B[(Site B: oldshop_2)]
 ```
 
-Ứng dụng đọc/ghi nghiệp vụ cốt lõi tại PostgreSQL primary. Các thuộc tính động được xử lý tại MongoDB. Upload và phát nội dung file đi qua lớp storage/media của ứng dụng tới MinIO khi cấu hình storage là `minio`.
+Không có transaction ACID chung cho PG, Mongo và MinIO. ACK sau ghi Mongo cho phép retry nhưng tạo độ trễ eventual consistency. Các node đã kiểm chứng nằm cùng Docker host, chưa tạo miền lỗi vật lý độc lập.
 
-PG standby nhận WAL từ primary. MongoDB gồm `mongo1`, `mongo2`, `mongo3` trong replica set `oldshop-rs`; vai trò PRIMARY/SECONDARY được xác định theo trạng thái replica set, không nên coi tên `mongo1` luôn đồng nghĩa với PRIMARY.
+### 2.3. Số service theo chế độ triển khai
 
-### 2.2. Triển khai vật lý hiện tại
+[Compose dữ liệu](../../deploy/docker-compose.distributed.yml) định nghĩa **14 service**, không có nghĩa cần 14 container chạy liên tục.
 
-File [docker-compose.distributed.yml](../../deploy/docker-compose.distributed.yml) định nghĩa stack `oldshop-data`. Profile `resilience` bổ sung PostgreSQL replica và hai MongoDB member so với cấu hình cơ sở.
+| Chế độ của `deploy/docker-compose.distributed.yml` | Service được chọn | Dài hạn | Một lần |
+|---|---:|---:|---:|
+| Mặc định | 9 | 6 | 3 |
+| `resilience` | 13 | 9 | 4 |
+| Mặc định + `test` | 10 | 6 | 4 |
+| `resilience` + `test` | 14 | 9 | 5 |
 
-| Thành phần | Trạng thái triển khai | Cổng host mặc định |
+Đây là số từ cấu hình, không phải ảnh chụp `docker ps`. Job init hoàn tất có thể còn container `Exited (0)`. Số đang running thấp hơn số service đã tạo. Trong evidence Ngày 7, `checks.healthy_services` có chín service dài hạn của profile resilience.
+
+### 2.4. Chức năng toàn bộ service của stack dữ liệu
+
+| Service | Nhóm/profile | Vòng đời | Chức năng | Phụ thuộc được khai báo |
+|---|---|---|---|---|
+| `pg-primary` | CSDL/mặc định | Dài hạn | PostgreSQL 16 nghiệp vụ và WAL. | Không. |
+| `pg-replica` | CSDL/resilience | Dài hạn | Base backup ban đầu, replay WAL read-only. | Primary healthy. |
+| `mongo1` | CSDL/mặc định | Dài hạn | Member ban đầu của oldshop-rs. | Không. |
+| `mongo2` | CSDL/resilience | Dài hạn | Data-bearing voting member thứ hai. | Không; expand thêm vào set. |
+| `mongo3` | CSDL/resilience | Dài hạn | Data-bearing voting member thứ ba. | Không; expand thêm vào set. |
+| `mongo-init` | Khởi tạo/mặc định | Một lần | Init set một member, tạo app user. | Mongo1 healthy. |
+| `mongo-expand` | Khởi tạo/resilience | Một lần | Thêm member tuần tự, chờ SECONDARY/committed config. | Init completed, mongo2/3 healthy. |
+| `mongo-schema-init` | Khởi tạo/mặc định | Một lần | `scripts.init_mongo`: validator và index. | Mongo-init completed. |
+| `minio` | Object store/mặc định | Dài hạn | S3/Console, volume riêng. | Không. |
+| `minio-init` | Khởi tạo/mặc định | Một lần | Tạo bucket private và policy/app user. | MinIO healthy. |
+| `backend` | Ứng dụng/mặc định | Dài hạn | Bootstrap/migration, API/media. | PG và MinIO healthy; init/schema jobs completed; mongo-expand là dependency tùy chọn. |
+| `frontend` | Ứng dụng/mặc định | Dài hạn | Angular/Nginx, proxy API/media. | Backend healthy. |
+| `etl-worker` | Nền/mặc định | Dài hạn | `python -m etl.run worker`. | Backend healthy. |
+| `etl-test` | Helper/test | Một lần | Mặc định chạy `python -m scripts.init_mongo` với Mongo admin URI; runner có thể override entrypoint. | Không. |
+
+Tên `etl-test` không chứng minh service tự chạy pytest: phải đọc command/entrypoint thực tế. `mongo-schema-init` cũng không trực tiếp đợi mongo-expand; backend đợi riêng các job tương ứng. `depends_on` chờ healthy/completed ở startup, không bảo đảm dependency luôn sống sau đó. Ping Mongo không chứng minh đã có PRIMARY; heartbeat worker không chứng minh dữ liệu đã đối soát đủ.
+
+Tách container giúp mỗi tiến trình có image, volume, credential, network, resource limit và vòng đời riêng. Có thể restart worker mà không restart database, thay member mà không nhân bản frontend, để job init kết thúc sau cấu hình. Đổi lại, hệ thống cần timeout/retry và điều phối dependency. Gom mọi tiến trình vào một container làm mất các ranh giới vận hành này; tách container trên một host vẫn không tạo HA chịu mất host.
+
+### 2.5. Các Compose khác và cách tránh đếm trùng
+
+Toàn repo có **10 tệp Compose, 37 mục khai báo service, 29 tên service khác nhau**. Các overlay và phương án thay thế không được cộng thành 37 container phải chạy cùng nhau.
+
+| Tệp/cấu hình | Service và chức năng | Vòng đời/phụ thuộc |
 |---|---|---|
-| Frontend | Angular/Nginx | `58080` |
-| Backend | FastAPI | `58000` |
-| PostgreSQL primary | Nơi ghi nghiệp vụ | `55432` |
-| PostgreSQL standby | Bản sao streaming, chỉ đọc | `55433` |
-| MongoDB | Replica set ba member khi bật profile | `57017` cho mongo1 nếu mở theo cấu hình GUI |
-| MinIO | Một node lưu object | `59000` API, `59001` Console |
-| ETL worker | Một process đồng bộ theo chu kỳ | Không cần cổng công khai |
+| `docker-compose.yml` | postgres; backend; frontend — stack phát triển cơ bản, ba service. | Dài hạn; backend→PG, frontend→backend. |
+| `deploy/docker-compose.yml` | postgres, backend, frontend, caddy — stack production bốn service. | Dài hạn; Caddy reverse proxy/TLS, phụ thuộc frontend. |
+| `deploy/docker-compose.monitoring.yml` | prometheus, node-exporter, postgres-exporter, grafana. | Dài hạn; PG exporter→postgres, Grafana→Prometheus. |
+| `deploy/docker-compose.loki.yml` | loki lưu log, promtail thu log; bổ sung cấu hình grafana đã có. | Dài hạn; promtail→Loki. Production+monitoring+Loki: 10 service. |
+| `deploy/docker-compose.elk.yml` | elasticsearch, es-setup, kibana, filebeat; bổ sung grafana. | es-setup một lần sau ES healthy; Kibana đợi setup; Filebeat đợi ES. Production+monitoring+ELK: 12 service, 11 dài hạn. |
+| `deploy/docker-compose.gui.yml` | Override mongo1 để publish 127.0.0.1:57017. | Không thêm service hoặc instance mới. |
+| `deploy/sites/compose.site-a.yml` | pg-a, DB oldshop_1. | Dài hạn, độc lập. |
+| `deploy/sites/compose.site-b.yml` | pg-b, DB oldshop_2. | Dài hạn, độc lập. |
+| `deploy/sites/compose.catalog.yml` | catalogue, gateway chỉ đọc, profile catalogue. | Dài hạn, đợi pg-a healthy. Hai site+gateway: ba service. |
 
-Các cổng trên là cổng để công cụ trên host kết nối. Bên trong Docker network, ứng dụng sử dụng hostname/cổng nội bộ, ví dụ `pg-primary:5432`, `mongo1:27017`, `minio:9000`. pgAdmin4 và MongoDB Compass là công cụ quản trị, không phải nơi trực tiếp lưu dữ liệu.
+`deploy/scripts/lib.sh` ghép production/monitoring và **một** hệ log; đây không phải overlay tự động cho oldshop-data. pgAdmin4/Compass là client quản trị trong hướng dẫn, không có service pgAdmin/Compass được thêm ở đây. Bootstrap sites chạy qua `deploy/scripts/sites.py`, không có container init sites riêng.
 
-Trong cấu hình đã kiểm chứng của stack này, container và volume nằm trên cùng một Docker host. Các node được tách về tiến trình/network/volume nhưng chưa được tách thành các miền lỗi vật lý độc lập.
+## 3. Thiết kế dữ liệu quan hệ, JSON và media
 
-Phần danh mục phân tán dùng project riêng `oldshop-sites`, không chuyển đổi database hay volume của `oldshop-data`:
+### 3.1. PostgreSQL
 
-| Thành phần phân tán | Database / vai trò | Địa chỉ mặc định trên host | Địa chỉ mạng Docker trong mô hình đã kiểm |
-|---|---|---|---|
-| Site A, service `pg-a` | `oldshop_1`, ghi fragment A và đọc view toàn cục | `127.0.0.1:56431` | `172.29.82.11:5432` |
-| Site B, service `pg-b` | `oldshop_2`, ghi fragment B | `127.0.0.1:56432` | `172.29.82.12:5432` |
-| Catalogue gateway | API chỉ đọc qua site A | `127.0.0.1:56480` | `172.29.82.20:8000` |
+#### 3.1.1. Nguồn schema và chuỗi migration
 
-Đây là hai instance PostgreSQL độc lập trên hai IP trong cùng Docker host. Các địa chỉ này mô tả cấu hình mô phỏng đã có, không phải IP LAN/VPN của hai máy thật. Cấu hình nằm trong [compose.site-a.yml](../../deploy/sites/compose.site-a.yml), [compose.site-b.yml](../../deploy/sites/compose.site-b.yml), [compose.catalog.yml](../../deploy/sites/compose.catalog.yml); quy trình nằm trong [hướng dẫn hai site](../HUONG_DAN_CSDL_PHAN_TAN.md).
+Baseline `database/01_schema/*.sql` có **18 bảng nghiệp vụ**. `database/init.sql`, `backend/scripts/init_db.py`, `backend/scripts/migrate.py` là đường bootstrap/migration; ORM tại `backend/app/models/` được đối chiếu cùng DDL. Runner kiểm baseline fingerprint, checksum và advisory lock, áp từng migration trong transaction, lưu schema_migrations.
 
-### 2.3. Sơ đồ và tài liệu thiết kế
+| Migration trong `database/04_migrations/` | Thay đổi chính |
+|---|---|
+| 001_indexes.sql | Sáu index workload, gồm unique cart/product. |
+| 002_partitioning.sql | Order HASH bốn partition; system_log RANGE tháng, DEFAULT và PK ghép; giữ FK. |
+| 003_vertical_split.sql | User core/profile/secret/wallet và view users_full. |
+| 004_media_metadata.sql | Product_image.content_type, size_bytes. |
+| 005_etl_outbox.sql | Năm bảng outbox/provenance/run/state/report, trigger nguồn. |
+| 006_media_cleanup.sql | Hàng đợi xóa media và trigger. |
+| 007_indexing_v2.sql | Chín index bổ sung, không thêm bảng/cột. |
 
-ERD rút gọn và sơ đồ phân tán được trình bày trực tiếp bằng Mermaid tại mục 3.1.1 và 3.2.3. Các nguồn thiết kế chi tiết để đối chiếu gồm:
+Sau split có 21 bảng nghiệp vụ; cộng năm bảng 005, một bảng 006 và schema_migrations thành **28 bảng logic**. Không cộng partition con lần nữa. Module sites có extension riêng, không gộp vào con số DB ứng dụng.
 
-| Nội dung | Nguồn hiện có | Phạm vi sử dụng |
+#### 3.1.2. Bảng, khóa và quan hệ
+
+| Bảng | PK và cột/quan hệ quan trọng | Ý nghĩa/ràng buộc |
 |---|---|---|
-| Kiến trúc ứng dụng | [07_architecture_current.puml](../diagram/07_architecture_current.puml) | PG/Mongo/MinIO và ETL của ứng dụng hiện hữu. |
-| ERD PostgreSQL đầy đủ ở giai đoạn Ngày 7 | [07_erd_current.dbml](../diagram/07_erd_current.dbml) | Bảng logic đến migration 006; đối chiếu thêm 007 và extension site khi mô tả hiện trạng. |
-| Topology replication | [02_distribution_diagram.puml](../diagram/02_distribution_diagram.puml) | Primary/standby và Mongo replica set; không thay sơ đồ phân mảnh hai site. |
-| Luồng ETL | [05_etl_flow.puml](../diagram/05_etl_flow.puml) | Trích xuất, biến đổi, nạp và đối soát. |
-| Schema và tái tạo hai site | [01_site_schema.sql](../../database/distributed/01_site_schema.sql), [05_global_views.sql](../../database/distributed/05_global_views.sql) | Ownership, phân mảnh sản phẩm/ảnh và view toàn cục. |
+| user_core | user_id; username/email UNIQUE, trạng thái, trust_score, thời gian | Gốc tài khoản. |
+| user_profile | user_id vừa PK vừa FK→core; full_name/phone/address/avatar_url | Hồ sơ/PII, tối đa một dòng mỗi core. |
+| user_secret | user_id PK/FK→core; password_hash, random_key, token/expiry | Bí mật xác thực, không qua ETL Mongo. |
+| user_wallet | user_id PK/FK→core; balance NUMERIC | Ví giao dịch trên primary; DDL003 không có CHECK số dư không âm. |
+| role; user_role | role_id; PK(user_id,role_id), hai FK | User–role nhiều–nhiều. |
+| category | category_id; parent_id tự FK; name UNIQUE | Cho phép cây danh mục; seed không chứng minh cây nhiều tầng. |
+| product | product_id; seller_id/approved_by→core; category_id→category | Title, description, price/quantity có CHECK, status, soft-delete, media/thuộc tính cũ. |
+| product_image | image_id; product_id→product CASCADE | image_url, is_primary/display_order, content_type/size_bytes; không chứa byte ảnh. |
+| contact_info | contact_id; user_id→core | Sổ địa chỉ. FK từ order không tự kiểm contact thuộc buyer. |
+| shopping_cart | cart_id; user_id FK và UNIQUE | User có tối đa một cart. |
+| shopping_cart_item | cart_item_id; cart_id/product_id FK | Quantity; unique(cart_id,product_id) do 001. |
+| voucher | voucher_id; code UNIQUE | Giảm giá, usage, hiệu lực. |
+| payment_method | payment_method_id; method_name UNIQUE | Danh mục phương thức. |
+| order | order_id; buyer/contact/payment_method FK; voucher FK nullable | Tổng tiền/shipping/discount/final/status/date; HASH(order_id). |
+| order_detail | order_detail_id; order_id/product_id FK | Quantity, price_at_purchase, subtotal; một đơn có thể nhiều seller. |
+| transaction | transaction_id; order_id/user_id/payment_method_id FK | Amount, balance_before/after, status; reference_number UNIQUE. |
+| review | review_id; product_id/buyer_id FK | Rating0 là report theo code; 1–5 là review, soft-delete. |
+| system_log | PK(log_id,created_at); user_id FK nullable | RANGE theo created_at; log_id riêng không đủ định danh nguồn. |
+| violation_log | log_id; user_id FK | User bị xử lý, reason/action_taken; nguồn không có actor riêng. |
+| system_feedback | feedback_id; user_id nullable FK SET NULL | Subject/content/status, guest_email; nguồn contact_messages. |
 
-Một số sơ đồ nguồn được lập ở giai đoạn trước; khi xuất sang PPT/PDF cần đối chiếu nội dung video MP4/bucket `product-videos`, indexing JSON và topology hai site. Các sơ đồ rút gọn trong báo cáo giải thích thiết kế, không phải ảnh chụp trạng thái vận hành.
+PK/FK của ba mảnh user đều CASCADE về core. `users_full` là view JOIN chỉ đọc, không có trigger ghi. ORM tạo đủ bốn dòng trong một transaction nhưng FK một chiều không bắt buộc mọi core phải có đủ các con khi DBA ghi SQL trực tiếp. Không có order.seller_id: seller phải đi qua order_detail→product.
 
-## 3. Thiết kế và thực thi giải pháp cơ sở dữ liệu
-
-### 3.1. Cơ sở dữ liệu hợp nhất
-
-#### 3.1.1. PostgreSQL: dữ liệu có cấu trúc và nguồn nghiệp vụ
-
-PostgreSQL quản lý các dữ liệu có quan hệ rõ ràng: người dùng, vai trò, danh mục, sản phẩm, quan hệ sản phẩm–ảnh, giỏ hàng, đơn hàng, chi tiết đơn, giao dịch và voucher. Các khóa chính, khóa ngoại, ràng buộc và transaction bảo vệ tính toàn vẹn của dữ liệu trong phạm vi PostgreSQL.
-
-Dữ liệu người dùng được tách thành `user_core`, `user_profile`, `user_secret`, `user_wallet`, liên kết bằng `user_id`. Mục đích là phân chia các nhóm thông tin theo chức năng và đường truy cập. Việc tách bảng tự nó không tạo ra phân quyền bảo mật hay phân tán vật lý; vẫn cần kiểm soát truy cập tại ứng dụng/database.
-
-Các thao tác nhạy cảm với tính nhất quán như tồn kho, ví và giao dịch sử dụng primary. Không coi bản sao PostgreSQL bất đồng bộ là nơi mặc định để quyết định số dư hoặc số lượng hàng khả dụng.
-
-Các nhóm quan hệ chính:
-
-| Nhóm | Bảng tiêu biểu | Liên kết và vai trò |
+| Bảng vận hành | PK | Nội dung/quan hệ |
 |---|---|---|
-| Tài khoản và quyền | `user_core`, `user_profile`, `user_secret`, `user_wallet`, `role`, `user_role` | Các mảnh user dùng chung `user_id`; user–role là quan hệ nhiều–nhiều. |
-| Danh mục và tin đăng | `category`, `product`, `product_image` | Product tham chiếu seller và category; mỗi ảnh thuộc một product bằng FK. |
-| Giỏ hàng | `shopping_cart`, `shopping_cart_item` | Mỗi user tối đa một cart theo UNIQUE; cart item liên kết product và số lượng. |
-| Đơn hàng và thanh toán | `order`, `order_detail`, `transaction`, `payment_method`, `voucher`, `contact_info` | Đơn có chi tiết và giao dịch; giá tại thời điểm mua nằm ở chi tiết đơn; địa chỉ giao hàng được xử lý tại PG. |
-| Kiểm duyệt và vận hành | `review`, `violation_log`, `system_log`, `system_feedback`, `etl_outbox`, `etl_runs` | Nguồn nghiệp vụ, audit, sự kiện và trạng thái đồng bộ; các bản đọc được chiếu sang Mongo theo hợp đồng. |
+| etl_time_origin | (source_table,source_key,field_name) | JSONB source key, timestamp/zone; không FK đa hình tới các bảng nguồn. |
+| etl_outbox | event_id | Source/entity key JSONB, operation/status/attempts/available_at; last_run_id không khai báo FK. |
+| etl_runs | run_id UUID | Mode/status/time, rows_in/out/errors, details JSONB. |
+| etl_state | name | Value JSONB, updated_at; heartbeat/initialization/deep-check. |
+| report_daily_sales | (report_date,seller_id,category_id) | Counts/quantity/gross_sales_vnd/refreshed_at/run_id; các ID không được khai báo FK trong005. |
+| media_deletions | deletion_id | url_path UNIQUE, lý do/status/retry; worker ánh xạ URL sang object, không có FK liên kho. |
+| schema_migrations | version | Checksum và lịch sử runner. |
 
-ERD sau rút gọn các quan hệ nghiệp vụ chính; không liệt kê mọi cột, constraint và bảng vận hành:
+Có chênh lệch giữa ORM và SQL: `transaction.amount` là NUMERIC(18,4) trong DDL nhưng DECIMAL(18,2) trong ORM; transfer_method NOT NULL trong SQL nhưng ORM cho nullable; UNIQUE reference_number có trong SQL nhưng ORM chưa khai báo tương ứng. Đây là nợ đồng bộ model, không phải lý do sửa ngược DDL trong lần viết báo cáo. SQL/migration là căn cứ constraint CSDL thực tế.
+
+#### 3.1.3. ERD và giới hạn sơ đồ hiện hữu
+
+![ERD baseline 18 bảng trước user split và ETL](../diagram/01_erd_current.png)
+
+Hình trên là **baseline ngày 27/10**, còn user nguyên khối, system_log PK đơn và chưa có bảng ETL. Không dùng nó như ERD sau migration. Nguồn phù hợp hơn là [07_erd_current.dbml](../diagram/07_erd_current.dbml). `docs/evidence/day7_schema_review.json` ghi result PASS, logical_tables=28, columns=222, table_column_type_nullability_diffs rỗng; chỉ chứng minh phạm vi bảng/cột/kiểu/nullability của lượt kiểm.
 
 ```mermaid
 erDiagram
     USER_CORE ||--o| USER_PROFILE : profile
-    USER_CORE ||--o| USER_SECRET : authentication
+    USER_CORE ||--o| USER_SECRET : secret
     USER_CORE ||--o| USER_WALLET : wallet
-    USER_CORE ||--o{ USER_ROLE : roles
-    ROLE ||--o{ USER_ROLE : members
+    USER_CORE ||--o{ USER_ROLE : membership
+    ROLE ||--o{ USER_ROLE : roles
     USER_CORE ||--o{ PRODUCT : sells
+    CATEGORY o|--o{ CATEGORY : parent
     CATEGORY ||--o{ PRODUCT : groups
     PRODUCT ||--o{ PRODUCT_IMAGE : images
     USER_CORE ||--o| SHOPPING_CART : owns
     SHOPPING_CART ||--o{ SHOPPING_CART_ITEM : contains
-    PRODUCT ||--o{ SHOPPING_CART_ITEM : reserved
+    PRODUCT ||--o{ SHOPPING_CART_ITEM : reserves
     USER_CORE ||--o{ CONTACT_INFO : addresses
     USER_CORE ||--o{ ORDER : buys
-    CONTACT_INFO ||--o{ ORDER : delivery
-    PAYMENT_METHOD ||--o{ ORDER : payment_method
+    CONTACT_INFO ||--o{ ORDER : contact
+    PAYMENT_METHOD ||--o{ ORDER : method
     VOUCHER o|--o{ ORDER : discount
     ORDER ||--o{ ORDER_DETAIL : lines
-    PRODUCT ||--o{ ORDER_DETAIL : sold_items
+    PRODUCT ||--o{ ORDER_DETAIL : purchased
     ORDER ||--o{ TRANSACTION : payments
+    PRODUCT ||--o{ REVIEW : reviews
+    USER_CORE ||--o{ REVIEW : writes
 ```
 
-Với các mảnh user, service tạo đủ các dòng trong một transaction; FK/PK một chiều không tự bắt buộc mọi core phải có đủ bảng con khi ghi SQL trực tiếp, nên sơ đồ dùng phía con `0..1`. View `users_full` tái tạo bằng JOIN và dùng để đọc. `order` phân hoạch HASH theo `order_id` thành bốn partition; `system_log` phân hoạch RANGE theo thời gian, có partition DEFAULT. Đây là phân hoạch trong instance, khác với phân bổ product sang hai site ở mục 3.2.
+Sơ đồ rút gọn trên lược approver/log và một số FK để dễ đọc; bảng/SQL là nguồn đầy đủ. Với con user, 0..1 biểu thị đúng giới hạn FK/PK, không giả định SQL ép đủ bốn mảnh.
 
-Schema SQL và [migrations 001–007](../../database/04_migrations) là nguồn đối chiếu cho khóa, kiểu, CHECK, trigger và index. Không cộng partition children vào số thực thể nghiệp vụ hoặc coi bản sao Mongo là một bảng giao dịch độc lập.
+| Sơ đồ hiện có | Phạm vi/sai khác |
+|---|---|
+| docs/diagram/01_erd_current.dbml và .png | Baseline18 bảng; PNG cần đối chiếu DBML đã hiệu chỉnh. |
+| docs/diagram/07_erd_current.dbml | 28 bảng đến006;007 chỉ thêm index; chưa có site_config/seller_site/distributed_installation, site_id, FDW. |
+| docs/diagram/02_distribution_diagram.puml và .png | Ngày 2 còn ghi ETL PLANNED; code/evidence về sau đã có worker. |
+| docs/diagram/02_fragmentation_model.puml | Target Ngày 2 dùng timestamptz/UTC; SQL002 thực giữ timestamp without time zone. |
+| docs/diagram/07_architecture_current.puml | Ghi ba bucket; init hiện có bốn bucket và MP4 upload; chưa có module sites. |
+| docs/diagram/05_etl_flow.puml, 07_data_flow_current.puml | Luồng outbox/projection; không mô tả A–B sync vì ETL hiện không làm việc đó. |
 
-#### 3.1.2. MongoDB: dữ liệu bán cấu trúc
+PUML/DBML được liên kết như nguồn, không chèn như ảnh. Mermaid trong báo cáo là mô hình từ code/config, không phải ảnh chụp runtime.
 
-MongoDB lưu document BSON với object và array lồng nhau. Dữ liệu không hoàn toàn tùy ý: các model Pydantic được dùng để xây validator, còn các dictionary như `attributes` cho phép khóa linh hoạt.
+### 3.2. MongoDB: JSON/BSON và validator
 
-Các nhóm document nghiệp vụ gồm `product_details`, `order_snapshots`, `reviews`, `system_logs`, `violation_logs`, `contact_messages`. Collection `etl_errors` phục vụ vận hành ETL.
+#### 3.2.1. Nguồn chuẩn và trường dữ liệu
 
-Thiết kế các nhóm document chính:
+[documents.py](../../backend/app/schemas/documents.py) → `backend/app/services/mongo_schema.py::validators()` → `backend/scripts/init_mongo.py` là đường sinh/cài `$jsonSchema`. Init dùng validationLevel strict và validationAction error. JSON snapshot trong docs/design không phải đầu vào runtime.
 
-| Collection | Trường và cấu trúc tiêu biểu | Ý nghĩa/ràng buộc |
+Model dùng strict, extra=forbid và cấm NaN/Infinity. Identifier là int dương ≤int64; VND là int không âm ≤int64. `_id` string bắt buộc; schema_version=1 và deleted=false có default. AwareDatetime được chuyển thành BSON Date; ISO8601 trong JSON ví dụ không có nghĩa Mongo lưu string ngày giờ.
+
+Quy ước: **R** bắt buộc khi dựng model; **D** có default; **N** cho phép null. Tất cả sáu collection kế thừa `_id`, schema_version và deleted.
+
+| Collection | R: trường và kiểu | D/N: trường và kiểu |
 |---|---|---|
-| `product_details` | `product_id`, `category_id`, `description`, `condition`, `attributes`, `tags`, `images`, `updated_at` | Thuộc tính theo loại hàng; image reference gồm bucket/key; unique `product_id`. |
-| `order_snapshots` | `order_id`, `buyer{id,region}`, `items[]`, `payments[]`, các trường tiền `_vnd`, `order_status`, `order_date`, `etl` | Bản đọc đơn; tiền VND nguyên không âm, không thay dữ liệu giao dịch nguồn. |
-| `reviews` | `review_id`, `product_id`, `buyer_id`, `type`, `rating`, `content`, `status`, `evidence[]` | `rating=0` là report; review có rating 1–5; có trường phục vụ moderation. |
-| `system_logs` | `log_id`, `created_at`, `action`, `actor_id`, `payload`, `etl` | Danh tính nguồn log theo cặp ID/thời điểm; payload có cấu trúc giới hạn. |
-| `violation_logs` | `log_id`, `target_user_id`, `reason`, `action_taken`, `created_at` | Bản đọc vi phạm; không tự tạo actor khi dữ liệu nguồn thiếu. |
-| `contact_messages` | `feedback_id`, `subject`, `content`, `status`, `attachments[]`, `created_at` | Form liên hệ; khác bảng sổ địa chỉ `contact_info` chỉ lưu tại PG. |
+| product_details | _id:string, product_id/category_id:int, updated_at:date | description/video_url/dimensions_raw:string N; weight_grams:int≥0 N; dimensions/condition:object N; attributes:object={}, tags:string[]=[], images:object[]=[], etl:object N. |
+| reviews | _id, review_id/product_id/buyer_id:int, type:review/report, rating:int0–5, created_at:date | title/content:string N; status:pending/approved/rejected N; moderation:object N; evidence:object[]=[], updated_at:date N, etl N. |
+| order_snapshots | _id, order_id:int, buyer:object, items:object[] min1; total_amount_vnd/shipping_fee_vnd/discount_amount_vnd/final_amount_vnd:int; order_status:int0–4, order_date:date, etl:object | payments:object[]=[], voucher_id:int N, voucher_current:object N. |
+| system_logs | _id, log_id:int, action:string1–100, created_at:date | actor_id:int N, resource_type:string N, resource_id:int N, message:string≤2000 N, payload:object N, ip_hash:string N, etl N. |
+| violation_logs | _id, log_id/target_user_id:int, reason:string1–500, action_taken:string1–100, created_at:date | actor_id:int N, payload:object N, etl N; không bịa actor thiếu ở PG. |
+| contact_messages | _id, feedback_id:int, subject:string1–200, content:string1–5000, status:int0–2, created_at:date | user_id:int N, attachments:object[]=[], etl N. |
 
-Các document dùng `_id` string, `schema_version=1` và cờ `deleted` theo model. Metadata `etl` ghi thời điểm đồng bộ và thông tin lượt chạy khi có. Ví dụ minh họa `product_details` theo cấu trúc hiện hành:
+| Object/mảng | Cấu trúc và ràng buộc |
+|---|---|
+| ObjectReference / image | R bucket:string3–63, key:string1–1024; content_type:string N, size:int≥0 N. Ảnh thêm image_id:int N, is_primary=false, display_order=0. |
+| Condition / Dimensions | Condition R grade:int1–10; warranty_months:int≥0=0, defects:string[]=[]. Dimensions R length/width/height:number>0; unit=cm, enum cm/mm/m. |
+| Buyer / item | Buyer R id:int; region:north/central/south/unknown N. Item R product_id, quantity>0, price_at_purchase_vnd, subtotal_vnd; title/category/seller hậu tố _current cho phép null. |
+| Payment / voucher | Payment R transaction_id, method_id, status_code:int, amount_vnd; fraud_score:number0–1 N. Voucher R voucher_id, discount_type_code_current:int, discount_value_current:decimal string, is_active_current/is_deleted_current:bool. |
+| ETLMetadata | R synced_at:date; source_updated_at:date N, run_id:string N, source_created_at:string N. |
+| Moderation / LogPayload | Moderation R actor_id:int, at:date, reason:string N. Payload event/reason_code:string N; changed_fields:string[]=[]. |
+
+Reviews còn có ràng buộc report iff rating0; review có rating1–5. Mongo ID tham chiếu PG là quan hệ logic, không có FK liên engine. Collection vận hành thứ bảy `etl_errors` có model ở `backend/app/schemas/etl.py`: R _id:string, event_id:int, run_id:string, entity_type:enum sáu entity ETL, entity_key:object, code:string≤80, attempts:int≥1, last_at:date; resolved:bool=false. Entity_key.id dương, created_at:string cho phép null.
+
+#### 3.2.2. Ví dụ JSON theo schema triển khai
+
+Các giá trị dưới đây minh họa hợp đồng và quy tắc transform; không phải dump/seed import, không khẳng định object hoặc product tồn tại. ID entity theo `backend/etl/transform.py`; log cần mã hóa cả khóa thời gian.
 
 ```json
 {
-  "_id": "product:123",
-  "schema_version": 1,
-  "product_id": 123,
-  "category_id": 1,
-  "description": "Điện thoại đã qua sử dụng",
-  "condition": {"grade": 8, "warranty_months": 0, "defects": []},
-  "attributes": {
-    "brand": "Thuong hieu A",
-    "ram_gb": 8,
-    "storage_gb": 256
-  },
-  "tags": ["dien-thoai", "da-qua-su-dung"],
-  "images": [
-    {
-      "bucket": "product-images",
-      "key": "products/123/example.jpg",
-      "content_type": "image/jpeg",
-      "size": 123456,
-      "image_id": 123,
-      "is_primary": true,
-      "display_order": 0
-    }
-  ],
-  "updated_at": "2026-11-04T02:00:00Z",
-  "deleted": false,
-  "etl": {"synced_at": "2026-11-04T02:01:00Z", "run_id": "demo-041126"}
+  "_id":"product:1", "schema_version":1, "deleted":false,
+  "product_id":1, "category_id":1, "description":"Sản phẩm đã qua sử dụng",
+  "condition":{"grade":8,"warranty_months":0,"defects":[]},
+  "attributes":{"brand":"Minh họa","ram_gb":8}, "tags":["do-cu"],
+  "images":[{"bucket":"product-images","key":"products/1/example.jpg",
+    "content_type":"image/jpeg","size":123456,
+    "image_id":1,"is_primary":true,"display_order":0}],
+  "updated_at":"2026-11-05T02:00:00Z",
+  "etl":{"synced_at":"2026-11-05T02:01:00Z","run_id":"illustration"}
 }
 ```
 
-Đây là dữ liệu minh họa hợp đồng, không phải dump thực tế hoặc bộ seed để import; không xác nhận product/object trong ví dụ tồn tại. `product_id/category_id` là integer dương; `attributes` là object có khóa linh hoạt; `tags` là mảng string; `images` là mảng object reference; `condition.grade` trong khoảng 1–10. Thời gian thể hiện bằng ISO 8601 UTC trong JSON và phải được chuyển sang kiểu datetime/BSON Date khi lưu. Model document kiểm kiểu, giới hạn và từ chối trường ngoài hợp đồng; không chỉ kiểm JSON có cú pháp hợp lệ.
-
-`attributes` và `tags` là dữ liệu do MongoDB sở hữu. Các trường bản đọc khác, chẳng hạn mô tả, danh mục và tham chiếu ảnh, có thể được chiếu từ PostgreSQL qua ETL. Vì vậy, không phải mọi trường trong MongoDB đều là nguồn dữ liệu độc lập với PostgreSQL.
-
-Tags là metadata mô tả nghiệp vụ. Ngoài tags, MongoDB còn chứa thuộc tính động, dữ liệu nhúng và metadata tham chiếu file. Các document contract nằm trong [documents.py](../../backend/app/schemas/documents.py).
-
-ETL hiện tạo ID ổn định dạng `product:123`, `order:...` hoặc ID ghép cho log theo [transform.py](../../backend/etl/transform.py), giúp upsert khi xử lý lại. Không đưa password/token hoặc địa chỉ/số điện thoại vào order snapshot. `attributes/tags` có thể rỗng trong seed nguồn; ví dụ trên không có nghĩa dữ liệu RAM/brand đã được nạp cho toàn bộ sản phẩm. JSON document nghiệp vụ này cũng khác JSON cấu hình index ở mục 3.3.
-
-#### 3.1.3. MinIO: nội dung phi cấu trúc
-
-MinIO lưu các byte thực của ảnh, video và file đính kèm dưới dạng object trong bucket. Một object được xác định bằng bucket và key. Metadata kỹ thuật như content type và kích thước hỗ trợ việc lưu/phát file.
-
-Các bucket phục vụ ảnh sản phẩm, video sản phẩm, avatar và attachment. Bucket được cấu hình private; ứng dụng dùng credentials được cấp để upload hoặc đọc nội dung qua media gateway.
-
-Video sản phẩm có thể là liên kết Google Drive/YouTube hoặc MP4 upload. Với MP4, file nằm trong MinIO khi dùng storage backend MinIO; với liên kết bên ngoài, nội dung file vẫn ở dịch vụ bên ngoài. Không tuyên bố mọi video liên kết đã được sao chép vào MinIO.
-
-Lớp truy cập storage nằm trong [storage.py](../../backend/app/services/storage.py).
-
-#### 3.1.4. Vì sao vẫn giữ `product_image` trong PostgreSQL?
-
-`product_image` quản lý quan hệ có cấu trúc giữa sản phẩm và ảnh. Nó không chỉ chứa đường dẫn:
-
-| Trường/nhóm trường | Ý nghĩa |
-|---|---|
-| `image_id` | Định danh bản ghi ảnh |
-| `product_id` | Khóa ngoại xác định sản phẩm sở hữu ảnh |
-| `image_url` | Tham chiếu đường dẫn phục vụ nội dung ảnh |
-| `is_primary`, `display_order` | Vai trò và thứ tự hiển thị ảnh |
-| Metadata khác | Các thông tin đi kèm như loại nội dung/kích thước nếu có |
-
-Ví dụ quan hệ tham chiếu:
-
-```text
-PG product_image:
-  product_id = 123
-  image_url = /media/products/123/abc.jpg
-  is_primary = true
-
-MinIO:
-  bucket = product-images
-  key = products/123/abc.jpg
-  content = dữ liệu nhị phân của ảnh
-
-Mongo product_details.images:
-  bản tham chiếu bucket/key và metadata được ETL đồng bộ
+```json
+{
+  "_id":"order:1", "schema_version":1, "deleted":false,
+  "order_id":1, "buyer":{"id":7,"region":"unknown"},
+  "items":[{"product_id":1,"quantity":1,
+    "price_at_purchase_vnd":100000,"subtotal_vnd":100000}],
+  "payments":[], "total_amount_vnd":100000,"shipping_fee_vnd":20000,
+  "discount_amount_vnd":0,"final_amount_vnd":120000,
+  "order_status":0,"order_date":"2026-11-05T02:00:00Z",
+  "etl":{"synced_at":"2026-11-05T02:01:00Z"}
+}
 ```
 
-Đường dẫn `/media/...` là địa chỉ qua gateway của ứng dụng; không nhất thiết là URL trực tiếp do MinIO trả về. Ứng dụng ánh xạ đường dẫn tới bucket/key để đọc object. Cách này cũng giúp đường dẫn nghiệp vụ không phải phụ thuộc trực tiếp vào hostname/cổng MinIO.
+Lần lượt là ví dụ reviews, violation_logs và contact_messages:
 
-MinIO quản lý object nhưng không thay PostgreSQL bảo đảm khóa ngoại tới sản phẩm, trạng thái ảnh chính hoặc thứ tự ảnh trong danh sách nghiệp vụ. Việc PostgreSQL lưu tham chiếu không đồng nghĩa PostgreSQL lưu nội dung ảnh, cũng không vi phạm phân chia ba loại dữ liệu.
+```json
+[
+  {"_id":"review:1","review_id":1,"product_id":1,"buyer_id":7,
+   "type":"report","rating":0,"content":"Nội dung cần kiểm tra",
+   "evidence":[],"created_at":"2026-11-05T02:00:00Z"},
+  {"_id":"violation_log:1","log_id":1,"target_user_id":7,
+   "reason":"Violation details retained in PostgreSQL","action_taken":"warning",
+   "created_at":"2026-11-05T02:00:00Z"},
+  {"_id":"contact:1","feedback_id":1,"subject":"Contact request",
+   "content":"Message retained in PostgreSQL","status":0,"attachments":[],
+   "created_at":"2026-11-05T02:00:00Z"}
+]
+```
 
-Có thể thiết kế quan hệ ảnh hoàn toàn trong MongoDB, nhưng đó là phương án khác, cần thay đổi API, ownership, ETL và quy trình dọn file. Trong thiết kế hiện tại, PostgreSQL là nguồn chuẩn cho quan hệ ảnh; MongoDB có bản đọc; MinIO là nguồn chuẩn cho nội dung file. Cơ chế cleanup kiểm tra tham chiếu trước khi xóa để bảo vệ file còn được sử dụng, bao gồm các ảnh seed dùng chung.
+Ví dụ cấu trúc system_logs, với `_id` tượng trưng phải thay bằng khóa do transform sinh khi nạp:
 
-#### 3.1.5. ETL kết nối các kho dữ liệu như thế nào?
+```json
+{
+  "_id":"system-log-key-illustration","log_id":1,"actor_id":7,
+  "action":"UPDATE","resource_type":"product","resource_id":1,
+  "payload":{"event":"PG_LOG"},
+  "created_at":"2026-11-05T02:00:00Z",
+  "etl":{"synced_at":"2026-11-05T02:01:00Z"}
+}
+```
 
-ETL là Extract–Transform–Load: trích xuất dữ liệu nguồn, chuyển đổi sang dạng phù hợp và nạp vào đích. Trong OldShop, ETL không chỉ là chép nguyên một hàng SQL sang JSON.
+`docs/design/03_document_examples.json` có ID kiểu p_1/o_1, là ví dụ thiết kế cũ; ETL mặc định dùng product:1/order:1, loader có thể giữ _id cũ nếu đã tìm được business key. `03_mongo_validators.json` thiếu một số trường về sau như voucher_current/deleted kế thừa; `05_mongo_validators.json` gần runtime hơn nhưng nguồn chuẩn vẫn là model/validator sinh từ code.
 
-| Bước | Ví dụ với sản phẩm |
-|---|---|
-| Extract | Đọc `product` và các dòng `product_image` liên quan từ PostgreSQL |
-| Transform | Chuẩn hóa thời gian, chuyển các trường thành object/array, ánh xạ đường dẫn ảnh thành bucket/key, kiểm tra dữ liệu |
-| Load | Upsert vào `product_details` trên MongoDB, giữ các trường Mongo-owned như `attributes` và `tags` |
+#### 3.2.3. Nhúng, tham chiếu và đánh đổi
 
-Đồng bộ thay đổi được thực hiện bằng transactional outbox:
+Order nhúng items/payments để đọc snapshot; giá mua ở order_detail, còn các trường `_current` là thông tin hiện tại, không giả làm lịch sử lúc mua. Product nhúng attributes/condition/tags và metadata ảnh vì đọc cùng trang; byte vẫn tham chiếu bucket/key. Document giảm JOIN bản đọc nhưng lặp thông tin và cần fan-out/reconcile. Stock/ví/payment không chuyển sang document để thay ràng buộc PG. Endpoint ghi metadata tùy ý có UI/phân quyền đầy đủ chưa được chứng minh hoàn tất.
 
-1. Khi dữ liệu nguồn thay đổi, trigger PostgreSQL ghi sự kiện outbox trong cùng transaction.
-2. Nếu transaction nghiệp vụ rollback, sự kiện tương ứng cũng rollback.
-3. Worker lấy sự kiện đến hạn, đọc trạng thái nguồn và xử lý các bản đọc liên quan.
-4. Sau khi nạp thành công, worker đánh dấu sự kiện đã xử lý. Nếu lỗi, giữ trạng thái để retry và theo dõi lỗi.
+### 3.3. MinIO và quan hệ media
 
-Worker có cơ chế khóa để tránh các lượt đồng bộ ghi chồng nhau. Upsert theo khóa nguồn cho phép xử lý lại sự kiện mà không mặc định tạo thêm document trùng. Tuy nhiên, đây không phải bảo đảm exactly-once hay một transaction chung xuyên PostgreSQL–MongoDB–MinIO.
+`deploy/data/minio/init.sh` hiện tạo **bốn bucket private**: product-images, product-videos, user-avatars, attachments, với app policy giới hạn bucket. `storage.py` chọn LocalStorage/MinioStorage bằng STORAGE_BACKEND; URL /media/... được ánh xạ sang key để stream. PG lưu quan hệ ảnh, Mongo lưu bản đọc reference, MinIO lưu byte; không có SQL FK tới object.
 
-Các luồng ETL chính gồm sản phẩm, đơn hàng, review/report, log/contact, media và tổng hợp doanh số. Luồng media đưa file local/seed còn thiếu lên MinIO; ảnh/video upload mới có thể được ứng dụng ghi trực tiếp lên MinIO mà không chờ ETL. Báo cáo tổng hợp doanh số được ghi về PostgreSQL.
+MP4 upload nằm trong product-videos khi dùng MinIO, có hỗ trợ Range/HEAD trong code. Video link Drive/YouTube vẫn ở dịch vụ ngoài. Bucket/schema attachments không chứng minh uploader và API tải attachment có kiểm quyền đã hoàn tất. Upload và commit PG không nguyên tử xuyên kho; code dọn object mới khi commit lỗi. Migration006 enqueue xóa sau unlink; worker chỉ xóa sau kiểm tra tham chiếu/quality, không scan bucket để tự xóa mọi orphan.
 
-Bản đọc MongoDB có thể trễ so với PostgreSQL vì worker xử lý theo chu kỳ. Đây là nhất quán cuối cùng đối với dữ liệu sao chép. Nếu một kho lỗi, phải theo dõi backlog, retry và đối soát thay vì giả định tất cả kho luôn đồng bộ tức thì.
+## 4. Kiến trúc phân tán và chiến lược phân phối dữ liệu
 
-Chi tiết mã nguồn và ownership: [ETL](../../backend/etl), [thiết kế ETL/outbox](../design/05_etl.md).
+### 4.1. Phân biệt các cơ chế
 
-### 3.2. Hệ thống cơ sở dữ liệu phân tán
-
-#### 3.2.1. Bài toán và phạm vi lựa chọn
-
-Phần danh mục OldShop cần cho phép từng site quản lý sản phẩm của nhóm người bán được giao, đồng thời cung cấp truy vấn toàn bộ danh mục. Vì vậy, phần mở rộng lựa chọn **phân mảnh ngang product theo site quản lý seller**, phân mảnh dẫn xuất ảnh và hợp nhất kết quả đọc tại site A. Hai site đều có khả năng ghi cục bộ; site B không phải standby của site A.
-
-Báo cáo phân biệt hai mô hình cùng có trong dự án:
-
-| Mô hình | Mục tiêu | Phần đã triển khai |
+| Cơ chế | Áp dụng | Ý nghĩa thực tế |
 |---|---|---|
-| Stack ứng dụng `oldshop-data` | Vận hành website, đồng bộ nhiều kho và kiểm chứng replication. | PG primary/standby, Mongo replica set, MinIO, ETL và ứng dụng. |
-| Danh mục hai site `oldshop-sites` | Kiểm chứng phân bổ dữ liệu, ghi cục bộ và truy vấn liên site. | Hai PG độc lập, ownership/ID, FK/trigger, FDW chỉ đọc và gateway danh mục. |
+| PG partitioning | Order HASH, log RANGE trong primary | Chia hàng cùng instance, không tự phân bổ sang Site A/B. |
+| PG tách dọc | Core/profile/secret/wallet | Chia cột theo user_id cùng PG, không tự tạo phân quyền hay phân tán vật lý. |
+| PG streaming replication | pg-primary→pg-replica | Standby replay WAL, giữ bản sao database; async. |
+| Mongo replication | Mongo1/2/3 thuộc oldshop-rs | Các member sao chép cùng logical dataset; không chia shard. |
+| Phân mảnh hai site | Product theo seller_site; ảnh dẫn xuất | A/B giữ tập product khác nhau và ghi fragment sở hữu. |
+| FDW/global view | A đọc B, UNION ALL local/remote | Tổng hợp lúc query, không copy product B vào bảng local A. |
+| ETL | PG ứng dụng→Mongo/MinIO/báo cáo PG | Transform và materialize bản đọc; không đồng bộ A–B. |
 
-Replication sao chép cùng dữ liệu sang node khác; partitioning chia bảng trong instance; phân mảnh liên site phân bổ những tập dòng khác nhau tới database độc lập. Triển khai hai site hiện có không phải MongoDB sharded cluster, cũng chưa thay toàn bộ commerce backend bằng ứng dụng đa site.
+### 4.2. MongoDB Replica Set
 
-#### 3.2.2. Replication và phân hoạch trong stack ứng dụng
+#### 4.2.1. Cấu hình và cơ chế
 
-| Hạng mục | Cách thực hiện | Giới hạn |
+Compose có `--replSet oldshop-rs`, keyfile và volume riêng từng member. `deploy/data/mongo/start.sh` tạo keyfile mode400; `init.js` initiate một member khi cần, tạo app user, và mở rộng tuần tự khi MONGO_MEMBERS=3. Base có một member; resilience có **ba data-bearing voting member**, không arbiter hoặc shard.
+
+```mermaid
+flowchart LR
+    Client[FastAPI / ETL: replicaSet=oldshop-rs] --> P[(Một PRIMARY)]
+    P -->|oplog replication| S1[(Một SECONDARY)]
+    P -->|oplog replication| S2[(Một SECONDARY)]
+    P <-->|heartbeat / voting| S1
+    P <-->|heartbeat / voting| S2
+    S1 <-->|heartbeat / voting| S2
+```
+
+Vai trò không cố định theo tên container. Mongo1 có priority2 ban đầu, mongo2/3 priority1, nhưng tên mongo1 không bảo đảm luôn là PRIMARY. Ba voter cần majority **2/3**; mất một secondary vẫn còn quorum. Mất hai voter không đủ majority; base một member không có bản dự phòng để bầu thay. Primary nhận ghi, secondary sao chép oplog; cơ chế election chọn member đủ điều kiện khi cần. `backend/app/services/mongo.py` đặt WriteConcern majority với wtimeout5000ms.
+
+Ba instance lưu bản sao cùng dữ liệu, không mỗi node một nhóm collection/product. Không có mongos/config-server/shard allocation trong stack. Replication tăng khả năng phục hồi member nhưng không tăng dung lượng hữu dụng bằng tổng ba node như sharding. Các node chung host vẫn mất cùng miền lỗi.
+
+Mongo-init tạo topology/user; mongo-expand thêm member và chờ SECONDARY/commitmentStatus; mongo-schema-init cài validator/index. Ba job không thay thế nhau. Không tự tắt hai member của set ba voter rồi kỳ vọng node còn lại vẫn ghi majority.
+
+#### 4.2.2. Bằng chứng cấu hình và hoạt động
+
+| Nguồn | Trường/giá trị cần đọc | Kết luận và giới hạn |
 |---|---|---|
-| PostgreSQL replication | Một primary và một standby, truyền WAL bằng streaming bất đồng bộ | Standby chỉ đọc; có thể trễ so với primary |
-| MongoDB replication | Replica set `oldshop-rs` với ba data-bearing member khi bật profile | Cùng dữ liệu của replica set, không chia mỗi member giữ một phần |
-| Phân hoạch PostgreSQL | `order` phân hoạch HASH theo `order_id`; `system_log` phân hoạch RANGE theo thời gian | Các partition vẫn trong cùng instance/site hiện tại |
-| Tách nhóm dữ liệu user | `user_core/profile/secret/wallet`, tái tạo bằng quan hệ theo `user_id` | Là phân rã bảng, chưa phân bổ sang các máy khác nhau |
-| Network và lưu trữ | Các service có hostname/volume riêng, cấu hình credentials và healthcheck | Cùng Docker host, còn chung miền lỗi vật lý |
-| Theo dõi ứng dụng | Readiness kiểm tra các phụ thuộc; verifier kiểm replication/topology | Healthcheck không thay bài kiểm thử failover và tính đúng dữ liệu |
+| docs/day2/resilience-verification.json; docs/evidence/day7_stack.json | result PASS; checks.mongo.set=oldshop-rs, version=7.0.43; members mongo1 PRIMARY, mongo2/3 SECONDARY; app auth thành công | Đã quan sát set ba member MongoDB 7 trong lượt kiểm lịch sử; không xác nhận lại topology MongoDB 8. |
+| docs/day2/fault-verification.json | mongo_secondary_outage.writablePrimary=true; majorityInsertAndDelete=true; result PASS | Đã thử ghi majority khi mất secondary. limits ghi rõ không thử primary failure/host loss. |
+| docs/evidence/day6_failover.json | mongo_image=mongo:7.0; scenarios mongo2_stopped/recovered và mongo_unavailable; result PASS | Kiểm phản hồi API khi lỗi/khôi phục; không mặc định là thử election primary. |
+| docs/benchmark/mongo/summary.json | version=8.0.32, source=current_application_database, cases đo được | MongoDB 8 đã phục vụ query ngày 05/11; file không có rs.status/member state để xác nhận ba member/election MongoDB 8. |
 
-[day6_failover.json](../evidence/day6_failover.json) lưu các tình huống trên môi trường thử riêng, gồm dừng/phục hồi Mongo secondary, dừng/phục hồi PG replica và kiểm ứng dụng. Evidence sử dụng MongoDB 7; không suy thành chứng nhận election trên mọi phiên bản MongoDB hoặc mọi tình huống mất primary/phân hoạch mạng. Healthcheck và trạng thái PRIMARY/SECONDARY tại một thời điểm không thay thế bài kiểm thử lỗi.
+Kết luận: **replica set ba member đã kiểm chứng trên MongoDB 7; MongoDB 8 có bằng chứng truy vấn nhưng chưa đủ bằng chứng nghiệm thu topology/election tương đương**. Không suy “MongoDB 8 chưa từng chạy” từ tài liệu cũ hoặc “MongoDB 8 HA đã đạt” từ explain. Ping healthcheck chỉ chứng minh truy cập tiến trình, không thay trạng thái PRIMARY/SECONDARY hoặc majority failure test.
 
-Các file triển khai: [Compose ứng dụng](../../deploy/docker-compose.distributed.yml), [PG replication](../../deploy/data/postgres/init-replication.sh), [PG standby](../../deploy/data/postgres/start-replica.sh), [Mongo init](../../deploy/data/mongo/init.js). Mô hình này vẫn dùng PG primary cho giao dịch, chưa tự định tuyến đọc sang standby hay tự promote PG.
+### 4.3. PostgreSQL primary/standby
 
-#### 3.2.3. Sơ đồ chiến lược phân tán hai site
+`deploy/data/postgres/init-replication.sh` tạo role LOGIN/REPLICATION và HBA scram. Compose primary đặt wal_level=replica, max_wal_senders=5, wal_keep_size=256MB. `start-replica.sh` chạy pg_basebackup với WAL stream/write-recovery-conf trên volume mới, đặt application_name=oldshop-data-replica và hot_standby=on; volume cũ phải có standby.signal. Không tự xóa/reseed volume hoặc dùng slot giữ WAL vô hạn.
+
+`docs/evidence/day7_stack.json` ghi checks.pg_stat_replication=`oldshop-data-replica:streaming:async`, primary/replica orders cùng30. Verifier `deploy/scripts/check-data-stack.py` còn chờ pg_is_in_recovery và replay LSN đạt target, nhưng JSON không lưu raw LSN. Kết hợp này chứng minh streaming async đã chạy tại lượt kiểm; count bằng nhau riêng lẻ không chứng minh mọi dữ liệu đồng nhất hoặc lag luôn0. Fault evidence xác nhận primary còn phục vụ khi standby dừng.
+
+Không tìm thấy cơ chế PG promotion/fencing/chuyển endpoint hoàn chỉnh. Commerce vẫn dùng primary; cấu hình replica không tự tạo routing SQLAlchemy. Async có thể trễ; không cam kết RPO0 hoặc failover tự động. Đây là cặp khác với hai database oldshop_1/oldshop_2 ở phần sau.
+
+### 4.4. Site A và Site B
+
+#### 4.4.1. Topology, ownership và phân mảnh
+
+| Thành phần | Database | Endpoint host mặc định | IP Docker mặc định | Trách nhiệm |
+|---|---|---|---|---|
+| pg-a / Site A | oldshop_1 | 127.0.0.1:56431 | 172.29.82.11:5432 | Ghi fragment A; foreign tables/global views. |
+| pg-b / Site B | oldshop_2 | 127.0.0.1:56432 | 172.29.82.12:5432 | Ghi fragment B; reader cho A. |
+| catalogue | Kết nối A | 127.0.0.1:56480 | 172.29.82.20:8000 | Gateway thử nghiệm chỉ đọc. |
+
+Đây là IP mô phỏng trên một Docker host, không phải IP LAN/VPN giữa hai host. `deploy/scripts/sites.py::common_schema()` dựng schema chung từ source, loại seed baseline, áp001–007 rồi extension site. `database/distributed/01_site_schema.sql` thêm site_config, distributed_installation, seller_site và product.site_id, trigger ownership/ID. Reference fixture chứa category/seller mapping và tài khoản synthetic; không phải hệ thống identity/ví production tự đồng bộ.
+
+Đặt P là tập product toàn cục, owner(seller_id) từ seller_site: P_A gồm product có owner A, tương tự B. Ảnh I_A là ảnh có product_id thuộc P_A. Tái tạo P bằng P_A UNION ALL P_B; tính không giao nhau dựa trên ownership/ID, không nhờ UNION loại trùng. A dùng ID lẻ, B ID chẵn và sequence increment2 trong module thử; quy tắc này chưa chứng minh đã chuyển đổi an toàn toàn bộ ID lịch sử.
+
+| Nhóm | Phân bổ | Cơ chế |
+|---|---|---|
+| product, product_image | Fragment theo site seller; ảnh dẫn xuất theo product | Constraint/trigger kiểm owner và ID; FK ảnh local. Đây là phân mảnh ngang, không tách cột product giữa A/B. |
+| category, seller_site | Reference cùng fixture/version ở cả hai | Copy lúc bootstrap; không pipeline truyền cập nhật liên tục. |
+| Các bảng ứng dụng khác | Có schema chung do template/migration | Có bảng không đồng nghĩa nghiệp vụ cart/order/payment/ETL đa site đã tích hợp. |
+| site_b.* và global views tại A | Foreign table đọc B, view hợp local/remote | Reader chỉ đọc; không có bảng materialized tự nhận bản sao product B. |
 
 ```mermaid
 flowchart TB
-    WA["Writer A"] --> PA
-    WB["Writer B"] --> PB
-    Client["Client danh mục"] --> API
-    subgraph Host["Một Docker host trong môi trường đã kiểm chứng"]
-        API["Catalogue gateway chỉ đọc :56480"] --> VA
-        subgraph SiteA["Site A / oldshop_1 / 172.29.82.11"]
-            VA["v_product / v_product_image / v_category"]
-            PA["Product A + ảnh A"]
-            RA["Category + seller_site tham chiếu"]
-            VA --> PA
-            VA --> RA
-            FDW["postgres_fdw / schema site_b"]
-            VA --> FDW
-        end
-        subgraph SiteB["Site B / oldshop_2 / 172.29.82.12"]
-            PB["Product B + ảnh B"]
-            RB["Category + seller_site tham chiếu"]
-        end
-        FDW -->|"TCP, role b_reader"| PB
-        RA -.->|"Cùng fixture; chưa tự đồng bộ thay đổi"| RB
-    end
+    G[Catalogue gateway: chỉ đọc] --> A[Site A: oldshop_1]
+    A --> V[v_product / v_product_image]
+    V --> PA[(Product A và ảnh A)]
+    V --> F[Foreign tables site_b]
+    F -->|postgres_fdw / b_reader| B[Site B: oldshop_2]
+    B --> PB[(Product B và ảnh B)]
+    RA[category / seller_site A] -.->|cùng fixture khi bootstrap| RB[category / seller_site B]
 ```
 
-Sơ đồ biểu diễn chiến lược đã triển khai: ghi dữ liệu tại site sở hữu, đọc toàn cục qua view tại A và `postgres_fdw` đọc B. Gateway kết nối A bằng `global_reader`. Các bản category/mapping được cài cùng fixture ở hai site; mũi tên nét đứt không biểu diễn một pipeline replication đang chạy.
+`04_fdw.sql` tạo server_b/user mapping và import product, product_image, category, seller_site, site_identity vào schema site_b. `05_global_views.sql` hợp product/ảnh bằng UNION ALL; v_category/v_seller_site chỉ dùng bản A để không nhân reference. Gateway `backend/app/catalogue_gateway.py` dùng global_reader tại A, REPEATABLE READ/read-only, kiểm v_site_health, lọc/sort trước pagination và batch ảnh; không checkout hoặc tăng view_count.
 
-Phần `oldshop-sites` có network/volume riêng. Nó không tự dùng MongoDB/MinIO hay worker của `oldshop-data`. Do đó, truy vấn danh mục phân tán hiện trả metadata ảnh từ PG, không chứng minh nội dung ảnh fixture đã tồn tại trên object storage hoặc frontend thương mại đã chuyển sang API này.
+#### 4.4.2. Kết luận về đồng bộ hóa
 
-#### 3.2.4. Quy tắc phân mảnh, phân bổ và tái tạo
+**Đối với product/product_image, trường hợp đúng là (3): chỉ tổng hợp khi truy vấn. Hai site ghi fragment độc lập; không có replication hoặc ETL theo lịch giữa A–B.** Reference data có bản giống nhau vì bootstrap nạp cùng fixture, không phải vì tự truyền các cập nhật tiếp theo.
 
-Gọi `owner(seller_id)` là site trong bảng `seller_site`. Với tập product thuộc phạm vi hai site:
+| Khả năng | Kết quả đối chiếu |
+|---|---|
+| Tự replication A→B/B→A | Không có standby/primary_conninfo hoặc publication/subscription cho cặp sites. Không nhầm với pg-primary/pg-replica. |
+| Đồng bộ theo lịch/ETL A–B | Không có worker nhiều nguồn/site; worker hiện dùng PG ứng dụng. |
+| A thấy thay đổi B | Có qua foreign query; transaction đọc cũ có thể giữ snapshot cũ, transaction mới thấy commit mới. |
+| Local độc lập | Có: mỗi site đọc/ghi phần sở hữu khi site kia dừng; global tại A còn phụ thuộc B. |
+| Reference tự cập nhật | Chưa triển khai; bằng nhau lúc bootstrap/kiểm không chứng minh tự đồng bộ. |
+
+T02 lưu same_transaction_price=123.00 và new_transaction_price=456.00 sau thay đổi ở B. Đây là semantics snapshot/query của FDW, không phải replication lag. Không suy ra transaction ACID toàn cục cho nhiều site. Commerce đa site còn cần reservation/idempotency, owner đơn/tiền, xử lý mất mạng và rollback/bù trừ riêng.
+
+#### 4.4.3. Evidence và giới hạn
+
+`docs/evidence/distributed/test_results.json` ghi status PASS, T01–T12 PASS, clean_rebuild_verified=true, physical_hosts_verified=false. Lượt lưu mới kết thúc **05/11/2026 13:57:52 giờ Việt Nam**.
+
+| Nhóm kiểm | Kết quả đã lưu | Không chứng minh |
+|---|---|---|
+| T01–T03 | Kết nối A→B đúng identity; snapshot/commit; quyền/HBA/function. | A/B replication, toàn bộ bảo mật production. |
+| T04, T10 | Dừng từng site; local còn đọc/ghi, query cần remote lỗi có timeout rồi phục hồi. | Chịu mất host hoặc global luôn khả dụng. |
+| T05–T07 | PK/FK/CHECK/site/owner, tái tạo, schema/reference không nhân dòng. | Migration dữ liệu thật hoặc tự sync reference. |
+| T08 / queries.Q1–Q6 | Expected/actual khớp fixture. | Toàn bộ ORM/commerce đã dùng global view. |
+| T09 | Bốn writer,40 ID không trùng; write kiểm thử được rollback. | Mọi ID lịch sử đã được chuyển đổi. |
+| T11 | Bootstrap idempotent và clean rebuild. | Backup/DR ngoài host. |
+| T12 | Plan và thời gian local/remote/global trên fixture nhỏ. | Capacity/SLA hoặc FDW nhanh hơn local. |
+
+Inventory ghi PostgreSQL 16.15, migrations001–007, mỗi site5 product/8 ảnh; schema_comparison.equal=true. api_results.status=PASS kiểm filter/pagination/read-only/HTTP503 khi mất A/B và recovery. Đây là M1 và gateway riêng; chưa commerce frontend/backend/cart/checkout, Mongo/media đa site hoặc migration dữ liệu thật. Hướng dẫn [hai site](../HUONG_DAN_CSDL_PHAN_TAN.md) và [Tailscale](../HUONG_DAN_TAILSCALE_WINDOWS_LINUX.md) không thay evidence hai host vật lý.
+
+### 4.5. Ưu điểm, chi phí và chịu lỗi
+
+Kiến trúc giữ giao dịch cần ràng buộc ở PG, dùng document cho bản đọc/thuộc tính và object store cho byte. Replication hỗ trợ thử lỗi member; ownership và view làm rõ phân mảnh danh mục. Đổi lại, cần vận hành nhiều dependency, theo dõi outbox/retry, độ trễ projection và reference data.
+
+| Sự cố | Hành vi có cơ sở | Giới hạn |
+|---|---|---|
+| PG standby dừng | Primary vẫn phục vụ. | Mất primary chưa tự promote; async không cam kết RPO0. |
+| Một Mongo secondary dừng | Đã thử ghi majority trên set ba member. | Chưa đủ evidence mất primary/election; chung host. |
+| Toàn Mongo lỗi | Detail fallback PG; filter attributes503; ETL retry. | Metadata/filter không còn đầy đủ. |
+| MinIO dừng | Byte ảnh/upload503; phần PG khác có thể phục vụ. | Single-node không có bản object tự thay. |
+| B dừng | A local còn dùng; global cần B trả lỗi hữu hạn. | Hai mảnh không dự phòng cho nhau. |
+
+PG auto-failover, Mongo sharding, MinIO distributed và khả năng phục hồi mất host chưa được chứng minh. Restart policy không thay failover DB; replication cũng sao chép xóa/sai dữ liệu nên không thay backup.
+
+## 5. Quy trình ETL và luồng xử lý dữ liệu
+
+### 5.1. Mục đích và các pipeline
+
+ETL tạo projection Mongo từ PG, chuyển media local theo tham chiếu khi cần và xây báo cáo ngày trên PG. Nó không phải WAL replication, Mongo member replication hay A–B sync.
+
+| Entity/pipeline | Nguồn | Đích/biến đổi |
+|---|---|---|
+| product | Product, ảnh, provenance | product_details; condition/dimensions/reference; giữ attributes/tags. |
+| order | Order/detail/transaction/product/voucher | order_snapshots; items/payments nhúng; tiền nguyên; không chuyển địa chỉ/phone/email buyer. |
+| review | Review | reviews, rating0→report; giữ moderation/evidence. |
+| system_log | Log và provenance | system_logs, khóa ghép ID/time, payload giới hạn; TTL chỉ bản sao Mongo. |
+| violation_log | Violation | violation_logs, user mục tiêu; actor nguồn thiếu không được bịa. |
+| contact | System_feedback | contact_messages, không phải contact_info; giữ attachments. |
+| media / aggregate | Local media theo key; đơn/chi tiết hợp lệ | MinIO; report_daily_sales trên PG theo ngày Việt Nam và seller/category hiện tại. |
+
+### 5.2. Trigger, transform, upsert và bảo đảm xử lý
+
+```mermaid
+sequenceDiagram
+    participant API as FastAPI
+    participant PG as PG source và outbox
+    participant W as ETL worker
+    participant M as Mongo projections
+    API->>PG: Ghi nghiệp vụ và event trong cùng transaction
+    W->>PG: Lấy event đến hạn, ORDER BY event_id
+    W->>PG: Extract allowlist với snapshot nguồn
+    W->>W: Validate, VND, timezone, stable ID
+    W->>M: Partial upsert, majority write
+    M-->>W: Thành công
+    W->>PG: ACK đúng event, lưu run/state/quality
+    Note over W,PG: Lỗi trước ACK thì replay
+```
+
+Migration005 cài AFTER I/U/D trên mười bảng: product, product_image, order, order_detail, transaction, voucher, review, system_log, violation_log, system_feedback. Trigger cùng transaction nguồn ghi key/op và fan-out tới entity phụ thuộc; không chỉ quét updated_at vốn thiếu ở order.
+
+`extract.py` dùng REPEATABLE READ read-only và column allowlist. `transform.py` chuyển Decimal→VND nguyên, lỗi nếu NULL không hợp lệ/phần lẻ/âm/vượt giới hạn; không làm tròn âm thầm. Timestamp SQL cũ giữ nguyên; etl_time_origin ghi nguồn Asia/Ho_Chi_Minh theo D7 và timezone session cho thay đổi mới; transform tạo aware UTC. Text công khai được che theo heuristic, không phải bảo đảm phát hiện mọi PII. Violation.reason và contact.subject/content hiện dùng placeholder an toàn, không chuyển toàn bộ nội dung nguồn sang Mongo; raw secrets/address/wallet/log details/IP không được copy nguyên trạng.
+
+`load.py` partial $set/$setOnInsert theo business key/ID ổn định; không replace toàn document làm mất attributes/tags, review moderation/evidence hoặc contact attachments. Mongo ghi xong mới ACK event PG: semantics **at least once**, không exactly once/transaction hai DB. Worker có session advisory lock7363195005. SELECT pending/dead đến hạn dùng FOR UPDATE SKIP LOCKED; không lấy MAX(event_id) làm watermark bỏ event commit muộn.
+
+Lỗi tăng attempts, backoff mặc định15 giây nhân đôi tới900 giây; từ lần5 gắn dead. **Dead vẫn được worker chọn lại khi đến hạn**, không cách ly ngừng retry vĩnh viễn; retry-dead đưa về pending/đến hạn ngay. Outbox PG giữ lỗi kể cả Mongo down, errors.py ghi mã sanitized vào etl_errors/log.
+
+Quality kiểm count active, các trường PG sở hữu, projection errors và tham chiếu media; full/reconcile kiểm sâu toàn bộ key, incremental kiểm các entity chạm tới. Reconcile phát hiện sai lệch, không tự sửa mọi field hỏng; full dùng để sửa/rebuild. Count bằng nhau không thay được field comparison. Log Mongo TTL90 ngày không purge log nguồn PG.
+
+Aggregate rebuild trong transaction PG, lấy delivered order_status3, tổng subtotal hàng trước discount/chưa gồm ship theo ngày Việt Nam và seller/category hiện tại. Không đồng nhất gross_sales_vnd với admin total_revenue theo final_amount; không cộng orders_count các nhóm thành tổng đơn vì một đơn có thể thuộc nhiều nhóm.
+
+### 5.3. Tệp triển khai, lịch chạy và tham số
+
+| Tệp | Điểm cần đọc | Ý nghĩa |
+|---|---|---|
+| deploy/docker-compose.distributed.yml | etl-worker.entrypoint/environment/depends_on/healthcheck | Worker chạy dài hạn; dùng PG primary của oldshop-data, không phải sites. |
+| backend/etl/run.py | worker(), execute(), process_batch(); CLI full/incremental/reconcile/worker/status/retry-dead/health | Chạy thủ công hoặc service; lần đầu full, sau incremental; deep check theo ngày UTC. |
+| backend/app/core/config.py | ETL_POLL_SECONDS60, BATCH_SIZE100, MAX_ATTEMPTS5, BACKOFF_SECONDS15 mặc định | Poll nghỉ sau mỗi cycle; runtime env có thể ghi đè; không suy latency luôn dưới60 giây. |
+| backend/etl/extract.py; transform.py | SOURCES, snapshot/allowlist, tiền/time/ID | Nguồn và hợp đồng chuyển đổi. |
+| backend/etl/pipelines/documents.py; load.py | project và upsert/ownership | Dựng projection, giữ field Mongo và xử lý delete. |
+| backend/etl/quality.py; errors.py | compare/mismatch/error code/resolve | Xác minh dữ liệu và khả năng phục hồi. |
+| backend/etl/pipelines/media.py; media_cleanup.py; aggregate.py | Copy referenced key, kiểm tham chiếu trước xóa, rebuild aggregate | Không replication object store hoặc media A/B. |
+
+### 5.4. Kết quả ETL đã lưu
+
+| Evidence | Trường/giá trị | Kết luận/giới hạn |
+|---|---|---|
+| docs/evidence/day5_rollout.json | exit_code=0; full_runs[0] và [1] success57/57/errors0; details.quality.mismatches=0; source_reconciliation.counts_and_digests_equal=true | Full lặp đạt trên seed lịch sử16 product/30 order/11 violation; nguồn18 bảng được bảo toàn. |
+| Cùng tệp | quality media referenced/found32, lỗi0; aggregate.groups=2, gross_sales_vnd=13100000 | Đối soát media/aggregate seed, không throughput thực tế. Review/log/contact0/0 không chứng minh nhánh phi rỗng. |
+| docs/evidence/day5_worker_latency.json | initial_backlog.pending=16 → after.pending=0, after.dead=0; completed_run success16/16/errors0; completed_quality_mismatches=0; elapsed_seconds=26.06 | Quan sát incremental một lần ở tải nhỏ, không p95/SLA100k. |
+| docs/evidence/day6_rollout.json | initial_rollout_exit_code=1; recovery_exit_code=0; etl_runs/quality/source_reconciliation.before_after_and_recovery_equal=true | Lỗi CLI sau migration được phục hồi; không bỏ qua lỗi đầu hoặc gọi mọi phase thành công ngay. |
+| docs/evidence/day7_rehearsal.json | result PASS; stages tên etl_twice: hai run57/57, metadata_preserved=true | Full replay giữ metadata trong demo cô lập. |
+| docs/evidence/day7_stack.json | checks.etl.pending0/dead0, last_run success, checks.etl.media_cleanup pending0/failed0 | Ảnh chụp lúc kiểm, không bảo đảm backlog luôn0. |
+| docs/evidence/day5_tests.txt; day5_failure_progress_test.txt; day5_null_money_test.txt | Log test đã lưu; đối chiếu backend/tests/test_day5_etl.py để biết coverage | Có test commit muộn/replay/failure/NULL money/provenance/fan-out; source test riêng không phải bằng chứng thực thi. |
+
+Khi nghiệm thu đọc cùng mode/status/started_at/ended_at, rows_in/out/errors, details.quality, pending/dead/oldest_pending_seconds và heartbeat. Incremental success với0 hàng có thể chỉ là không có event; reconcile có thể giữ counters0 dù đã đối soát và tái tạo aggregate. Phải đọc mode/details/backlog trước khi diễn giải công việc đã làm. Rows_out là số thao tác, không luôn là số document unique. Evidence MongoDB 7 lịch sử không tự chứng minh ETL đầy đủ đã được chạy lại trên MongoDB 8 ngày 05/11. Một worker, extract N+1 và rebuild aggregate còn là giới hạn quy mô; chưa có throughput100k được xác minh.
+
+## 6. Thiết kế indexing và kiểm chứng hiệu quả
+
+### 6.1. Kiểm kê và các phiên bản
+
+| Phạm vi/nguồn | Kết quả kiểm kê | Cách hiểu |
+|---|---|---|
+| database/baseline_v0.json | 71 định nghĩa:44 thủ công,27 PK/UNIQUE | Baseline trước các migration nâng cấp. |
+| database/indexing/catalog.json, revision index-v1 | PG 98 index gốc:61 application,37 constraint;95 B-tree và3 GIN | Catalog sau007, không đếm lại index con partition. |
+| docs/benchmark/pg/indexes.json | 143 mục:98 gốc+44 index con partition+schema_migrations_pkey | Catalog DB ứng dụng được chụp05/11; parent partition index không tự có storage như index con. |
+| docs/evidence/distributed/schema_comparison.json | common_contract.indexes có148 mục | Schema sites có thêm5 index PK/UNIQUE từ ba bảng site; không thuộc catalog 98 của ứng dụng. |
+| database/indexing/catalog.json, mongodb | 19 index thủ công trên7 collection | Gồm6 unique,2 partial,1 TTL,1 wildcard,1 text; thuộc tính có thể chồng nhau. |
+| docs/benchmark/mongo/indexes.json | 24 mục trên6 collection:18 thủ công+6 _id_ | Runner chỉ thu sáu model nghiệp vụ, không kiểm đủ etl_errors hoặc _index_catalog_state. |
+
+PG tạo index phục vụ PRIMARY KEY/UNIQUE; dự án khai báo constraint, không cần tạo index trùng lần nữa. FK **không tự tạo index ở phía bảng con**. Mongo có `_id_` tự tạo ở collection thông thường; các business-key unique còn cần vì ETL tìm theo ID nghiệp vụ. `managed_by=constraint` trong catalog là phân loại quyền sở hữu, không lệnh tạo index độc lập thay constraint.
+
+Bảng sau bao phủ **37 index constraint-owned** trong catalog. Tất cả là unique B-tree; các tên còn hậu tố cũ sau rename/clone không tạo thêm một bảng nghiệp vụ mới.
+
+| Bảng | Index tự tạo theo constraint và khóa | Cơ sở sử dụng |
+|---|---|---|
+| category | category_pkey(category_id); category_name_key(name) | Định danh và lookup/tính duy nhất tên. |
+| contact_info | contact_info_pkey(contact_id) | Lookup địa chỉ theo ID và đích FK từ order. |
+| etl_outbox | etl_outbox_pkey(event_id) | Định danh và ACK đúng event, khác index chọn event pending. |
+| etl_runs | etl_runs_pkey(run_id) | Định danh run và cập nhật kết quả theo UUID. |
+| etl_state | etl_state_pkey(name) | Upsert trạng thái theo tên, không cần index name thứ hai. |
+| etl_time_origin | etl_time_origin_pkey(source_table,source_key,field_name) | Equality toàn bộ khóa provenance; prefix table trước, không lookup tùy ý mọi field JSONB. |
+| media_deletions | media_deletions_pkey(deletion_id); media_deletions_url_path_key(url_path) | Định danh và deduplicate yêu cầu theo URL; worker ánh xạ URL thành object. |
+| order | order_day4_new_pkey(order_id) | Identity đơn, lookup/FK theo order_id và index con trên HASH partition. |
+| order_detail | order_detail_pkey(order_detail_id) | Identity dòng chi tiết, không thay index order_id/product_id. |
+| payment_method | payment_method_pkey(payment_method_id); payment_method_method_name_key(method_name) | Định danh và duy nhất tên phương thức. |
+| product | product_pkey(product_id) | Định danh, lookup chi tiết và đích FK. |
+| product_image | product_image_pkey(image_id) | Định danh bản ghi ảnh, khác tham chiếu key object. |
+| report_daily_sales | report_daily_sales_pkey(report_date,seller_id,category_id) | Chặn nhóm trùng, prefix ngày hỗ trợ báo cáo theo khoảng. |
+| review | review_pkey(review_id) | Định danh review/report, không thay index theo product. |
+| role | role_pkey(role_id); role_role_name_key(role_name) | Identity và duy nhất tên role trên toàn bảng. |
+| shopping_cart | shopping_cart_pkey(cart_id); shopping_cart_user_id_key(user_id) | Identity và tối đa một cart/user. |
+| shopping_cart_item | shopping_cart_item_pkey(cart_item_id) | Identity dòng; unique cart/product là index application của001. |
+| system_feedback | system_feedback_pkey(feedback_id) | Định danh message nguồn. |
+| system_log | system_log_day4_new_pkey(log_id,created_at) | Unique trong parent RANGE phải chứa khóa phân vùng; lookup nguồn cần cả cặp. |
+| transaction | transaction_pkey(transaction_id); transaction_reference_number_key(reference_number) | Định danh và chống reference giao dịch trùng, không partition bảng tài chính. |
+| user_core | user_pkey(user_id); user_username_key(username); user_email_key(email) | Identity/auth và uniqueness toàn bảng; partial active không cho phép vượt các constraint này. |
+| user_profile | user_profile_pkey(user_id) | Tối đa một hồ sơ/core và JOIN bằng khóa chung. |
+| user_secret | user_secret_pkey(user_id); user_secret_random_key_key(random_key) | Một secret/core và random_key duy nhất; không chứng minh có index password_reset_token. |
+| user_wallet | user_wallet_pkey(user_id) | Một ví/core và lookup số dư; unique ID không tự kiểm số dư không âm. |
+| user_role | user_role_pkey(user_id,role_id) | Chặn membership trùng, hỗ trợ prefix user; truy vấn role-first cần index đảo. |
+| violation_log | violation_log_pkey(log_id) | Định danh log vi phạm. |
+| voucher | voucher_pkey(voucher_id); voucher_code_key(code) | Identity và mã duy nhất toàn phần. |
+
+Ngoài37 mục này, runner có schema_migrations_pkey(version) để chống lặp version. Extension site thêm site_config_pkey(singleton), site_config_site_id_key(site_id), distributed_installation_pkey(singleton), seller_site_pkey(seller_id), seller_site_seller_id_site_id_key(seller_id,site_id). Các singleton PK cùng CHECK giới hạn một dòng config; seller PK phục vụ owner lookup, composite UNIQUE là đích FK product(seller_id,site_id). Không có manual CREATE INDEX mới trong01_site_schema.sql. Những index này bảo vệ toàn vẹn/lookup tương ứng, không mặc định đã có benchmark hiệu năng riêng.
+
+Baseline → SQL 001 → partition/tách dọc002/003 → media004 → ETL/cleanup005/006 → SQL 007 là lịch sử phát triển vật lý. Migration002/003 còn đổi vị trí/tên index khi clone partition và tách user. “Indexing v2” là tên đợt tối ưu007; **JSON revision index-v1 là lần tiếp nhận cấu hình sau007**, không phải trạng thái trước007. Chưa có migration008 hoặc snapshot index-v2 trong worktree.
+
+Một số kế hoạch cũ còn ghi007 chưa áp DB đang dùng. Bằng chứng mới hơn `docs/benchmark/pg/summary.json.migrations` có001–007 và indexes.json có đủ chín index007: có thể kết luận007 hiện diện trong DB được đo ngày 05/11, không suy ai áp hoặc thời điểm trước đó. Verify JSON toàn catalog có evidence môi trường tách biệt; benchmark hiện tại không tự chứng minh applied snapshot metadata đã được tiếp nhận trên DB ứng dụng.
+
+### 6.2. Cơ sở lựa chọn index PostgreSQL
+
+B-tree phù hợp equality/range/JOIN và ORDER BY tương thích; khóa đầu của composite quyết định prefix hữu ích. Partial index giảm tập entry nhưng query phải đáp ứng predicate. GIN trigram hỗ trợ điều kiện chuỗi, khác full-text tsvector. Planner chọn theo cost/dữ liệu, không bắt buộc dùng index chỉ vì đã khai báo.
+
+Quy ước bảng: **ND** = is_deleted=false; **V** = status=1 AND ND. Không ghi kiểu nghĩa là B-tree; ASC mặc định, DESC ghi rõ. Bảng bao phủ **61 index application**, bao gồm các index kế thừa còn tồn tại, không đồng nghĩa mọi index đã có phép đo chứng minh lợi ích. Tên và predicate chính xác đọc ở catalog.json.
+
+| Bảng / index | Trường, kiểu/predicate | Cơ sở kỹ thuật, truy vấn và giới hạn |
+|---|---|---|
+| category / idx_category_created_at | created_at | Khoảng ngày/sắp thời gian; chưa có benchmark riêng. |
+| category / idx_category_is_active | is_active; ND | Danh mục active; boolean có thể chọn lọc thấp. |
+| category / idx_category_name_active | UNIQUE name; ND | Lookup/chống trùng tập chưa xóa; unique name toàn phần vẫn hạn chế tái sử dụng tên. |
+| category / idx_category_parent | parent_id; ND | Duyệt con theo cha, equality prefix; không chứng minh seed có cây sâu. |
+| contact_info / idx_contact_info_default | is_default; ND | Lọc địa chỉ mặc định; không tự thay composite user/default hoặc constraint một default mỗi user. |
+| contact_info / idx_contact_info_user | user_id | Địa chỉ theo user và JOIN; không index toàn văn địa chỉ PII. |
+| product / idx_product_seller | seller_id; ND | Sản phẩm seller, JOIN nhánh seller→order; hiệu quả tùy số hàng mỗi seller. |
+| product / idx_product_category | category_id; ND | Danh mục/JOIN; ca category hiện tại chọn Bitmap Index Scan này. |
+| product / idx_product_status | status; ND | Moderation theo trạng thái; không đủ tối ưu mọi sort. |
+| product / idx_product_price | price; ND | Khoảng giá/sort giá; không tự bao phủ category+price+ID. |
+| product / idx_product_created_at | created_at; ND | Khoảng ngày/sort có thể đảo chiều; không khớp mọi mixed-order tie-break. |
+| product / idx_product_title | GIN to_tsvector('english',title); ND | Full-text declaration baseline; chưa thấy consumer @@ trong search hiện tại, không coi là cơ chế ILIKE. |
+| product / idx_product_catalogue | category_id,created_at DESC; V | Equality category trước, sort ngày sau; giới hạn ở tin công khai; ca đo mới không chọn index này. |
+| product / idx_product_title_trgm | GIN title gin_trgm_ops; V | Nhánh title ILIKE; tăng chi phí ghi text; hiện search vẫn Seq Scan. |
+| product / idx_product_description_trgm | GIN description gin_trgm_ops; V | Nhánh description trong OR; chỉ index title không bao phủ OR hai cột. Không tự bảo đảm BitmapOr ở mọi dữ liệu. |
+| product / idx_product_visible_date_id | created_at DESC,product_id ASC; V | Danh mục toàn cục, đúng thứ tự ID phá hòa; ca catalogue đã chọn. |
+| product_image / idx_product_image_product | product_id | Lấy ảnh/JOIN theo sản phẩm; ca hiện tại trả2 ảnh dùng Index Scan. |
+| product_image / idx_product_image_url | image_url toàn phần | Kiểm mọi tham chiếu cleanup kể cả product xóa mềm; URL không UNIQUE vì ảnh có thể dùng chung. |
+| order / order_day4_new_buyer_id_idx | buyer_id; ND | Lookup buyer, còn tồn tại sau clone partition; không giúp prune HASH(order_id). |
+| order / order_day4_new_buyer_id_order_date_idx | buyer_id,order_date DESC; ND | Equality buyer trước, lịch sử mới nhất sau; phải xét bốn partition. |
+| order / order_day4_new_order_date_idx | order_date; ND | Khoảng ngày đơn còn hiệu lực; không thay PK order_id. |
+| order / order_day4_new_order_status_idx | order_status; ND | Lọc trạng thái; độ chọn lọc phụ thuộc phân bố, count nhiều hàng có thể Seq Scan. |
+| order / idx_order_voucher_lookup | voucher_id, không partial | ETL fan-out khi voucher đổi kể cả đơn đã soft-delete. |
+| order_detail / idx_order_detail_order | order_id | JOIN lấy dòng của đơn; composite bắt đầu product không thay lookup này. |
+| order_detail / idx_order_detail_product_order | product_id,order_id | Seller/product→đơn và fan-out; có thể index-only khi visibility/columns phù hợp, chưa phải ca đo nào cũng đạt. |
+| shopping_cart_item / idx_shopping_cart_item_cart | cart_id | Lấy các dòng giỏ; chồng prefix uq_cart_product cần theo dõi usage trước khi drop. |
+| shopping_cart_item / idx_shopping_cart_item_product | product_id | Tra giỏ có product/tham chiếu FK; không được phục vụ bằng prefix cart_id. |
+| shopping_cart_item / uq_cart_product | UNIQUE cart_id,product_id | Lookup cặp và chặn dòng trùng khi ghi đồng thời; không tự giải quyết mọi race reserve stock. |
+| review / idx_review_product | product_id | Review của sản phẩm; bảng đo hiện rỗng, chưa có số liệu hiệu năng. |
+| review / idx_review_buyer | buyer_id | Review của buyer; tương tự cần workload phi rỗng. |
+| review / idx_review_rating | rating | Report rating0 và moderation; chọn lọc phụ thuộc phân bố rating. |
+| role / idx_role_name | role_name; ND | Lookup role chưa xóa; có unique role_name toàn phần, bảng nhỏ nên cần review chồng lặp. |
+| role / idx_role_created_at | created_at | Sort/ngày vai trò; chưa có bằng chứng lợi ích trên bảng rất nhỏ. |
+| user_core / idx_user_created_at | created_at | Danh sách/đăng ký theo ngày. |
+| user_core / idx_user_username_active | UNIQUE username; ND | Lookup và unique trong tập chưa xóa; constraint toàn phần vẫn cấm trùng sau soft-delete. |
+| user_core / idx_user_email_active | UNIQUE email; ND | Login/email chưa xóa; không thay constraint email toàn phần. |
+| user_core / idx_user_is_active | is_active; ND | Lọc quản trị, boolean có thể ít chọn lọc. |
+| user_core / idx_user_email_verified | email_verified; ND | Lọc xác minh; chưa có số đo workload riêng. |
+| user_profile / idx_user_profile_avatar_url | avatar_url, không UNIQUE | Cleanup shared-avatar reference; giữ tham chiếu ở hồ sơ. |
+| user_role / idx_user_role_role_user | role_id,user_id | Liệt kê user theo role; đảo prefix so với PK(user_id,role_id). |
+| transaction / idx_transaction_order | order_id | JOIN giao dịch của đơn/ETL snapshot. |
+| transaction / idx_transaction_user | user_id | Lịch sử giao dịch theo user. |
+| transaction / idx_transaction_status | transaction_status | Lọc trạng thái; chưa có phép đo tương ứng, không suy nhanh hơn. |
+| transaction / idx_transaction_fraud_score | fraud_score | Khoảng điểm/rà soát; hiệu quả cần dữ liệu chọn lọc. |
+| voucher / idx_voucher_code_active | UNIQUE code; is_active=true | Mã hiệu lực; unique toàn phần code vẫn ràng buộc toàn bảng. |
+| voucher / idx_voucher_valid_to | valid_to; is_active=true | Tìm mã sắp/hết hạn; range sau lọc active. |
+| voucher / idx_voucher_created_at | created_at | Liệt kê theo ngày; chưa có benchmark riêng. |
+| system_log / idx_system_log_user | user_id | Audit theo user, được clone vào partition; không tự prune nếu thiếu thời gian. |
+| system_log / idx_system_log_action | action | Lọc hành động; nhiều dòng cùng action có thể cần scan. |
+| system_log / idx_system_log_created_at | created_at | Khoảng thời gian; RANGE prune trước, index trong partition sau nếu có lợi. |
+| violation_log / idx_violation_log_user | user_id | Lịch sử xử lý user mục tiêu. |
+| violation_log / idx_violation_log_created_at | created_at | Khoảng ngày/sort; không phải TTL tự xóa. |
+| system_feedback / idx_system_feedback_user | user_id | Lịch sử hỗ trợ theo user. |
+| system_feedback / idx_system_feedback_status | status | Inbox theo trạng thái; selectivity chưa đo. |
+| system_feedback / idx_system_feedback_created_at | created_at | Thời gian tiếp nhận; không tự thay compound status/date. |
+| etl_outbox / idx_etl_outbox_pending | available_at,event_id; status IN pending/dead | Prefix due-time, sau đó ID; range thời gian không bảo đảm ORDER BY event_id không sort. |
+| etl_outbox / idx_etl_outbox_pending_event | event_id,available_at; cùng predicate | Đúng thứ tự lấy event, available_at lọc đến hạn; workload rỗng đã chọn Index Only Scan, chưa chứng minh backlog lớn. |
+| etl_outbox / idx_etl_outbox_entity_pending | entity_type,entity_key,event_id; status<>done | Equality loại và toàn JSONB key trước, event cũ nhất sau; dùng B-tree, không cần GIN cho equality toàn key. |
+| etl_runs / idx_etl_runs_started | started_at DESC | Run mới nhất LIMIT1; ca etl_status chọn index. |
+| etl_runs / idx_etl_runs_aggregate_success | ended_at DESC; status=success AND details ? aggregate | Aggregate thành công mới nhất; predicate key cố định, không tự cần GIN details. |
+| media_deletions / idx_media_deletions_due | available_at,deletion_id; status=pending | Cleanup đến hạn; ORDER BY deletion_id vẫn có thể sort sau range. |
+
+Order/log parent có index con vật lý trên partition. Tên order_day4_new_* được giữ sau migration clone; không tự đổi tên trong báo cáo thành idx_order_buyer_date rồi coi hai tên là hai index khác nhau. Các bảng payment_method, shopping_cart, user_secret, user_wallet, etl_state, etl_time_origin, report_daily_sales dựa vào PK/UNIQUE sẵn có, không có index application riêng trong catalog. PK report_daily_sales(report_date,seller_id,category_id) hỗ trợ prefix ngày/range và nhóm theo ngày, không mọi lọc seller độc lập.
+
+Mọi index thêm chi phí storage, INSERT/UPDATE/DELETE, WAL và bảo trì/VACUUM; GIN còn có posting/pending list. Partial index phải thêm/xóa entry khi status/is_deleted đổi. Index boolean hoặc trên bảng nhỏ không mặc định có lợi. Một số index đơn trùng prefix composite và partial unique trùng constraint toàn phần vẫn được giữ vì chưa đủ dữ liệu usage để bỏ. Không còn bộ đo chi phí ghi trước/sau để lượng hóa các đánh đổi này.
+
+### 6.3. MongoDB: đủ 19 index khai báo
+
+| Collection / tên index | Keys, options | Truy vấn/cơ sở và đánh đổi |
+|---|---|---|
+| product_details / product_id_1 | product_id:1, UNIQUE | Identity/upsert business key; ca hiện tại dùng IXSCAN. |
+| product_details / category_id_1_attributes.brand_1 | category_id:1, attributes.brand:1 | Category equality trước rồi brand; không luôn hỗ trợ query chỉ brand khi app không truyền category. |
+| product_details / idx_product_attributes | attributes.$**:1, wildcard | Thuộc tính động theo nhiều key; tăng số entry, không bao phủ mọi tổ hợp AND/sort. |
+| product_details / idx_live_product_image_key | images.key:1; partial deleted=false | Cleanup shared-image reference; mảng sinh multikey; query phải lọc document còn sống. |
+| product_details / description_text_tags_text | description:text, tags:text | Text declaration; chưa thấy app dùng $text, không coi là search production hiện tại. |
+| reviews / review_id_1 | review_id:1, UNIQUE | Idempotent upsert, chống duplicate business ID. |
+| reviews / product_id_1_created_at_-1 | product_id:1, created_at:-1 | Equality product trước, review mới nhất sau; chi phí ghi compound. |
+| reviews / type_1_status_1 | type:1,status:1; partial report/pending | Tập moderation nhỏ; ngoài predicate không được phục vụ đầy đủ. |
+| order_snapshots / order_id_1 | order_id:1, UNIQUE | Identity đơn, không thay giao dịch PG. |
+| order_snapshots / buyer.id_1_order_date_-1 | buyer.id:1, order_date:-1 | Buyer equality và sort ngày; ca đo20 dòng dùng index này. |
+| order_snapshots / order_status_1_order_date_-1 | order_status:1,order_date:-1 | Trạng thái/ngày; không hỗ trợ mọi buyer filter bằng prefix. |
+| system_logs / log_id_1_created_at_1 | log_id:1,created_at:1, UNIQUE | Khóa log nguồn ghép, không unique riêng log_id. |
+| system_logs / created_at_1 | created_at:1; TTL7776000 giây | Dọn bản sao sau90 ngày; không bảo đảm xóa đúng thời khắc và không purge PG/violation. |
+| system_logs / action_1_actor_id_1_created_at_-1 | action:1,actor_id:1,created_at:-1 | Audit theo action/actor/time; actor-only không có prefix tương ứng. |
+| violation_logs / log_id_1 | log_id:1, UNIQUE | Identity vi phạm, khác namespace system_logs. |
+| violation_logs / target_user_id_1_created_at_-1 | target_user_id:1,created_at:-1 | Lịch sử vi phạm mục tiêu; không suy actor. |
+| contact_messages / feedback_id_1 | feedback_id:1, UNIQUE | Upsert form liên hệ. |
+| contact_messages / status_1_created_at_-1 | status:1,created_at:-1 | Hàng đợi hỗ trợ theo trạng thái/thời gian. |
+| etl_errors / resolved_1_last_at_1 | resolved:1,last_at:1 | Theo dõi lỗi chưa giải quyết theo thời gian; không chứa index dữ liệu nghiệp vụ. |
+
+Các entry này nằm trong catalog chung, được init đọc qua adapter; index `_id_` do Mongo tạo không nằm trong19 khai báo. Có bucket/key trong document không có nghĩa MinIO được đánh B-tree theo thiết kế này; key object và index DBMS là hai khái niệm khác nhau.
+
+### 6.4. JSON cấu hình, snapshot và cơ chế áp dụng
+
+| Tệp | Vai trò | Trường/điểm đọc và giới hạn |
+|---|---|---|
+| database/indexing/catalog.json | Đầu vào mong muốn | schema_version, revision, postgresql[], mongodb[]; keys/method/unique/predicate/managed_by hoặc options. |
+| database/indexing/catalog.schema.json | Schema cho cấu hình | Cấu trúc JSON; parser còn kiểm tên/field/predicate hỗ trợ, không chỉ cú pháp JSON. |
+| database/indexing/snapshots/index-v1.json | Snapshot đóng băng | Trạng thái index gắn release; không chỉnh lại lịch sử để che drift. |
+| database/indexing/releases.json | Binding release | migration007, revision index-v1, sha256 snapshot, baseline_migrations checksums001–007. |
+| docs/benchmark/pg/indexes.json; docs/benchmark/mongo/indexes.json | Output catalog thực tế khi đo | Index definitions/listIndexes, không phải đầu vào tự tạo index. |
+| docs/benchmark/*/summary.json và từng query JSON | Output đo | SQL/command/parameters/runs/stats; không phải định nghĩa index cần tạo. |
+| docs/evidence/index_config_catalog_verify.json | Output đối soát | engines.*.indexes[].status/reasons/actual, partition_indexes, unmanaged. Matched không chứng minh tăng tốc. |
+
+JSON chỉ lưu khai báo/metadata. B-tree/GIN/text/wildcard index thực nằm trong DBMS. Đổi cùng định nghĩa SQL/Python sang JSON không tự làm query nhanh hơn.
 
 ```text
-P_A = { p thuộc Product | owner(p.seller_id) = A }
-P_B = { p thuộc Product | owner(p.seller_id) = B }
-
-I_A = { i thuộc ProductImage | i.product_id thuộc các khóa của P_A }
-I_B = { i thuộc ProductImage | i.product_id thuộc các khóa của P_B }
-
-Product      = P_A UNION ALL P_B
-ProductImage = I_A UNION ALL I_B
+PostgreSQL: catalog → validate/plan → SQL migration + snapshot + release
+           → migration runner → index DBMS → verify/explain
+MongoDB:   catalog → validate/plan → create_index(key, options)
+           → verify → ghi applied snapshot trong _index_catalog_state
 ```
 
-| Dữ liệu | Quy tắc phân bổ | Cách thực hiện trong dự án |
-|---|---|---|
-| `product` | Fragment ngang theo site sở hữu seller. | `product.site_id` có mặc định `local_site()`; FK `(seller_id, site_id)` tới `seller_site`; trigger chặn ghi sai site và đổi ownership. |
-| `product_image` | Fragment dẫn xuất theo product tại site. | FK product cục bộ; trigger chặn đổi ID/product ownership và kiểm quy tắc cấp khóa ảnh. |
-| Category và seller–site mapping | Dữ liệu tham chiếu có bản ở cả hai site. | Nạp cùng fixture; view `v_category`, `v_seller_site` lấy bản A để tránh đếm lặp. Chưa có luồng tự đồng bộ khi thay reference data. |
-| Các bảng còn lại | Schema ứng dụng được kế thừa tại hai site. | Chưa phân tán nghiệp vụ order/cart/payment; không coi việc có bảng là đã vận hành giao dịch liên site. |
+`backend/app/services/index_config.py` validate chặt và cung cấp adapter; `mongo_schema.py` lấy INDEXES=mongo_indexes(), không duy trì danh sách Python độc lập. `backend/scripts/generate_index_migration.py` sinh migration/snapshot/release cho thay đổi PG tiếp theo; `scripts.indexes apply` dùng migration runner thay vì execute mọi JSON tùy ý. Constraint-owned index chỉ được kiểm kê, không compile thành CREATE INDEX độc lập phá ownership.
 
-Ba tính chất phân mảnh được giải thích trong phạm vi trên:
+`backend/app/services/index_mongo.py` plan→tạo missing→verify→ghi `_index_catalog_state` với _id=mongodb. `backend/scripts/init_mongo.py` cài validator rồi áp catalog; `backend/etl/errors.py` dùng cùng subset etl_errors. Mongo DDL không có transaction toàn bộ catalog; lỗi có thể để lại index đã tạo trước đó nhưng chưa cập nhật snapshot. Hai engine không có transaction DDL chung.
 
-- **Đầy đủ:** mỗi seller được gán đúng một A/B; product hợp lệ tham chiếu seller/site nên thuộc một fragment. Đây không phải khẳng định dữ liệu thật của ứng dụng đã được di chuyển hết sang hai site.
-- **Không giao nhau:** trigger kiểm site cục bộ và ownership; product ID/ảnh ID tại A là số lẻ dương, tại B là số chẵn dương, sequence tăng 2. Quy tắc lẻ/chẵn chống trùng ID, còn vị từ phân mảnh nghiệp vụ dựa trên seller ownership.
-- **Tái tạo:** `v_product` và `v_product_image` hợp bảng local A với foreign table B bằng `UNION ALL`. View giữ cả dòng xóa mềm; API áp bộ lọc nghiệp vụ riêng. Category lấy một bản tham chiếu, không hợp hai bản giống nhau.
+CLI `backend/scripts/indexes.py` có validate/plan/apply/verify. Plan phân biệt matched/missing/conflict/unmanaged; plan hợp lệ vẫn có thể thiếu index. Verify mặc định kiểm snapshot đã áp; --desired kiểm catalog mong muốn. Công cụ bổ sung index; khóa/options cùng tên khác nhau báo conflict, không tự drop/rebuild. Các index001–007 có trước lớp JSON, không tuyên bố đã sinh từ JSON ngay từ đầu.
 
-Định nghĩa cài đặt ở [01_site_schema.sql](../../database/distributed/01_site_schema.sql) và [05_global_views.sql](../../database/distributed/05_global_views.sql). Hai site dùng cùng schema xây từ baseline và migrations `001`–`007`, không sửa checksum lịch sử. `distributed_installation` lưu marker/version/source hash cho bootstrap; chạy lại đúng bản cài không tự nạp chồng fixture.
+`docs/evidence/index_config_validation.json` và `index_config_catalog_verify.json` ghi kiểm môi trường riêng,98 PG/19 Mongo matched, kiểm conflict/rollback/generator. Chúng chứng minh chức năng cấu hình trong phạm vi ấy, không tự xác nhận adopted metadata của DB ứng dụng. Chi tiết vận hành ở [hướng dẫn indexing JSON](../HUONG_DAN_INDEXING_JSON.md).
 
-Fixture kiểm thử có **5 product và 8 ảnh mỗi site**, tổng 10 product/16 bản ghi ảnh; có trường hợp rỗng, nhiều ảnh, chưa duyệt, xóa mềm và dữ liệu ngoài khoảng tháng truy vấn. Đây là dữ liệu giả lập từ [fixture_manifest.json](../../database/distributed/fixture_manifest.json), không phải toàn bộ seed 1.000 sản phẩm của ứng dụng.
+### 6.5. Benchmark hiện có và bảng đối chiếu trước/sau
 
-#### 3.2.5. Truy vấn liên site, phân quyền và tính nhất quán
+#### 6.5.1. Điều kiện đo và thiếu mốc trước
 
-Tại A, `server_b` dùng `postgres_fdw` kết nối B bằng role `b_reader`, import các bảng được cho phép vào schema `site_b`. View hợp nhất cung cấp giao diện đọc, trong khi writer ghi trực tiếp vào database sở hữu dữ liệu. Có thể đọc danh mục từ A mà không copy/import lại product B sau mỗi thay đổi. Cấu hình ở [04_fdw.sql](../../database/distributed/04_fdw.sql); quyền ở [03_permissions.sql](../../database/distributed/03_permissions.sql).
+`docs/benchmark/manifest.json` và [README benchmark](../benchmark/README.md) ghi lượt bắt đầu **05/11/2026 13:27:11 giờ Việt Nam**: PostgreSQL 16.15, MongoDB 8.0.32; PG 1.001 product/2.001 ảnh/31 đơn, Mongo 1.001 product_details/31 order_snapshots. Review/log/cart_item rỗng. Giữ nguyên index, một warmup và năm mẫu; PG READ ONLY/REPEATABLE READ, Mongo đọc tuần tự không có snapshot chung với PG. Worker vẫn có thể hoạt động.
 
-| Role | Phạm vi |
+README xác nhận **các output fixture trước/sau cũ đã bị xóa khỏi thư mục benchmark**. Không còn cặp file thô tương đương trong worktree để kiểm lại các tỷ lệ lịch sử. Vì vậy bảng sau đối chiếu rõ phần thiếu; không đặt đường dẫn “before.json” không tồn tại, không dùng số trong DOCX/slide cũ thay output trước.
+
+| Workload | Tệp kết quả trước tạo index | Kết quả sau/hiện trạng có index | Execution median hiện tại | Kết luận so sánh |
+|---|---|---|---:|---|
+| PG catalogue | Không có tệp còn lại | docs/benchmark/pg/catalogue.json | 0.347ms | Có dùng index; không tính tỷ lệ tăng tốc. |
+| PG catalogue_category | Không có | docs/benchmark/pg/catalogue_category.json | 0.599ms | Có bitmap scan, không kết luận index mới tốt hơn cũ. |
+| PG search | Không có | docs/benchmark/pg/search.json | 5.111ms | Seq Scan; chưa chứng minh trigram cải thiện tại dữ liệu này. |
+| PG buyer_history | Không có | docs/benchmark/pg/buyer_history.json | 0.119ms | Scan bốn partition; không chứng minh composite được chọn. |
+| PG seller_orders | Không có | docs/benchmark/pg/seller_orders.json | 0.383ms | Có JOIN/scan hỗn hợp, không tỷ lệ trước/sau. |
+| PG order_pk_pruning | Không có | docs/benchmark/pg/order_pk_pruning.json | 0.020ms | Prune còn một partition; không đồng nghĩa Index Scan. |
+| PG product_images | Không có | docs/benchmark/pg/product_images.json | 0.081ms | Index Scan hiện tại, thiếu mốc trước. |
+| PG etl_status | Không có | docs/benchmark/pg/etl_status.json | 0.061ms | Dùng index run mới nhất; thiếu mốc trước. |
+| PG etl_poll_selection | Không có | docs/benchmark/pg/etl_poll_selection.json | 0.070ms | Index Only Scan hàng đợi không có event đến hạn. |
+| Mongo product_details | Không có | docs/benchmark/mongo/product_details.json | 0ms; docs1/keys1/returned1 | IXSCAN; không xác định cải thiện trước/sau. |
+| Mongo order_snapshots | Không có | docs/benchmark/mongo/order_snapshots.json | 0ms; docs20/keys20/returned20 | IXSCAN; không xác định cải thiện trước/sau. |
+
+Cột “sau/hiện trạng” là **đo có index**, không phải lượt after của một A/B experiment còn đủ before. Các `counts_before/counts_after` trong Mongo summary là số document quanh cùng lượt đo, không phải trước/sau tối ưu index. Nếu có cặp tương đương, speedup=T_before/T_after và giảm thời gian=(T_before−T_after)/T_before; hiện không đủ T_before nên không tính.
+
+#### 6.5.2. Đọc EXPLAIN PostgreSQL
+
+Trong `docs/benchmark/pg/<workload>.json`, đọc sql/parameters, runs[].Execution Time, Planning Time; đi đệ quy Plan.Plans[] lấy Node Type, Index Name, Actual Rows/Loops, Rows Removed by Filter, Shared Hit/Read Blocks và Heap Fetches khi có. Median Planning và Execution tính độc lập nên không mặc định cùng một sample. Plan điển hình dưới là sample có execution ở giữa năm mẫu, không phải mọi run có cùng chi tiết timing/buffer.
+
+| Workload | Execution / Planning median (ms) | Plan/quan sát và diễn giải |
+|---|---:|---|
+| catalogue | 0.347 / 0.535 | Index Scan idx_product_visible_date_id + category_pkey;100 dòng;108 shared hit/0 read trong sample giữa. Khớp ORDER BY/tie-break, không đủ số liệu lợi ích trước/sau. |
+| catalogue_category | 0.599 / 0.356 | Bitmap Index Scan idx_product_category→Bitmap Heap Scan;175 product qua lọc,69 bị loại. Không chọn idx_product_catalogue trong ca này. |
+| search | 5.111 / 1.603 | Seq Scan product;45 dòng qua,956 bị loại. Planner không dùng trigram tại workload nhỏ/độ chọn lọc hiện có; không kết luận GIN hỏng. |
+| buyer_history | 0.119 / 0.465 | Seq Scan bốn HASH partition;20 dòng qua, tổng11 bị loại. Buyer không phải hash key. |
+| seller_orders | 0.383 / 1.103 | Product PK index và Seq Scan order_detail/bốn order partition;16 kết quả cuối. Không coi mọi JOIN đã index-only. |
+| order_pk_pruning | 0.020 / 0.138 | Chỉ Seq Scan order_h0;1 dòng qua/7 bị loại. Chứng minh pruning, không phải sử dụng PK Index Scan. |
+| product_images | 0.081 / 0.060 | Index Scan idx_product_image_product,2 dòng. |
+| etl_status | 0.061 / 0.051 | Index Scan idx_etl_runs_started,1 dòng. |
+| etl_poll_selection | 0.070 / 0.257 | Index Only Scan idx_etl_outbox_pending_event,0 dòng/0 Heap Fetches; chưa đại diện backlog lớn/claim/ACK. |
+
+Index Scan tìm index rồi đọc heap; Index Only Scan có thể tránh heap khi visibility/columns phù hợp; Bitmap Index Scan tạo bitmap để đọc heap theo nhóm; Seq Scan có thể hợp lý với bảng nhỏ hoặc nhiều dòng phù hợp. Buffers hit cho biết truy cập cache PostgreSQL, read không có nghĩa toàn bộ I/O hệ điều hành đã được đo. Không ép planner để tạo hình ảnh index được dùng.
+
+Index bytes hiện tại **3,489,792**, chỉ có một mốc. Review_history/reports/cart_lookup/log_month_pruning bị skipped vì dữ liệu rỗng; không có phép đo để kết luận index ở các ca đó hiệu quả. Không suy p95 HTTP, concurrency, latency frontend hoặc SLA từ SQL đại diện chọn một số cột.
+
+#### 6.5.3. Đọc executionStats MongoDB
+
+Đọc `runs[].queryPlanner.winningPlan` và `runs[].executionStats` trong từng file query. Các trường cần dùng là executionTimeMillis, totalDocsExamined, totalKeysExamined, nReturned và stage IXSCAN/FETCH/COLLSCAN. Tên index thực trong plan quan trọng hơn việc index có trong listIndexes.
+
+| Workload | Winning index/plan | Median ms / docs examined / keys examined / nReturned |
+|---|---|---:|
+| product_details | product_id_1; IXSCAN→FETCH lọc category/deleted | 0 / 1 / 1 / 1 |
+| order_snapshots | buyer.id_1_order_date_-1; IXSCAN→FETCH lọc deleted | 0 / 20 / 20 / 20 |
+
+Hai ca đo không có COLLSCAN; docs/keys gần số trả về thể hiện số entry đã kiểm trong workload cụ thể, không tự là tỷ lệ tăng tốc. 0ms do độ phân giải nguyên millisecond, không phải không mất thời gian. Reviews và attribute_search skipped vì thiếu document/metadata phù hợp; wildcard chưa được chứng minh hiệu quả bằng lượt này. Không so trực tiếp độ chính xác thời gian Mongo với PG hoặc gộp số đo fixture MongoDB 7 cũ vào MongoDB 8 hiện tại.
+
+### 6.6. Index mới ở mức đề xuất
+
+| Ứng viên trong kế hoạch | Trạng thái và giới hạn |
 |---|---|
-| `site_admin` | Cài đặt/quản trị schema và cấu hình site. |
-| `site_writer` | Đọc/ghi product, ảnh hợp lệ ở site cục bộ; đọc reference data, không sửa site/mapping hoặc ghi trực tiếp bảng vận hành. |
-| `b_reader` | Đọc các bảng danh mục/identity được cho phép ở B cho kết nối FDW; không cấp ghi hoặc đọc secret/wallet. |
-| `global_reader` | Đọc các view toàn cục tại A cho gateway; không là tài khoản writer. |
+| I01 product(category_id,created_at DESC,product_id ASC) | Chưa trong catalog/007; idx_product_catalogue hiện thiếu ID tie-break ở cuối. |
+| I03 product(category_id,price,product_id) | Chưa triển khai; không đánh đồng với index price đơn. |
+| I06 product_image(product_id,display_order,image_id) | Chưa triển khai; không đánh đồng với index product_id. |
+| I13 user_secret(password_reset_token) | Chưa triển khai; không suy lookup token đã được tối ưu. |
+| I14 system_log(resource_type,resource_id,created_at DESC) | Chưa triển khai; các index user/action/date không thay đúng prefix này. |
+| M02 idx_live_product_brand_ram trên attributes.brand,attributes.ram_gb,product_id; partial deleted=false | Mới đề xuất; wildcard đang có không đồng nghĩa targeted compound đã có. |
+| Review composite/partial bổ sung, BRIN log | Không nằm trong bộ triển khai đã chọn. Không còn benchmark ứng viên thô để định lượng lý do chọn/bỏ. |
 
-HBA được giới hạn theo nguồn cấu hình; công cụ cài đặt còn thu hồi quyền gọi function nghiệp vụ của reader để tránh ghi gián tiếp qua `SECURITY DEFINER`. Đây là chính sách cho module site, không phải khẳng định mọi role của ứng dụng cũ đã được tách quyền tương tự.
+Nguồn kế hoạch là `docs/KE_HOACH_THIET_KE_INDEXING.md`; SQL 007 và catalog mới là nguồn xác định index đã khai báo/đối soát. Không tạo index mới trong tác vụ báo cáo. Cần workload phù hợp, dữ liệu và điều kiện đo tương đương trước khi cam kết ứng viên tốt hơn bộ hiện tại.
 
-Bộ [Q1–Q6](../../database/distributed/queries) bao gồm:
+## 7. Đánh giá kết quả triển khai
 
-| Query | Mục tiêu kiểm chứng |
-|---|---|
-| Q1 | Đọc trực tiếp fragment B từ A qua foreign table, bằng quyền phù hợp. |
-| Q2 | Hợp product và JOIN category, lọc dòng chưa xóa mềm. |
-| Q3 | Product và ảnh ở site sở hữu, giữ cả product không có ảnh qua LEFT JOIN. |
-| Q4 | Đếm product theo category, giữ category rỗng. |
-| Q5 | Đếm và giá trung bình theo category trong khoảng thời gian nửa mở. |
-| Q6 | Seller không có product hợp lệ trong khoảng thời gian, dùng NOT EXISTS. |
+### 7.1. Tổng hợp theo trạng thái bằng chứng
 
-Gateway [catalogue_gateway.py](../../backend/app/catalogue_gateway.py) cung cấp `GET /products`, `GET /products/{product_id}`, `/health` và `/ready`. Lọc category/search/trạng thái và sắp xếp thực hiện trên kết quả hợp nhất trước `OFFSET/LIMIT`; query trả `total` toàn cục và ảnh được lấy theo nhóm product. Giá decimal được biểu diễn string trong JSON response của gateway; kiểu này khác trường integer VND của document snapshot Mongo.
-
-Gateway dùng giao dịch **read-only, REPEATABLE READ**, kiểm đủ identity A/B trước khi trả dữ liệu. Khi một site không truy cập được, trả `503` thay vì thành công với danh mục thiếu. `/health` chỉ xác nhận process còn hoạt động, còn `/ready` kiểm được cả hai site. Gateway không tăng `view_count`, không mở endpoint ghi product/checkout và không merge `attributes/tags` từ Mongo.
-
-Evidence cho thấy commit mới tại B xuất hiện ở giao dịch đọc mới tại A, trong khi giao dịch đọc đang mở giữ snapshot của nó. Điều này không có nghĩa hai database có một mốc snapshot toàn cục đồng bộ hoặc transaction ghi ACID xuyên site. Chưa triển khai giao dịch thanh toán liên site, tự chuyển ownership seller hoặc giải quyết xung đột reference data tự động.
-
-#### 3.2.6. Kết quả kiểm chứng và giới hạn bằng chứng
-
-[test_results.json](../evidence/distributed/test_results.json) ngày 04/11/2026 ghi **T01–T12 đều PASS**, với phạm vi `M1, one host / two virtual IPs` và `physical_hosts_verified: false`:
-
-| Bằng chứng | Kết quả được ghi nhận |
-|---|---|
-| T01–T03 | Kết nối A→B đúng database/identity; commit/snapshot; reader/HBA/function không vượt quyền. |
-| T04, T10 | Dừng từng site trong môi trường thử; site còn lại đọc/ghi local, truy vấn global lỗi khi thiếu site và phục hồi sau khi bật lại. |
-| T05–T07 | Chặn khóa/FK/site/ownership/dữ liệu sai; tái tạo và so sánh schema; reference data không bị đếm lặp. |
-| T08 | Q1–Q6 khớp kết quả kỳ vọng tính từ fixture, gồm các trường hợp rỗng. |
-| T09 | Bốn writer đồng thời cấp 40 ID đúng phân bổ, không trùng; thao tác kiểm thử được rollback. |
-| T11 | Bootstrap lại không nạp chồng; dựng cặp site thử sạch, đối chiếu schema/fixture/query. |
-| T12 | Lưu plan và thời gian local/remote/global trên fixture nhỏ, cùng host. |
-
-[schema_comparison.json](../evidence/distributed/schema_comparison.json) ghi `equal: true`; [inventory.json](../evidence/distributed/inventory.json) ghi hai database PostgreSQL 16.15 với migrations 001–007. [api_results.json](../evidence/distributed/api_results.json) ghi PASS cho phân trang/lọc toàn cục, API chỉ đọc, xử lý mất site và phục hồi. Đây là bằng chứng đã lưu của từng lượt kiểm, không phải trạng thái runtime được đo lại khi viết báo cáo.
-
-[performance_results.json](../evidence/distributed/performance_results.json) là phép đo nhỏ có chi phí FDW/network trong cùng host; không dùng để suy ra phân tán nhanh hơn tập trung hoặc đủ sức chịu tải production. T01–T12 cũng không chứng minh chịu mất một máy vật lý vì hai container còn chung host.
-
-#### 3.2.7. Những phần chưa hoàn thành
-
-- Chưa có evidence xác nhận hai site chạy trên hai máy vật lý/VM độc lập; hướng dẫn LAN/VPN/Tailscale đã có nhưng chưa thay được kiểm chứng thực tế.
-- Chưa tích hợp commerce frontend/backend với global view để vận hành giỏ hàng, tồn kho và thanh toán nhiều site; gateway hiện chỉ đọc danh mục.
-- Chưa chuyển dữ liệu thật, điều chỉnh ID/ownership và kiểm đủ FK/đối soát khi migration từ ứng dụng cũ sang các site.
-- Chưa triển khai đồng bộ Mongo metadata/media đa site hoặc cập nhật category/seller mapping tự động giữa A/B.
-- Chưa có cơ chế tự động failover PostgreSQL, fencing primary cũ và chuyển endpoint ứng dụng một cách hoàn chỉnh.
-- Chưa có MongoDB sharded cluster; replica set hiện tại phục vụ sao chép, không phải chia tải lưu trữ theo shard.
-- MinIO vẫn single-node, chưa triển khai distributed object storage chịu mất node/máy.
-- Chưa có tự động định tuyến đọc ứng dụng sang PostgreSQL standby; biến cấu hình replica không đồng nghĩa đường đọc đã được triển khai.
-- Chưa kiểm chứng toàn diện RPO/RTO, độ trễ replication và phục hồi dưới tải trên nhiều máy.
-
-MongoDB replica set có cơ chế bầu PRIMARY, nhưng vẫn cần kiểm thử với topology, phiên bản và client thực tế trước khi cam kết thời gian phục hồi. Docker restart policy khởi động lại container cũng không thay thế một cơ chế failover database.
-
-Kết quả hiện tại là **ứng dụng đa kho có replication và module danh mục phân mảnh trên hai PostgreSQL độc lập, đã kiểm chức năng liên site trên cùng host**. Chưa hoàn thành thương mại đa site hoặc khả năng chịu mất host. Sao chép dữ liệu không thay thế backup vì thao tác xóa/sai dữ liệu cũng có thể được sao chép.
-
-Hướng dẫn tái lập: [hai site PostgreSQL](../HUONG_DAN_CSDL_PHAN_TAN.md), [Tailscale Windows/Linux](../HUONG_DAN_TAILSCALE_WINDOWS_LINUX.md) và [sites.py](../../deploy/scripts/sites.py). Bộ verifier có fault injection; chỉ dùng đúng môi trường fixture/test mà công cụ yêu cầu, không gọi nó như một lệnh kiểm sức khỏe chỉ đọc trên hệ thống phục vụ người dùng.
-
-### 3.3. Indexing: bài toán, giải pháp và thực thi
-
-#### 3.3.1. Bài toán hiệu suất
-
-Các đường truy vấn cần tối ưu gồm danh sách sản phẩm đã duyệt theo danh mục/thời gian, tìm kiếm nội dung, lấy review theo sản phẩm, tìm đơn theo người mua, kiểm tra tham chiếu ảnh dùng chung và lấy sự kiện ETL chưa xử lý.
-
-Một index đơn trên từng cột không mặc định giải quyết được mọi truy vấn ghép điều kiện và sắp xếp. Thiết kế phải xem xét cột đứng đầu, chiều sắp xếp, predicate, kiểu index và độ chọn lọc. Đồng thời phải tính chi phí duy trì khi insert/update/delete, dung lượng và index chồng lặp.
-
-Các lựa chọn dưới đây có trong [catalog hiện hành](../../database/indexing/catalog.json), không phải danh sách index mới cần tạo thêm:
-
-| Trường cần tra cứu | Thiết kế index | Lý do lựa chọn và giới hạn |
+| Hạng mục | Trạng thái | Cơ sở và phạm vi |
 |---|---|---|
-| PG `user_core.email`, `username` và ID nghiệp vụ | Unique/B-tree theo PK/UNIQUE. | Định danh/login, chống trùng và bảo vệ quan hệ; không tạo thêm index trùng constraint. |
-| PG `product(created_at DESC, product_id ASC)` | B-tree ghép, partial `status=1 AND is_deleted=false`. | Danh sách công khai có thứ tự ổn định, ID phá hòa khi trùng ngày; không bao phủ mọi trạng thái moderation. |
-| PG `product.title`, `description` | GIN với `gin_trgm_ops`, partial cho sản phẩm công khai. | Hỗ trợ tìm chuỗi/ILIKE theo workload; khác index full-text và không đồng nghĩa tìm kiếm tiếng Việt hoàn chỉnh. |
-| PG `order(buyer_id, order_date DESC)` và `order_detail.order_id` | B-tree theo lịch sử và JOIN. | Lấy đơn của người mua và chi tiết đơn; partition HASH(order_id) không tự prune theo buyer. |
-| PG `order.voucher_id` | B-tree trên parent và các index con. | Tra các đơn dùng voucher, có tính cả dòng xóa mềm theo workload; không nhầm số root với số relation vật lý. |
-| PG `product_image.image_url`, `user_profile.avatar_url` | B-tree không unique. | Tra tham chiếu trước khi dọn object; URL seed có thể dùng chung nên không ép unique. |
-| PG outbox `event_id/available_at`, `entity_type/entity_key/event_id` | B-tree ghép, partial theo trạng thái chưa hoàn tất. | Claim hàng đợi và tìm entity cần retry; đánh đổi chi phí cập nhật trạng thái/index. |
-| Mongo ID nguồn: `product_id`, `review_id`, `order_id` | Unique từng ID theo collection. | Ngăn bản đọc trùng khi replay ETL, phối hợp với `_id` ổn định. |
-| Mongo `attributes.$**`, `(category_id, attributes.brand)` | Wildcard và compound. | Hỗ trợ thuộc tính linh hoạt và bộ lọc theo category/brand; không đảm bảo mọi tổ hợp lọc đều covered scan. |
-| Mongo `images.key` | Partial multikey khi `deleted=false`. | Kiểm object còn được product đang sống tham chiếu; cần khớp điều kiện partial. |
-| Mongo `(product_id, created_at DESC)`, `(buyer.id, order_date DESC)` | Compound trong reviews và order_snapshots. | Equality theo đối tượng rồi sắp xếp lịch sử mới nhất; thứ tự khóa theo đường truy vấn. |
-| Mongo `system_logs.created_at` | TTL đơn trường, 7.776.000 giây, tương đương 90 ngày. | Retention bản sao Mongo; cần BSON Date, không cam kết xóa đúng tức thời và không xóa log nguồn PG. |
+| PG schema, tách user, partition | Đã triển khai và kiểm chứng lịch sử | SQL 001–006, schema_review PASS28 bảng; benchmark05/11 ghi001–007. |
+| JSON/validator/index Mongo | Đã triển khai; có kiểm chứng local | Model/init và index_config_validation; không dùng file docs JSON như evidence runtime. |
+| MinIO ảnh và storage gateway | Đã triển khai; media local/restore đã kiểm | Code storage/init, rollout/quality32 ảnh lịch sử; không đồng nghĩa attachment workflow hoàn tất. |
+| MP4 upload/stream | Đã triển khai; có log test riêng | backend code và docs/evidence/product_video_tests.txt; không suy mọi video ngoài đã di trú. |
+| ETL full/incremental/replay/quality | Đã kiểm chứng trên môi trường lịch sử | Day5/6/7, seed nhỏ/MongoDB 7; benchmark MongoDB 8 không thay full ETL suite. |
+| Mongo ba member | Đã kiểm chứng MongoDB 7; chưa đủ evidence tương đương MongoDB 8 | Topology + mất secondary/majority write; chưa primary-election/host-loss test. |
+| PG primary/standby | Đã kiểm chứng streaming async | pg_stat_replication/verifier, thử dừng standby; không auto-failover. |
+| Hai site product/ảnh + FDW/gateway | Đã kiểm chứng M1 một host/hai IP | T01–T12/Q1–Q6/API PASS; không commerce đa site. |
+| Index007 trong DB ứng dụng | Đã hiện diện ở snapshot05/11 | Migrations và index definitions trong benchmark, không chỉ kế hoạch. |
+| JSON catalog tooling | Đã triển khai và verify môi trường riêng | 98 PG/19 Mongo matched; thiếu evidence adoption metadata trên DB ứng dụng hiện tại. |
+| Hiệu năng hiện tại | Đã đo workload có index | Chín PG/hai Mongo measured; ca rỗng skipped, thiếu mốc trước. |
+| CI remote | Đã cấu hình; chưa đủ evidence chạy remote | .github/workflows và tài liệu; log local không thay GitHub Actions run. |
+| PG auto-failover/Mongo shard/MinIO distributed | Đã thiết kế/định hướng, chưa có triển khai hoàn chỉnh | Không tìm thấy control plane/promotion/shard/distributed-storage tương ứng. |
+| Mất host/RPO/RTO production | Chưa đủ bằng chứng | Cùng host; backup rehearsal local không chứng minh off-host DR. |
 
-Trong mô hình hai site, mỗi database kế thừa schema/index qua 001–007; chưa có một bộ index toàn cục độc lập bao phủ cả A/B. `v_product` là view hợp nhất, còn dữ liệu và index vật lý nằm ở từng database. Khi đánh giá truy vấn FDW cần xem plan local/remote và lượng dữ liệu truyền; benchmark index của ứng dụng tập trung không tự chứng minh hiệu suất liên site. Hiện chỉ có phép đo fixture nhỏ của mục 3.2.6 cho module này.
+Các log test được xem đúng theo phạm vi ca kiểm và thời điểm lưu, không cộng số lượng pass ở các lần chạy khác nhau thành một suite hiện tại. Ngay cả result PASS cũng phải đọc cùng profile, version, dataset và các trường limit/skipped.
 
-#### 3.3.2. Giải pháp: tự thiết kế cấu hình, sử dụng bộ máy index của DB
+### 7.2. Tính nhất quán của tài liệu và sản phẩm báo cáo
 
-OldShop định nghĩa cấu hình index mong muốn trong JSON. Phần tự thiết kế là lựa chọn trường, thứ tự khóa, chiều sắp xếp, loại index và options dựa trên workload. PostgreSQL/MongoDB vẫn trực tiếp xây và duy trì cấu trúc index vật lý.
+`docs/report/07_report.md`, `07_slides.md`, `generated/` và `final/` thuộc bộ bàn giao Ngày 7. Các bản Word/PPT đã xuất còn có nội dung fixture lớn/MongoDB 7/FDW sau MVP trong khi mã nguồn và benchmark mới đã có007, JSON catalog, MongoDB 8 và module FDW riêng. Chúng không phải nguồn ưu tiên cho số liệu hiện trạng.
 
-Do đó, dự án **chưa tự lập trình cây B-tree/B+ tree hay thuật toán index thay thế DBMS**. Phần triển khai đọc khai báo key/options để gọi cơ chế index của DBMS, đồng thời quản lý vòng đời migration/snapshot cho PostgreSQL.
+Báo cáo này cập nhật nội dung phân tích, dùng ảnh tồn tại và Mermaid inline để giải thích topology mới. Tác vụ không chỉnh các tệp Word/PPT, không viết kịch bản; vì vậy không đánh dấu toàn bộ bộ trình chiếu cũ đã đồng bộ. Đối với sơ đồ nguồn cũ, chênh lệch được ghi ở3.1.3 thay vì gắn nhãn “hiện hành” không điều kiện.
 
-| Thành phần | Vai trò |
-|---|---|
-| [catalog.json](../../database/indexing/catalog.json) | Cấu hình mong muốn cho PostgreSQL và MongoDB |
-| [catalog.schema.json](../../database/indexing/catalog.schema.json) | Schema mô tả định dạng khai báo; hỗ trợ editor/kiểm tra cấu hình |
-| [index_config.py](../../backend/app/services/index_config.py) | Đọc và kiểm tra cấu hình bằng model/allowlist, tạo biểu diễn chuẩn hóa |
-| [index_postgres.py](../../backend/app/services/index_postgres.py) | Biên dịch khai báo được hỗ trợ thành DDL và đối chiếu catalog PostgreSQL |
-| [index_mongo.py](../../backend/app/services/index_mongo.py) | Đối chiếu và bổ sung index MongoDB từ key/options |
-| [snapshots](../../database/indexing/snapshots) và [releases.json](../../database/indexing/releases.json) | Ghi phiên bản cấu hình và liên kết với lịch sử migration |
+## 8. Hạn chế và kế hoạch hoàn thiện sản phẩm
 
-Catalog `index-v1` hiện khai báo 98 index PostgreSQL ở cấp root: 61 index ứng dụng/ETL và 37 index gắn với PK/UNIQUE; cùng 19 index MongoDB. Đây không phải tổng số index relation vật lý vì partition có index con. Các index của constraint được kiểm kê và bảo vệ, không tự tạo lại như standalone application index.
+### 8.1. Nguyên tắc tiến độ
 
-Các dạng được hỗ trợ gồm B-tree và GIN với một số biểu thức/opclass cho PostgreSQL; index đơn/ghép, text, wildcard, unique, sparse, partial, TTL theo các giới hạn của bộ kiểm tra cho MongoDB. Không mặc định chấp nhận mọi tính năng index mà DBMS cung cấp.
+Kế hoạch gốc `docs/KE_HOACH_NANG_CAP_7_NGAY.md` đặt khoảng27/10–02/11/2026; evidence triển khai Ngày5–7 ghi30/10. Các mốc này là lịch sử, không tự chuyển thành deadline cho công việc còn lại. Lịch đề xuất05–09/11 trong bản báo cáo trước chưa có xác nhận nên không dùng làm cam kết. Không có dữ liệu về phân công cá nhân hoặc công việc đang chạy trực tiếp để xác nhận “đang thực hiện”; bảng dưới chỉ ghi trạng thái có thể chứng minh. Không gán người phụ trách theo yêu cầu phạm vi lần này.
 
-#### 3.3.3. Ví dụ cấu hình và ý nghĩa cấu trúc index
+### 8.2. Bảng tiến độ và việc còn lại
 
-Ví dụ rút gọn một phần tử PostgreSQL trong catalog:
+P0 là việc cần rõ trước khi nghiệm thu nội dung/kết quả; P1 cần trước mở rộng môi trường hoặc dùng dữ liệu thật; P2 là tối ưu/mở rộng theo nhu cầu. Ưu tiên là đánh giá kỹ thuật của báo cáo, không phải lịch giao việc đã được nhóm xác nhận.
 
-```json
-{
-  "name": "idx_product_visible_date_id",
-  "schema": "public",
-  "table": "product",
-  "method": "btree",
-  "unique": false,
-  "keys": [
-    { "column": "created_at", "order": "DESC", "nulls": "FIRST" },
-    { "column": "product_id", "order": "ASC", "nulls": "LAST" }
-  ],
-  "managed_by": "application",
-  "predicate": {
-    "all": [
-      { "column": "status", "op": "eq", "value": 1 },
-      { "column": "is_deleted", "op": "eq", "value": false }
-    ]
-  }
-}
-```
-
-Đây là B-tree ghép trên `(created_at DESC, product_id ASC)`, chỉ chứa các dòng sản phẩm đã duyệt và chưa xóa mềm. Thứ tự trong mảng `keys` có ý nghĩa; index `(A, B)` không mặc định tương đương `(B, A)`. Predicate giúp thu hẹp tập dòng được lập chỉ mục.
-
-Khái niệm cấu trúc cần phân biệt: JSON có cấu trúc khai báo để diễn đạt thiết kế; B-tree là cấu trúc dữ liệu vật lý do PostgreSQL thực thi. JSON không thay cách PostgreSQL tổ chức nội bộ B-tree. Khi chạy `SELECT`, optimizer xét index vật lý và thống kê DB, không đọc lại file JSON trên host.
-
-Với MongoDB, ví dụ index review theo sản phẩm và thời gian:
-
-```json
-{
-  "collection": "reviews",
-  "keys": [["product_id", 1], ["created_at", -1]],
-  "options": { "name": "product_id_1_created_at_-1" }
-}
-```
-
-Thiết kế đặt `product_id` đứng đầu cho điều kiện bằng, tiếp theo là `created_at` giảm dần để phục vụ lấy review mới. Đây là một phần tử cấu hình, không phải toàn bộ file catalog.
-
-#### 3.3.4. Quy trình thực thi và lý do vẫn giữ SQL migration
-
-```text
-PostgreSQL:
-JSON → validate/plan → sinh SQL + snapshot + release binding
-     → review → migration runner → index vật lý → verify/EXPLAIN
-
-MongoDB:
-JSON → validate/plan → create_index(key, options)
-     → đối soát → ghi snapshot đã áp → verify/explain
-```
-
-Các chức năng CLI gồm `validate`, `plan`, `apply`, `verify`. Plan báo `matched`, `missing`, `conflict`, `unmanaged`; plan PASS vẫn có thể có index missing. Verify mặc định đối chiếu snapshot đã áp, còn `--desired` đối chiếu catalog mong muốn.
-
-PostgreSQL áp DDL qua migration đã đóng băng, giữ kiểm tra checksum và lịch sử. File [001_indexes.sql](../../database/04_migrations/001_indexes.sql) và [007_indexing_v2.sql](../../database/04_migrations/007_indexing_v2.sql) vẫn được giữ vì là lịch sử triển khai. `index-v1` mô tả bộ index tương ứng sau 007; không sinh 008 chỉ để đổi định dạng khai báo. Khi có bổ sung PostgreSQL index thực sự, generator có thể sinh migration tiếp theo cùng snapshot/release mới.
-
-Các index 001–007 là thiết kế SQL đã có trước lớp cấu hình JSON. Không tuyên bố chúng đã được sinh từ JSON ngay từ đầu. Phần bổ sung JSON hiện quản lý cấu hình/đối soát và cung cấp đường sinh migration cho thay đổi tiếp theo.
-
-Công cụ tự động chủ yếu xử lý bổ sung index. Đổi khóa/chiều/unique/TTL của index cùng tên có thể gây conflict và cần quy trình riêng; không tự xóa/rebuild để ép cấu hình khớp. Apply hai engine cũng không có transaction DDL chung xuyên hai DB.
-
-Hướng dẫn lệnh vận hành nằm ở [mục 18 hướng dẫn hệ thống](../HUONG_DAN_CAU_HINH_VA_CHAY_HE_THONG.md#18-cấu-hình-và-chạy-indexing-json) và [hướng dẫn JSON](../HUONG_DAN_INDEXING_JSON.md).
-
-#### 3.3.5. Kiểm chứng và kết quả đo hiệu suất
-
-Phải tách ba loại bằng chứng:
-
-| Loại kiểm tra | Điều được chứng minh | Không tự chứng minh |
-|---|---|---|
-| Unit/contract test | Parser, validation, compiler và các nhánh xử lý tuân theo test | Hiệu suất DB thật hoặc trạng thái DB đang phục vụ |
-| Plan/verify catalog | Định nghĩa index thực tế khớp cấu hình/snapshot | Index được mọi truy vấn sử dụng hoặc làm mọi truy vấn nhanh hơn |
-| Benchmark/explain | Cách thực thi và số đo trên workload/môi trường cụ thể | SLA chung, hiệu năng mọi máy hoặc mọi khối lượng dữ liệu |
-
-Bằng chứng triển khai JSON tại [index_config_validation.json](../evidence/index_config_validation.json) ghi nhận kiểm tra trên PG/Mongo riêng, gồm parity sau 007, tạo migration mới trên DB UUID, kiểm tra rollback và xung đột Mongo. Log đi kèm có 92 passed, 31 skipped; đây là phạm vi môi trường kiểm thử được mô tả trong bằng chứng, không phải toàn bộ bài kiểm thử đều đã chạy.
-
-Sau lỗi thiếu dependencies khi dùng Conda base, bộ 53 unit test indexing đã được chạy lại thành công bằng Python 3.13 và dependencies khóa trong container riêng; CLI validate cũng PASS. Hai lượt kiểm tra có môi trường khác nhau, không gộp chúng thành một lượt end-to-end duy nhất.
-
-Benchmark hiện tại đo trực tiếp dữ liệu ứng dụng đã seed và thay đổi phát sinh:
-1.001 sản phẩm, 2.001 ảnh, 31 đơn; Mongo có 1.001 product_details và 31 order_snapshots.
-Review, giỏ hàng chi tiết và log rỗng; không sinh thêm bản ghi hoặc metadata brand/RAM.
-
-Kết quả tại [README benchmark](../benchmark/README.md),
-[PostgreSQL](../benchmark/pg/summary.json) và [MongoDB](../benchmark/mongo/summary.json).
-Một warmup và năm mẫu mỗi truy vấn; giữ nguyên index. PG dùng transaction READ ONLY,
-REPEATABLE READ; Mongo dùng lệnh đọc tuần tự. Không có phép so sánh trước/sau,
-không sử dụng kết quả fixture lớn cũ để chứng minh hiệu năng của DB hiện tại.
-
-Các file plan và summary là output chạy công cụ đo, không phải cấu hình tạo index.
-Việc chuyển cùng định nghĩa index sang JSON không tự thay đổi hiệu suất vật lý.
-
-## 4. Kế hoạch hoàn thiện sản phẩm
-
-### 4.1. Tiến độ tổng hợp đến 04/11/2026
-
-Trạng thái sau dựa trên mã nguồn và evidence được dẫn trong báo cáo. Không quy đổi thành phần trăm hoàn thành vì chưa có tổng effort hoặc phạm vi nghiệm thu cuối được chốt.
-
-| Hạng mục | Kết quả đã có | Phần cần hoàn thiện |
-|---|---|---|
-| Thiết kế dữ liệu quan hệ | SQL schema, user split, order/log partition, ERD và ownership giữa ba kho. | Đối chiếu sơ đồ đầy đủ khi đưa extension site vào bản trình bày; giữ SQL làm nguồn cho constraint. |
-| JSON và ETL | Document model/validator, outbox, full/incremental/reconcile và metadata ownership. | Cải thiện vận hành backlog/retention; thiết kế đường ghi metadata và đồng bộ đa site nếu mở rộng. |
-| Indexing | Migrations 001–007, catalog `index-v1`, snapshot/verify và benchmark lịch sử. | Theo dõi usage/chi phí ghi và đo lại trên workload mục tiêu; không tự bỏ index cũ. |
-| Phân tán danh mục | Hai PG độc lập, product/ảnh theo site, FDW/global views, T01–T12 và API evidence PASS. | Giữ giới hạn một host; kiểm chứng hai host thật nếu được chọn làm phạm vi nghiệm thu. |
-| Ứng dụng đa site | Gateway danh mục chỉ đọc chạy riêng đã có kiểm thử. | Commerce backend/frontend, cart/checkout, ID/FK migration và Mongo/media đa site chưa hoàn thành. |
-| Hồ sơ và demo | Nguồn báo cáo/slide Ngày 7 và tài liệu vận hành hiện có; báo cáo này bổ sung thiết kế site. | Đồng bộ PPT với 007/JSON/hai site; tổng duyệt và ghi rõ môi trường/giới hạn của từng bằng chứng. |
-| Triển khai Windows | Có hướng dẫn PowerShell và phân tích lỗi 04/11. | Thu log máy gặp lỗi và nghiệm thu đúng topology; chưa xác nhận đã xử lý dứt điểm lỗi Docker Engine trên máy đó. |
-
-### 4.2. Công việc, phân công và thời hạn đề xuất
-
-**Các mốc sau là kế hoạch đề xuất, chưa phải deadline hoặc phân công cá nhân đã được xác nhận.** Dùng vai trò A/B/C/D theo [kế hoạch nhóm](../KE_HOACH_NANG_CAP_7_NGAY.md): A phụ trách PG/thiết kế dữ liệu; B phụ trách Mongo/storage; C phụ trách ETL/backend; D phụ trách hạ tầng và hồ sơ. Nhóm cần điền tên thực tế, xác nhận khả năng thực hiện và chốt hạn. Mốc giờ dưới đây theo giờ Việt Nam.
-
-| Ưu tiên | Công việc còn lại | Vai trò phụ trách đề xuất | Hạn đề xuất | Đầu ra/tiêu chí hoàn thành |
+| Hạng mục | Hiện trạng | Công việc/đầu ra tiếp theo | Ưu tiên | Mốc có căn cứ / thời hạn |
 |---|---|---|---|---|
-| P0 | Thu thông tin và phân loại lỗi Windows; kiểm Engine, env/volume và topology trước retry. | D + C | 05/11/2026, 12:00 | Raw log/exit/container state và phiên bản có thời điểm; không suy nguyên nhân chỉ từ mã lỗi; không thay credentials dữ liệu cũ. |
-| P1 | Rà schema/seed/bootstrap bị ngắt và đường phục hồi; chọn base/resilience phù hợp máy demo. | A + C + D | 05/11/2026, 18:00 | Checklist đúng phạm vi và restart giữ dữ liệu; nếu còn lỗi thì ghi blocker và bước xử lý cụ thể. |
-| P1 | Chốt sơ đồ allocation, ownership/ID, JSON và index với source hiện hành. | A + B + C | 06/11/2026, 18:00 | ERD/sơ đồ liên kết đúng SQL, ví dụ có nhãn minh họa, bảng index có query/lý do và nguồn evidence. |
-| P1 | Chốt nghiệm thu hai IP cùng host hay hai host; nếu chọn hai host thì kiểm LAN/VPN, HBA, quyền, truy vấn và lỗi/phục hồi. | D + A | 07/11/2026, 18:00 | Bộ evidence ghi hostname/IP/site và failure domain thực; nếu thiếu máy, giữ phạm vi một host và ghi phần chưa làm. |
-| P1 | Đồng bộ báo cáo/PPT và kịch bản demo với năm yêu cầu. | D tổng hợp; A/B/C rà nội dung | 08/11/2026, 18:00 | ERD, phân tán, JSON, index, tiến độ/owner/hạn có mục rõ ràng; không dùng slide cũ để khẳng định commerce đa site. |
-| P1 | Tổng duyệt ứng dụng và bài kiểm chứng phân tán trong môi trường thử. | C + D; cả nhóm phản biện | 09/11/2026, 18:00 | Lượt demo có log và nội dung nhất quán; có evidence dự phòng ghi đúng ngày/môi trường. |
+| Thiết kế quan hệ và ownership | Có SQL/ERD, tách user/partition đã kiểm | Khi bàn giao, dùng ERD07 và chú thích baseline; đối chiếu thêm extension site. | P0 | Đã có evidence30/10; chưa có hạn cập nhật sơ đồ được xác nhận. |
+| ORM–DDL | Có chênh precision amount, nullability transfer_method, unique metadata | Rà/đồng bộ model bằng thay đổi riêng; kiểm tương thích API và schema. | P1 | Chưa có hạn xác nhận. |
+| JSON/validator | Có model runtime, snapshots cũ lệch một số trường | Dùng schema sinh từ code; phân biệt ví dụ và output ETL. | P0 | Nội dung đã tổng hợp trong báo cáo này; chưa có hạn sửa các docs khác. |
+| ETL | Có rollout/replay/quality nhỏ; một worker/N+1/full aggregate rebuild | Theo dõi backlog/dead/field mismatch; xác minh lại môi trường mục tiêu và tải cần nghiệm thu. | P1 | Kiểm thành công30/10; chưa có hạn/throughput cam kết. |
+| Index benchmark | Có after-only05/11; thiếu before thô | Nếu cần chứng minh tăng tốc, chuẩn bị phép đo trước/sau tương đương ở môi trường riêng; giữ raw plans/params/version. | P0 nếu yêu cầu tỷ lệ cải thiện | Không tự chạy trong tác vụ; chưa có deadline xác nhận. |
+| JSON catalog adoption | Tooling/isolated verify PASS | Xác minh applied snapshot/hash trên DB mục tiêu, phân biệt physical index và metadata adoption. | P1 | Có evidence môi trường riêng; chưa có hạn xác nhận. |
+| MongoDB 8 replication/ETL | Có query benchmark, thiếu suite topology/election/ETL tương đương | Thu rs.status/majority write và kết quả ETL/failure đúng phiên bản, đúng topology. | P1 | Query đã đo05/11; chưa có hạn xác nhận. |
+| Module hai site M1 | Đã kiểm hai IP cùng host | Chốt tiêu chí một host hay hai host; nếu hai host, thu identity/network/rights/outage evidence tương ứng. | P0 về phạm vi nghiệm thu | M1 có evidence05/11; chưa có hạn hai host xác nhận. |
+| Commerce đa site | Chưa tích hợp toàn luồng | Đặc tả owner/ID/FK/reservation/payment/retry; migration/rollback dữ liệu thật, tests xuyên site. | P2, đợt riêng | Chưa có deadline hoặc effort đã xác nhận. |
+| Reference/Mongo/media đa site | Bootstrap reference thủ công; ETL single-source | Thiết kế update/version/site-aware event và media reference/GC; tránh xóa nhầm khi remote mất. | P2 | Chưa có deadline xác nhận. |
+| Backup và HA | Có rehearsal local, PG không auto-promote, MinIO single-node | Backup ngoài host, diễn tập restore, chốt RPO/RTO; HA cần failure domain/fencing/endpoints riêng. | P1 trước dữ liệu thật | Chưa có bằng chứng/mốc cam kết production. |
+| Retention và media cleanup | Có retry/queue; chưa policy GC lịch sử đầy đủ | Retention outbox/origin/runs/errors/cleanup, không purge event chưa ACK; attachments cần workflow/quyền. | P1 | Chưa có deadline xác nhận. |
+| CI remote | Có cấu hình, thiếu kết quả remote | Thu run và commit tương ứng khi thực hiện release theo quy trình dự án. | P1 | Chưa có ngày hoàn tất được xác nhận. |
+| Hồ sơ báo cáo/PPT | Markdown này cập nhật; binary cũ chưa đồng bộ | Lần bàn giao khác cần xuất lại tài liệu từ nội dung đã chốt, giữ version/số liệu thống nhất. | P0 về hồ sơ | Không tạo/sửa Word/PPT trong phạm vi lần này; chưa đặt deadline. |
 
-Các phần mở rộng sản phẩm cần lập đợt riêng sau khi chốt yêu cầu và nguồn lực:
+Các hạng mục chưa triển khai không được chuyển thành hoàn thành chỉ vì có hướng dẫn. Không áp dụng tỷ lệ phần trăm nếu chưa có tổng phạm vi/effort và tiêu chí nghiệm thu được chốt. Vấn đề Windows trong `docs/PHAN_TICH_LOI_WINDOWS_VA_KHUYEN_NGHI_04-11-26.md` vẫn cần log đúng máy nếu còn phát sinh; không có evidence mới ở đây để khẳng định đã xử lý dứt điểm Docker Engine trên máy đó.
 
-| Hướng mở rộng | Phụ trách đề xuất | Phụ thuộc trước khi cam kết thời hạn |
+## 9. Kết luận và mức độ đáp ứng yêu cầu
+
+OldShop đã triển khai kiến trúc đa kho: PG giữ giao dịch/quan hệ, Mongo giữ thuộc tính và projection, MinIO giữ byte; ETL nối các kho bằng outbox/retry/đối soát. PG có partition/tách dọc và standby async; Mongo có replica set ba member đã kiểm trên MongoDB 7. Module riêng đã phân mảnh danh mục A/B và dùng FDW để đọc hợp nhất, có evidence chức năng nhưng cùng host.
+
+**Không có bằng chứng A–B tự replication hoặc ETL theo lịch.** Reference chỉ được nạp giống nhau lúc bootstrap; query FDW thấy cập nhật remote theo snapshot. Không có cơ sở gọi toàn bộ commerce đa site, Mongo sharding, PG auto-failover hoặc chịu mất host là hoàn tất.
+
+Indexing có catalog, migration và đường áp/verify. Bản đo05/11 chứng minh plan và chi phí hiện tại của workload có index; **thiếu before thô nên chưa chứng minh được tỷ lệ cải thiện trước/sau**. Những index không được chọn và ca skipped được công bố, không dùng lý thuyết index để thay số đo.
+
+| Yêu cầu ban đầu | Mức đáp ứng của nội dung báo cáo này | Giới hạn triển khai/bàn giao |
 |---|---|---|
-| Migration dữ liệu thật và commerce đa site | A + C | Chốt owner/ID/FK, luồng tồn kho/đơn hàng/thanh toán và quy trình rollback; chưa có deadline được xác nhận. |
-| Mongo metadata/media đa site và đồng bộ reference data | B + C | Chốt nguồn ghi từng trường, namespace object/ID và giải quyết cập nhật; chưa có deadline được xác nhận. |
-| PG auto-failover, backup/restore ngoài host và dự phòng storage | D + A + B | Có failure domain độc lập, chính sách fencing/endpoint và mục tiêu RPO/RTO; chưa có deadline được xác nhận. |
+| 1. Tổng hợp thiết kế dữ liệu | Đáp ứng: bảng/khóa/quan hệ, ownership, ERD và chênh lệch schema/ORM. | Sơ đồ cũ được chú thích; không sửa mã nguồn/sơ đồ ngoài tệp. |
+| 2. Thiết kế phân tán | Đáp ứng: toàn bộ service, profile, Mongo/PG replication, site allocation/query và kết luận sync. | M1 hai IP chung host; chưa commerce/HA nhiều host. |
+| 3. JSON | Đáp ứng: required/default/type/nested, sáu collection, etl_errors, ví dụ và validator/ETL. | Ví dụ là hợp đồng, không giả dump; workflow ghi metadata/attachment còn thiếu. |
+| 4. Indexing | Đáp ứng thiết kế và cách đọc kết quả; đã lập bảng đối chiếu trước/sau với phần thiếu rõ ràng. | Chưa đủ evidence thô để chứng minh mức tăng tốc; không tính tỷ lệ. |
+| 5. Kế hoạch hoàn thiện | Đáp ứng phạm vi cập nhật: trạng thái, backlog, ưu tiên, gate và mốc lịch sử có nguồn. | Không tự phân công hoặc đặt hạn mới theo yêu cầu; chưa có deadline xác nhận cho phần còn lại. |
+| 6. Báo cáo/thuyết trình | Đáp ứng tổng hợp nội dung, sơ đồ và phụ lục để sử dụng khi báo cáo. | Không tạo Word/PPT/kịch bản; bộ PPT cũ chưa được đồng bộ trong tác vụ này. |
 
-Các hạng mục này là kế hoạch, không được đánh dấu hoàn thành chỉ vì schema hoặc tài liệu triển khai đã tồn tại. Phần điều tra Windows tham khảo [phân tích ngày 04-11-26](../PHAN_TICH_LOI_WINDOWS_VA_KHUYEN_NGHI_04-11-26.md); tài liệu đó phân biệt lỗi bảo vệ env đã xác nhận với giả thuyết EOF/pipe còn cần log.
+Các quyết định cần được bảo vệ bằng đúng loại chứng cứ: DDL chứng minh ràng buộc đã khai báo; code chứng minh đường xử lý; output chứng minh lần chạy; benchmark chứng minh workload/môi trường đã đo. Phạm vi kết luận dừng ở phạm vi bằng chứng, không suy từ nhiều container thành HA hoặc từ index tồn tại thành mọi truy vấn nhanh hơn.
 
-## 5. Tổng kết
+## 10. Phụ lục đường dẫn và hướng dẫn kiểm chứng
 
-OldShop giải quyết bài toán người dùng vừa mua vừa bán đồ cũ bằng hệ thống có quản lý tài khoản, kiểm duyệt tin đăng và xử lý giao dịch. Kiến trúc dữ liệu được phân chia theo yêu cầu nghiệp vụ thay vì đưa toàn bộ thông tin vào một loại kho lưu trữ.
+### 10.1. Nguồn triển khai chính
 
-| Nội dung | Kết quả đã đạt | Giới hạn cần trình bày rõ |
+| Nhóm | Tệp/thư mục có thật trong repository | Chức năng |
 |---|---|---|
-| Hợp nhất dữ liệu | PostgreSQL giữ nghiệp vụ/quan hệ, MongoDB giữ thuộc tính linh hoạt và bản đọc, MinIO giữ file | Có dữ liệu chiếu trùng theo ownership; không có ACID chung cho ba kho |
-| ETL | Có extract/transform/upsert, transactional outbox, retry, quality/reconcile và tổng hợp | Bản đọc có độ trễ; vẫn cần vận hành và xử lý backlog/lỗi |
-| Phân tán | Có replication trong stack ứng dụng; có hai PG độc lập phân mảnh product/ảnh, FDW/global views và gateway chỉ đọc, evidence T01–T12/API PASS | Đã kiểm hai IP cùng host; chưa commerce đa site, HA nhiều máy, PG auto-failover, Mongo sharding hoặc MinIO distributed |
-| Indexing | Thiết kế theo workload, cấu hình JSON, migration/snapshot và verify | Dùng bộ máy index của DBMS; chưa tự viết cấu trúc index vật lý |
-| Đánh giá hiệu suất | Có explain và benchmark trước/sau, số đo kèm điều kiện thử nghiệm | Không suy rộng mẫu đo thành cam kết hiệu năng cho mọi môi trường |
-| Hoàn thiện sản phẩm | Có bảng tiến độ, backlog, vai trò và hạn đề xuất tại mục 4 | Chưa có tên người được giao hoặc deadline cuối được xác nhận; các việc chưa làm được ghi riêng |
+| Schema/khởi tạo | [database/init.sql](../../database/init.sql), [01_schema](../../database/01_schema), [migrations](../../database/04_migrations) | DDL/constraint/seed call và lịch sử nâng cấp. |
+| ORM/runner | [models](../../backend/app/models), [init_db.py](../../backend/scripts/init_db.py), [migrate.py](../../backend/scripts/migrate.py) | Mapping, bootstrap, fingerprint/checksum/migration lock. |
+| JSON | [documents.py](../../backend/app/schemas/documents.py), [etl.py](../../backend/app/schemas/etl.py), [mongo_schema.py](../../backend/app/services/mongo_schema.py), [init_mongo.py](../../backend/scripts/init_mongo.py) | Hợp đồng, validator, index init. |
+| Hạ tầng | [distributed Compose](../../deploy/docker-compose.distributed.yml), [Mongo init](../../deploy/data/mongo/init.js), [PG primary init](../../deploy/data/postgres/init-replication.sh), [standby start](../../deploy/data/postgres/start-replica.sh) | Topology/dependency và replication bootstrap. |
+| Sites | [sites.py](../../deploy/scripts/sites.py), [verify_sites.py](../../deploy/scripts/verify_sites.py), [distributed SQL](../../database/distributed), [gateway](../../backend/app/catalogue_gateway.py) | Schema/fixture/FDW/query và gateway read-only. |
+| ETL | [run.py](../../backend/etl/run.py), [extract.py](../../backend/etl/extract.py), [transform.py](../../backend/etl/transform.py), [load.py](../../backend/etl/load.py), [quality.py](../../backend/etl/quality.py), [pipelines](../../backend/etl/pipelines) | Poll/extract/project/upsert/retry/quality/media/aggregate. |
+| Index JSON | [catalog](../../database/indexing/catalog.json), [snapshot](../../database/indexing/snapshots/index-v1.json), [releases](../../database/indexing/releases.json), [CLI](../../backend/scripts/indexes.py), [generator](../../backend/scripts/generate_index_migration.py) | Định nghĩa mong muốn và release/migration. |
+| Index drivers | [index_config.py](../../backend/app/services/index_config.py), [index_postgres.py](../../backend/app/services/index_postgres.py), [index_mongo.py](../../backend/app/services/index_mongo.py) | Parse/compile/inspect/plan/apply/verify. |
+| Media | [storage.py](../../backend/app/services/storage.py), [MinIO init](../../deploy/data/minio/init.sh) | Key/bucket/backend storage, policy và bốn bucket. |
+| Sơ đồ | [ERD07](../diagram/07_erd_current.dbml), [architecture07](../diagram/07_architecture_current.puml), [data flow07](../diagram/07_data_flow_current.puml), [ETL flow](../diagram/05_etl_flow.puml) | Nguồn sơ đồ; giới hạn phiên bản đã phân tích ở3.1.3. |
 
-Hướng tiếp theo là nghiệm thu môi trường mục tiêu, chốt phạm vi hai host và kiểm chứng truy vấn/quyền/phục hồi, sau đó mới mở rộng commerce và đồng bộ đa site. Election Mongo cần kiểm đúng phiên bản thực tế; PG failover và dự phòng object storage cần failure domain cùng quy trình riêng. Việc mở rộng phải kiểm cả tính đúng dữ liệu và khả năng phục hồi, bên cạnh thời gian truy vấn.
+### 10.2. Bảng đọc bằng chứng và giới hạn kết luận
 
-Báo cáo phản ánh trạng thái triển khai và phạm vi bằng chứng đã có; việc tổng hợp báo cáo không tự áp migration, tạo index mới hoặc thay đổi dữ liệu của hệ thống đang chạy.
+Các đường dẫn sau tính từ gốc repo. Không cần chạy lại benchmark/ETL/deploy để đọc bảng này. `verify_sites.py` có fault injection, `sites.py verify` không phải lệnh healthcheck chỉ đọc trên dữ liệu đang phục vụ; không dùng chúng thay thao tác đọc evidence.
+
+| Tệp evidence | Thông số/đường dẫn trường | Ý nghĩa/kết luận được phép | Không thể suy ra chỉ từ tệp |
+|---|---|---|---|
+| docs/evidence/day7_schema_review.json | result, logical_tables, columns, table_column_type_nullability_diffs, scope | 28 bảng/222 cột khớp schema logic ở lượt kiểm; đọc scope loại partition. | Mọi constraint/default/trigger/index/site extension đều đã so. |
+| docs/evidence/day7_stack.json | profile, checks.healthy_services, checks.mongo.members[].state, checks.mongo.version | Profile resilience và set MongoDB 7 hoạt động lúc 30/10. | Runtime hiện tại hoặc MongoDB 8 election. |
+| Cùng tệp | checks.pg_stat_replication, checks.orders, checks.replica_orders | Streaming async và count order của lượt kiểm. | Lag luôn0, RPO0, promote tự động. |
+| docs/day2/fault-verification.json | mongo_secondary_outage.*, pg_replica_outage_primary_available, limits | Ghi majority khi mất secondary, primary PG còn dùng khi standby dừng. | Mất primary/host đã được thử. |
+| docs/evidence/day6_failover.json | mongo_image, isolated, scenarios[].scenario/readiness/attribute_search, result | Phản hồi API khi phụ thuộc mất/khôi phục đúng scenario. | Toàn hệ thống luôn HA, kết quả tương đương mọi phiên bản. |
+| docs/evidence/distributed/inventory.json | topology, physical_hosts_verified, sites.*.database/products/images/migrations | Đúng hai DB/fragment5 sản phẩm8 ảnh, cùng host. | Hai máy vật lý hoặc replication A/B. |
+| docs/evidence/distributed/test_results.json | checks.T01.detail database/role/client_address/server_address; T02.detail | Kết nối PG A→B và semantics snapshot/commit; giá123→456 ở transaction mới. | Sao chép dữ liệu hoặc transaction toàn cục nguyên tử. |
+| Cùng tệp | checks.T04/T10, T05–T09, T11, queries.Q1–Q6 expected/actual, status | Local outage isolation, toàn vẹn/tái tạo/ID/bootstrap/query đúng fixture. | Commerce/payment/ETL/media xuyên site hoàn tất. |
+| docs/evidence/distributed/schema_comparison.json | equal, common_contract, differences nếu có | Schema contract A/B bằng nhau ở lần kiểm; xem index extension. | Mọi dữ liệu luôn đồng bộ. |
+| docs/evidence/distributed/api_results.json | status, checks, b_down_response, physical_hosts_verified | Global filter/page/read-only, outage và recovery gateway. | Frontend commerce đã được tích hợp. |
+| docs/evidence/distributed/performance_results.json | local/remote/global: samples_ms, median_ms, p95_ms, plan; limitations | Chi phí FDW trên fixture/cùng host; đọc riêng từng nhóm. | Scale tốt hơn tập trung, SLA hai host. |
+| docs/evidence/distributed/clean_rebuild.json | bootstrap_idempotent, clean_rebuild_verified | Dựng sạch/lặp bootstrap được kiểm. | Backup ngoài máy hoặc restore dữ liệu thật. |
+| docs/evidence/day5_rollout.json | full_runs[].status/rows_in/rows_out/errors/details.quality; source_reconciliation | Full lặp, field/media quality và nguồn giữ nguyên trong rollout. | Mọi collection đã được thử phi rỗng hoặc ETL100k đạt. |
+| docs/evidence/day5_worker_latency.json | initial_backlog, elapsed_seconds, after, completed_run, completed_quality_mismatches |16 event được worker xử lý, quality0 mismatch tại phép quan sát. | P95, throughput hoặc latency luôn26.06 giây. |
+| docs/evidence/day6_rollout.json | initial_rollout_exit_code, recovery_exit_code, etl_runs, source_reconciliation | Lịch sử lỗi/phục hồi và đối soát trước mở lại. | Không có lỗi ở lượt đầu. |
+| docs/evidence/day7_rehearsal.json | result, isolated, stages[name=etl_twice].runs, stages[name=etl_twice].metadata_preserved | Replay/metadata trong demo cô lập. | Dữ liệu production hiện tại giống demo. |
+| docs/evidence/index_config_validation.json | result, scope, generated_at, inventory, tests.passed/skipped/skipped_scope, cli.validate/plan/apply/apply_repeat/verify/generate_noop, verified_scenarios, limits | Parser/generator/apply/rollback/conflict đã kiểm theo các scenario được liệt kê. | Mọi test skipped đã chạy hoặc app DB đã được adoption. |
+| docs/evidence/index_config_catalog_verify.json | engines.postgresql/mongodb.indexes[].status/reasons/actual, partition_indexes/unmanaged |98 PG/19 Mongo matched trên môi trường verify; index tồn tại/đúng định nghĩa. | Query planner chọn chúng, tăng tốc hoặc metadata adoption ở DB khác. |
+| docs/benchmark/manifest.json | started_at/finished_at, generated_rows, mutations, limitations, runner_sha256, seed_sql_sha256, pg_rows, mongo_counts | Nguồn/thời điểm và fingerprint; generated_rows=0, mutations rỗng cho biết runner không sinh dữ liệu/đổi index. | DB chưa thay đổi sau seed hoặc có phép đo before-index. |
+| docs/benchmark/pg/summary.json | transaction_read_only, isolation, rows, migrations, index_bytes, cases.*.status/median_execution_ms/median_planning_ms | Snapshot dữ liệu/phiên bản/index và median từng workload. | Before/sau, mọi query ORM/HTTP hoặc tải đồng thời. |
+| docs/benchmark/pg/*.json theo workload ở6.5 | sql, parameters, runs[].Plan, Execution Time, Planning Time; Plans đệ quy | Scan/index/rows/buffers của từng sample. | Index tồn tại luôn được dùng; Index Only Scan luôn không đọc heap. |
+| docs/benchmark/mongo/summary.json | version, counts_before/after, cases.*.status/median_* | Phiên bản/count/median, skipped do thiếu dữ liệu. | Counts bằng nhau chứng minh nội dung bất biến hoặc trước/sau tạo index. |
+| docs/benchmark/mongo/product_details.json; order_snapshots.json | command, runs[].queryPlanner.winningPlan, executionStats.* | Winning index, docs/keys/returned và thời gian query hiện tại. |0ms là không tốn thời gian; tỷ lệ tăng tốc khi thiếu before. |
+| docs/benchmark/pg/indexes.json; mongo/indexes.json | Định nghĩa từng index, table/collection/keys/options | Inventory của DB được đo; so với catalog/snapshot. | Toàn bộ19 Mongo đã được kiểm vì runner chỉ lấy sáu collection. |
+
+### 10.3. Nguồn còn thiếu để nâng mức kết luận
+
+| Nhận định muốn kiểm thêm | Bằng chứng còn cần | Trường/chỉ số phải có |
+|---|---|---|
+| Index làm nhanh hơn bao nhiêu | Cặp raw before/after cùng query/dữ liệu/version/params và điều kiện cache/tải tương đương | PG planning/execution/scan/buffers; Mongo executionStats/docs/keys/returned; index diff và số mẫu. |
+| MongoDB 8 replication/election và ETL đạt như MongoDB 7 | Topology/failure/ETL output đúng MongoDB 8 và đúng client | rs.status/member/version/majority write, thời gian failover; run quality/backlog/error/replay. |
+| Catalog được tiếp nhận trên DB ứng dụng | Kết quả verify snapshot/hash và release binding đúng DB mục tiêu | PG schema_migrations/checksum; Mongo _index_catalog_state; matched/missing/conflict, DB identity. |
+| Hai site thực sự ở hai host | Inventory/identity/network và failure test từ môi trường đó | Hostname/IP/DB/site marker/failure domain; không chỉ tên container. |
+| Commerce/metadata/media đa site hoàn tất | Code routing và output end-to-end/rollback/recovery | Owner/ID/FK, reservation/payment idempotency, outbox theo site, reference/media safety. |
+| Có backup chịu mất host/RPO/RTO | Backup ở nơi độc lập và kết quả restore đo được | Thời điểm backup/LSN hoặc dữ liệu đối soát, recovery duration, dữ liệu mất/tái lập. |
+
+Việc thiếu các bằng chứng này không được thay bằng số liệu suy đoán. Báo cáo đã chỉ rõ mức kết luận hiện có và điều kiện để nâng mức nghiệm thu, đồng thời giữ nguyên mã nguồn, cấu hình và hệ thống đang triển khai.
