@@ -1,0 +1,583 @@
+// Nguồn: SQL trong repository; đối chiếu qua catalog PostgreSQL 16 dựng tạm.
+// Các bảng vật lý sau migration; không dùng ORM làm nguồn schema.
+Project oldshop_current {
+  database_type: 'PostgreSQL'
+  Note: 'Schema PostgreSQL suy ra từ database/init.sql và toàn bộ migration 001–007; không phải snapshot database đang chạy. Gồm bảng nghiệp vụ, bảng vận hành và schema_migrations do backend/scripts/migrate.py tạo. Chỉ vẽ FK được SQL khai báo. users_full là view JOIN chỉ đọc, không phải bảng. Các partition được biểu diễn bằng bảng cha; xem ghi chú từng bảng. Index có điều kiện, GIN và thứ tự sắp xếp được giữ bằng SQL trong note vì DBML không biểu diễn đầy đủ.'
+}
+
+Table "category" {
+  "category_id" serial [not null]
+  "name" varchar(100) [not null]
+  "description" text
+  "parent_id" integer
+  "is_active" boolean [not null, default: `true`]
+  "is_deleted" boolean [not null, default: `false`]
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamp
+
+  indexes {
+    "name" [name: 'category_name_key', unique, type: btree, note: 'CREATE UNIQUE INDEX category_name_key ON public.category USING btree (name)']
+    "category_id" [name: 'category_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX category_pkey ON public.category USING btree (category_id)']
+    "created_at" [name: 'idx_category_created_at', type: btree, note: 'CREATE INDEX idx_category_created_at ON public.category USING btree (created_at)']
+    "is_active" [name: 'idx_category_is_active', type: btree, note: 'CREATE INDEX idx_category_is_active ON public.category USING btree (is_active) WHERE (is_deleted = false)']
+    "name" [name: 'idx_category_name_active', type: btree, note: 'CREATE UNIQUE INDEX idx_category_name_active ON public.category USING btree (name) WHERE (is_deleted = false)']
+    "parent_id" [name: 'idx_category_parent', type: btree, note: 'CREATE INDEX idx_category_parent ON public.category USING btree (parent_id) WHERE (is_deleted = false)']
+  }
+}
+
+Table "contact_info" {
+  "contact_id" serial [not null]
+  "user_id" integer [not null]
+  "full_name" varchar(100) [not null]
+  "phone_number" varchar(15) [not null]
+  "address" varchar(255) [not null]
+  "province" varchar(100)
+  "district" varchar(100)
+  "ward" varchar(100)
+  "is_default" boolean [not null, default: `false`]
+  "is_deleted" boolean [not null, default: `false`]
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamp
+
+  indexes {
+    "contact_id" [name: 'contact_info_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX contact_info_pkey ON public.contact_info USING btree (contact_id)']
+    "is_default" [name: 'idx_contact_info_default', type: btree, note: 'CREATE INDEX idx_contact_info_default ON public.contact_info USING btree (is_default) WHERE (is_deleted = false)']
+    "user_id" [name: 'idx_contact_info_user', type: btree, note: 'CREATE INDEX idx_contact_info_user ON public.contact_info USING btree (user_id)']
+  }
+}
+
+Table "etl_outbox" {
+  "event_id" bigserial [not null]
+  "source_table" text [not null]
+  "source_key" jsonb [not null]
+  "entity_type" text [not null]
+  "entity_key" jsonb [not null]
+  "operation" text [not null]
+  "created_at" timestamptz [not null, default: `clock_timestamp()`]
+  "available_at" timestamptz [not null, default: `clock_timestamp()`]
+  "status" text [not null, default: `'pending'::text`]
+  "attempts" integer [not null, default: `0`]
+  "processed_at" timestamptz
+  "last_error_code" varchar(80)
+  "last_run_id" uuid [note: 'Không có FOREIGN KEY tới etl_runs.']
+
+  checks {
+    `(entity_type = ANY (ARRAY['product'::text, 'order'::text, 'review'::text, 'system_log'::text, 'violation_log'::text, 'contact'::text]))` [name: 'etl_outbox_entity_type_check']
+    `(operation = ANY (ARRAY['INSERT'::text, 'UPDATE'::text, 'DELETE'::text]))` [name: 'etl_outbox_operation_check']
+    `(status = ANY (ARRAY['pending'::text, 'done'::text, 'dead'::text]))` [name: 'etl_outbox_status_check']
+    `(attempts >= 0)` [name: 'etl_outbox_attempts_check']
+  }
+
+  indexes {
+    "event_id" [name: 'etl_outbox_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX etl_outbox_pkey ON public.etl_outbox USING btree (event_id)']
+    ("entity_type", "entity_key", "event_id") [name: 'idx_etl_outbox_entity_pending', type: btree, note: 'CREATE INDEX idx_etl_outbox_entity_pending ON public.etl_outbox USING btree (entity_type, entity_key, event_id) WHERE (status <> \'done\'::text)']
+    ("available_at", "event_id") [name: 'idx_etl_outbox_pending', type: btree, note: 'CREATE INDEX idx_etl_outbox_pending ON public.etl_outbox USING btree (available_at, event_id) WHERE (status = ANY (ARRAY[\'pending\'::text, \'dead\'::text]))']
+    ("event_id", "available_at") [name: 'idx_etl_outbox_pending_event', type: btree, note: 'CREATE INDEX idx_etl_outbox_pending_event ON public.etl_outbox USING btree (event_id, available_at) WHERE (status = ANY (ARRAY[\'pending\'::text, \'dead\'::text]))']
+  }
+}
+
+Table "etl_runs" {
+  "run_id" uuid [not null]
+  "mode" text [not null]
+  "started_at" timestamptz [not null, default: `clock_timestamp()`]
+  "ended_at" timestamptz
+  "status" text [not null, default: `'running'::text`]
+  "rows_in" bigint [not null, default: `0`]
+  "rows_out" bigint [not null, default: `0`]
+  "errors" integer [not null, default: `0`]
+  "details" jsonb [not null, default: `'{}'::jsonb`]
+
+  indexes {
+    "run_id" [name: 'etl_runs_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX etl_runs_pkey ON public.etl_runs USING btree (run_id)']
+    "ended_at" [name: 'idx_etl_runs_aggregate_success', type: btree, note: 'CREATE INDEX idx_etl_runs_aggregate_success ON public.etl_runs USING btree (ended_at DESC) WHERE ((status = \'success\'::text) AND (details ? \'aggregate\'::text))']
+    "started_at" [name: 'idx_etl_runs_started', type: btree, note: 'CREATE INDEX idx_etl_runs_started ON public.etl_runs USING btree (started_at DESC)']
+  }
+}
+
+Table "etl_state" {
+  "name" text [not null]
+  "value" jsonb [not null]
+  "updated_at" timestamptz [not null, default: `clock_timestamp()`]
+
+  indexes {
+    "name" [name: 'etl_state_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX etl_state_pkey ON public.etl_state USING btree (name)']
+  }
+}
+
+Table "etl_time_origin" {
+  "source_table" text [not null]
+  "source_key" jsonb [not null]
+  "field_name" text [not null]
+  "source_value" timestamp [not null]
+  "source_zone" text [not null]
+  "recorded_at" timestamptz [not null, default: `clock_timestamp()`]
+
+  indexes {
+    ("source_table", "source_key", "field_name") [name: 'etl_time_origin_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX etl_time_origin_pkey ON public.etl_time_origin USING btree (source_table, source_key, field_name)']
+  }
+}
+
+Table "media_deletions" {
+  "deletion_id" bigserial [not null]
+  "url_path" text [not null]
+  "status" text [not null, default: `'pending'::text`]
+  "attempts" integer [not null, default: `0`]
+  "available_at" timestamptz [not null, default: `clock_timestamp()`]
+  "created_at" timestamptz [not null, default: `clock_timestamp()`]
+  "processed_at" timestamptz
+  "last_error_code" varchar(80)
+
+  checks {
+    `(url_path ~~ '/media/%'::text)` [name: 'media_deletions_url_path_check']
+    `(status = ANY (ARRAY['pending'::text, 'done'::text]))` [name: 'media_deletions_status_check']
+  }
+
+  indexes {
+    ("available_at", "deletion_id") [name: 'idx_media_deletions_due', type: btree, note: 'CREATE INDEX idx_media_deletions_due ON public.media_deletions USING btree (available_at, deletion_id) WHERE (status = \'pending\'::text)']
+    "deletion_id" [name: 'media_deletions_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX media_deletions_pkey ON public.media_deletions USING btree (deletion_id)']
+    "url_path" [name: 'media_deletions_url_path_key', unique, type: btree, note: 'CREATE UNIQUE INDEX media_deletions_url_path_key ON public.media_deletions USING btree (url_path)']
+  }
+}
+
+Table "order" {
+  "order_id" serial [not null]
+  "buyer_id" integer [not null]
+  "contact_id" integer [not null]
+  "payment_method_id" integer [not null]
+  "voucher_id" integer
+  "order_date" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  "total_amount" numeric(18,2) [not null]
+  "shipping_fee" numeric(18,2) [default: `0`]
+  "discount_amount" numeric(18,2) [default: `0`]
+  "final_amount" numeric(18,2) [not null]
+  "order_status" smallint [not null, default: `0`]
+  "shipping_address" text
+  "tracking_number" varchar(100)
+  "notes" text
+  "is_deleted" boolean [not null, default: `false`]
+
+  checks {
+    `(order_status = ANY (ARRAY[0, 1, 2, 3, 4]))` [name: 'order_order_status_check']
+  }
+
+  indexes {
+    "voucher_id" [name: 'idx_order_voucher_lookup', type: btree, note: 'CREATE INDEX idx_order_voucher_lookup ON ONLY public."order" USING btree (voucher_id)']
+    "buyer_id" [name: 'order_day4_new_buyer_id_idx', type: btree, note: 'CREATE INDEX order_day4_new_buyer_id_idx ON ONLY public."order" USING btree (buyer_id) WHERE (is_deleted = false)']
+    ("buyer_id", "order_date") [name: 'order_day4_new_buyer_id_order_date_idx', type: btree, note: 'CREATE INDEX order_day4_new_buyer_id_order_date_idx ON ONLY public."order" USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)']
+    "order_date" [name: 'order_day4_new_order_date_idx', type: btree, note: 'CREATE INDEX order_day4_new_order_date_idx ON ONLY public."order" USING btree (order_date) WHERE (is_deleted = false)']
+    "order_status" [name: 'order_day4_new_order_status_idx', type: btree, note: 'CREATE INDEX order_day4_new_order_status_idx ON ONLY public."order" USING btree (order_status) WHERE (is_deleted = false)']
+    "order_id" [name: 'order_day4_new_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX order_day4_new_pkey ON ONLY public."order" USING btree (order_id)']
+  }
+
+  Note: 'PARTITION BY HASH (order_id). Các partition order_h0..order_h3, MODULUS 4; PK(order_id) và FK được giữ. final_amount là cột thường NOT NULL, không phải generated column; SQL không có CHECK cho công thức tổng tiền.'
+}
+
+Table "order_detail" {
+  "order_detail_id" serial [not null]
+  "order_id" integer [not null]
+  "product_id" integer [not null]
+  "quantity" integer [not null]
+  "price_at_purchase" numeric(18,2) [not null]
+  "subtotal" numeric(18,2) [not null]
+
+  checks {
+    `(quantity > 0)` [name: 'order_detail_quantity_check']
+  }
+
+  indexes {
+    "order_id" [name: 'idx_order_detail_order', type: btree, note: 'CREATE INDEX idx_order_detail_order ON public.order_detail USING btree (order_id)']
+    ("product_id", "order_id") [name: 'idx_order_detail_product_order', type: btree, note: 'CREATE INDEX idx_order_detail_product_order ON public.order_detail USING btree (product_id, order_id)']
+    "order_detail_id" [name: 'order_detail_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX order_detail_pkey ON public.order_detail USING btree (order_detail_id)']
+  }
+}
+
+Table "payment_method" {
+  "payment_method_id" serial [not null]
+  "method_name" varchar(50) [not null]
+  "is_online" boolean [not null]
+  "is_deleted" boolean [not null, default: `false`]
+
+  indexes {
+    "method_name" [name: 'payment_method_method_name_key', unique, type: btree, note: 'CREATE UNIQUE INDEX payment_method_method_name_key ON public.payment_method USING btree (method_name)']
+    "payment_method_id" [name: 'payment_method_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX payment_method_pkey ON public.payment_method USING btree (payment_method_id)']
+  }
+}
+
+Table "product" {
+  "product_id" serial [not null]
+  "seller_id" integer [not null]
+  "category_id" integer [not null]
+  "title" varchar(255) [not null]
+  "description" text
+  "price" numeric(18,2) [not null]
+  "quantity" integer [not null]
+  "view_count" integer [not null, default: `0`]
+  "video_url" varchar(500)
+  "status" smallint [not null, default: `0`]
+  "reject_reason" varchar(500)
+  "approved_by" integer
+  "is_deleted" boolean [not null, default: `false`]
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamp
+  "sold_at" timestamp
+  "weight_grams" integer
+  "dimensions" varchar(50)
+  "condition_rating" smallint
+  "warranty_months" integer [default: `0`]
+  "transfer_method" smallint [not null, default: `1`]
+
+  checks {
+    `(price >= (0)::numeric)` [name: 'product_price_check']
+    `(quantity >= 0)` [name: 'product_quantity_check']
+    `(status = ANY (ARRAY[0, 1, 2, 3]))` [name: 'product_status_check']
+    `((condition_rating >= 1) AND (condition_rating <= 10))` [name: 'product_condition_rating_check']
+    `(transfer_method = ANY (ARRAY[1, 2]))` [name: 'product_transfer_method_check']
+  }
+
+  indexes {
+    ("category_id", "created_at") [name: 'idx_product_catalogue', type: btree, note: 'CREATE INDEX idx_product_catalogue ON public.product USING btree (category_id, created_at DESC) WHERE ((status = 1) AND (is_deleted = false))']
+    "category_id" [name: 'idx_product_category', type: btree, note: 'CREATE INDEX idx_product_category ON public.product USING btree (category_id) WHERE (is_deleted = false)']
+    "created_at" [name: 'idx_product_created_at', type: btree, note: 'CREATE INDEX idx_product_created_at ON public.product USING btree (created_at) WHERE (is_deleted = false)']
+    "description" [name: 'idx_product_description_trgm', note: 'CREATE INDEX idx_product_description_trgm ON public.product USING gin (description gin_trgm_ops) WHERE ((status = 1) AND (is_deleted = false))']
+    "price" [name: 'idx_product_price', type: btree, note: 'CREATE INDEX idx_product_price ON public.product USING btree (price) WHERE (is_deleted = false)']
+    "seller_id" [name: 'idx_product_seller', type: btree, note: 'CREATE INDEX idx_product_seller ON public.product USING btree (seller_id) WHERE (is_deleted = false)']
+    "status" [name: 'idx_product_status', type: btree, note: 'CREATE INDEX idx_product_status ON public.product USING btree (status) WHERE (is_deleted = false)']
+    `to_tsvector('english'::regconfig, title::text)` [name: 'idx_product_title', note: 'CREATE INDEX idx_product_title ON public.product USING gin (to_tsvector(\'english\'::regconfig, (title)::text)) WHERE (is_deleted = false)']
+    "title" [name: 'idx_product_title_trgm', note: 'CREATE INDEX idx_product_title_trgm ON public.product USING gin (title gin_trgm_ops) WHERE ((status = 1) AND (is_deleted = false))']
+    ("created_at", "product_id") [name: 'idx_product_visible_date_id', type: btree, note: 'CREATE INDEX idx_product_visible_date_id ON public.product USING btree (created_at DESC, product_id) WHERE ((status = 1) AND (is_deleted = false))']
+    "product_id" [name: 'product_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX product_pkey ON public.product USING btree (product_id)']
+  }
+}
+
+Table "product_image" {
+  "image_id" serial [not null]
+  "product_id" integer [not null]
+  "image_url" varchar(500) [not null]
+  "alt_text" varchar(255)
+  "is_primary" boolean [not null, default: `false`]
+  "display_order" integer [not null, default: `0`]
+  "uploaded_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  "content_type" varchar(100)
+  "size_bytes" bigint
+
+  checks {
+    `(size_bytes >= 0)` [name: 'product_image_size_bytes_check']
+  }
+
+  indexes {
+    "product_id" [name: 'idx_product_image_product', type: btree, note: 'CREATE INDEX idx_product_image_product ON public.product_image USING btree (product_id)']
+    "image_url" [name: 'idx_product_image_url', type: btree, note: 'CREATE INDEX idx_product_image_url ON public.product_image USING btree (image_url)']
+    "image_id" [name: 'product_image_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX product_image_pkey ON public.product_image USING btree (image_id)']
+  }
+}
+
+Table "report_daily_sales" {
+  "report_date" date [not null]
+  "seller_id" integer [not null, note: 'Không có FOREIGN KEY trong SQL.']
+  "category_id" integer [not null, note: 'Không có FOREIGN KEY trong SQL.']
+  "orders_count" bigint [not null]
+  "item_quantity" bigint [not null]
+  "gross_sales_vnd" numeric(30,0) [not null]
+  "refreshed_at" timestamptz [not null]
+  "run_id" uuid [not null, note: 'Không có FOREIGN KEY trong SQL.']
+
+  indexes {
+    ("report_date", "seller_id", "category_id") [name: 'report_daily_sales_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX report_daily_sales_pkey ON public.report_daily_sales USING btree (report_date, seller_id, category_id)']
+  }
+}
+
+Table "review" {
+  "review_id" serial [not null]
+  "product_id" integer [not null]
+  "buyer_id" integer [not null]
+  "rating" smallint [not null]
+  "title" varchar(255)
+  "content" text
+  "is_verified_purchase" boolean [not null, default: `false`]
+  "helpful_count" integer [not null, default: `0`]
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamp
+  "is_deleted" boolean [not null, default: `false`]
+
+  checks {
+    `((rating >= 0) AND (rating <= 5))` [name: 'review_rating_check']
+  }
+
+  indexes {
+    "buyer_id" [name: 'idx_review_buyer', type: btree, note: 'CREATE INDEX idx_review_buyer ON public.review USING btree (buyer_id)']
+    "product_id" [name: 'idx_review_product', type: btree, note: 'CREATE INDEX idx_review_product ON public.review USING btree (product_id)']
+    "rating" [name: 'idx_review_rating', type: btree, note: 'CREATE INDEX idx_review_rating ON public.review USING btree (rating)']
+    "review_id" [name: 'review_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX review_pkey ON public.review USING btree (review_id)']
+  }
+}
+
+Table "role" {
+  "role_id" serial [not null]
+  "role_name" varchar(50) [not null]
+  "description" varchar(255)
+  "is_deleted" boolean [not null, default: `false`]
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamp
+
+  indexes {
+    "created_at" [name: 'idx_role_created_at', type: btree, note: 'CREATE INDEX idx_role_created_at ON public.role USING btree (created_at)']
+    "role_name" [name: 'idx_role_name', type: btree, note: 'CREATE INDEX idx_role_name ON public.role USING btree (role_name) WHERE (is_deleted = false)']
+    "role_id" [name: 'role_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX role_pkey ON public.role USING btree (role_id)']
+    "role_name" [name: 'role_role_name_key', unique, type: btree, note: 'CREATE UNIQUE INDEX role_role_name_key ON public.role USING btree (role_name)']
+  }
+}
+
+Table "schema_migrations" {
+  "version" varchar(3) [not null]
+  "applied_at" timestamptz [not null, default: `CURRENT_TIMESTAMP`]
+  "checksum" character(64) [not null]
+
+  indexes {
+    "version" [name: 'schema_migrations_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX schema_migrations_pkey ON public.schema_migrations USING btree (version)']
+  }
+}
+
+Table "shopping_cart" {
+  "cart_id" serial [not null]
+  "user_id" integer [not null]
+  "last_updated" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    "cart_id" [name: 'shopping_cart_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX shopping_cart_pkey ON public.shopping_cart USING btree (cart_id)']
+    "user_id" [name: 'shopping_cart_user_id_key', unique, type: btree, note: 'CREATE UNIQUE INDEX shopping_cart_user_id_key ON public.shopping_cart USING btree (user_id)']
+  }
+
+  Note: 'UNIQUE(user_id): mỗi user có tối đa một giỏ hàng; FK không bắt buộc user phải có giỏ.'
+}
+
+Table "shopping_cart_item" {
+  "cart_item_id" serial [not null]
+  "cart_id" integer [not null]
+  "product_id" integer [not null]
+  "quantity" integer [not null]
+  "added_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+
+  checks {
+    `(quantity > 0)` [name: 'shopping_cart_item_quantity_check']
+  }
+
+  indexes {
+    "cart_id" [name: 'idx_shopping_cart_item_cart', type: btree, note: 'CREATE INDEX idx_shopping_cart_item_cart ON public.shopping_cart_item USING btree (cart_id)']
+    "product_id" [name: 'idx_shopping_cart_item_product', type: btree, note: 'CREATE INDEX idx_shopping_cart_item_product ON public.shopping_cart_item USING btree (product_id)']
+    "cart_item_id" [name: 'shopping_cart_item_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX shopping_cart_item_pkey ON public.shopping_cart_item USING btree (cart_item_id)']
+    ("cart_id", "product_id") [name: 'uq_cart_product', unique, type: btree, note: 'CREATE UNIQUE INDEX uq_cart_product ON public.shopping_cart_item USING btree (cart_id, product_id)']
+  }
+}
+
+Table "system_feedback" {
+  "feedback_id" serial [not null]
+  "user_id" integer
+  "guest_email" varchar(255)
+  "subject" varchar(200) [not null]
+  "content" text [not null]
+  "status" smallint [default: `0`, note: 'SQL không có CHECK; chú thích: 0 Pending, 1 Reviewed, 2 Resolved.']
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    "created_at" [name: 'idx_system_feedback_created_at', type: btree, note: 'CREATE INDEX idx_system_feedback_created_at ON public.system_feedback USING btree (created_at)']
+    "status" [name: 'idx_system_feedback_status', type: btree, note: 'CREATE INDEX idx_system_feedback_status ON public.system_feedback USING btree (status)']
+    "user_id" [name: 'idx_system_feedback_user', type: btree, note: 'CREATE INDEX idx_system_feedback_user ON public.system_feedback USING btree (user_id)']
+    "feedback_id" [name: 'system_feedback_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX system_feedback_pkey ON public.system_feedback USING btree (feedback_id)']
+  }
+}
+
+Table "system_log" {
+  "log_id" bigserial [not null]
+  "user_id" integer
+  "action" varchar(100) [not null]
+  "resource_type" varchar(50)
+  "resource_id" integer [note: 'Tham chiếu theo resource_type ở mức ứng dụng; không có FOREIGN KEY.']
+  "details" text
+  "ip_address" varchar(45)
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    "action" [name: 'idx_system_log_action', type: btree, note: 'CREATE INDEX idx_system_log_action ON ONLY public.system_log USING btree (action)']
+    "created_at" [name: 'idx_system_log_created_at', type: btree, note: 'CREATE INDEX idx_system_log_created_at ON ONLY public.system_log USING btree (created_at)']
+    "user_id" [name: 'idx_system_log_user', type: btree, note: 'CREATE INDEX idx_system_log_user ON ONLY public.system_log USING btree (user_id)']
+    ("log_id", "created_at") [name: 'system_log_day4_new_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX system_log_day4_new_pkey ON ONLY public.system_log USING btree (log_id, created_at)']
+  }
+
+  Note: 'PARTITION BY RANGE (created_at). Partition tháng system_log_YYYYMM và system_log_default. PK(log_id, created_at); log_id riêng lẻ không có UNIQUE. Số partition phụ thuộc dữ liệu và lịch bảo trì.'
+}
+
+Table "transaction" {
+  "transaction_id" serial [not null]
+  "order_id" integer [not null]
+  "user_id" integer [not null]
+  "payment_method_id" integer [not null]
+  "amount" numeric(18,4) [not null]
+  "balance_before" numeric(18,4) [default: `0.0000`]
+  "balance_after" numeric(18,4) [default: `0.0000`]
+  "transaction_status" smallint [not null, default: `0`, note: 'SQL không có CHECK cho trạng thái; chú thích SQL: 0 Pending, 1 Success, 2 Flagged, 3 Fraud, 4 Failed.']
+  "fraud_score" numeric(5,2) [default: `0.00`]
+  "reference_number" varchar(100)
+  "provider_transaction_id" varchar(100)
+  "address" text
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamp [default: `CURRENT_TIMESTAMP`]
+
+  checks {
+    `(amount >= (0)::numeric)` [name: 'transaction_amount_check']
+  }
+
+  indexes {
+    "fraud_score" [name: 'idx_transaction_fraud_score', type: btree, note: 'CREATE INDEX idx_transaction_fraud_score ON public.transaction USING btree (fraud_score)']
+    "order_id" [name: 'idx_transaction_order', type: btree, note: 'CREATE INDEX idx_transaction_order ON public.transaction USING btree (order_id)']
+    "transaction_status" [name: 'idx_transaction_status', type: btree, note: 'CREATE INDEX idx_transaction_status ON public.transaction USING btree (transaction_status)']
+    "user_id" [name: 'idx_transaction_user', type: btree, note: 'CREATE INDEX idx_transaction_user ON public.transaction USING btree (user_id)']
+    "transaction_id" [name: 'transaction_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX transaction_pkey ON public.transaction USING btree (transaction_id)']
+    "reference_number" [name: 'transaction_reference_number_key', unique, type: btree, note: 'CREATE UNIQUE INDEX transaction_reference_number_key ON public.transaction USING btree (reference_number)']
+  }
+}
+
+Table "user_core" {
+  "user_id" serial [not null]
+  "username" varchar(50) [not null]
+  "email" varchar(100) [not null]
+  "is_active" boolean [not null, default: `true`]
+  "is_deleted" boolean [not null, default: `false`]
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamp
+  "last_login" timestamp
+  "email_verified" boolean [not null, default: `false`]
+  "trust_score" numeric(5,2) [default: `0.0`]
+
+  indexes {
+    "created_at" [name: 'idx_user_created_at', type: btree, note: 'CREATE INDEX idx_user_created_at ON public.user_core USING btree (created_at)']
+    "email" [name: 'idx_user_email_active', type: btree, note: 'CREATE UNIQUE INDEX idx_user_email_active ON public.user_core USING btree (email) WHERE (is_deleted = false)']
+    "email_verified" [name: 'idx_user_email_verified', type: btree, note: 'CREATE INDEX idx_user_email_verified ON public.user_core USING btree (email_verified) WHERE (is_deleted = false)']
+    "is_active" [name: 'idx_user_is_active', type: btree, note: 'CREATE INDEX idx_user_is_active ON public.user_core USING btree (is_active) WHERE (is_deleted = false)']
+    "username" [name: 'idx_user_username_active', type: btree, note: 'CREATE UNIQUE INDEX idx_user_username_active ON public.user_core USING btree (username) WHERE (is_deleted = false)']
+    "email" [name: 'user_email_key', unique, type: btree, note: 'CREATE UNIQUE INDEX user_email_key ON public.user_core USING btree (email)']
+    "user_id" [name: 'user_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX user_pkey ON public.user_core USING btree (user_id)']
+    "username" [name: 'user_username_key', unique, type: btree, note: 'CREATE UNIQUE INDEX user_username_key ON public.user_core USING btree (username)']
+  }
+
+  Note: 'Đổi tên từ "user" bởi migration 003. Tất cả FK cũ tự trỏ tới user_core; tên constraint/index có thể vẫn mang tiền tố user_. users_full JOIN user_core/user_profile/user_secret/user_wallet, không có bảng "user" sau migration.'
+}
+
+Table "user_profile" {
+  "user_id" integer [not null]
+  "full_name" varchar(100) [not null]
+  "phone_number" varchar(15)
+  "address" varchar(255)
+  "avatar_url" varchar(500)
+
+  indexes {
+    "avatar_url" [name: 'idx_user_profile_avatar_url', type: btree, note: 'CREATE INDEX idx_user_profile_avatar_url ON public.user_profile USING btree (avatar_url)']
+    "user_id" [name: 'user_profile_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX user_profile_pkey ON public.user_profile USING btree (user_id)']
+  }
+
+  Note: 'PK đồng thời là FK tới user_core, ON DELETE CASCADE. Mỗi user_core có tối đa một dòng ở bảng này; FK không bắt buộc mọi user_core phải có dòng con.'
+}
+
+Table "user_role" {
+  "user_id" integer [not null]
+  "role_id" integer [not null]
+
+  indexes {
+    ("role_id", "user_id") [name: 'idx_user_role_role_user', type: btree, note: 'CREATE INDEX idx_user_role_role_user ON public.user_role USING btree (role_id, user_id)']
+    ("user_id", "role_id") [name: 'user_role_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX user_role_pkey ON public.user_role USING btree (user_id, role_id)']
+  }
+}
+
+Table "user_secret" {
+  "user_id" integer [not null]
+  "password_hash" varchar(255) [not null]
+  "random_key" varchar(64) [not null]
+  "email_verification_token" varchar(255)
+  "password_reset_token" varchar(255)
+  "password_reset_expires" timestamp
+
+  indexes {
+    "user_id" [name: 'user_secret_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX user_secret_pkey ON public.user_secret USING btree (user_id)']
+    "random_key" [name: 'user_secret_random_key_key', unique, type: btree, note: 'CREATE UNIQUE INDEX user_secret_random_key_key ON public.user_secret USING btree (random_key)']
+  }
+
+  Note: 'PK đồng thời là FK tới user_core, ON DELETE CASCADE. Mỗi user_core có tối đa một dòng ở bảng này; FK không bắt buộc mọi user_core phải có dòng con.'
+}
+
+Table "user_wallet" {
+  "user_id" integer [not null]
+  "balance" numeric(18,4) [not null, default: `10000000.00`]
+
+  indexes {
+    "user_id" [name: 'user_wallet_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX user_wallet_pkey ON public.user_wallet USING btree (user_id)']
+  }
+
+  Note: 'PK đồng thời là FK tới user_core, ON DELETE CASCADE. Mỗi user_core có tối đa một dòng ở bảng này; FK không bắt buộc mọi user_core phải có dòng con.'
+}
+
+Table "violation_log" {
+  "log_id" serial [not null]
+  "user_id" integer [not null]
+  "reason" varchar(500) [not null]
+  "action_taken" varchar(50) [not null]
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    "created_at" [name: 'idx_violation_log_created_at', type: btree, note: 'CREATE INDEX idx_violation_log_created_at ON public.violation_log USING btree (created_at)']
+    "user_id" [name: 'idx_violation_log_user', type: btree, note: 'CREATE INDEX idx_violation_log_user ON public.violation_log USING btree (user_id)']
+    "log_id" [name: 'violation_log_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX violation_log_pkey ON public.violation_log USING btree (log_id)']
+  }
+}
+
+Table "voucher" {
+  "voucher_id" serial [not null]
+  "code" varchar(50) [not null]
+  "description" varchar(255)
+  "discount_type" smallint [not null, default: `0`]
+  "discount_value" numeric(18,2) [not null]
+  "max_usage" integer
+  "usage_count" integer [not null, default: `0`]
+  "min_order_amount" numeric(18,2)
+  "valid_from" timestamp [not null]
+  "valid_to" timestamp [not null]
+  "is_active" boolean [not null, default: `true`]
+  "is_deleted" boolean [not null, default: `false`]
+  "created_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    "code" [name: 'idx_voucher_code_active', type: btree, note: 'CREATE UNIQUE INDEX idx_voucher_code_active ON public.voucher USING btree (code) WHERE (is_active = true)']
+    "created_at" [name: 'idx_voucher_created_at', type: btree, note: 'CREATE INDEX idx_voucher_created_at ON public.voucher USING btree (created_at)']
+    "valid_to" [name: 'idx_voucher_valid_to', type: btree, note: 'CREATE INDEX idx_voucher_valid_to ON public.voucher USING btree (valid_to) WHERE (is_active = true)']
+    "code" [name: 'voucher_code_key', unique, type: btree, note: 'CREATE UNIQUE INDEX voucher_code_key ON public.voucher USING btree (code)']
+    "voucher_id" [name: 'voucher_pkey', pk, type: btree, note: 'CREATE UNIQUE INDEX voucher_pkey ON public.voucher USING btree (voucher_id)']
+  }
+}
+
+// Quan hệ và hành vi ON DELETE/ON UPDATE đúng theo constraint PostgreSQL.
+Ref "category_parent_id_fkey": "category"."parent_id" > "category"."category_id" [delete: no action, update: no action]
+Ref "contact_info_user_id_fkey": "contact_info"."user_id" > "user_core"."user_id" [delete: no action, update: no action]
+Ref "order_buyer_id_fkey": "order"."buyer_id" > "user_core"."user_id" [delete: no action, update: no action]
+Ref "order_contact_id_fkey": "order"."contact_id" > "contact_info"."contact_id" [delete: no action, update: no action]
+Ref "order_payment_method_id_fkey": "order"."payment_method_id" > "payment_method"."payment_method_id" [delete: no action, update: no action]
+Ref "order_voucher_id_fkey": "order"."voucher_id" > "voucher"."voucher_id" [delete: no action, update: no action]
+Ref "order_detail_order_id_fkey": "order_detail"."order_id" > "order"."order_id" [delete: no action, update: no action]
+Ref "order_detail_product_id_fkey": "order_detail"."product_id" > "product"."product_id" [delete: no action, update: no action]
+Ref "product_approved_by_fkey": "product"."approved_by" > "user_core"."user_id" [delete: no action, update: no action]
+Ref "product_category_id_fkey": "product"."category_id" > "category"."category_id" [delete: no action, update: no action]
+Ref "product_seller_id_fkey": "product"."seller_id" > "user_core"."user_id" [delete: no action, update: no action]
+Ref "product_image_product_id_fkey": "product_image"."product_id" > "product"."product_id" [delete: cascade, update: no action]
+Ref "review_buyer_id_fkey": "review"."buyer_id" > "user_core"."user_id" [delete: no action, update: no action]
+Ref "review_product_id_fkey": "review"."product_id" > "product"."product_id" [delete: no action, update: no action]
+Ref "shopping_cart_user_id_fkey": "user_core"."user_id" - "shopping_cart"."user_id" [delete: no action, update: no action]
+Ref "shopping_cart_item_cart_id_fkey": "shopping_cart_item"."cart_id" > "shopping_cart"."cart_id" [delete: no action, update: no action]
+Ref "shopping_cart_item_product_id_fkey": "shopping_cart_item"."product_id" > "product"."product_id" [delete: no action, update: no action]
+Ref "system_feedback_user_id_fkey": "system_feedback"."user_id" > "user_core"."user_id" [delete: set null, update: no action]
+Ref "system_log_user_id_fkey": "system_log"."user_id" > "user_core"."user_id" [delete: no action, update: no action]
+Ref "transaction_order_id_fkey": "transaction"."order_id" > "order"."order_id" [delete: cascade, update: no action]
+Ref "transaction_payment_method_id_fkey": "transaction"."payment_method_id" > "payment_method"."payment_method_id" [delete: no action, update: no action]
+Ref "transaction_user_id_fkey": "transaction"."user_id" > "user_core"."user_id" [delete: no action, update: no action]
+Ref "user_profile_user_id_fkey": "user_core"."user_id" - "user_profile"."user_id" [delete: cascade, update: no action]
+Ref "user_role_role_id_fkey": "user_role"."role_id" > "role"."role_id" [delete: no action, update: no action]
+Ref "user_role_user_id_fkey": "user_role"."user_id" > "user_core"."user_id" [delete: no action, update: no action]
+Ref "user_secret_user_id_fkey": "user_core"."user_id" - "user_secret"."user_id" [delete: cascade, update: no action]
+Ref "user_wallet_user_id_fkey": "user_core"."user_id" - "user_wallet"."user_id" [delete: cascade, update: no action]
+Ref "violation_log_user_id_fkey": "violation_log"."user_id" > "user_core"."user_id" [delete: no action, update: no action]

@@ -1,0 +1,80 @@
+@startuml
+title OldShop — JSON sản phẩm hiện tại
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+class Document <<object>> {
+  _id: str {required}
+  schema_version: Literal[1] = 1
+  deleted: bool = False
+}
+class ProductDetails <<document>> {
+  product_id: Identifier {required}
+  category_id: Identifier {required}
+  description: str | None = None
+  video_url: str | None = None
+  weight_grams: Annotated[int, Field(ge=0)] | None = None
+  dimensions: Dimensions | None = None
+  dimensions_raw: str | None = None
+  condition: Condition | None = None
+  attributes: dict[str, JsonValue] = {}
+  tags: list[str] = []
+  images: list[ProductImageReference] = []
+  updated_at: AwareDatetime {required}
+  deleted: bool = False
+  etl: ETLMetadata | None = None
+}
+class Dimensions <<object>> {
+  length: float {required}
+  width: float {required}
+  height: float {required}
+  unit: Literal['cm', 'mm', 'm'] = 'cm'
+}
+class Condition <<object>> {
+  grade: int {required}
+  warranty_months: int = 0
+  defects: list[str] = []
+}
+class ObjectReference <<object>> {
+  bucket: str {required}
+  key: str {required}
+  content_type: str | None = None
+  size: Annotated[int, Field(ge=0)] | None = None
+}
+class ProductImageReference <<object>> {
+  image_id: Identifier | None = None
+  is_primary: bool = False
+  display_order: int = 0
+}
+class ETLMetadata <<object>> {
+  synced_at: AwareDatetime {required}
+  source_updated_at: AwareDatetime | None = None
+  run_id: str | None = None
+  source_created_at: str | None = None
+}
+class ProductResponse <<API DTO>> {
+  … core fields abbreviated
+  product_images: list[ProductImageResponse]
+}
+class ProductDetailResponse <<API DTO>> {
+  seller: UserResponse | None = None
+  reviews: list[ProductReviewResponse] = []
+  attributes: dict[str, JsonValue] = {}
+  tags: list[str] = []
+  metadata_status: Literal['available', 'missing', 'unavailable'] = 'missing'
+  metadata_synced_at: datetime | None = None
+}
+Document <|-- ProductDetails
+ObjectReference <|-- ProductImageReference
+ProductDetails "1" *--> "0..1" Dimensions : dimensions
+ProductDetails "1" *--> "0..1" Condition : condition
+ProductDetails "1" *--> "0..*" ProductImageReference : images
+ProductDetails "1" *--> "0..1" ETLMetadata : etl
+ProductResponse <|-- ProductDetailResponse
+ProductDetails ..> ProductDetailResponse : metadata service: attributes/tags/sync
+note as Legend
+Document fields follow documents.py; API core is abbreviated.
+Composition describes embedded value objects, not database FK or separate collections.
+Required/default/null follow model. Defaults are applied by application model, not Mongo validator.
+Document uses BSON dates; JSON transport uses ISO 8601.
+end note
+@enduml

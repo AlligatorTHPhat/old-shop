@@ -1,0 +1,41 @@
+@startuml
+title OldShop — DFD mức 1: luồng JSON hiện tại
+skinparam shadowing false
+rectangle "E1 · Angular / trình duyệt" as E1
+usecase "1.0 Ghi sản phẩm\nValidate + quyền + CRUD" as P1
+usecase "2.0 Đọc và tổng hợp\nCore PG + metadata Mongo" as P2
+usecase "3.0 Xử lý media\nStorage service /media" as P3
+usecase "4.0 ETL\nExtract / validate / partial upsert / ACK" as P4
+database "D1 PG nghiệp vụ\nproduct / ảnh / nguồn khác" as D1
+database "D2 PG outbox\ncùng database với D1" as D2
+database "D3 MongoDB\n6 document + etl_errors" as D3
+storage "D4 MinIO\nObject bytes" as D4
+E1 --> P1 : JSON cập nhật / trạng thái;\nFormData tạo tin + file
+P1 --> E1 : JSON / lỗi
+P1 --> D1 : Product / ProductImage\n(SQL/ORM)
+D1 --> P1 : Bản ghi / kết quả ghi
+E1 --> P2 : ID / bộ lọc\nattributes JSON
+P2 --> E1 : JSON kết quả
+P2 --> D1 : Điều kiện lọc / ID (SQL)
+D1 --> P2 : Core, giá, stock, ảnh
+P2 --> D3 : ID / lọc attributes
+D3 --> P2 : Attributes / tags\nSync / IDs phù hợp
+P1 --> P3 : File upload / đường dẫn thao tác
+P3 --> P1 : URL media đã lưu
+E1 --> P3 : Yêu cầu GET/HEAD /media
+P3 --> E1 : Byte ảnh/video; HTTP headers
+P3 --> D4 : Byte upload / object key
+D4 --> P3 : Byte file / metadata
+P1 --> D2 : Event cùng\ntransaction
+D1 --> P4 : Bản ghi nguồn + origin (SQL)
+D2 --> P4 : Event / key JSONB
+P4 --> D2 : ACK / attempts / retry state
+P4 --> D3 : BSON upsert
+D3 --> P4 : Kết quả ghi
+P4 --> D4 : Object key / byte còn thiếu
+D4 --> P4 : Metadata / xác nhận object
+note bottom of D2 : Trigger nguồn ghi D2 cùng transaction; không có luồng trực tiếp kho-kho.
+note bottom of D4 : File bytes đi qua tiến trình; JSON chỉ giữ URL/bucket/key.
+note bottom of P2 : Chi tiết fallback metadata; attributes filter lỗi trả 503.
+note bottom of P4 : Hiện tại single-source PG; không vẽ source_site hoặc write API chưa triển khai.
+@enduml

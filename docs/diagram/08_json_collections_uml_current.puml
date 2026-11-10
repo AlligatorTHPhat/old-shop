@@ -1,0 +1,186 @@
+@startuml
+title OldShop — sáu document và object nhúng hiện tại
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+class Document <<base>> {
+  _id: str {required}
+  schema_version: Literal[1] = 1
+  deleted: bool = False
+}
+class ProductDetails <<product_details>> {
+  product_id: Identifier {required}
+  category_id: Identifier {required}
+  description: str | None = None
+  video_url: str | None = None
+  weight_grams: Annotated[int, Field(ge=0)] | None = None
+  dimensions: Dimensions | None = None
+  dimensions_raw: str | None = None
+  condition: Condition | None = None
+  attributes: dict[str, JsonValue] = {}
+  tags: list[str] = []
+  images: list[ProductImageReference] = []
+  updated_at: AwareDatetime {required}
+  deleted: bool = False
+  etl: ETLMetadata | None = None
+}
+class ReviewDocument <<reviews>> {
+  review_id: Identifier {required}
+  product_id: Identifier {required}
+  buyer_id: Identifier {required}
+  type: Literal['review', 'report'] {required}
+  rating: int {required}
+  title: str | None = None
+  content: str | None = None
+  status: Literal['pending', 'approved', 'rejected'] | None = None
+  moderation: Moderation | None = None
+  evidence: list[ObjectReference] = []
+  created_at: AwareDatetime {required}
+  updated_at: AwareDatetime | None = None
+  deleted: bool = False
+  etl: ETLMetadata | None = None
+}
+class OrderSnapshot <<order_snapshots>> {
+  order_id: Identifier {required}
+  buyer: BuyerReference {required}
+  items: list[OrderSnapshotItem] {required}
+  payments: list[PaymentSnapshot] = []
+  total_amount_vnd: VND {required}
+  shipping_fee_vnd: VND {required}
+  discount_amount_vnd: VND {required}
+  final_amount_vnd: VND {required}
+  voucher_id: Identifier | None = None
+  voucher_current: VoucherSnapshot | None = None
+  order_status: int {required}
+  order_date: AwareDatetime {required}
+  deleted: bool = False
+  etl: ETLMetadata {required}
+}
+class SystemLogDocument <<system_logs>> {
+  log_id: Identifier {required}
+  actor_id: Identifier | None = None
+  action: str {required}
+  resource_type: str | None = None
+  resource_id: int | None = None
+  message: str | None = None
+  payload: LogPayload | None = None
+  ip_hash: str | None = None
+  created_at: AwareDatetime {required}
+  etl: ETLMetadata | None = None
+}
+class ViolationLogDocument <<violation_logs>> {
+  log_id: Identifier {required}
+  target_user_id: Identifier {required}
+  actor_id: Identifier | None = None
+  reason: str {required}
+  action_taken: str {required}
+  created_at: AwareDatetime {required}
+  payload: LogPayload | None = None
+  etl: ETLMetadata | None = None
+}
+class ContactMessageDocument <<contact_messages>> {
+  feedback_id: Identifier {required}
+  user_id: Identifier | None = None
+  subject: str {required}
+  content: str {required}
+  status: int {required}
+  attachments: list[ObjectReference] = []
+  created_at: AwareDatetime {required}
+  etl: ETLMetadata | None = None
+}
+class ObjectReference <<embedded>> {
+  bucket: str {required}
+  key: str {required}
+  content_type: str | None = None
+  size: Annotated[int, Field(ge=0)] | None = None
+}
+class ProductImageReference <<embedded>> {
+  image_id: Identifier | None = None
+  is_primary: bool = False
+  display_order: int = 0
+}
+class Dimensions <<embedded>> {
+  length: float {required}
+  width: float {required}
+  height: float {required}
+  unit: Literal['cm', 'mm', 'm'] = 'cm'
+}
+class Condition <<embedded>> {
+  grade: int {required}
+  warranty_months: int = 0
+  defects: list[str] = []
+}
+class ETLMetadata <<embedded>> {
+  synced_at: AwareDatetime {required}
+  source_updated_at: AwareDatetime | None = None
+  run_id: str | None = None
+  source_created_at: str | None = None
+}
+class Moderation <<embedded>> {
+  actor_id: Identifier {required}
+  at: AwareDatetime {required}
+  reason: str | None = None
+}
+class BuyerReference <<embedded>> {
+  id: Identifier {required}
+  region: Literal['north', 'central', 'south', 'unknown'] | None = None
+}
+class OrderSnapshotItem <<embedded>> {
+  product_id: Identifier {required}
+  quantity: int {required}
+  price_at_purchase_vnd: VND {required}
+  subtotal_vnd: VND {required}
+  title_current: str | None = None
+  category_id_current: Identifier | None = None
+  seller_id_current: Identifier | None = None
+}
+class PaymentSnapshot <<embedded>> {
+  transaction_id: Identifier {required}
+  method_id: Identifier {required}
+  status_code: int {required}
+  amount_vnd: VND {required}
+  fraud_score: Annotated[float, Field(ge=0, le=1)] | None = None
+}
+class VoucherSnapshot <<embedded>> {
+  voucher_id: Identifier {required}
+  discount_type_code_current: int {required}
+  discount_value_current: str {required}
+  is_active_current: bool {required}
+  is_deleted_current: bool {required}
+}
+class LogPayload <<embedded>> {
+  event: str | None = None
+  reason_code: str | None = None
+  changed_fields: list[str] = []
+}
+Document <|-- ProductDetails
+Document <|-- ReviewDocument
+Document <|-- OrderSnapshot
+Document <|-- SystemLogDocument
+Document <|-- ViolationLogDocument
+Document <|-- ContactMessageDocument
+ObjectReference <|-- ProductImageReference
+ProductDetails "1" *--> "0..1" Dimensions : dimensions
+ProductDetails "1" *--> "0..1" Condition : condition
+ProductDetails "1" *--> "0..*" ProductImageReference : images
+ReviewDocument "1" *--> "0..1" Moderation : moderation
+ReviewDocument "1" *--> "0..*" ObjectReference : evidence
+OrderSnapshot "1" *--> "1" BuyerReference : buyer
+OrderSnapshot "1" *--> "1..*" OrderSnapshotItem : items
+OrderSnapshot "1" *--> "0..*" PaymentSnapshot : payments
+OrderSnapshot "1" *--> "0..1" VoucherSnapshot : voucher_current
+SystemLogDocument "1" *--> "0..1" LogPayload : payload
+ViolationLogDocument "1" *--> "0..1" LogPayload : payload
+ContactMessageDocument "1" *--> "0..*" ObjectReference : attachments
+ProductDetails "1" *--> "0..1" ETLMetadata : etl
+ReviewDocument "1" *--> "0..1" ETLMetadata : etl
+OrderSnapshot "1" *--> "1" ETLMetadata : etl
+SystemLogDocument "1" *--> "0..1" ETLMetadata : etl
+ViolationLogDocument "1" *--> "0..1" ETLMetadata : etl
+ContactMessageDocument "1" *--> "0..1" ETLMetadata : etl
+note as Legend
+Identifier = integer in (0, 2^63-1]; VND = integer in [0, 2^63-1].
+Review invariant: rating=0 iff type=report; rating 1..5 iff type=review.
+ETLError is an operational schema in schemas/etl.py, separate from these six documents.
+The PNG/SVG overview lists all direct fields; this source also expands embedded object classes.
+end note
+@enduml
