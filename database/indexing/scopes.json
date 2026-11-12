@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "postgresql": {
+    "commerce": {"tables": "*", "dsn_env": "FRAGMENT_COMMERCE_DSN"},
+    "site-a": {"tables": ["product", "product_image"], "dsn_env": "FRAGMENT_SITE_A_DSN"},
+    "site-b": {"tables": ["product", "product_image"], "dsn_env": "FRAGMENT_SITE_B_DSN"}
+  }
+}

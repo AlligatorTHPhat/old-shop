@@ -68,7 +68,7 @@ def load_env(path):
     return result
 
 
-def common_schema():
+def common_schema(max_version=None):
     """Build one schema from SQL-first sources; deliberately exclude every seed include.
 
     No modifications to migration history or to the baseline files. Historical
@@ -81,6 +81,8 @@ def common_schema():
             if not path.startswith("03_seeds/"):
                 paths.append(ROOT / "database" / path)
     migrations = sorted((ROOT / "database/04_migrations").glob("[0-9][0-9][0-9]_*.sql"))
+    if max_version is not None:
+        migrations = [p for p in migrations if p.name[:3] <= max_version]
     paths.extend(migrations)
     paths.append(SQL_DIR / "01_site_schema.sql")
     chunks = ["SET standard_conforming_strings = on;\n"]
@@ -297,8 +299,9 @@ class Sites:
                 + "\nCOMMIT;"
             )
             self.sql(site, sql, values={"target_db": self.env[f"SITE_{site}_DB_NAME"]})
-            print(f"Site {site}: schema 001–007, ownership rules and synthetic fixtures installed")
+            print(f"Site {site}: current schema, ownership rules and synthetic fixtures installed")
         self.configure_access()
+        self.upgrade()
         save_json(EVIDENCE / "source_manifest.json", manifest)
         save_json(SQL_DIR / "fixture_manifest.json", {"version": 1, "A": fixture("A"), "B": fixture("B")})
 
@@ -309,7 +312,10 @@ class Sites:
             db = self.env[f"SITE_{site}_DB_NAME"]
             source = self.env.get(f"SITE_{site}_READER_SOURCE_CIDR", self.env["SITE_A_VIRTUAL_IP"] + "/32")
             source = str(ipaddress.ip_network(source, strict=False))
-            api_source = self.env.get("CATALOGUE_VIRTUAL_IP", "172.29.82.20") + "/32"
+            api_source = self.env.get(
+                f"SITE_{site}_CATALOG_SOURCE_CIDR",
+                self.env.get("CATALOGUE_VIRTUAL_IP", "172.29.82.20") + "/32",
+            )
             api_source = str(ipaddress.ip_network(api_source, strict=False))
             rules = ["local all site_admin trust", "local all all reject"]
             for address in ("127.0.0.1/32", gateway):
@@ -337,7 +343,7 @@ class Sites:
             self.sql(site, "SELECT pg_reload_conf();")
         print("HBA restricted to local administration, the host gateway, the catalogue and the FDW reader source")
 
-    def configure_fdw(self):
+    def configure_fdw(self, preserve_endpoint=False):
         if "A" not in self.selected:
             raise ValueError("FDW is configured at A")
         existing = self.query("A", "SELECT srvname FROM pg_foreign_server WHERE srvname='server_b'")
@@ -348,7 +354,7 @@ class Sites:
             "reader_pw": self.env["SITE_B_READER_PASSWORD"],
             "admin_role": "site_admin",
         }
-        if existing:
+        if existing and not preserve_endpoint:
             self.sql(
                 "A",
                 """BEGIN;
@@ -357,7 +363,7 @@ class Sites:
                 COMMIT;""",
                 values=params,
             )
-        else:
+        elif not existing:
             self.sql(
                 "A",
                 "BEGIN;\n"
@@ -368,11 +374,125 @@ class Sites:
                 values=params,
             )
         self.sql("A", "BEGIN;\n" + (SQL_DIR / "05_global_views.sql").read_text() + "\nCOMMIT;")
+        self.sql("A", "BEGIN;\n" + (SQL_DIR / "06_routed_views.sql").read_text() + "\nCOMMIT;")
         result = self.query("A", "SELECT site_id FROM site_b.site_identity")
         if result != [{"site_id": "B"}]:
             # site_identity has a second column, but the explicit SELECT above only returns site_id.
             raise RuntimeError("Foreign server does not identify as B")
         print("FDW A → B configured and remote site identity checked")
+
+    def upgrade(self, apply=True, migration_dir=None):
+        """Additive catalogue upgrades with a separate contract migration history."""
+        contract = json.loads((SQL_DIR / "fragmentation.json").read_text())
+        digest = hashlib.sha256(json.dumps(contract, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        report = {"contract_sha256": digest, "apply": apply, "sites": {}}
+        paths = sorted(Path(migration_dir or SQL_DIR / "migrations").glob("[0-9][0-9][0-9]_*.sql"))
+        regular = sorted((ROOT / "database/04_migrations").glob("[0-9][0-9][0-9]_*.sql"))
+        regular_pending = {}
+        references = {}
+        # Read preflight for all selected sites before applying to the first one.
+        for site in self.selected:
+            identity = self.query(site, "SELECT site_id,id_remainder FROM site_config")
+            if identity != [{"site_id": site, "id_remainder": 1 if site == "A" else 0}]:
+                raise ValueError("Site identity/allocation differs")
+            applied = self.query(site, "SELECT version,checksum FROM schema_migrations ORDER BY version")
+            if len(applied) < 7 or [r["version"] for r in applied] != [p.name[:3] for p in regular[: len(applied)]]:
+                raise ValueError("Unrecognized common migration history; require at least 007")
+            for row, path in zip(applied, regular, strict=False):
+                if row["checksum"] != hashlib.sha256(path.read_bytes()).hexdigest():
+                    raise ValueError("Common migration checksum differs")
+            installed = self.query(site, "SELECT source_sha256 FROM distributed_installation")
+            if installed and installed[0]["source_sha256"] != common_schema(applied[-1]["version"])[1]["source_sha256"]:
+                raise ValueError("Installed source manifest differs")
+            regular_pending[site] = regular[len(applied) :]
+            for path in regular_pending[site]:
+                bindings = json.loads((ROOT / "database/indexing/releases.json").read_text())
+                binding = next((b for b in bindings if b["migration"] == path.name[:3]), None)
+                if not binding or "baseline_migrations" in binding:
+                    raise ValueError("Site upgrades only accept frozen additive index releases")
+                frozen = json.loads(
+                    (ROOT / "database/indexing/snapshots" / (binding["revision"] + ".json")).read_text()
+                )
+                frozen_digest = hashlib.sha256(
+                    json.dumps(frozen, sort_keys=True, separators=(",", ":")).encode()
+                ).hexdigest()
+                header = f"-- index-catalog: {binding['revision']} {binding['sha256']}"
+                if frozen_digest != binding["sha256"] or not path.read_text().startswith(header + "\n"):
+                    raise ValueError("Index release snapshot/header differs")
+            references[site] = self.query(
+                site,
+                """SELECT md5(
+                COALESCE((SELECT jsonb_agg(to_jsonb(r) ORDER BY category_id)::text FROM category r),'[]') || ':' ||
+                COALESCE((SELECT jsonb_agg(to_jsonb(r) ORDER BY seller_id)::text FROM seller_site r),'[]'))
+                AS digest""",
+            )[0]["digest"]
+        if len(set(references.values())) != 1:
+            raise ValueError("Reference copies differ; reconcile before installing a contract")
+        prepared = {}
+        for site in self.selected:
+            marker = self.query(site, "SELECT to_regclass('public.site_schema_migrations')::text AS marker")[0][
+                "marker"
+            ]
+            history = (
+                self.query(site, "SELECT version,checksum,contract_sha256 FROM site_schema_migrations ORDER BY version")
+                if marker
+                else []
+            )
+            if [r["version"] for r in history] != [p.name[:3] for p in paths[: len(history)]]:
+                raise ValueError("Unknown site migration history")
+            pending = []
+            for pos, path in enumerate(paths):
+                checksum = hashlib.sha256(path.read_bytes()).hexdigest()
+                if pos < len(history):
+                    if history[pos]["checksum"] != checksum or history[pos]["contract_sha256"] != digest:
+                        raise ValueError("Site migration checksum/contract differs; use a new version")
+                else:
+                    pending.append((path, checksum))
+            report["sites"][site] = {
+                "applied": [r["version"] for r in history],
+                "pending": [p.name for p, _ in pending],
+                "common_pending": [p.name for p in regular_pending[site]],
+            }
+            if apply and (pending or regular_pending[site]):
+                chunks = [
+                    "BEGIN; SET LOCAL statement_timeout='120s';",
+                    "SELECT pg_advisory_xact_lock(104107, 1101);",
+                    "CREATE TABLE IF NOT EXISTS site_schema_migrations (version varchar(3) PRIMARY KEY, "
+                    "checksum char(64) NOT NULL,contract_sha256 char(64) NOT NULL, "
+                    "applied_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP);",
+                ]
+                for path in regular_pending[site]:
+                    chunks += [
+                        path.read_text(),
+                        "INSERT INTO schema_migrations(version,checksum) VALUES ("
+                        + literal(path.name[:3])
+                        + ","
+                        + literal(hashlib.sha256(path.read_bytes()).hexdigest())
+                        + ");",
+                    ]
+                if regular_pending[site]:
+                    chunks.append(
+                        "UPDATE distributed_installation SET source_sha256="
+                        + literal(common_schema()[1]["source_sha256"])
+                        + ";"
+                    )
+                for path, checksum in pending:
+                    chunks += [
+                        path.read_text().replace("__CONTRACT_SHA256__", digest),
+                        "INSERT INTO site_schema_migrations(version,checksum,contract_sha256) VALUES ("
+                        + literal(path.name[:3])
+                        + ","
+                        + literal(checksum)
+                        + ","
+                        + literal(digest)
+                        + ");",
+                    ]
+                chunks.append("COMMIT;")
+                prepared[site] = (chunks, pending)
+        for site, (chunks, pending) in prepared.items():
+            self.sql(site, "\n".join(chunks))
+            report["sites"][site]["installed"] = [p.name[:3] for p, _ in pending]
+        return report
 
     def inventory(self):
         return {
@@ -402,6 +522,8 @@ def main():
             "prepare",
             "up",
             "bootstrap",
+            "plan-upgrade",
+            "upgrade",
             "access",
             "fdw",
             "status",
@@ -425,6 +547,8 @@ def main():
         print("Independent PostgreSQL sites are healthy")
     elif args.command == "bootstrap":
         sites.bootstrap()
+    elif args.command in ("plan-upgrade", "upgrade"):
+        print(json.dumps(sites.upgrade(apply=args.command == "upgrade"), indent=2))
     elif args.command == "fdw":
         sites.configure_fdw()
     elif args.command == "access":

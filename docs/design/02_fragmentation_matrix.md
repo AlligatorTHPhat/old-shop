@@ -1,5 +1,8 @@
 # Ngày 2 — Ma trận phân mảnh và phân bổ dữ liệu
 
+> Cập nhật 10/11/2026: tài liệu Ngày 2 giữ làm lịch sử. Contract, routing hai site,
+> kiểm chứng và đường nâng cấp hiện hành nằm trong [runbook fragmentation](../runbooks/fragmentation_indexing.md).
+
 Nguồn: [D1–D6](../decisions.md), [inventory](../01_data_inventory.md), schema SQL hiện tại.
 **Đây là mô hình đích.** Compose Ngày 2 nạp baseline 18 bảng; partition/tách user là migration Ngày 4.
 Sơ đồ nguồn: [02_fragmentation_model.puml](../diagram/02_fragmentation_model.puml).

@@ -346,6 +346,20 @@ def plan_postgres(connection, catalog):
                     pending.append(child)
         elif spec.managed_by == "constraint":
             reasons.append("missing_constraint_index")
+        elif spec.unique and not reasons:
+            # Ordinary PostgreSQL UNIQUE permits multiple NULL keys. Compare only
+            # fully non-null tuples, respecting the intended partial predicate.
+            keys = ",".join(identifier(k.column) for k in spec.keys)
+            where = " AND ".join(identifier(k.column) + " IS NOT NULL" for k in spec.keys)
+            if spec.predicate:
+                where += " AND " + predicate_sql(spec.predicate)
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    f"SELECT 1 FROM {identifier(spec.schema_name)}.{identifier(spec.table)} "
+                    f"WHERE {where} GROUP BY {keys} HAVING count(*)>1 LIMIT 1"
+                )
+                if cursor.fetchone():
+                    reasons.append("unique_duplicate_keys")
         entries.append(
             {
                 "name": spec.name,

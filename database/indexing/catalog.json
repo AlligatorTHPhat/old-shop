@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": "index-v1",
+  "revision": "index-v2-fragmentation",
   "postgresql": [
     {
       "name": "category_name_key",
@@ -1755,6 +1755,45 @@
         }
       ],
       "managed_by": "constraint"
+    },
+    {
+      "name": "idx_product_visible_seller_date_id",
+      "schema": "public",
+      "table": "product",
+      "method": "btree",
+      "unique": false,
+      "keys": [
+        {
+          "column": "seller_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        },
+        {
+          "column": "created_at",
+          "order": "DESC",
+          "nulls": "FIRST"
+        },
+        {
+          "column": "product_id",
+          "order": "ASC",
+          "nulls": "LAST"
+        }
+      ],
+      "predicate": {
+        "all": [
+          {
+            "column": "status",
+            "op": "eq",
+            "value": 1
+          },
+          {
+            "column": "is_deleted",
+            "op": "eq",
+            "value": false
+          }
+        ]
+      },
+      "managed_by": "application"
     }
   ],
   "mongodb": [

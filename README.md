@@ -38,6 +38,10 @@ The verified topology uses two virtual IPs on one Docker host. Commerce checkout
 the existing Mongo/MinIO stack remain on their existing architecture.
 For two physical hosts, see the [Tailscale guide for Windows and Linux](docs/HUONG_DAN_TAILSCALE_WINDOWS_LINUX.md).
 
+**Fragment routing/index upgrade:** [runbook](docs/runbooks/fragmentation_indexing.md)
+adds validated per-site product reads, seller routing, scoped index verification and an
+additive seller catalogue index (migration 008). Global catalogue reads still require both sites.
+
 **Day 7 handoff:** [report source](docs/report/07_report.md),
 [18-slide outline and speaker notes](docs/report/07_slides.md),
 [demo/rebuild instructions](docs/report/07_demo_script.md), [Q&A](docs/report/07_qa.md),

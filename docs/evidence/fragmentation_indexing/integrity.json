@@ -1,0 +1,38 @@
+{
+  "result": "PASS",
+  "read_only": true,
+  "independent_reference_checked": false,
+  "checks": {
+    "A_ownership": true,
+    "A_derived": true,
+    "A_vertical_rows": true,
+    "A_vertical_columns": true,
+    "B_ownership": true,
+    "B_derived": true,
+    "B_vertical_rows": true,
+    "B_vertical_columns": true,
+    "reference_copies": true,
+    "product_disjoint": true,
+    "product_reconstruction": true,
+    "product_image_disjoint": true,
+    "product_image_reconstruction": true
+  },
+  "rows": {
+    "product": {
+      "A": 5,
+      "B": 5,
+      "global": 10,
+      "sha256": "b05767cf3a88336a4311c259e84767f27ee69bb01058b621f0850e54a56cfbdd"
+    },
+    "product_image": {
+      "A": 8,
+      "B": 8,
+      "global": 16,
+      "sha256": "f19d5ab8c742bcd44f7d36d2b67478199da7233fe35c570d1c6659e2e55a1ac4"
+    }
+  },
+  "limitations": [
+    "Independent completeness requires --reference captured from the source before fragmentation",
+    "Separate DB snapshots do not form an atomic global snapshot; audit during a controlled write pause"
+  ]
+}

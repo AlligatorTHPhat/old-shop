@@ -1,0 +1,186 @@
+{
+  "result": "PASS",
+  "backup_restore_verified": true,
+  "backup_directory": "deploy/backups/fragmentation_20261110_230858",
+  "source_rows_unchanged": true,
+  "before": {
+    "A": {
+      "product": {
+        "rows": 5,
+        "digest": "a48d1a7ebc1f7d46b644caa3b783ff52"
+      },
+      "product_image": {
+        "rows": 8,
+        "digest": "8e095fb36760b822bdd481c6a981d8fd"
+      },
+      "category": {
+        "rows": 3,
+        "digest": "dce77a91de1025d5916fd5c7c415fd90"
+      },
+      "seller_site": {
+        "rows": 6,
+        "digest": "b32be80f43b1301c367e2200ac2aae92"
+      },
+      "user_core": {
+        "rows": 7,
+        "digest": "c0cfd07af4b0577a8cd0f22097a0a7c9"
+      },
+      "user_profile": {
+        "rows": 7,
+        "digest": "ce8ec5e19a9b3b51bee5e2b407274326"
+      },
+      "user_secret": {
+        "rows": 7,
+        "digest": "0ee5ef74391f532aab6c63589a0b6104"
+      },
+      "user_wallet": {
+        "rows": 7,
+        "digest": "aebbc4d9b54676fec364ac8f270092fe"
+      }
+    },
+    "B": {
+      "product": {
+        "rows": 5,
+        "digest": "e247ca66f3647b92310f933675167ba3"
+      },
+      "product_image": {
+        "rows": 8,
+        "digest": "0de47ffae1a548b19880f9eb9c154806"
+      },
+      "category": {
+        "rows": 3,
+        "digest": "dce77a91de1025d5916fd5c7c415fd90"
+      },
+      "seller_site": {
+        "rows": 6,
+        "digest": "b32be80f43b1301c367e2200ac2aae92"
+      },
+      "user_core": {
+        "rows": 7,
+        "digest": "c0cfd07af4b0577a8cd0f22097a0a7c9"
+      },
+      "user_profile": {
+        "rows": 7,
+        "digest": "ce8ec5e19a9b3b51bee5e2b407274326"
+      },
+      "user_secret": {
+        "rows": 7,
+        "digest": "0ee5ef74391f532aab6c63589a0b6104"
+      },
+      "user_wallet": {
+        "rows": 7,
+        "digest": "aebbc4d9b54676fec364ac8f270092fe"
+      }
+    }
+  },
+  "after": {
+    "A": {
+      "product": {
+        "rows": 5,
+        "digest": "a48d1a7ebc1f7d46b644caa3b783ff52"
+      },
+      "product_image": {
+        "rows": 8,
+        "digest": "8e095fb36760b822bdd481c6a981d8fd"
+      },
+      "category": {
+        "rows": 3,
+        "digest": "dce77a91de1025d5916fd5c7c415fd90"
+      },
+      "seller_site": {
+        "rows": 6,
+        "digest": "b32be80f43b1301c367e2200ac2aae92"
+      },
+      "user_core": {
+        "rows": 7,
+        "digest": "c0cfd07af4b0577a8cd0f22097a0a7c9"
+      },
+      "user_profile": {
+        "rows": 7,
+        "digest": "ce8ec5e19a9b3b51bee5e2b407274326"
+      },
+      "user_secret": {
+        "rows": 7,
+        "digest": "0ee5ef74391f532aab6c63589a0b6104"
+      },
+      "user_wallet": {
+        "rows": 7,
+        "digest": "aebbc4d9b54676fec364ac8f270092fe"
+      }
+    },
+    "B": {
+      "product": {
+        "rows": 5,
+        "digest": "e247ca66f3647b92310f933675167ba3"
+      },
+      "product_image": {
+        "rows": 8,
+        "digest": "0de47ffae1a548b19880f9eb9c154806"
+      },
+      "category": {
+        "rows": 3,
+        "digest": "dce77a91de1025d5916fd5c7c415fd90"
+      },
+      "seller_site": {
+        "rows": 6,
+        "digest": "b32be80f43b1301c367e2200ac2aae92"
+      },
+      "user_core": {
+        "rows": 7,
+        "digest": "c0cfd07af4b0577a8cd0f22097a0a7c9"
+      },
+      "user_profile": {
+        "rows": 7,
+        "digest": "ce8ec5e19a9b3b51bee5e2b407274326"
+      },
+      "user_secret": {
+        "rows": 7,
+        "digest": "0ee5ef74391f532aab6c63589a0b6104"
+      },
+      "user_wallet": {
+        "rows": 7,
+        "digest": "aebbc4d9b54676fec364ac8f270092fe"
+      }
+    }
+  },
+  "plan": {
+    "contract_sha256": "1aa7c720aefc9793681d4aaccee026a339f174167f30aaa1752a1875f15c498a",
+    "apply": false,
+    "sites": {
+      "A": {
+        "applied": [
+          "001"
+        ],
+        "pending": [],
+        "common_pending": []
+      },
+      "B": {
+        "applied": [
+          "001"
+        ],
+        "pending": [],
+        "common_pending": []
+      }
+    }
+  },
+  "upgrade": {
+    "contract_sha256": "1aa7c720aefc9793681d4aaccee026a339f174167f30aaa1752a1875f15c498a",
+    "apply": true,
+    "sites": {
+      "A": {
+        "applied": [
+          "001"
+        ],
+        "pending": [],
+        "common_pending": []
+      },
+      "B": {
+        "applied": [
+          "001"
+        ],
+        "pending": [],
+        "common_pending": []
+      }
+    }
+  }
+}

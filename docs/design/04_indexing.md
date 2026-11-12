@@ -1,5 +1,8 @@
 # Ngày 4 — Index, partition, tách user và benchmark
 
+> Cập nhật 10/11/2026: release `index-v2-fragmentation` bổ sung index seller (008),
+> scoped verification và unique preflight. Xem [runbook hiện hành](../runbooks/fragmentation_indexing.md).
+
 > Cập nhật 01/11/2026: thiết kế Ngày 4 bên dưới là bằng chứng lịch sử. Phần bổ sung
 > đã có [migration 007](../../database/04_migrations/007_indexing_v2.sql),
 > [benchmark dữ liệu hiện tại](../benchmark/README.md)

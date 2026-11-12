@@ -1,0 +1,28 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/backend
+configfile: pytest.ini
+collected 262 items
+
+tests/test_day3_data.py .............sssssssssss                         [  9%]
+tests/test_day4_migrations.py .............s.                            [ 14%]
+tests/test_day5_etl.py .........sssssssssssssssssss                      [ 25%]
+tests/test_day6_integration.py ........ssssssssssssss                    [ 33%]
+tests/test_fragmentation.py .............                                [ 38%]
+tests/test_index_config.py ............................................. [ 56%]
+........                                                                 [ 59%]
+tests/test_index_config_integration.py ..                                [ 59%]
+tests/test_indexing_v2.py .                                              [ 60%]
+tests/test_moderation_pagination.py ...............                      [ 66%]
+tests/test_product_video.py ..............................ss             [ 78%]
+tests/test_system.py ...........                                         [ 82%]
+tests/test_v1_admin.py ....                                              [ 83%]
+tests/test_v1_auth.py ..........                                         [ 87%]
+tests/test_v1_cart.py .....                                              [ 89%]
+tests/test_v1_category.py ....                                           [ 91%]
+tests/test_v1_moderator.py .....                                         [ 93%]
+tests/test_v1_order.py ......                                            [ 95%]
+tests/test_v1_product.py ......                                          [ 97%]
+tests/test_v1_user.py ......                                             [100%]
+
+================== 215 passed, 47 skipped in 61.78s (0:01:01) ==================

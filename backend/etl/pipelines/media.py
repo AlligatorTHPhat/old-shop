@@ -1,12 +1,12 @@
 """Reuse idempotent seed/runtime-media transfer and PG key-based metadata backfill."""
 
 from minio.error import S3Error
-from scripts.backfill_media_metadata import backfill
-from scripts.init_db import SEED_MEDIA_DIR
-from scripts.seed_media import seed_media
 
 from app.services.storage import bucket_for, content_type, local_path, minio_client, validate_path
 from etl.transform import QualityError
+from scripts.backfill_media_metadata import backfill
+from scripts.init_db import SEED_MEDIA_DIR
+from scripts.seed_media import seed_media
 
 
 def run():

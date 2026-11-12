@@ -25,7 +25,7 @@ def payload():
 
 def test_initial_inventory_and_compatibility_adapter():
     catalog = load_catalog()
-    assert len(catalog.postgresql) == 98
+    assert len(catalog.postgresql) == 99
     assert sum(i.managed_by == "constraint" for i in catalog.postgresql) == 37
     assert len(catalog.mongodb) == 19
     indexes = mongo_indexes(catalog)
@@ -45,7 +45,7 @@ def test_database_src_resolves_packaged_catalog_and_snapshot(tmp_path):
     shutil.copytree(CATALOG_PATH.parent, packaged / "indexing")
     code = (
         "from app.services.index_config import load_catalog, DATABASE_DIR; "
-        "c=load_catalog(); s=load_catalog(DATABASE_DIR/'indexing/snapshots/index-v1.json'); "
+        "c=load_catalog(); s=load_catalog(DATABASE_DIR/'indexing/snapshots'/f'{c.revision}.json'); "
         "assert c.digest()==s.digest(); print(len(c.postgresql),len(c.mongodb))"
     )
     result = subprocess.run(
@@ -56,7 +56,7 @@ def test_database_src_resolves_packaged_catalog_and_snapshot(tmp_path):
         check=True,
         env={**os.environ, "DATABASE_SRC": str(packaged), "PYTHONPATH": os.pathsep.join(str(p) for p in sys.path)},
     )
-    assert result.stdout.strip() == "98 19"
+    assert result.stdout.strip() == "99 19"
 
 
 @pytest.mark.parametrize(

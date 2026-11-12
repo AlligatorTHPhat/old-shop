@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "revision": "fragmentation-v1",
+  "sites": [{"site_id": "A", "id_remainder": 1}, {"site_id": "B", "id_remainder": 0}],
+  "primary": {"relation": "product", "owner_relation": "seller_site", "owner_key": "seller_id", "site_key": "site_id", "reconstruction_key": "product_id", "id_modulus": 2},
+  "derived": {"relation": "product_image", "parent": "product", "parent_key": "product_id", "reconstruction_key": "image_id"},
+  "vertical": {"relations": ["user_core", "user_profile", "user_secret", "user_wallet"], "reconstruction_key": "user_id"},
+  "ownership_update": "reject",
+  "references": {"authority": "A", "relations": ["category", "seller_site"], "updates": "maintenance_only"}
+}

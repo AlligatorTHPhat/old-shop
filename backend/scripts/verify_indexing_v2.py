@@ -57,22 +57,17 @@ def verify(preflight=False, mongo=False):
     with closing(connect()) as connection:
         connection.set_session(readonly=True)
         with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT version,checksum FROM schema_migrations ORDER BY version"
-            )
+            cursor.execute("SELECT version,checksum FROM schema_migrations ORDER BY version")
             history = cursor.fetchall()
-            local = {
-                p.name[:3]: p
-                for p in (DATABASE_DIR / "04_migrations").glob("[0-9][0-9][0-9]_*.sql")
-            }
+            local = {p.name[:3]: p for p in (DATABASE_DIR / "04_migrations").glob("[0-9][0-9][0-9]_*.sql")}
             applied = [r[0] for r in history]
             assert applied == sorted(local)[: len(applied)] and len(applied) >= 6, (
                 "Expected a recognized post-006 schema"
             )
             for version, checksum in history:
-                assert (
-                    hashlib.sha256(local[version].read_bytes()).hexdigest() == checksum
-                ), "Migration checksum mismatch"
+                assert hashlib.sha256(local[version].read_bytes()).hexdigest() == checksum, (
+                    "Migration checksum mismatch"
+                )
             result = {"versions": applied, "indexes": {}}
             if not preflight:
                 assert "007" in applied, "Migration 007 is not installed"
@@ -90,13 +85,9 @@ def verify(preflight=False, mongo=False):
                     )
                     row = cursor.fetchone()
                     assert row and row[:4] == (table, "btree", False, True), name
-                    assert [normalize(k) for k in row[4]] == [
-                        normalize(k) for k in keys
-                    ], name
+                    assert [normalize(k) for k in row[4]] == [normalize(k) for k in keys], name
                     assert normalize(row[5]) == normalize(predicate), (name, row[5])
-                    assert row[6] == [
-                        3 if key.endswith(" DESC") else 0 for key in keys
-                    ], name
+                    assert row[6] == [3 if key.endswith(" DESC") else 0 for key in keys], name
                     assert row[7], f"Unexpected INCLUDE columns: {name}"
                     cursor.execute(
                         """WITH RECURSIVE tree(oid) AS (SELECT %s::regclass::oid UNION ALL
@@ -111,19 +102,11 @@ def verify(preflight=False, mongo=False):
                         "relations": count,
                     }
     if mongo:
-        info = (
-            get_database()
-            .product_details.index_information()
-            .get("idx_live_product_image_key")
+        info = get_database().product_details.index_information().get("idx_live_product_image_key")
+        assert info and info["key"] == [("images.key", 1)] and not info.get("unique", False), (
+            "Missing shared-image Mongo index"
         )
-        assert (
-            info
-            and info["key"] == [("images.key", 1)]
-            and not info.get("unique", False)
-        ), "Missing shared-image Mongo index"
-        assert info.get("partialFilterExpression") == {"deleted": False}, (
-            "Wrong Mongo live-image predicate"
-        )
+        assert info.get("partialFilterExpression") == {"deleted": False}, "Wrong Mongo live-image predicate"
         result["mongo_live_image_index"] = True
     return {"result": "PASS", **result}
 

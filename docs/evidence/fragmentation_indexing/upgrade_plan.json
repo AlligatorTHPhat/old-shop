@@ -1,0 +1,24 @@
+{
+  "contract_sha256": "1aa7c720aefc9793681d4aaccee026a339f174167f30aaa1752a1875f15c498a",
+  "apply": false,
+  "sites": {
+    "A": {
+      "applied": [],
+      "pending": [
+        "001_fragment_contract.sql"
+      ],
+      "common_pending": [
+        "008_fragmentation_seller_index.sql"
+      ]
+    },
+    "B": {
+      "applied": [],
+      "pending": [
+        "001_fragment_contract.sql"
+      ],
+      "common_pending": [
+        "008_fragmentation_seller_index.sql"
+      ]
+    }
+  }
+}

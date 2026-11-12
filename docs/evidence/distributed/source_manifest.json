@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "source_sha256": "ee8d0ee977566e2c695ee59823bcdac476f0c4a08f8eb6afa8a4275e5f292229",
+  "source_sha256": "694d2f9c3e15ce25447e4ebc7d856b2cb2775693c1b08a182d2f1e0e0f624e16",
   "files": {
     "database/config/database_config.sql": "9c06e03cc6df3a059bcacb644a1eff04f39ccdbb595c9590823fb02f425e0375",
     "database/01_schema/roles.sql": "826cdbc8493bea93dbb7d970a94d34d75f37b4bcd3e81015c2f8adca91f67088",
@@ -33,6 +33,7 @@
     "database/04_migrations/005_etl_outbox.sql": "3385e1085552dcae5f905986abe0c1225de71a166564ac42b7b6c2a161f88d66",
     "database/04_migrations/006_media_cleanup.sql": "a199c5984ce6a7540634e6f55b1727a7e7b14fa2e7477defcd6d3a099df466b6",
     "database/04_migrations/007_indexing_v2.sql": "b6baebc7d52bd14dd9a41a620f72be379f4d69f35e76303b03cb00798b4acb6e",
+    "database/04_migrations/008_fragmentation_seller_index.sql": "ab5b7374518648020b4ef1c2257ab50cce2966dd815978d0e34275951aa622dd",
     "database/distributed/01_site_schema.sql": "63a3a778d7439205c9c34f86d787ba067cb6eba01cc43c9384ccf56a18e19460"
   },
   "migrations": [
@@ -42,7 +43,8 @@
     "004_media_metadata.sql",
     "005_etl_outbox.sql",
     "006_media_cleanup.sql",
-    "007_indexing_v2.sql"
+    "007_indexing_v2.sql",
+    "008_fragmentation_seller_index.sql"
   ],
   "contains_application_seeds": false
 }

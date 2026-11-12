@@ -12,5 +12,10 @@
       "007": "b6baebc7d52bd14dd9a41a620f72be379f4d69f35e76303b03cb00798b4acb6e",
       "006": "a199c5984ce6a7540634e6f55b1727a7e7b14fa2e7477defcd6d3a099df466b6"
     }
+  },
+  {
+    "migration": "008",
+    "revision": "index-v2-fragmentation",
+    "sha256": "125d9b89525872562a16487acf71ead0d76404267abf4819c33989d7234a9784"
   }
 ]

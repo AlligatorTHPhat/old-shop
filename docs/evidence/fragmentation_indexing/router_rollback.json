@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "stack": "oldshop-fragmentation",
+  "legacy_a_detail_requires_b": true,
+  "routed_a_detail_survives_b_outage": true,
+  "global_fails_closed": true,
+  "routing_restored": true,
+  "ready": true
+}

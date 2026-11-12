@@ -1,0 +1,9 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/phat/Documents/Project/Epic-Ecommerce-FastAPI-main/backend
+configfile: pytest.ini
+collected 13 items
+
+tests/test_fragmentation.py .............                                [100%]
+
+============================= 13 passed in 33.00s ==============================

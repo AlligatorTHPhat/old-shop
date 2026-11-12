@@ -8,8 +8,12 @@ services:
     entrypoint: [uvicorn, app.catalogue_gateway:app, --host, 0.0.0.0, --port, "8000"]
     environment:
       DISTRIBUTED_CATALOG_URL: postgresql://global_reader:${SITE_A_GLOBAL_PASSWORD}@pg-a:5432/${SITE_A_DB_NAME:-oldshop_1}
+      DISTRIBUTED_CATALOG_B_URL: postgresql://global_reader:${SITE_B_GLOBAL_PASSWORD}@${SITE_B_CATALOG_HOST:-pg-b}:${SITE_B_CATALOG_PORT:-5432}/${SITE_B_DB_NAME:-oldshop_2}
+      DISTRIBUTED_CATALOG_ROUTING: ${DISTRIBUTED_CATALOG_ROUTING:-1}
     volumes:
       - ../../backend/app/catalogue_gateway.py:/app/app/catalogue_gateway.py:ro
+      - ../../backend/app/services/fragment_router.py:/app/app/services/fragment_router.py:ro
+      - ../../database/distributed/fragmentation.json:/opt/database/distributed/fragmentation.json:ro
     ports: ["127.0.0.1:${CATALOGUE_PORT:-56480}:8000"]
     networks:
       sites:

@@ -54,7 +54,9 @@ def verify_api(sites):
     try:
         sites.run(["stop", "-t", "2", "pg-b"])
         b_down = request("/products?limit=1", 503)
-        request("/products/1", 503)  # A-only ID must not masquerade as a complete service.
+        assert request("/products/1")["site_id"] == "A"
+        assert request("/products?seller_id=101")["sites"] == ["A"]
+        request("/products/2", 503)
         request("/ready", 503)
         request("/health")
     finally:
@@ -63,6 +65,7 @@ def verify_api(sites):
     try:
         sites.run(["stop", "-t", "2", "pg-a"])
         request("/products", 503)
+        assert request("/products/2")["site_id"] == "B"
         request("/health")
     finally:
         sites.run(["up", "-d", "--wait", "--wait-timeout", "60", "pg-a"])
@@ -80,7 +83,7 @@ def verify_api(sites):
             "input validation",
             "read-only HTTP and SQL",
             "no view-count mutation",
-            "503 on A or B outage",
+            "global reads fail closed on A or B outage; product reads isolate unrelated site failures",
             "recovery",
         ],
         "product_ids": ids,

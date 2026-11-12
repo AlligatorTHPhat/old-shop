@@ -8,10 +8,6 @@ import subprocess
 import uuid
 
 import pytest
-from etl.extract import Source
-from etl.pipelines.documents import project
-from etl.pipelines.media import ensure_images
-from etl.transform import video_url
 from fastapi import HTTPException, UploadFile
 from sqlalchemy.orm import Session
 from starlette.datastructures import Headers
@@ -19,6 +15,10 @@ from starlette.datastructures import Headers
 from app.core.config import settings
 from app.core.exceptions import BadRequestError
 from app.services import product_video, storage
+from etl.extract import Source
+from etl.pipelines.documents import project
+from etl.pipelines.media import ensure_images
+from etl.transform import video_url
 
 
 @pytest.fixture(scope="module")

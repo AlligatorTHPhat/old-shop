@@ -89,6 +89,9 @@ trong image được dùng. Hash seed ghi nhận nguồn, không khẳng định
 
 ## Chạy lại
 
+Hướng dẫn từng bước, xử lý thiếu `psycopg2`, chạy Docker/venv, đọc kết quả và quyết định reset/seed:
+[Đo index bằng dữ liệu dự án](../HUONG_DAN_DO_INDEX_DU_LIEU_DU_AN.md).
+
 Từ `backend/`, dùng môi trường Python/dependencies và cấu hình kết nối của backend:
 
 ```bash

@@ -96,6 +96,34 @@ def signature(keys, options):
     return result
 
 
+def unique_data_conflicts(collection, spec):
+    """Bounded read-only preflight. Server-side unique build remains authoritative.
+
+    Missing and null share a key for ordinary unique indexes. Sparse includes a
+    document if any indexed field exists; partial includes only matching rows.
+    Array keys need Mongo's multikey semantics and are intentionally not guessed.
+    """
+    match = spec.options.partialFilterExpression or {}
+    if spec.options.sparse:
+        match = {"$or": [{field: {"$exists": True}} for field, _ in spec.keys]}
+    prefix = [{"$match": match}] if match else []
+    arrays = prefix + [{"$match": {"$expr": {"$or": [{"$isArray": "$" + f} for f, _ in spec.keys]}}}, {"$limit": 1}]
+    if list(collection.aggregate(arrays, maxTimeMS=5000)):
+        return ["unique_multikey_requires_explicit_data_review"]
+    duplicate = prefix + [
+        {
+            "$group": {
+                "_id": {f"k{i}": {"$ifNull": ["$" + field, None]} for i, (field, _) in enumerate(spec.keys)},
+                "count": {"$sum": 1},
+            }
+        },
+        {"$match": {"count": {"$gt": 1}}},
+        {"$limit": 1},
+        {"$project": {"_id": 0, "count": 1}},
+    ]
+    return ["unique_duplicate_or_null_keys"] if list(collection.aggregate(duplicate, maxTimeMS=5000)) else []
+
+
 def plan_mongo(database, catalog):
     existing_collections = set(database.list_collection_names())
     schemas = contract_schemas({s.collection for s in catalog.mongodb})
@@ -121,6 +149,8 @@ def plan_mongo(database, catalog):
             for name, info in existing.items():
                 if signature(info["key"], info) == desired:
                     reasons.append("equivalent_definition_with_other_name:" + name)
+            if spec.options.unique and not reasons and spec.collection in existing_collections:
+                reasons += unique_data_conflicts(database[spec.collection], spec)
         entries.append(
             {
                 "collection": spec.collection,

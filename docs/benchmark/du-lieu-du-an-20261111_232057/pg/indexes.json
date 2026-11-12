@@ -1,0 +1,717 @@
+[
+  {
+    "table": "category",
+    "name": "category_name_key",
+    "definition": "CREATE UNIQUE INDEX category_name_key ON public.category USING btree (name)"
+  },
+  {
+    "table": "category",
+    "name": "category_pkey",
+    "definition": "CREATE UNIQUE INDEX category_pkey ON public.category USING btree (category_id)"
+  },
+  {
+    "table": "category",
+    "name": "idx_category_created_at",
+    "definition": "CREATE INDEX idx_category_created_at ON public.category USING btree (created_at)"
+  },
+  {
+    "table": "category",
+    "name": "idx_category_is_active",
+    "definition": "CREATE INDEX idx_category_is_active ON public.category USING btree (is_active) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "category",
+    "name": "idx_category_name_active",
+    "definition": "CREATE UNIQUE INDEX idx_category_name_active ON public.category USING btree (name) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "category",
+    "name": "idx_category_parent",
+    "definition": "CREATE INDEX idx_category_parent ON public.category USING btree (parent_id) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "contact_info",
+    "name": "contact_info_pkey",
+    "definition": "CREATE UNIQUE INDEX contact_info_pkey ON public.contact_info USING btree (contact_id)"
+  },
+  {
+    "table": "contact_info",
+    "name": "idx_contact_info_default",
+    "definition": "CREATE INDEX idx_contact_info_default ON public.contact_info USING btree (is_default) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "contact_info",
+    "name": "idx_contact_info_user",
+    "definition": "CREATE INDEX idx_contact_info_user ON public.contact_info USING btree (user_id)"
+  },
+  {
+    "table": "etl_outbox",
+    "name": "etl_outbox_pkey",
+    "definition": "CREATE UNIQUE INDEX etl_outbox_pkey ON public.etl_outbox USING btree (event_id)"
+  },
+  {
+    "table": "etl_outbox",
+    "name": "idx_etl_outbox_entity_pending",
+    "definition": "CREATE INDEX idx_etl_outbox_entity_pending ON public.etl_outbox USING btree (entity_type, entity_key, event_id) WHERE (status <> 'done'::text)"
+  },
+  {
+    "table": "etl_outbox",
+    "name": "idx_etl_outbox_pending",
+    "definition": "CREATE INDEX idx_etl_outbox_pending ON public.etl_outbox USING btree (available_at, event_id) WHERE (status = ANY (ARRAY['pending'::text, 'dead'::text]))"
+  },
+  {
+    "table": "etl_outbox",
+    "name": "idx_etl_outbox_pending_event",
+    "definition": "CREATE INDEX idx_etl_outbox_pending_event ON public.etl_outbox USING btree (event_id, available_at) WHERE (status = ANY (ARRAY['pending'::text, 'dead'::text]))"
+  },
+  {
+    "table": "etl_runs",
+    "name": "etl_runs_pkey",
+    "definition": "CREATE UNIQUE INDEX etl_runs_pkey ON public.etl_runs USING btree (run_id)"
+  },
+  {
+    "table": "etl_runs",
+    "name": "idx_etl_runs_aggregate_success",
+    "definition": "CREATE INDEX idx_etl_runs_aggregate_success ON public.etl_runs USING btree (ended_at DESC) WHERE ((status = 'success'::text) AND (details ? 'aggregate'::text))"
+  },
+  {
+    "table": "etl_runs",
+    "name": "idx_etl_runs_started",
+    "definition": "CREATE INDEX idx_etl_runs_started ON public.etl_runs USING btree (started_at DESC)"
+  },
+  {
+    "table": "etl_state",
+    "name": "etl_state_pkey",
+    "definition": "CREATE UNIQUE INDEX etl_state_pkey ON public.etl_state USING btree (name)"
+  },
+  {
+    "table": "etl_time_origin",
+    "name": "etl_time_origin_pkey",
+    "definition": "CREATE UNIQUE INDEX etl_time_origin_pkey ON public.etl_time_origin USING btree (source_table, source_key, field_name)"
+  },
+  {
+    "table": "media_deletions",
+    "name": "idx_media_deletions_due",
+    "definition": "CREATE INDEX idx_media_deletions_due ON public.media_deletions USING btree (available_at, deletion_id) WHERE (status = 'pending'::text)"
+  },
+  {
+    "table": "media_deletions",
+    "name": "media_deletions_pkey",
+    "definition": "CREATE UNIQUE INDEX media_deletions_pkey ON public.media_deletions USING btree (deletion_id)"
+  },
+  {
+    "table": "media_deletions",
+    "name": "media_deletions_url_path_key",
+    "definition": "CREATE UNIQUE INDEX media_deletions_url_path_key ON public.media_deletions USING btree (url_path)"
+  },
+  {
+    "table": "order",
+    "name": "idx_order_voucher_lookup",
+    "definition": "CREATE INDEX idx_order_voucher_lookup ON ONLY public.\"order\" USING btree (voucher_id)"
+  },
+  {
+    "table": "order",
+    "name": "order_day4_new_buyer_id_idx",
+    "definition": "CREATE INDEX order_day4_new_buyer_id_idx ON ONLY public.\"order\" USING btree (buyer_id) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order",
+    "name": "order_day4_new_buyer_id_order_date_idx",
+    "definition": "CREATE INDEX order_day4_new_buyer_id_order_date_idx ON ONLY public.\"order\" USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order",
+    "name": "order_day4_new_order_date_idx",
+    "definition": "CREATE INDEX order_day4_new_order_date_idx ON ONLY public.\"order\" USING btree (order_date) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order",
+    "name": "order_day4_new_order_status_idx",
+    "definition": "CREATE INDEX order_day4_new_order_status_idx ON ONLY public.\"order\" USING btree (order_status) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order",
+    "name": "order_day4_new_pkey",
+    "definition": "CREATE UNIQUE INDEX order_day4_new_pkey ON ONLY public.\"order\" USING btree (order_id)"
+  },
+  {
+    "table": "order_detail",
+    "name": "idx_order_detail_order",
+    "definition": "CREATE INDEX idx_order_detail_order ON public.order_detail USING btree (order_id)"
+  },
+  {
+    "table": "order_detail",
+    "name": "idx_order_detail_product_order",
+    "definition": "CREATE INDEX idx_order_detail_product_order ON public.order_detail USING btree (product_id, order_id)"
+  },
+  {
+    "table": "order_detail",
+    "name": "order_detail_pkey",
+    "definition": "CREATE UNIQUE INDEX order_detail_pkey ON public.order_detail USING btree (order_detail_id)"
+  },
+  {
+    "table": "order_h0",
+    "name": "order_h0_buyer_id_idx",
+    "definition": "CREATE INDEX order_h0_buyer_id_idx ON public.order_h0 USING btree (buyer_id) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h0",
+    "name": "order_h0_buyer_id_order_date_idx",
+    "definition": "CREATE INDEX order_h0_buyer_id_order_date_idx ON public.order_h0 USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h0",
+    "name": "order_h0_order_date_idx",
+    "definition": "CREATE INDEX order_h0_order_date_idx ON public.order_h0 USING btree (order_date) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h0",
+    "name": "order_h0_order_status_idx",
+    "definition": "CREATE INDEX order_h0_order_status_idx ON public.order_h0 USING btree (order_status) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h0",
+    "name": "order_h0_pkey",
+    "definition": "CREATE UNIQUE INDEX order_h0_pkey ON public.order_h0 USING btree (order_id)"
+  },
+  {
+    "table": "order_h0",
+    "name": "order_h0_voucher_id_idx",
+    "definition": "CREATE INDEX order_h0_voucher_id_idx ON public.order_h0 USING btree (voucher_id)"
+  },
+  {
+    "table": "order_h1",
+    "name": "order_h1_buyer_id_idx",
+    "definition": "CREATE INDEX order_h1_buyer_id_idx ON public.order_h1 USING btree (buyer_id) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h1",
+    "name": "order_h1_buyer_id_order_date_idx",
+    "definition": "CREATE INDEX order_h1_buyer_id_order_date_idx ON public.order_h1 USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h1",
+    "name": "order_h1_order_date_idx",
+    "definition": "CREATE INDEX order_h1_order_date_idx ON public.order_h1 USING btree (order_date) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h1",
+    "name": "order_h1_order_status_idx",
+    "definition": "CREATE INDEX order_h1_order_status_idx ON public.order_h1 USING btree (order_status) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h1",
+    "name": "order_h1_pkey",
+    "definition": "CREATE UNIQUE INDEX order_h1_pkey ON public.order_h1 USING btree (order_id)"
+  },
+  {
+    "table": "order_h1",
+    "name": "order_h1_voucher_id_idx",
+    "definition": "CREATE INDEX order_h1_voucher_id_idx ON public.order_h1 USING btree (voucher_id)"
+  },
+  {
+    "table": "order_h2",
+    "name": "order_h2_buyer_id_idx",
+    "definition": "CREATE INDEX order_h2_buyer_id_idx ON public.order_h2 USING btree (buyer_id) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h2",
+    "name": "order_h2_buyer_id_order_date_idx",
+    "definition": "CREATE INDEX order_h2_buyer_id_order_date_idx ON public.order_h2 USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h2",
+    "name": "order_h2_order_date_idx",
+    "definition": "CREATE INDEX order_h2_order_date_idx ON public.order_h2 USING btree (order_date) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h2",
+    "name": "order_h2_order_status_idx",
+    "definition": "CREATE INDEX order_h2_order_status_idx ON public.order_h2 USING btree (order_status) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h2",
+    "name": "order_h2_pkey",
+    "definition": "CREATE UNIQUE INDEX order_h2_pkey ON public.order_h2 USING btree (order_id)"
+  },
+  {
+    "table": "order_h2",
+    "name": "order_h2_voucher_id_idx",
+    "definition": "CREATE INDEX order_h2_voucher_id_idx ON public.order_h2 USING btree (voucher_id)"
+  },
+  {
+    "table": "order_h3",
+    "name": "order_h3_buyer_id_idx",
+    "definition": "CREATE INDEX order_h3_buyer_id_idx ON public.order_h3 USING btree (buyer_id) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h3",
+    "name": "order_h3_buyer_id_order_date_idx",
+    "definition": "CREATE INDEX order_h3_buyer_id_order_date_idx ON public.order_h3 USING btree (buyer_id, order_date DESC) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h3",
+    "name": "order_h3_order_date_idx",
+    "definition": "CREATE INDEX order_h3_order_date_idx ON public.order_h3 USING btree (order_date) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h3",
+    "name": "order_h3_order_status_idx",
+    "definition": "CREATE INDEX order_h3_order_status_idx ON public.order_h3 USING btree (order_status) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "order_h3",
+    "name": "order_h3_pkey",
+    "definition": "CREATE UNIQUE INDEX order_h3_pkey ON public.order_h3 USING btree (order_id)"
+  },
+  {
+    "table": "order_h3",
+    "name": "order_h3_voucher_id_idx",
+    "definition": "CREATE INDEX order_h3_voucher_id_idx ON public.order_h3 USING btree (voucher_id)"
+  },
+  {
+    "table": "payment_method",
+    "name": "payment_method_method_name_key",
+    "definition": "CREATE UNIQUE INDEX payment_method_method_name_key ON public.payment_method USING btree (method_name)"
+  },
+  {
+    "table": "payment_method",
+    "name": "payment_method_pkey",
+    "definition": "CREATE UNIQUE INDEX payment_method_pkey ON public.payment_method USING btree (payment_method_id)"
+  },
+  {
+    "table": "product",
+    "name": "idx_product_catalogue",
+    "definition": "CREATE INDEX idx_product_catalogue ON public.product USING btree (category_id, created_at DESC) WHERE ((status = 1) AND (is_deleted = false))"
+  },
+  {
+    "table": "product",
+    "name": "idx_product_category",
+    "definition": "CREATE INDEX idx_product_category ON public.product USING btree (category_id) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "product",
+    "name": "idx_product_created_at",
+    "definition": "CREATE INDEX idx_product_created_at ON public.product USING btree (created_at) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "product",
+    "name": "idx_product_description_trgm",
+    "definition": "CREATE INDEX idx_product_description_trgm ON public.product USING gin (description gin_trgm_ops) WHERE ((status = 1) AND (is_deleted = false))"
+  },
+  {
+    "table": "product",
+    "name": "idx_product_price",
+    "definition": "CREATE INDEX idx_product_price ON public.product USING btree (price) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "product",
+    "name": "idx_product_seller",
+    "definition": "CREATE INDEX idx_product_seller ON public.product USING btree (seller_id) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "product",
+    "name": "idx_product_status",
+    "definition": "CREATE INDEX idx_product_status ON public.product USING btree (status) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "product",
+    "name": "idx_product_title",
+    "definition": "CREATE INDEX idx_product_title ON public.product USING gin (to_tsvector('english'::regconfig, (title)::text)) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "product",
+    "name": "idx_product_title_trgm",
+    "definition": "CREATE INDEX idx_product_title_trgm ON public.product USING gin (title gin_trgm_ops) WHERE ((status = 1) AND (is_deleted = false))"
+  },
+  {
+    "table": "product",
+    "name": "idx_product_visible_date_id",
+    "definition": "CREATE INDEX idx_product_visible_date_id ON public.product USING btree (created_at DESC, product_id) WHERE ((status = 1) AND (is_deleted = false))"
+  },
+  {
+    "table": "product",
+    "name": "product_pkey",
+    "definition": "CREATE UNIQUE INDEX product_pkey ON public.product USING btree (product_id)"
+  },
+  {
+    "table": "product_image",
+    "name": "idx_product_image_product",
+    "definition": "CREATE INDEX idx_product_image_product ON public.product_image USING btree (product_id)"
+  },
+  {
+    "table": "product_image",
+    "name": "idx_product_image_url",
+    "definition": "CREATE INDEX idx_product_image_url ON public.product_image USING btree (image_url)"
+  },
+  {
+    "table": "product_image",
+    "name": "product_image_pkey",
+    "definition": "CREATE UNIQUE INDEX product_image_pkey ON public.product_image USING btree (image_id)"
+  },
+  {
+    "table": "report_daily_sales",
+    "name": "report_daily_sales_pkey",
+    "definition": "CREATE UNIQUE INDEX report_daily_sales_pkey ON public.report_daily_sales USING btree (report_date, seller_id, category_id)"
+  },
+  {
+    "table": "review",
+    "name": "idx_review_buyer",
+    "definition": "CREATE INDEX idx_review_buyer ON public.review USING btree (buyer_id)"
+  },
+  {
+    "table": "review",
+    "name": "idx_review_product",
+    "definition": "CREATE INDEX idx_review_product ON public.review USING btree (product_id)"
+  },
+  {
+    "table": "review",
+    "name": "idx_review_rating",
+    "definition": "CREATE INDEX idx_review_rating ON public.review USING btree (rating)"
+  },
+  {
+    "table": "review",
+    "name": "review_pkey",
+    "definition": "CREATE UNIQUE INDEX review_pkey ON public.review USING btree (review_id)"
+  },
+  {
+    "table": "role",
+    "name": "idx_role_created_at",
+    "definition": "CREATE INDEX idx_role_created_at ON public.role USING btree (created_at)"
+  },
+  {
+    "table": "role",
+    "name": "idx_role_name",
+    "definition": "CREATE INDEX idx_role_name ON public.role USING btree (role_name) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "role",
+    "name": "role_pkey",
+    "definition": "CREATE UNIQUE INDEX role_pkey ON public.role USING btree (role_id)"
+  },
+  {
+    "table": "role",
+    "name": "role_role_name_key",
+    "definition": "CREATE UNIQUE INDEX role_role_name_key ON public.role USING btree (role_name)"
+  },
+  {
+    "table": "schema_migrations",
+    "name": "schema_migrations_pkey",
+    "definition": "CREATE UNIQUE INDEX schema_migrations_pkey ON public.schema_migrations USING btree (version)"
+  },
+  {
+    "table": "shopping_cart",
+    "name": "shopping_cart_pkey",
+    "definition": "CREATE UNIQUE INDEX shopping_cart_pkey ON public.shopping_cart USING btree (cart_id)"
+  },
+  {
+    "table": "shopping_cart",
+    "name": "shopping_cart_user_id_key",
+    "definition": "CREATE UNIQUE INDEX shopping_cart_user_id_key ON public.shopping_cart USING btree (user_id)"
+  },
+  {
+    "table": "shopping_cart_item",
+    "name": "idx_shopping_cart_item_cart",
+    "definition": "CREATE INDEX idx_shopping_cart_item_cart ON public.shopping_cart_item USING btree (cart_id)"
+  },
+  {
+    "table": "shopping_cart_item",
+    "name": "idx_shopping_cart_item_product",
+    "definition": "CREATE INDEX idx_shopping_cart_item_product ON public.shopping_cart_item USING btree (product_id)"
+  },
+  {
+    "table": "shopping_cart_item",
+    "name": "shopping_cart_item_pkey",
+    "definition": "CREATE UNIQUE INDEX shopping_cart_item_pkey ON public.shopping_cart_item USING btree (cart_item_id)"
+  },
+  {
+    "table": "shopping_cart_item",
+    "name": "uq_cart_product",
+    "definition": "CREATE UNIQUE INDEX uq_cart_product ON public.shopping_cart_item USING btree (cart_id, product_id)"
+  },
+  {
+    "table": "system_feedback",
+    "name": "idx_system_feedback_created_at",
+    "definition": "CREATE INDEX idx_system_feedback_created_at ON public.system_feedback USING btree (created_at)"
+  },
+  {
+    "table": "system_feedback",
+    "name": "idx_system_feedback_status",
+    "definition": "CREATE INDEX idx_system_feedback_status ON public.system_feedback USING btree (status)"
+  },
+  {
+    "table": "system_feedback",
+    "name": "idx_system_feedback_user",
+    "definition": "CREATE INDEX idx_system_feedback_user ON public.system_feedback USING btree (user_id)"
+  },
+  {
+    "table": "system_feedback",
+    "name": "system_feedback_pkey",
+    "definition": "CREATE UNIQUE INDEX system_feedback_pkey ON public.system_feedback USING btree (feedback_id)"
+  },
+  {
+    "table": "system_log",
+    "name": "idx_system_log_action",
+    "definition": "CREATE INDEX idx_system_log_action ON ONLY public.system_log USING btree (action)"
+  },
+  {
+    "table": "system_log",
+    "name": "idx_system_log_created_at",
+    "definition": "CREATE INDEX idx_system_log_created_at ON ONLY public.system_log USING btree (created_at)"
+  },
+  {
+    "table": "system_log",
+    "name": "idx_system_log_user",
+    "definition": "CREATE INDEX idx_system_log_user ON ONLY public.system_log USING btree (user_id)"
+  },
+  {
+    "table": "system_log",
+    "name": "system_log_day4_new_pkey",
+    "definition": "CREATE UNIQUE INDEX system_log_day4_new_pkey ON ONLY public.system_log USING btree (log_id, created_at)"
+  },
+  {
+    "table": "system_log_202611",
+    "name": "system_log_202611_action_idx",
+    "definition": "CREATE INDEX system_log_202611_action_idx ON public.system_log_202611 USING btree (action)"
+  },
+  {
+    "table": "system_log_202611",
+    "name": "system_log_202611_created_at_idx",
+    "definition": "CREATE INDEX system_log_202611_created_at_idx ON public.system_log_202611 USING btree (created_at)"
+  },
+  {
+    "table": "system_log_202611",
+    "name": "system_log_202611_pkey",
+    "definition": "CREATE UNIQUE INDEX system_log_202611_pkey ON public.system_log_202611 USING btree (log_id, created_at)"
+  },
+  {
+    "table": "system_log_202611",
+    "name": "system_log_202611_user_id_idx",
+    "definition": "CREATE INDEX system_log_202611_user_id_idx ON public.system_log_202611 USING btree (user_id)"
+  },
+  {
+    "table": "system_log_202612",
+    "name": "system_log_202612_action_idx",
+    "definition": "CREATE INDEX system_log_202612_action_idx ON public.system_log_202612 USING btree (action)"
+  },
+  {
+    "table": "system_log_202612",
+    "name": "system_log_202612_created_at_idx",
+    "definition": "CREATE INDEX system_log_202612_created_at_idx ON public.system_log_202612 USING btree (created_at)"
+  },
+  {
+    "table": "system_log_202612",
+    "name": "system_log_202612_pkey",
+    "definition": "CREATE UNIQUE INDEX system_log_202612_pkey ON public.system_log_202612 USING btree (log_id, created_at)"
+  },
+  {
+    "table": "system_log_202612",
+    "name": "system_log_202612_user_id_idx",
+    "definition": "CREATE INDEX system_log_202612_user_id_idx ON public.system_log_202612 USING btree (user_id)"
+  },
+  {
+    "table": "system_log_202701",
+    "name": "system_log_202701_action_idx",
+    "definition": "CREATE INDEX system_log_202701_action_idx ON public.system_log_202701 USING btree (action)"
+  },
+  {
+    "table": "system_log_202701",
+    "name": "system_log_202701_created_at_idx",
+    "definition": "CREATE INDEX system_log_202701_created_at_idx ON public.system_log_202701 USING btree (created_at)"
+  },
+  {
+    "table": "system_log_202701",
+    "name": "system_log_202701_pkey",
+    "definition": "CREATE UNIQUE INDEX system_log_202701_pkey ON public.system_log_202701 USING btree (log_id, created_at)"
+  },
+  {
+    "table": "system_log_202701",
+    "name": "system_log_202701_user_id_idx",
+    "definition": "CREATE INDEX system_log_202701_user_id_idx ON public.system_log_202701 USING btree (user_id)"
+  },
+  {
+    "table": "system_log_202702",
+    "name": "system_log_202702_action_idx",
+    "definition": "CREATE INDEX system_log_202702_action_idx ON public.system_log_202702 USING btree (action)"
+  },
+  {
+    "table": "system_log_202702",
+    "name": "system_log_202702_created_at_idx",
+    "definition": "CREATE INDEX system_log_202702_created_at_idx ON public.system_log_202702 USING btree (created_at)"
+  },
+  {
+    "table": "system_log_202702",
+    "name": "system_log_202702_pkey",
+    "definition": "CREATE UNIQUE INDEX system_log_202702_pkey ON public.system_log_202702 USING btree (log_id, created_at)"
+  },
+  {
+    "table": "system_log_202702",
+    "name": "system_log_202702_user_id_idx",
+    "definition": "CREATE INDEX system_log_202702_user_id_idx ON public.system_log_202702 USING btree (user_id)"
+  },
+  {
+    "table": "system_log_default",
+    "name": "system_log_default_action_idx",
+    "definition": "CREATE INDEX system_log_default_action_idx ON public.system_log_default USING btree (action)"
+  },
+  {
+    "table": "system_log_default",
+    "name": "system_log_default_created_at_idx",
+    "definition": "CREATE INDEX system_log_default_created_at_idx ON public.system_log_default USING btree (created_at)"
+  },
+  {
+    "table": "system_log_default",
+    "name": "system_log_default_pkey",
+    "definition": "CREATE UNIQUE INDEX system_log_default_pkey ON public.system_log_default USING btree (log_id, created_at)"
+  },
+  {
+    "table": "system_log_default",
+    "name": "system_log_default_user_id_idx",
+    "definition": "CREATE INDEX system_log_default_user_id_idx ON public.system_log_default USING btree (user_id)"
+  },
+  {
+    "table": "transaction",
+    "name": "idx_transaction_fraud_score",
+    "definition": "CREATE INDEX idx_transaction_fraud_score ON public.transaction USING btree (fraud_score)"
+  },
+  {
+    "table": "transaction",
+    "name": "idx_transaction_order",
+    "definition": "CREATE INDEX idx_transaction_order ON public.transaction USING btree (order_id)"
+  },
+  {
+    "table": "transaction",
+    "name": "idx_transaction_status",
+    "definition": "CREATE INDEX idx_transaction_status ON public.transaction USING btree (transaction_status)"
+  },
+  {
+    "table": "transaction",
+    "name": "idx_transaction_user",
+    "definition": "CREATE INDEX idx_transaction_user ON public.transaction USING btree (user_id)"
+  },
+  {
+    "table": "transaction",
+    "name": "transaction_pkey",
+    "definition": "CREATE UNIQUE INDEX transaction_pkey ON public.transaction USING btree (transaction_id)"
+  },
+  {
+    "table": "transaction",
+    "name": "transaction_reference_number_key",
+    "definition": "CREATE UNIQUE INDEX transaction_reference_number_key ON public.transaction USING btree (reference_number)"
+  },
+  {
+    "table": "user_core",
+    "name": "idx_user_created_at",
+    "definition": "CREATE INDEX idx_user_created_at ON public.user_core USING btree (created_at)"
+  },
+  {
+    "table": "user_core",
+    "name": "idx_user_email_active",
+    "definition": "CREATE UNIQUE INDEX idx_user_email_active ON public.user_core USING btree (email) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "user_core",
+    "name": "idx_user_email_verified",
+    "definition": "CREATE INDEX idx_user_email_verified ON public.user_core USING btree (email_verified) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "user_core",
+    "name": "idx_user_is_active",
+    "definition": "CREATE INDEX idx_user_is_active ON public.user_core USING btree (is_active) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "user_core",
+    "name": "idx_user_username_active",
+    "definition": "CREATE UNIQUE INDEX idx_user_username_active ON public.user_core USING btree (username) WHERE (is_deleted = false)"
+  },
+  {
+    "table": "user_core",
+    "name": "user_email_key",
+    "definition": "CREATE UNIQUE INDEX user_email_key ON public.user_core USING btree (email)"
+  },
+  {
+    "table": "user_core",
+    "name": "user_pkey",
+    "definition": "CREATE UNIQUE INDEX user_pkey ON public.user_core USING btree (user_id)"
+  },
+  {
+    "table": "user_core",
+    "name": "user_username_key",
+    "definition": "CREATE UNIQUE INDEX user_username_key ON public.user_core USING btree (username)"
+  },
+  {
+    "table": "user_profile",
+    "name": "idx_user_profile_avatar_url",
+    "definition": "CREATE INDEX idx_user_profile_avatar_url ON public.user_profile USING btree (avatar_url)"
+  },
+  {
+    "table": "user_profile",
+    "name": "user_profile_pkey",
+    "definition": "CREATE UNIQUE INDEX user_profile_pkey ON public.user_profile USING btree (user_id)"
+  },
+  {
+    "table": "user_role",
+    "name": "idx_user_role_role_user",
+    "definition": "CREATE INDEX idx_user_role_role_user ON public.user_role USING btree (role_id, user_id)"
+  },
+  {
+    "table": "user_role",
+    "name": "user_role_pkey",
+    "definition": "CREATE UNIQUE INDEX user_role_pkey ON public.user_role USING btree (user_id, role_id)"
+  },
+  {
+    "table": "user_secret",
+    "name": "user_secret_pkey",
+    "definition": "CREATE UNIQUE INDEX user_secret_pkey ON public.user_secret USING btree (user_id)"
+  },
+  {
+    "table": "user_secret",
+    "name": "user_secret_random_key_key",
+    "definition": "CREATE UNIQUE INDEX user_secret_random_key_key ON public.user_secret USING btree (random_key)"
+  },
+  {
+    "table": "user_wallet",
+    "name": "user_wallet_pkey",
+    "definition": "CREATE UNIQUE INDEX user_wallet_pkey ON public.user_wallet USING btree (user_id)"
+  },
+  {
+    "table": "violation_log",
+    "name": "idx_violation_log_created_at",
+    "definition": "CREATE INDEX idx_violation_log_created_at ON public.violation_log USING btree (created_at)"
+  },
+  {
+    "table": "violation_log",
+    "name": "idx_violation_log_user",
+    "definition": "CREATE INDEX idx_violation_log_user ON public.violation_log USING btree (user_id)"
+  },
+  {
+    "table": "violation_log",
+    "name": "violation_log_pkey",
+    "definition": "CREATE UNIQUE INDEX violation_log_pkey ON public.violation_log USING btree (log_id)"
+  },
+  {
+    "table": "voucher",
+    "name": "idx_voucher_code_active",
+    "definition": "CREATE UNIQUE INDEX idx_voucher_code_active ON public.voucher USING btree (code) WHERE (is_active = true)"
+  },
+  {
+    "table": "voucher",
+    "name": "idx_voucher_created_at",
+    "definition": "CREATE INDEX idx_voucher_created_at ON public.voucher USING btree (created_at)"
+  },
+  {
+    "table": "voucher",
+    "name": "idx_voucher_valid_to",
+    "definition": "CREATE INDEX idx_voucher_valid_to ON public.voucher USING btree (valid_to) WHERE (is_active = true)"
+  },
+  {
+    "table": "voucher",
+    "name": "voucher_code_key",
+    "definition": "CREATE UNIQUE INDEX voucher_code_key ON public.voucher USING btree (code)"
+  },
+  {
+    "table": "voucher",
+    "name": "voucher_pkey",
+    "definition": "CREATE UNIQUE INDEX voucher_pkey ON public.voucher USING btree (voucher_id)"
+  }
+]

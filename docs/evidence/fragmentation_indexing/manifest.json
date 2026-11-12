@@ -1,0 +1,60 @@
+{
+  "result": "LOCAL_VERIFIED",
+  "created_at": "2026-11-10T23:17:40.055928+07:00",
+  "source_head": "54d370e79607a937592905083ca36e3384efb036",
+  "working_tree_changes": true,
+  "source_sha256": {
+    "backend/app/catalogue_gateway.py": "7544659bc50081c3af9a44f068ead7166a255ddd562ea9a6bb4a24974ddc2ad2",
+    "backend/app/services/fragment_router.py": "a97c1962aab874b80ce5f9b4fff17f53165f0bac057b8dc704cc71516e9cc9f7",
+    "backend/app/services/index_mongo.py": "e3040419f2e9c9d769c88a87b64e391c42665508ed3f4d6e558df8ff33bc2586",
+    "backend/app/services/index_postgres.py": "983e95a7476cbcbcbc1e93f0043641a6ef4ae0ec846835e5867b2e5617bc0743",
+    "backend/etl/pipelines/media.py": "7e420f91d24d1619418dfcc83c105b66b535dc9f4eb61d7531e4342634a1ea00",
+    "backend/scripts/benchmark_current.py": "0e3af93f9e766f6f4b75c0b684ba1872a0468f6b5a58cf01617760bb51c5a13e",
+    "backend/scripts/benchmark_fragmentation.py": "048999168134ef785be8e35cdf80b8ec9fbd62059b05e379dd5c14227726aaa2",
+    "backend/scripts/fragmentation_lab.py": "aa4a06ca33895c17de5d76fd48d49d2884c47a3d68a14c8d671cc5d67a71f9cd",
+    "backend/scripts/plan_scoped_indexes.py": "a37b9f6dcb83b282dddd8b7d4918ab4c30e29d3d5b04f1e079d089a3cc4e1427",
+    "backend/scripts/verify_fragmentation.py": "cda036debc81962e8c3ba2ad5f85569bbdb1770ecb3dcd9de9707bd16523dfcf",
+    "backend/scripts/verify_indexing_v2.py": "9df7395af10d9658de7d083641e551abba5ed6863f1b9c3c2ae07b238de7c5f3",
+    "backend/tests/test_fragmentation.py": "9ea447b497528839d50be2ae0a74346b17afc776dadfb78da28b3938c55b8dab",
+    "backend/tests/test_index_config.py": "b7b2f1430c447424117e3a8eeae68795ca41cd609eea1fe92703e0ed07563c90",
+    "backend/tests/test_index_config_integration.py": "dec9263e5e39d40c00b7fa74cac512f8b038af0d3e8c1c8aebdf52bfedde8e1e",
+    "backend/tests/test_indexing_v2.py": "94e307d8e79cf880fd9b71680e7a3ddfb18462f5abfdcab204d2b4149712b13d",
+    "backend/tests/test_product_video.py": "c009fd9ad47f890fda075b5bacef038392b1b2b2291fa76e759d7768e5ebdac2",
+    "database/04_migrations/008_fragmentation_seller_index.sql": "ab5b7374518648020b4ef1c2257ab50cce2966dd815978d0e34275951aa622dd",
+    "database/distributed/06_routed_views.sql": "1657643120a109f250cacd93bbdc6eede80145b1077970ccd16a9502d8a46b08",
+    "database/distributed/fragmentation.json": "abe4f7f759ec2a281b83f4e986e073ecaeee30cf141badd09860e9f85c5ea52f",
+    "database/distributed/migrations/001_fragment_contract.sql": "ba72217dd60a6652e81b1e18503df851d61f49c3ebf997499dd7575a3ef4ea14",
+    "database/indexing/catalog.json": "697ad80f5800b768f57e276db1be21095e28eb0b53e400d769fd826ed3731e8e",
+    "database/indexing/releases.json": "cc22402e2fe14b6fbc2ad20f95fe15d89c95e57e11026d7db4618d2fad42ea92",
+    "database/indexing/scopes.json": "b74f55fd9447568bdec5d7fedc2923ef2714e62f316d51a33a8b61d59ea7b695",
+    "database/indexing/snapshots/index-v2-fragmentation.json": "f3a1893b4a66f0ba04ecb98223e5671cbe8521fcd4e0d47611da1152a0ade6e9",
+    "deploy/scripts/apply-fragmentation.py": "01af2a4321d487cc77dc5df63bca4717a0786107f550ec4bcd465958e537f5eb",
+    "deploy/scripts/sites.py": "cd79ae2428eb988cb6f423ae4e52abd27d026c7ec5b9eabbf9fa154c8dae7097",
+    "deploy/scripts/verify_catalogue.py": "581e61332ee70fe27c1ff13693ab9252720932fc0da12ee40fa115a38d7fda11",
+    "deploy/scripts/verify_sites.py": "b024038bbeca2a31fcc802d73efe3db05ddf5c1e34673eeade19ccb74ce5b6b7",
+    "deploy/sites/compose.catalog.yml": "cc82aae40567f452e193d6dc2d54112586b593f52dc0241c881e1e4215bf0028",
+    "deploy/sites/env.example": "3b507d2ab5f4c627dd835bb787e8c6728c6be0b0ba3d76708fcbbe3287c57786"
+  },
+  "checks": {
+    "test_results": "PASS",
+    "api_results": "PASS",
+    "integrity": "PASS",
+    "scoped_indexes": "PASS",
+    "rollout": "PASS",
+    "router_rollback": "PASS"
+  },
+  "backend_tests": {
+    "passed": 215,
+    "skipped": 47
+  },
+  "fragmentation_recheck_passed": 13,
+  "ruff_lint": "PASS",
+  "ruff_format": "PASS",
+  "physical_hosts_verified": false,
+  "pending": [
+    "VPN remote B upgrade and gateway rollout",
+    "Existing commerce migration 008 rollout",
+    "Representative concurrent production workload and committed write-cost measurement",
+    "Central write routing / cross-site ownership transfer"
+  ]
+}

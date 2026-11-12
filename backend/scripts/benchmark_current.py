@@ -57,8 +57,7 @@ def pg_cases(cursor):
     )
     buyer = one(
         cursor,
-        'SELECT buyer_id FROM "order" WHERE NOT is_deleted GROUP BY buyer_id '
-        "ORDER BY count(*) DESC,buyer_id LIMIT 1",
+        'SELECT buyer_id FROM "order" WHERE NOT is_deleted GROUP BY buyer_id ORDER BY count(*) DESC,buyer_id LIMIT 1',
     )
     add(
         "buyer_history",
@@ -112,7 +111,7 @@ def pg_cases(cursor):
     month = one(cursor, "SELECT date_trunc('month',min(created_at)) FROM system_log")[0]
     add(
         "log_month_pruning",
-        "SELECT count(*) FROM system_log WHERE created_at>=%s " "AND created_at<%s + interval '1 month'",
+        "SELECT count(*) FROM system_log WHERE created_at>=%s AND created_at<%s + interval '1 month'",
         (month, month) if month else (),
         None if month else "system_log is empty",
     )

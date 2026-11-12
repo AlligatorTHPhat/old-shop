@@ -1,0 +1,2920 @@
+{
+  "result": "PASS",
+  "read_only": true,
+  "desired_revision": "index-v2-fragmentation",
+  "desired_sha256": "125d9b89525872562a16487acf71ead0d76404267abf4819c33989d7234a9784",
+  "scopes": {
+    "site-a": {
+      "result": "PASS",
+      "scope_sha256": "45f1c1378d45de2645534c3014a0fdc4e18db3cd848135e7a2c4d46753e9e7ae",
+      "indexes": [
+        {
+          "name": "idx_product_catalogue",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "category_id",
+              "created_at"
+            ],
+            "expressions": [
+              "category_id",
+              "created_at"
+            ],
+            "flags": [
+              0,
+              3
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_category",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "category_id"
+            ],
+            "expressions": [
+              "category_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_created_at",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at"
+            ],
+            "expressions": [
+              "created_at"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_description_trgm",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "gin",
+            "unique": false,
+            "columns": [
+              "description"
+            ],
+            "expressions": [
+              "description"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              "public.gin_trgm_ops"
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_price",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "price"
+            ],
+            "expressions": [
+              "price"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_seller",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "seller_id"
+            ],
+            "expressions": [
+              "seller_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_status",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "status"
+            ],
+            "expressions": [
+              "status"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_title",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "gin",
+            "unique": false,
+            "columns": [
+              null
+            ],
+            "expressions": [
+              "to_tsvector('english'::regconfig, title::text)"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_title_trgm",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "gin",
+            "unique": false,
+            "columns": [
+              "title"
+            ],
+            "expressions": [
+              "title"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              "public.gin_trgm_ops"
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_visible_date_id",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at",
+              "product_id"
+            ],
+            "expressions": [
+              "created_at",
+              "product_id"
+            ],
+            "flags": [
+              3,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "product_pkey",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "product_id"
+            ],
+            "expressions": [
+              "product_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_image_product",
+          "schema": "public",
+          "table": "product_image",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "product_id"
+            ],
+            "expressions": [
+              "product_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_image_url",
+          "schema": "public",
+          "table": "product_image",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "image_url"
+            ],
+            "expressions": [
+              "image_url"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "product_image_pkey",
+          "schema": "public",
+          "table": "product_image",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "image_id"
+            ],
+            "expressions": [
+              "image_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_visible_seller_date_id",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "seller_id",
+              "created_at",
+              "product_id"
+            ],
+            "expressions": [
+              "seller_id",
+              "created_at",
+              "product_id"
+            ],
+            "flags": [
+              0,
+              3,
+              0
+            ],
+            "opclasses": [
+              "",
+              "",
+              ""
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        }
+      ],
+      "unmanaged": [
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "category_name_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "category_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "idx_category_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "idx_category_is_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "idx_category_name_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "idx_category_parent",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "contact_info",
+          "name": "contact_info_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "contact_info",
+          "name": "idx_contact_info_default",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "contact_info",
+          "name": "idx_contact_info_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "distributed_installation",
+          "name": "distributed_installation_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_outbox",
+          "name": "etl_outbox_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_outbox",
+          "name": "idx_etl_outbox_entity_pending",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_outbox",
+          "name": "idx_etl_outbox_pending",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_outbox",
+          "name": "idx_etl_outbox_pending_event",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_runs",
+          "name": "etl_runs_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_runs",
+          "name": "idx_etl_runs_aggregate_success",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_runs",
+          "name": "idx_etl_runs_started",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_state",
+          "name": "etl_state_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_time_origin",
+          "name": "etl_time_origin_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "fragment_contract_state",
+          "name": "fragment_contract_state_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "media_deletions",
+          "name": "idx_media_deletions_due",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "media_deletions",
+          "name": "media_deletions_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "media_deletions",
+          "name": "media_deletions_url_path_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "idx_order_voucher_lookup",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "order_day4_new_buyer_id_idx",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "order_day4_new_buyer_id_order_date_idx",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "order_day4_new_order_date_idx",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "order_day4_new_order_status_idx",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "order_day4_new_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order_detail",
+          "name": "idx_order_detail_order",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order_detail",
+          "name": "idx_order_detail_product_order",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order_detail",
+          "name": "order_detail_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_buyer_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_buyer_id_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_order_status_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_voucher_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_buyer_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_buyer_id_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_order_status_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_voucher_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_buyer_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_buyer_id_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_order_status_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_voucher_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_buyer_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_buyer_id_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_order_status_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_voucher_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "payment_method",
+          "name": "payment_method_method_name_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "payment_method",
+          "name": "payment_method_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "report_daily_sales",
+          "name": "report_daily_sales_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "review",
+          "name": "idx_review_buyer",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "review",
+          "name": "idx_review_product",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "review",
+          "name": "idx_review_rating",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "review",
+          "name": "review_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "role",
+          "name": "idx_role_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "role",
+          "name": "idx_role_name",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "role",
+          "name": "role_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "role",
+          "name": "role_role_name_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "schema_migrations",
+          "name": "schema_migrations_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "seller_site",
+          "name": "seller_site_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "seller_site",
+          "name": "seller_site_seller_id_site_id_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart",
+          "name": "shopping_cart_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart",
+          "name": "shopping_cart_user_id_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "name": "idx_shopping_cart_item_cart",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "name": "idx_shopping_cart_item_product",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "name": "shopping_cart_item_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "name": "uq_cart_product",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "site_config",
+          "name": "site_config_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "site_config",
+          "name": "site_config_site_id_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "site_schema_migrations",
+          "name": "site_schema_migrations_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_feedback",
+          "name": "idx_system_feedback_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_feedback",
+          "name": "idx_system_feedback_status",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_feedback",
+          "name": "idx_system_feedback_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_feedback",
+          "name": "system_feedback_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_log",
+          "name": "idx_system_log_action",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_log",
+          "name": "idx_system_log_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_log",
+          "name": "idx_system_log_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_log",
+          "name": "system_log_day4_new_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202611",
+          "name": "system_log_202611_action_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202611",
+          "name": "system_log_202611_created_at_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202611",
+          "name": "system_log_202611_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202611",
+          "name": "system_log_202611_user_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202612",
+          "name": "system_log_202612_action_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202612",
+          "name": "system_log_202612_created_at_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202612",
+          "name": "system_log_202612_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202612",
+          "name": "system_log_202612_user_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202701",
+          "name": "system_log_202701_action_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202701",
+          "name": "system_log_202701_created_at_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202701",
+          "name": "system_log_202701_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202701",
+          "name": "system_log_202701_user_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202702",
+          "name": "system_log_202702_action_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202702",
+          "name": "system_log_202702_created_at_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202702",
+          "name": "system_log_202702_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202702",
+          "name": "system_log_202702_user_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_default",
+          "name": "system_log_default_action_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_default",
+          "name": "system_log_default_created_at_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_default",
+          "name": "system_log_default_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_default",
+          "name": "system_log_default_user_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "idx_transaction_fraud_score",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "idx_transaction_order",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "idx_transaction_status",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "idx_transaction_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "transaction_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "transaction_reference_number_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "idx_user_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "idx_user_email_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "idx_user_email_verified",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "idx_user_is_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "idx_user_username_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "user_email_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "user_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "user_username_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_profile",
+          "name": "idx_user_profile_avatar_url",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_profile",
+          "name": "user_profile_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_role",
+          "name": "idx_user_role_role_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_role",
+          "name": "user_role_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_secret",
+          "name": "user_secret_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_secret",
+          "name": "user_secret_random_key_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_wallet",
+          "name": "user_wallet_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "violation_log",
+          "name": "idx_violation_log_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "violation_log",
+          "name": "idx_violation_log_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "violation_log",
+          "name": "violation_log_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "voucher",
+          "name": "idx_voucher_code_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "voucher",
+          "name": "idx_voucher_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "voucher",
+          "name": "idx_voucher_valid_to",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "voucher",
+          "name": "voucher_code_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "voucher",
+          "name": "voucher_pkey",
+          "constraint_owned": true,
+          "attached": false
+        }
+      ]
+    },
+    "site-b": {
+      "result": "PASS",
+      "scope_sha256": "45f1c1378d45de2645534c3014a0fdc4e18db3cd848135e7a2c4d46753e9e7ae",
+      "indexes": [
+        {
+          "name": "idx_product_catalogue",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "category_id",
+              "created_at"
+            ],
+            "expressions": [
+              "category_id",
+              "created_at"
+            ],
+            "flags": [
+              0,
+              3
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_category",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "category_id"
+            ],
+            "expressions": [
+              "category_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_created_at",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at"
+            ],
+            "expressions": [
+              "created_at"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_description_trgm",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "gin",
+            "unique": false,
+            "columns": [
+              "description"
+            ],
+            "expressions": [
+              "description"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              "public.gin_trgm_ops"
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_price",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "price"
+            ],
+            "expressions": [
+              "price"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_seller",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "seller_id"
+            ],
+            "expressions": [
+              "seller_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_status",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "status"
+            ],
+            "expressions": [
+              "status"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_title",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "gin",
+            "unique": false,
+            "columns": [
+              null
+            ],
+            "expressions": [
+              "to_tsvector('english'::regconfig, title::text)"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": "(is_deleted = false)",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_title_trgm",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "gin",
+            "unique": false,
+            "columns": [
+              "title"
+            ],
+            "expressions": [
+              "title"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              "public.gin_trgm_ops"
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_visible_date_id",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "created_at",
+              "product_id"
+            ],
+            "expressions": [
+              "created_at",
+              "product_id"
+            ],
+            "flags": [
+              3,
+              0
+            ],
+            "opclasses": [
+              "",
+              ""
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "product_pkey",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "product_id"
+            ],
+            "expressions": [
+              "product_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_image_product",
+          "schema": "public",
+          "table": "product_image",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "product_id"
+            ],
+            "expressions": [
+              "product_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_image_url",
+          "schema": "public",
+          "table": "product_image",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "image_url"
+            ],
+            "expressions": [
+              "image_url"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "product_image_pkey",
+          "schema": "public",
+          "table": "product_image",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "constraint",
+          "actual": {
+            "method": "btree",
+            "unique": true,
+            "columns": [
+              "image_id"
+            ],
+            "expressions": [
+              "image_id"
+            ],
+            "flags": [
+              0
+            ],
+            "opclasses": [
+              ""
+            ],
+            "predicate": null,
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": true,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        },
+        {
+          "name": "idx_product_visible_seller_date_id",
+          "schema": "public",
+          "table": "product",
+          "status": "matched",
+          "reasons": [],
+          "managed_by": "application",
+          "actual": {
+            "method": "btree",
+            "unique": false,
+            "columns": [
+              "seller_id",
+              "created_at",
+              "product_id"
+            ],
+            "expressions": [
+              "seller_id",
+              "created_at",
+              "product_id"
+            ],
+            "flags": [
+              0,
+              3,
+              0
+            ],
+            "opclasses": [
+              "",
+              "",
+              ""
+            ],
+            "predicate": "((status = 1) AND (is_deleted = false))",
+            "valid": true,
+            "ready": true,
+            "live": true,
+            "constraint_owned": false,
+            "includes": 0,
+            "default_collation": true
+          },
+          "partition_indexes": []
+        }
+      ],
+      "unmanaged": [
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "category_name_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "category_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "idx_category_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "idx_category_is_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "idx_category_name_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "category",
+          "name": "idx_category_parent",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "contact_info",
+          "name": "contact_info_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "contact_info",
+          "name": "idx_contact_info_default",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "contact_info",
+          "name": "idx_contact_info_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "distributed_installation",
+          "name": "distributed_installation_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_outbox",
+          "name": "etl_outbox_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_outbox",
+          "name": "idx_etl_outbox_entity_pending",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_outbox",
+          "name": "idx_etl_outbox_pending",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_outbox",
+          "name": "idx_etl_outbox_pending_event",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_runs",
+          "name": "etl_runs_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_runs",
+          "name": "idx_etl_runs_aggregate_success",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_runs",
+          "name": "idx_etl_runs_started",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_state",
+          "name": "etl_state_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "etl_time_origin",
+          "name": "etl_time_origin_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "fragment_contract_state",
+          "name": "fragment_contract_state_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "media_deletions",
+          "name": "idx_media_deletions_due",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "media_deletions",
+          "name": "media_deletions_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "media_deletions",
+          "name": "media_deletions_url_path_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "idx_order_voucher_lookup",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "order_day4_new_buyer_id_idx",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "order_day4_new_buyer_id_order_date_idx",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "order_day4_new_order_date_idx",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "order_day4_new_order_status_idx",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order",
+          "name": "order_day4_new_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order_detail",
+          "name": "idx_order_detail_order",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order_detail",
+          "name": "idx_order_detail_product_order",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order_detail",
+          "name": "order_detail_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_buyer_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_buyer_id_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_order_status_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h0",
+          "name": "order_h0_voucher_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_buyer_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_buyer_id_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_order_status_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h1",
+          "name": "order_h1_voucher_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_buyer_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_buyer_id_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_order_status_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h2",
+          "name": "order_h2_voucher_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_buyer_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_buyer_id_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_order_date_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_order_status_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "order_h3",
+          "name": "order_h3_voucher_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "payment_method",
+          "name": "payment_method_method_name_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "payment_method",
+          "name": "payment_method_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "report_daily_sales",
+          "name": "report_daily_sales_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "review",
+          "name": "idx_review_buyer",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "review",
+          "name": "idx_review_product",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "review",
+          "name": "idx_review_rating",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "review",
+          "name": "review_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "role",
+          "name": "idx_role_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "role",
+          "name": "idx_role_name",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "role",
+          "name": "role_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "role",
+          "name": "role_role_name_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "schema_migrations",
+          "name": "schema_migrations_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "seller_site",
+          "name": "seller_site_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "seller_site",
+          "name": "seller_site_seller_id_site_id_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart",
+          "name": "shopping_cart_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart",
+          "name": "shopping_cart_user_id_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "name": "idx_shopping_cart_item_cart",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "name": "idx_shopping_cart_item_product",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "name": "shopping_cart_item_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "shopping_cart_item",
+          "name": "uq_cart_product",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "site_config",
+          "name": "site_config_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "site_config",
+          "name": "site_config_site_id_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "site_schema_migrations",
+          "name": "site_schema_migrations_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_feedback",
+          "name": "idx_system_feedback_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_feedback",
+          "name": "idx_system_feedback_status",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_feedback",
+          "name": "idx_system_feedback_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_feedback",
+          "name": "system_feedback_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_log",
+          "name": "idx_system_log_action",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_log",
+          "name": "idx_system_log_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_log",
+          "name": "idx_system_log_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_log",
+          "name": "system_log_day4_new_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202611",
+          "name": "system_log_202611_action_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202611",
+          "name": "system_log_202611_created_at_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202611",
+          "name": "system_log_202611_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202611",
+          "name": "system_log_202611_user_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202612",
+          "name": "system_log_202612_action_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202612",
+          "name": "system_log_202612_created_at_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202612",
+          "name": "system_log_202612_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202612",
+          "name": "system_log_202612_user_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202701",
+          "name": "system_log_202701_action_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202701",
+          "name": "system_log_202701_created_at_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202701",
+          "name": "system_log_202701_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202701",
+          "name": "system_log_202701_user_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202702",
+          "name": "system_log_202702_action_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202702",
+          "name": "system_log_202702_created_at_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202702",
+          "name": "system_log_202702_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_202702",
+          "name": "system_log_202702_user_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_default",
+          "name": "system_log_default_action_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_default",
+          "name": "system_log_default_created_at_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_default",
+          "name": "system_log_default_pkey",
+          "constraint_owned": true,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "system_log_default",
+          "name": "system_log_default_user_id_idx",
+          "constraint_owned": false,
+          "attached": true
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "idx_transaction_fraud_score",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "idx_transaction_order",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "idx_transaction_status",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "idx_transaction_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "transaction_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "transaction",
+          "name": "transaction_reference_number_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "idx_user_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "idx_user_email_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "idx_user_email_verified",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "idx_user_is_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "idx_user_username_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "user_email_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "user_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_core",
+          "name": "user_username_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_profile",
+          "name": "idx_user_profile_avatar_url",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_profile",
+          "name": "user_profile_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_role",
+          "name": "idx_user_role_role_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_role",
+          "name": "user_role_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_secret",
+          "name": "user_secret_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_secret",
+          "name": "user_secret_random_key_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "user_wallet",
+          "name": "user_wallet_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "violation_log",
+          "name": "idx_violation_log_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "violation_log",
+          "name": "idx_violation_log_user",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "violation_log",
+          "name": "violation_log_pkey",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "voucher",
+          "name": "idx_voucher_code_active",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "voucher",
+          "name": "idx_voucher_created_at",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "voucher",
+          "name": "idx_voucher_valid_to",
+          "constraint_owned": false,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "voucher",
+          "name": "voucher_code_key",
+          "constraint_owned": true,
+          "attached": false
+        },
+        {
+          "schema": "public",
+          "table": "voucher",
+          "name": "voucher_pkey",
+          "constraint_owned": true,
+          "attached": false
+        }
+      ]
+    }
+  }
+}

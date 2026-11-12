@@ -44,7 +44,7 @@ def postgres(monkeypatch):
         monkeypatch.setattr(settings, "DATABASE_URL", url.render_as_string(hide_password=False))
         monkeypatch.setattr(settings, "DB_NAME", name)
         load_schema()
-        assert run_migrations() == ["001", "002", "003", "004", "005", "006", "007"]
+        assert run_migrations() == ["001", "002", "003", "004", "005", "006", "007", "008"]
         with closing(connect()) as connection:
             yield connection
     finally:
@@ -88,11 +88,11 @@ def test_postgres_parity_generation_upgrade_rollback_and_applied_snapshot(postgr
     desired = IndexCatalog.model_validate(payload)
     before = plan_postgres(postgres, desired)
     assert before["indexes"][-1]["status"] == "missing"
-    assert release_catalog(postgres, root).revision == "index-v1"
+    assert release_catalog(postgres, root).revision == catalog.revision
     generated = generate(postgres, desired, root)
-    assert generated["migration"].startswith("008_")
+    assert generated["migration"].startswith("009_")
     assert '"price" DESC NULLS FIRST' in (root / "04_migrations" / generated["migration"]).read_text()
-    assert migrate.run_migrations() == ["008"]
+    assert migrate.run_migrations() == ["009"]
     assert migrate.run_migrations() == []
     assert release_catalog(postgres, root).revision == "index-v2-test"
     assert all(i["status"] == "matched" for i in plan_postgres(postgres, desired)["indexes"])
@@ -109,13 +109,13 @@ def test_postgres_parity_generation_upgrade_rollback_and_applied_snapshot(postgr
     assert plan_postgres(postgres, IndexCatalog.model_validate(modified))["indexes"][-1]["status"] == "conflict"
 
     # Runner rollback includes DDL and history row when later SQL fails.
-    bad = root / "04_migrations/009_test_rollback.sql"
+    bad = root / "04_migrations/010_test_rollback.sql"
     bad.write_text("CREATE INDEX idx_must_rollback ON product(price); SELECT 1/0;")
     with pytest.raises(Exception, match="division by zero"):
         migrate.run_migrations()
     with postgres.cursor() as cursor:
         cursor.execute(
-            "SELECT to_regclass('idx_must_rollback'),(SELECT count(*) FROM schema_migrations WHERE version='009')"
+            "SELECT to_regclass('idx_must_rollback'),(SELECT count(*) FROM schema_migrations WHERE version='010')"
         )
         assert cursor.fetchone() == (None, 0)
     bad.unlink()
@@ -207,7 +207,7 @@ def test_mongo_parity_idempotence_constraints_conflicts_and_applied_state(tmp_pa
         )
         desired = IndexCatalog.model_validate(payload)
         assert plan_mongo(database, desired)["indexes"][-1]["status"] == "missing"
-        assert applied_mongo_catalog(database).revision == "index-v1"
+        assert applied_mongo_catalog(database).revision == catalog.revision
         assert len(apply_mongo(database, desired)["created"]) == 1
         assert database.product_details.index_information()["idx_json_color"]["sparse"] is True
         assert applied_mongo_catalog(database).revision == "mongo-v2-test"

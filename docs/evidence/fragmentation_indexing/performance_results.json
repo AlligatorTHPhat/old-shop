@@ -1,0 +1,210 @@
+{
+  "local": {
+    "samples_ms": [
+      0.542,
+      0.347,
+      0.542,
+      0.322,
+      0.43,
+      0.345,
+      0.451
+    ],
+    "median_ms": 0.43,
+    "p95_ms": 0.542,
+    "plan": {
+      "Plan": {
+        "Node Type": "Aggregate",
+        "Strategy": "Plain",
+        "Partial Mode": "Simple",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 1.06,
+        "Total Cost": 1.07,
+        "Plan Rows": 1,
+        "Plan Width": 8,
+        "Actual Startup Time": 0.046,
+        "Actual Total Time": 0.059,
+        "Actual Rows": 1,
+        "Actual Loops": 1,
+        "Output": [
+          "count(*)"
+        ],
+        "Plans": [
+          {
+            "Node Type": "Seq Scan",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "product",
+            "Schema": "public",
+            "Alias": "product",
+            "Startup Cost": 0.0,
+            "Total Cost": 1.05,
+            "Plan Rows": 5,
+            "Plan Width": 0,
+            "Actual Startup Time": 0.034,
+            "Actual Total Time": 0.047,
+            "Actual Rows": 5,
+            "Actual Loops": 1,
+            "Output": [
+              "product_id",
+              "seller_id",
+              "category_id",
+              "title",
+              "description",
+              "price",
+              "quantity",
+              "view_count",
+              "video_url",
+              "status",
+              "reject_reason",
+              "approved_by",
+              "is_deleted",
+              "created_at",
+              "updated_at",
+              "sold_at",
+              "weight_grams",
+              "dimensions",
+              "condition_rating",
+              "warranty_months",
+              "transfer_method",
+              "site_id"
+            ]
+          }
+        ]
+      },
+      "Planning Time": 2.794,
+      "Triggers": [],
+      "Execution Time": 0.451
+    }
+  },
+  "remote": {
+    "samples_ms": [
+      31.843,
+      28.493,
+      30.762,
+      26.546,
+      33.101,
+      27.373,
+      29.614
+    ],
+    "median_ms": 29.614,
+    "p95_ms": 33.101,
+    "plan": {
+      "Plan": {
+        "Node Type": "Foreign Scan",
+        "Operation": "Select",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 108.53,
+        "Total Cost": 152.69,
+        "Plan Rows": 1,
+        "Plan Width": 8,
+        "Actual Startup Time": 6.416,
+        "Actual Total Time": 6.43,
+        "Actual Rows": 1,
+        "Actual Loops": 1,
+        "Output": [
+          "(count(*))"
+        ],
+        "Relations": "Aggregate on (site_b.product)",
+        "Remote SQL": "SELECT count(*) FROM public.product"
+      },
+      "Planning Time": 1.616,
+      "Triggers": [],
+      "Execution Time": 29.614
+    }
+  },
+  "global": {
+    "samples_ms": [
+      37.395,
+      48.053,
+      35.814,
+      43.272,
+      54.68,
+      31.966,
+      29.514
+    ],
+    "median_ms": 37.395,
+    "p95_ms": 54.68,
+    "plan": {
+      "Plan": {
+        "Node Type": "Aggregate",
+        "Strategy": "Plain",
+        "Partial Mode": "Simple",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 239.07,
+        "Total Cost": 239.08,
+        "Plan Rows": 1,
+        "Plan Width": 8,
+        "Actual Startup Time": 7.241,
+        "Actual Total Time": 7.26,
+        "Actual Rows": 1,
+        "Actual Loops": 1,
+        "Output": [
+          "count(*)"
+        ],
+        "Plans": [
+          {
+            "Node Type": "Append",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 0.0,
+            "Total Cost": 230.53,
+            "Plan Rows": 3418,
+            "Plan Width": 0,
+            "Actual Startup Time": 0.028,
+            "Actual Total Time": 7.243,
+            "Actual Rows": 10,
+            "Actual Loops": 1,
+            "Subplans Removed": 0,
+            "Plans": [
+              {
+                "Node Type": "Seq Scan",
+                "Parent Relationship": "Member",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "product",
+                "Schema": "public",
+                "Alias": "product",
+                "Startup Cost": 0.0,
+                "Total Cost": 1.05,
+                "Plan Rows": 5,
+                "Plan Width": 0,
+                "Actual Startup Time": 0.027,
+                "Actual Total Time": 0.029,
+                "Actual Rows": 5,
+                "Actual Loops": 1
+              },
+              {
+                "Node Type": "Foreign Scan",
+                "Operation": "Select",
+                "Parent Relationship": "Member",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "product",
+                "Schema": "site_b",
+                "Alias": "product_1",
+                "Startup Cost": 100.0,
+                "Total Cost": 212.39,
+                "Plan Rows": 3413,
+                "Plan Width": 0,
+                "Actual Startup Time": 7.188,
+                "Actual Total Time": 7.192,
+                "Actual Rows": 5,
+                "Actual Loops": 1,
+                "Remote SQL": "SELECT NULL FROM public.product"
+              }
+            ]
+          }
+        ]
+      },
+      "Planning Time": 5.488,
+      "Triggers": [],
+      "Execution Time": 29.514
+    }
+  },
+  "limitations": "Seed-scale, one Docker host; p95 uses nearest rank (7 samples), not a capacity benchmark."
+}

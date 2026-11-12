@@ -5,6 +5,7 @@ is removed in finally blocks; transactions used for other writes are rolled back
 """
 
 import hashlib
+import ipaddress
 import json
 import os
 import secrets
@@ -454,16 +455,30 @@ def verify(sites):
             prepare(env_file)
             values = dict(sites.env)
             values.update({key: secrets.token_hex(24) for key in values if key.endswith("_PASSWORD")})
+            network_ids = subprocess.check_output(["docker", "network", "ls", "-q"], text=True).split()
+            networks = json.loads(subprocess.check_output(["docker", "network", "inspect", *network_ids], text=True))
+            used = [
+                ipaddress.ip_network(pool["Subnet"])
+                for network in networks
+                for pool in (network.get("IPAM", {}).get("Config") or [])
+                if pool.get("Subnet")
+            ]
+            subnet = next(
+                ipaddress.ip_network(f"172.29.{i}.0/24")
+                for i in range(83, 250)
+                if all(not ipaddress.ip_network(f"172.29.{i}.0/24").overlaps(n) for n in used if n.version == 4)
+            )
+            prefix = str(subnet.network_address).rsplit(".", 1)[0]
             values.update(
                 SITE_A_PORT="0",
                 SITE_B_PORT="0",
-                SITES_SUBNET="172.29.83.0/24",
-                SITE_A_VIRTUAL_IP="172.29.83.11",
-                SITE_B_VIRTUAL_IP="172.29.83.12",
-                SITE_B_FDW_HOST="172.29.83.12",
+                SITES_SUBNET=str(subnet),
+                SITE_A_VIRTUAL_IP=prefix + ".11",
+                SITE_B_VIRTUAL_IP=prefix + ".12",
+                SITE_B_FDW_HOST=prefix + ".12",
                 SITE_B_FDW_PORT="5432",
-                SITE_B_READER_SOURCE_CIDR="172.29.83.11/32",
-                CATALOGUE_VIRTUAL_IP="172.29.83.20",
+                SITE_B_READER_SOURCE_CIDR=prefix + ".11/32",
+                CATALOGUE_VIRTUAL_IP=prefix + ".20",
             )
             env_file.write_text("".join(f"{key}={value}\n" for key, value in values.items()))
             fresh = Sites(env_file, project="oldshop-sites-rebuild-" + secrets.token_hex(4))

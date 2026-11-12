@@ -1,5 +1,12 @@
 # OldShop — Chạy và kiểm chứng hai site PostgreSQL
 
+> VM Ubuntu 24.04 chưa có Docker/database: theo [hướng dẫn site B từ máy trống](HUONG_DAN_SITE_B_UBUNTU_24_04.md),
+> dùng project/port riêng và cấu hình HBA cho cả FDW lẫn gateway đọc B trực tiếp.
+
+> Cập nhật 10/11/2026: với mã hiện hành, áp [nâng cấp fragmentation/indexing](runbooks/fragmentation_indexing.md)
+> trước khi recreate catalogue cũ. Detail theo ID chỉ cần site sở hữu; truy vấn global
+> và `/ready` vẫn cần A/B. Các mô tả bên dưới về detail luôn cần cả hai site là hành vi trước nâng cấp.
+
 Ngày cập nhật: 05/11/2026. Thiết kế tham khảo: [đánh giá và kế hoạch](DANH_GIA_VA_KE_HOACH_CSDL_PHAN_TAN_LAB02.md).
 
 **Chọn đúng môi trường trước khi chạy lệnh:**
