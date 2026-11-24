@@ -92,4 +92,40 @@ describe('Seller product video submission', () => {
     expect(component.isSubmitting).toBe(false);
     expect(showError).toHaveBeenCalledWith('Video không hợp lệ', 'Không thể lưu sản phẩm');
   });
+
+  it('loads and saves image descriptions separately from listing fields', () => {
+    component.editImageMetadata(existing);
+    http.expectOne(`${base}/42`).flush({ image_metadata_status: 'available', product_images: [
+      { image_id: 21, image_url: '/media/products/camera.png', caption: 'Mặt sau', description: 'Có vết trầy' }
+    ] });
+    expect(component.imageMetadata[0].description).toBe('Có vết trầy');
+    component.imageMetadata[0].caption = '  Mặt trước  ';
+    component.saveImageMetadata();
+    const request = http.expectOne(`${base}/42/images/metadata`);
+    expect(request.request.method).toBe('PUT');
+    expect(request.request.body).toEqual([{ image_id: 21, caption: 'Mặt trước', description: 'Có vết trầy' }]);
+    request.flush({ message: 'Đã lưu' });
+    expect(component.imageMetadataProductId).toBeNull();
+  });
+
+  it('keeps annotations for retry when Mongo is unavailable', () => {
+    component.editImageMetadata(existing);
+    http.expectOne(`${base}/42`).flush({ image_metadata_status: 'available', product_images: [
+      { image_id: 21, image_url: '/media/products/camera.png', caption: 'Mặt sau' }
+    ] });
+    component.saveImageMetadata();
+    http.expectOne(`${base}/42/images/metadata`).flush({ detail: 'Kho metadata tạm ngừng' }, { status: 503, statusText: 'Unavailable' });
+    expect(component.imageMetadataProductId).toBe(42);
+    expect(component.imageMetadata[0].caption).toBe('Mặt sau');
+    expect(component.savingImageMetadata).toBe(false);
+    expect(showError).toHaveBeenCalledWith('Kho metadata tạm ngừng');
+  });
+
+  it('prevents overwriting metadata when the read failed', () => {
+    component.editImageMetadata(existing);
+    http.expectOne(`${base}/42`).flush({ image_metadata_status: 'unavailable', product_images: [] });
+    component.saveImageMetadata();
+    http.expectNone(`${base}/42/images/metadata`);
+  });
+
 });

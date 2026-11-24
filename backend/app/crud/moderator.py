@@ -1,5 +1,7 @@
+from sqlalchemy import text
 from sqlalchemy.orm import Session, joinedload
 
+from app.core.config import settings
 from app.core.constants import REPORT_RATING, ProductStatus, RoleId
 from app.core.exceptions import BadRequestError, NotFoundError
 from app.models import Review, User, UserRole, ViolationLog
@@ -41,11 +43,26 @@ class CRUDModerator:
         if not review:
             raise NotFoundError("Review not found")
 
-        product, seller = review.product, review.product.seller
-        product.status = ProductStatus.REJECTED
-        product.reject_reason = f"Violation reported on review {review_id}"
+        if settings.BUCKET_MODE:
+            from app.buckets import catalogue
 
-        reason = f"Violation on review {review_id} for product {product.product_id}"
+            db.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": 8200000000 + review_id})
+            if review.rating != REPORT_RATING:
+                raise BadRequestError("Only violation reports can be handled")
+            reason = f"Violation on review {review_id} for product {review.product_id}"
+            if db.query(ViolationLog).filter(ViolationLog.reason == reason).first():
+                return review
+            product = catalogue.get(review.product_id, public=False, include_deleted=True)
+            seller = db.query(User).filter(User.user_id == product["seller_id"]).first()
+            catalogue.update(
+                review.product_id,
+                {"status": int(ProductStatus.REJECTED), "reject_reason": f"Violation reported on review {review_id}"},
+            )
+        else:
+            product, seller = review.product, review.product.seller
+            product.status = ProductStatus.REJECTED
+            product.reject_reason = f"Violation reported on review {review_id}"
+            reason = f"Violation on review {review_id} for product {product.product_id}"
         if seller.has_role(RoleId.USER):
             seller.trust_score = max(0.0, float(seller.trust_score or 0) - TRUST_PENALTY)
             db.add(ViolationLog(user_id=seller.user_id, reason=reason, action_taken="PRODUCT_REMOVAL"))

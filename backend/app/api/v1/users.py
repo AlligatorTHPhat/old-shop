@@ -142,6 +142,33 @@ def delete_contact(contact_id: int, current_user: User = Depends(get_current_use
 
 @router.get("/seller/dashboard-stats")
 def get_seller_stats(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    from app.core.config import settings
+
+    if settings.BUCKET_MODE:
+        from app.buckets import catalogue
+        from app.buckets.db import one, transaction
+
+        with transaction() as core:
+            stats = one(
+                core,
+                "SELECT count(DISTINCT o.order_id) FILTER(WHERE o.order_status=0) AS orders,"
+                'sum(d.subtotal) FILTER(WHERE o.order_status=3) AS revenue FROM "order" o '
+                "JOIN order_detail d USING(order_id) JOIN catalogue_directory p ON p.product_id=d.product_id "
+                "WHERE p.seller_id=%s AND NOT o.is_deleted",
+                (current_user.user_id,),
+            )
+            rating = one(
+                core,
+                "SELECT avg(r.rating) AS rating FROM review r JOIN catalogue_directory p USING(product_id) "
+                "WHERE p.seller_id=%s AND r.rating>0 AND NOT r.is_deleted",
+                (current_user.user_id,),
+            )
+        return {
+            "totalProducts": len(catalogue.listing(seller_id=current_user.user_id, public=False, limit=100000)),
+            "newOrders": stats["orders"],
+            "revenue": stats["revenue"] or 0,
+            "rating": rating["rating"] or 0,
+        }
     seller_orders = db.query(Order).join(OrderDetail).join(Product).filter(Product.seller_id == current_user.user_id)
 
     total_products = (

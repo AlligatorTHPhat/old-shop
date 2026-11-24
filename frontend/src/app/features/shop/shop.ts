@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { ProductService } from '../../shared/services/product.service';
+import { ImageSearchResult, ProductService } from '../../shared/services/product.service';
 import { CategoryService } from '../../shared/services/category.service';
 import { Product, Category } from '../../core/models';
 import { environment } from '../../../environments/environment';
@@ -31,6 +31,15 @@ export class ShopComponent implements OnInit {
   itemsPerPage = 9;
   loading = false;
   searchQuery = '';
+  searchImages = false;
+  graphImageSearch = false;
+  matchedImages: ImageSearchResult[] = [];
+  imageSearchCursor: string | null = null;
+  loadingImages = false;
+  imageSearchError = '';
+  private imageSearchRequest = 0;
+  appliedImageSearch = false;
+  private productSearchRequest = 0;
   selectedCategoryId: number | null = null;
   priceMin: number | null = null;
   priceMax: number | null = null;
@@ -59,11 +68,16 @@ export class ShopComponent implements OnInit {
 
   private initialLoad() {
     this.loading = true;
+    const requestId = ++this.productSearchRequest;
+    const imageSearch = this.searchImages && !!this.searchQuery.trim();
     forkJoin({
       categories: this.categoryService.getCategories(),
-      products: this.productService.getProducts({ skip: 0, limit: 1000, sort_by: 'created_at' })
+      products: this.productService.getProducts({ skip: 0, limit: 1000, sort_by: 'created_at',
+        image_search: imageSearch ? this.searchQuery.trim() : undefined })
     }).subscribe({
       next: (result) => {
+        if (requestId !== this.productSearchRequest) return;
+        this.appliedImageSearch = imageSearch;
         this.categories = result.categories;
         this.allProducts = result.products.filter(p => {
           const cat = this.categories.find(c => c.category_id === p.category_id);
@@ -75,6 +89,7 @@ export class ShopComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: (error) => {
+        if (requestId !== this.productSearchRequest) return;
         console.error('Lỗi tải dữ liệu:', error);
         this.loading = false;
         this.uiService.showError('Không thể tải dữ liệu cửa hàng.');
@@ -97,9 +112,15 @@ export class ShopComponent implements OnInit {
 
   loadProducts() {
     this.loading = true;
+    const requestId = ++this.productSearchRequest;
+    const imageSearch = this.searchImages && !!this.searchQuery.trim();
     // Load all approved products to support filtering and counts
-    this.productService.getProducts({ skip: 0, limit: 1000, sort_by: 'created_at' }).subscribe({
+    this.productService.getProducts({ skip: 0, limit: 1000, sort_by: 'created_at',
+      image_search: this.searchImages && this.searchQuery.trim() ? this.searchQuery.trim() : undefined
+    }).subscribe({
       next: (products) => {
+        if (requestId !== this.productSearchRequest) return;
+        this.appliedImageSearch = imageSearch;
         this.allProducts = products;
         this.computeCategoryCounts();
         this.applyFilters();
@@ -113,6 +134,7 @@ export class ShopComponent implements OnInit {
         });
       },
       error: (error) => {
+        if (requestId !== this.productSearchRequest) return;
         console.error('Error loading products:', error);
         this.loading = false;
         this.uiService.showError('Không thể tải danh sách sản phẩm.');
@@ -136,7 +158,7 @@ export class ShopComponent implements OnInit {
     const max = this.priceMax ?? Number.MAX_SAFE_INTEGER;
 
     this.filteredProducts = this.allProducts.filter((product) => {
-      const matchesSearch = this.searchQuery
+      const matchesSearch = this.searchQuery && !this.appliedImageSearch
         ? product.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         (product.description || '').toLowerCase().includes(this.searchQuery.toLowerCase())
         : true;
@@ -163,7 +185,41 @@ export class ShopComponent implements OnInit {
   }
 
   onSearch() {
-    this.applyFilters();
+    if (this.graphImageSearch) {
+      this.runImageSearch();
+    } else {
+      this.loadProducts();
+    }
+  }
+
+  runImageSearch(more = false) {
+    if (!this.searchQuery.trim()) {
+      this.imageSearchError = 'Nhập từ khóa trong mô tả ảnh.';
+      return;
+    }
+    const requestId = ++this.imageSearchRequest;
+    this.loadingImages = true;
+    this.imageSearchError = '';
+    if (!more) this.matchedImages = [];
+    this.productService.searchImages(this.searchQuery.trim(), more ? this.imageSearchCursor || undefined : undefined).subscribe({
+      next: response => {
+        if (requestId !== this.imageSearchRequest) return;
+        this.matchedImages = more ? [...this.matchedImages, ...response.items] : response.items;
+        this.imageSearchCursor = response.next_cursor;
+        this.loadingImages = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        if (requestId !== this.imageSearchRequest) return;
+        this.loadingImages = false;
+        this.imageSearchError = 'Tìm ảnh đang chưa khả dụng. Vui lòng thử lại sau.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  matchedImageUrl(url: string) {
+    return `${environment.imageBaseUrl}${url}`;
   }
 
   onCategoryChange(categoryId: number | null = null) {

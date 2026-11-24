@@ -17,13 +17,22 @@ logger = logging.getLogger(__name__)
 
 class CRUDAdmin:
     def get_stats(self, db: Session, sales_year: int | None = None) -> AdminDashboardStats:
+        from app.core.config import settings
+
+        pending = None
+        if settings.BUCKET_MODE:
+            from app.buckets import catalogue
+
+            pending = len(catalogue.listing(status=0, public=False, limit=100000))
         return AdminDashboardStats(
             sales_report=sales_report.read(db, sales_year),
             total_users=db.query(func.count(User.user_id))
             .filter(User.is_active == True, User.is_deleted == False)
             .scalar(),
             total_orders=db.query(func.count(Order.order_id)).filter(Order.is_deleted == False).scalar(),
-            pending_products=db.query(func.count(Product.product_id))
+            pending_products=pending
+            if pending is not None
+            else db.query(func.count(Product.product_id))
             .filter(Product.status == ProductStatus.PENDING, Product.is_deleted == False)
             .scalar(),
             total_revenue=db.query(func.sum(Order.final_amount))

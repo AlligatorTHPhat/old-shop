@@ -35,6 +35,16 @@ class Settings(BaseSettings):
     DB_NAME: str = "oldshop"
     DB_POOL_SIZE: int = 10
     DB_MAX_OVERFLOW: int = 20
+    BUCKET_MODE: bool = False
+    BUCKET_SITE_URLS: str = "{}"
+    BUCKET_DATASET: str = "demo-v2"
+    GRAPH_ENABLED: bool = False
+    GRAPH_GENERATION: int = 1
+    NEO4J_URI: str = ""
+    NEO4J_DATABASE: str = "neo4j"
+    NEO4J_USER: str = "neo4j"
+    NEO4J_PASSWORD: str = ""
+    GRAPH_TIMEOUT_SECONDS: int = 5
 
     # Day 2 infrastructure contracts; clients/read routing are implemented on Days 3-6.
     PG_REPLICA_URL: str = ""

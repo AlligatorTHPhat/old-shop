@@ -81,6 +81,7 @@
                   <i class="bi bi-chat-left-text me-1"></i> Lý do
                 </button>
 
+                <button class="btn btn-action btn-edit" (click)="editImageMetadata(p)">Mô tả ảnh</button>
                 <button class="btn btn-action btn-edit" (click)="openModal(p)" title="Chỉnh sửa">
                   <i class="bi bi-pencil-square me-1"></i> Sửa
                 </button>
@@ -317,4 +318,31 @@
     </div>
   </div>
 
+</div>
+
+<div *ngIf="imageMetadataProductId !== null" class="modal show d-block" role="dialog" aria-modal="true" aria-labelledby="image-metadata-title" style="background: rgba(0,0,0,.5)">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content">
+    <div class="modal-header">
+      <h5 id="image-metadata-title" class="modal-title">Mô tả từng ảnh sản phẩm</h5>
+      <button type="button" class="btn-close" aria-label="Đóng" [disabled]="savingImageMetadata" (click)="imageMetadataProductId = null"></button>
+    </div>
+    <div class="modal-body">
+      <p *ngIf="imageMetadataStatus === 'loading'" role="status">Đang tải mô tả ảnh…</p>
+      <p *ngIf="imageMetadataStatus !== 'available' && imageMetadataStatus !== 'loading'" role="alert">
+        Chưa tải được metadata ảnh. Hãy thử lại sau khi sản phẩm được đồng bộ.
+      </p>
+      <p class="text-muted">Ghi rõ góc chụp, màu sắc và khuyết điểm nhìn thấy để người mua tìm kiếm chính xác hơn.</p>
+      <div *ngFor="let image of imageMetadata" class="border rounded p-3 mb-3">
+        <img [src]="imagePreview(image.image_url)" [alt]="image.caption || 'Ảnh sản phẩm'" style="width:120px;height:90px;object-fit:contain">
+        <label [for]="'image-caption-' + image.image_id" class="form-label d-block mt-2">Chú thích ngắn</label>
+        <input [id]="'image-caption-' + image.image_id" class="form-control" [(ngModel)]="image.caption" maxlength="255" [disabled]="savingImageMetadata || imageMetadataStatus !== 'available'">
+        <label [for]="'image-description-' + image.image_id" class="form-label mt-2">Mô tả chi tiết ảnh</label>
+        <textarea [id]="'image-description-' + image.image_id" class="form-control" [(ngModel)]="image.description" maxlength="4000" rows="3" [disabled]="savingImageMetadata || imageMetadataStatus !== 'available'"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" [disabled]="savingImageMetadata" (click)="imageMetadataProductId = null">Đóng</button>
+      <button class="btn btn-primary" [disabled]="savingImageMetadata || imageMetadataStatus !== 'available'" (click)="saveImageMetadata()">{{ savingImageMetadata ? 'Đang lưu…' : 'Lưu mô tả ảnh' }}</button>
+    </div>
+  </div></div>
 </div>

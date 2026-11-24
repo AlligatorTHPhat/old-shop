@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-17",
+  "scope": "Isolated oldshop-buckets local stack; no production cutover",
+  "bucket_integration": {
+    "passed": 18,
+    "failed": 0,
+    "duration_seconds": 51.61
+  },
+  "legacy_regression": {
+    "passed": 218,
+    "skipped": 78,
+    "failed": 0,
+    "duration_seconds": 36.98
+  },
+  "frontend": {
+    "passed": 33,
+    "files_passed": 15,
+    "failed": 0
+  },
+  "frontend_production_build": {
+    "ok": true,
+    "initial_kb": 714.02,
+    "warning_budget_kb": 500
+  },
+  "backend_and_test_dependencies": "Hash-locked, wheels only; Neo4j driver 6.4.0",
+  "source_inventory_read_only": {
+    "products": 1001,
+    "contact_buyer_mismatches": 30,
+    "unsupported_payment_states": 5,
+    "self_buy_lines": 0
+  },
+  "benchmark_generation_only": {
+    "profile": "benchmark-v2",
+    "scale": 2,
+    "products": 2000,
+    "images": 4000,
+    "orders": 240,
+    "validated": true
+  },
+  "real_payments_sent": 0,
+  "legacy_databases_deleted": 0,
+  "http_smoke_final": {
+    "frontend_health": 200,
+    "readiness": 200,
+    "related_products": 200,
+    "related_items": 10,
+    "image_content_type": "image/jpeg",
+    "image_status": 200
+  }
+}

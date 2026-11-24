@@ -1,0 +1,12 @@
+{
+  "schema_version": 2,
+  "revision": "bucket-v2",
+  "bucket_count": 256,
+  "hash_algorithm": "sha256-prefix-u64be",
+  "hash_prefix": "oldshop:seller:v1:",
+  "owner_key": "seller_id",
+  "primary": "product",
+  "derived": ["product_image", "stock_reservation"],
+  "id_policy": "core-allocated-integer-ranges",
+  "ownership_update": "migration-only"
+}

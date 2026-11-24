@@ -1,0 +1,8 @@
+FROM oldshop-bucket-backend:local
+USER root
+COPY backend/requirements-dev.lock /tmp/bucket-requirements-dev.lock
+RUN pip install --no-cache-dir --only-binary :all: --require-hashes -r /tmp/bucket-requirements-dev.lock
+USER app
+ENV PYTHONPATH=/workspace/backend
+WORKDIR /workspace/backend
+ENTRYPOINT ["sh", "-c", "mkdir -p /tmp/prometheus; exec python -c 'import time; time.sleep(86400)'"]

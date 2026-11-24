@@ -35,12 +35,12 @@ async def get_access_token() -> str:
     return response.json()["access_token"]
 
 
-async def create_order(internal_order_id: int, amount_vnd: Decimal) -> dict:
+async def create_order(internal_order_id: int, amount_vnd: Decimal, request_id: str | None = None) -> dict:
     token = await get_access_token()
     async with httpx.AsyncClient(timeout=TIMEOUT) as client:
         response = await client.post(
             f"{settings.PAYPAL_API_URL}/v2/checkout/orders",
-            headers={"Authorization": f"Bearer {token}"},
+            headers={"Authorization": f"Bearer {token}", **({"PayPal-Request-Id": request_id} if request_id else {})},
             json={
                 "intent": "CAPTURE",
                 "purchase_units": [
@@ -57,7 +57,7 @@ async def create_order(internal_order_id: int, amount_vnd: Decimal) -> dict:
     return response.json()
 
 
-async def capture_order(paypal_order_id: str) -> dict:
+async def capture_order(paypal_order_id: str, request_id: str | None = None) -> dict:
     """Capture a payment the buyer has approved in the PayPal popup."""
     if not PAYPAL_ORDER_ID.fullmatch(paypal_order_id):
         raise BadRequestError("Invalid PayPal order id")
@@ -65,7 +65,11 @@ async def capture_order(paypal_order_id: str) -> dict:
     async with httpx.AsyncClient(timeout=TIMEOUT) as client:
         response = await client.post(
             f"{settings.PAYPAL_API_URL}/v2/checkout/orders/{paypal_order_id}/capture",
-            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                **({"PayPal-Request-Id": request_id} if request_id else {}),
+            },
         )
     if response.status_code not in (200, 201):
         logger.warning("PayPal capture failed", extra={"status": response.status_code, "body": response.text})

@@ -25,6 +25,55 @@ export class ProductManageComponent implements OnInit {
 
   Math = Math;
 
+  imageMetadataProductId: number | null = null;
+  imageMetadata: { image_id: number; image_url: string; caption: string; description: string }[] = [];
+  imageMetadataStatus = '';
+  savingImageMetadata = false;
+
+  editImageMetadata(product: any) {
+    this.imageMetadataProductId = product.product_id;
+    this.imageMetadata = [];
+    this.imageMetadataStatus = 'loading';
+    this.http.get<any>(`${this.apiUrl}/products/${product.product_id}`).subscribe({
+      next: data => {
+        if (this.imageMetadataProductId !== product.product_id) return;
+        this.imageMetadata = data.product_images.map((image: any) => ({
+          image_id: image.image_id, image_url: image.image_url,
+          caption: image.caption || '', description: image.description || ''
+        }));
+        this.imageMetadataStatus = data.image_metadata_status;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        if (this.imageMetadataProductId !== product.product_id) return;
+        this.imageMetadataStatus = 'unavailable';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  imagePreview(url: string) { return mediaUrl(url, 'assets/placeholder.jpg'); }
+
+  saveImageMetadata() {
+    if (this.savingImageMetadata || this.imageMetadataStatus !== 'available') return;
+    this.savingImageMetadata = true;
+    const body = this.imageMetadata.map(({ image_id, caption, description }) => ({
+      image_id, caption: caption.trim() || null, description: description.trim() || null
+    }));
+    this.http.put(`${this.apiUrl}/products/${this.imageMetadataProductId}/images/metadata`, body).subscribe({
+      next: () => {
+        this.savingImageMetadata = false;
+        this.imageMetadataProductId = null;
+        this.cdr.detectChanges();
+      },
+      error: err => {
+        this.savingImageMetadata = false;
+        this.uiService.showError(typeof err.error?.detail === 'string' ? err.error.detail : 'Không thể lưu mô tả ảnh.');
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
   products: any[] = [];
   categories: any[] = [];
   productForm!: FormGroup;

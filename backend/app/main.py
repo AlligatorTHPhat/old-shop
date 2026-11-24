@@ -33,6 +33,9 @@ async def lifespan(app: FastAPI):
         extra={"environment": settings.ENVIRONMENT, "docs": "/api/docs"},
     )
     yield
+    from app.services.neo4j import close
+
+    close()
     logger.info("Shutting down")
 
 
@@ -108,6 +111,21 @@ def create_app() -> FastAPI:
             checks["mongo"] = "up" if await run_in_threadpool(ping_mongo) else "down"
         if settings.STORAGE_BACKEND == "minio":
             checks["minio"] = "up" if await run_in_threadpool(ping_minio) else "down"
+        if settings.BUCKET_MODE:
+            from app.buckets.db import rows, transaction
+
+            def bucket_checks():
+                with transaction() as core:
+                    sites = rows(core, "SELECT site_id FROM site_registry WHERE active")
+                for site in sites:
+                    with transaction(site["site_id"]):
+                        pass
+
+            try:
+                await run_in_threadpool(bucket_checks)
+                checks["catalogue_sites"] = "up"
+            except Exception:
+                checks["catalogue_sites"] = "down"
         available = all(value == "up" for value in checks.values())
         return JSONResponse(
             status_code=200 if available else 503, content={"status": "ok" if available else "unavailable", **checks}

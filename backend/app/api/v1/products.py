@@ -19,8 +19,8 @@ from app.schemas import (
     ReviewResponse,
     StatusUpdate,
 )
-from app.schemas.catalog import ModerationProductPage
-from app.services import product_metadata
+from app.schemas.catalog import ImageMetadataInput, ModerationProductPage
+from app.services import image_metadata, product_metadata
 from app.services.product_video import cleanup_replaced_video, discard_video, normalize_video_link, save_video
 from app.services.storage import delete_media, save_image
 
@@ -51,6 +51,7 @@ def list_products(
     limit: int = Query(100, ge=1, le=1000),
     category_id: int | None = Query(None),
     search: str | None = Query(None),
+    image_search: str | None = Query(None, min_length=1, max_length=200),
     sort_by: str = Query("created_at", pattern="^(created_at|price|rating)$"),
     attributes: str | None = Query(None, max_length=4096, description='JSON equality filters, e.g. {"ram_gb":8}'),
     current_user: User | None = Depends(get_current_user_optional),
@@ -58,6 +59,12 @@ def list_products(
 ):
     """Approved products. Logged-in sellers don't see their own listings."""
     ids = product_metadata.matching_ids(product_metadata.parse_filters(attributes)) if attributes is not None else None
+    if image_search is not None:
+        image_ids = image_metadata.matching_image_ids(image_search)
+        matching = [
+            row[0] for row in db.query(ProductImage.product_id).filter(ProductImage.image_id.in_(image_ids)).distinct()
+        ]
+        ids = matching if ids is None else list(set(ids).intersection(matching))
     return crud_product.catalogue(
         db,
         skip=skip,
@@ -131,10 +138,27 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
     product = _get_or_404(db, product_id)
     crud_product.increment_view_count(db, product)
     response = ProductDetailResponse.model_validate(product)
-    return response.model_copy(update=product_metadata.read(product.product_id, product.category_id))
+    response = response.model_copy(update=product_metadata.read(product.product_id, product.category_id))
+    return image_metadata.enrich(response)
 
 
 # ---------- seller actions ----------
+
+
+@router.put("/{product_id}/images/metadata", response_model=Message)
+def replace_image_metadata(
+    product_id: int,
+    entries: list[ImageMetadataInput] = Body(..., max_length=1000),
+    current_user: User = Depends(any_user),
+    db: Session = Depends(get_db),
+):
+    product = _editable_product(db, product_id, current_user)
+    current_ids = {image.image_id for image in product.product_images}
+    submitted = [entry.image_id for entry in entries]
+    if len(submitted) != len(set(submitted)) or not set(submitted).issubset(current_ids):
+        raise HTTPException(422, "ID ảnh bị trùng hoặc không thuộc sản phẩm.")
+    image_metadata.replace(product_id, entries)
+    return Message(message="Đã lưu mô tả ảnh.")
 
 
 @router.post("", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
@@ -301,8 +325,7 @@ def delete_product(product_id: int, current_user: User = Depends(any_user), db: 
 def delete_product_image(
     product_id: int, image_id: int, current_user: User = Depends(any_user), db: Session = Depends(get_db)
 ):
-    product = _get_or_404(db, product_id)
-    _ensure_owner_or_admin(product, current_user)
+    _editable_product(db, product_id, current_user)
     image = db.query(ProductImage).filter_by(product_id=product_id, image_id=image_id).first()
     if image is None:
         raise HTTPException(404, "Image not found")

@@ -69,7 +69,7 @@
               <label for="shop-searchquery" class="visually-hidden">Tìm kiếm sản phẩm...</label>
               <input id="shop-searchquery" type="text" class="form-control border-start-0"
                      placeholder="Tìm kiếm sản phẩm..."
-                     [(ngModel)]="searchQuery"
+                     [(ngModel)]="searchQuery" maxlength="200"
                      (keyup.enter)="onSearch()" />
               <button class="btn btn-primary" type="button" (click)="onSearch()">
                 Tìm kiếm
@@ -77,6 +77,29 @@
             </div>
           </div>
         </div>
+
+        <div class="form-check mb-3">
+          <input id="search-image-description" class="form-check-input" type="checkbox" [(ngModel)]="searchImages">
+          <label for="search-image-description" class="form-check-label">Tìm theo chú thích và mô tả ảnh</label>
+        </div>
+
+        <div class="form-check mb-3">
+          <input id="graph-image-search" class="form-check-input" type="checkbox" [(ngModel)]="graphImageSearch">
+          <label for="graph-image-search" class="form-check-label">Tìm từng ảnh theo chú thích và mô tả (theo từ khóa)</label>
+        </div>
+        <section *ngIf="graphImageSearch" aria-label="Kết quả tìm ảnh">
+          <p *ngIf="loadingImages" role="status">Đang tìm ảnh…</p>
+          <p *ngIf="imageSearchError" class="text-danger" role="alert">{{ imageSearchError }}</p>
+          <div class="row g-3">
+            <figure *ngFor="let image of matchedImages" class="col-md-6">
+              <a [routerLink]="['/shop/product', image.product_id]">
+                <img [src]="matchedImageUrl(image.image_url)" [alt]="image.caption || 'Ảnh phù hợp'" class="img-fluid rounded" style="height:200px;object-fit:contain">
+              </a>
+              <figcaption><strong>{{ image.caption }}</strong><p>{{ image.description }}</p></figcaption>
+            </figure>
+          </div>
+          <button *ngIf="imageSearchCursor" class="btn btn-outline-primary my-3" [disabled]="loadingImages" (click)="runImageSearch(true)">Xem thêm ảnh</button>
+        </section>
 
         <!-- Loading -->
         <div *ngIf="loading" class="text-center py-5">
@@ -87,7 +110,7 @@
         </div>
 
         <!-- Products Grid -->
-        <div *ngIf="!loading" class="row g-4">
+        <div *ngIf="!loading && !graphImageSearch" class="row g-4">
           <div *ngFor="let product of products" class="col-xl-4 col-md-6">
             <div class="card h-100 shadow-sm hover-card">
               <div class="card-img-container">

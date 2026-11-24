@@ -20,6 +20,12 @@ from app.services.fragment_router import load_contract, relations
 def create_app(
     database_url: str | None = None, *, site_b_url: str | None = None, routed: bool | None = None
 ) -> FastAPI:
+    from app.core.config import settings
+
+    if settings.BUCKET_MODE:
+        from app.buckets.gateway import create_app as bucket_gateway
+
+        return bucket_gateway()
     url = database_url if database_url is not None else os.getenv("DISTRIBUTED_CATALOG_URL", "")
     b_url = site_b_url if site_b_url is not None else os.getenv("DISTRIBUTED_CATALOG_B_URL", "")
     use_router = routed if routed is not None else os.getenv("DISTRIBUTED_CATALOG_ROUTING", "1") == "1"

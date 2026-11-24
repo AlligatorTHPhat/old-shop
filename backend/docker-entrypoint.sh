@@ -9,7 +9,11 @@ if [ -n "$PROMETHEUS_MULTIPROC_DIR" ]; then
 fi
 
 if [ "${SKIP_DB_INIT:-false}" != "true" ]; then
-  python -m scripts.init_db
+  if [ "${BUCKET_MODE:-false}" = "true" ]; then
+    python -m scripts.bucket_setup
+  else
+    python -m scripts.init_db
+  fi
 fi
 
 exec "$@"

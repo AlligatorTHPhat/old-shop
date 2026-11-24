@@ -9,7 +9,7 @@ from etl.transform import QualityError, dimensions, document_id, label, public_t
 
 # These fields belong to Mongo; neither full load nor replay can overwrite them.
 OWNED = {
-    "product_details": {"attributes", "tags"},
+    "product_details": {"attributes", "tags", "image_metadata", "metadata_revision", "graph_pending_revision", "metadata_seed_owner"},
     "reviews": {"status", "moderation", "evidence"},
     "contact_messages": {"attachments"},
 }

@@ -1,0 +1,26 @@
+Trên slide là kết quả tối ưu hóa truy vấn thông qua chiến lược Indexing
+Khi hệ thống mở rộng quy mô lên hàng chục nghìn sản phẩm và đơn hàng, nếu không có chỉ mục, cơ sở dữ liệu bắt buộc phải dùng cơ chế quét tuần tự toàn bộ bảng
+Do đó, nhóm đã thiết kế chiến lược chỉ mục chuyên sâu trên cả hai hệ quản trị để chuyển đổi các truy vấn sang duyệt cây B-tree và GIN
+
+3 loại chỉ mục nâng cao:
+1. partial index trên postgresql: thay vì đánh chỉ mục toàn bộ bảng sản phẩm, nhóm tạo index idx_product_catalogue chỉ lưu các sản phẩm đã được duyệt và đang hoạt động, loại bỏ hoàn toàn các sản phẩm chờ duyệt hoặc đã bị xóa mềm, giúp tiết kiệm hơn 40% dung lượng bộ nhớ đệm RAM và tăng tốc ghi dữ liệu.
+2. GIN trigram index phục vụ tìm kiếm mở (fuzzy search): cụ thể ở chương trình bọn em sử dụng extension pg_trgm đánh chỉ mục GIN trên trường tittle và description, Nhờ đó, người mua tìm kiếm tên đồ cũ theo từ khóa gần đúng đạt tốc độ phản hồi tức thì, giải quyết bài toán mà toán tử LIKE %...% thông thường không thể tối ưu được.
+3. chỉ mục B-tree đơn trên Mongo: Tại collection product_details, nhóm tạo chỉ mục duy nhất trên trường product_id để phục vụ tra cứu chi tiết sản phẩm
+
+kết quả đạt được:  
+Giai đoạn thực thi (stage): Đạt trạng thái EXPRESS_IXSCAN trên chỉ mục product_id_1, chứng minh hệ thống đã đọc trực tiếp từ cây chỉ mục B-tree thay vì quét toàn bộ collection COLLSCAN.
+Thời gian thực thi (executionTimeMillis): Cực nhanh, chỉ mất đúng 2 mili-giây.
+Tỷ lệ quét tài liệu hoàn hảo (1:1): Chỉ số totalDocsExamined là 1, khớp tuyệt đối với số tài liệu trả về nReturned: 1. Hệ thống không phải duyệt dư thừa bất kỳ một document nào.
+
+
+
+kiến trúc hệ thống:
+Kính thưa thầy, kiến trúc của OldShop được xây dựng dựa trên nguyên lý Polyglot Persistence — chọn đúng hệ quản trị cho từng loại dữ liệu, chia thành 3 trụ cột độc lập:
+Cơ sở dữ liệu quan hệ có cấu trúc (postgresql): phụ trách dữ liệu có cấu trúc như tài khoản, số dư ví, đơn hàng. Tại đây, nhóm áp dụng hash partitioning 4 phân vùng cho đơn hàng và phân mảnh dọc 4 bảng cho người dùng.
+Cơ sở dữ liệu bán cấu trúc (mongodb): Phụ trách dữ liệu bán cấu trúc, đóng vai trò là bản đọc phi chuẩn hóa trong mô hình CQRS. MongoDB nhúng sẵn toàn bộ thông số kỹ thuật động và mảng ảnh, phục vụ tra cứu chi tiết sản phẩm dưới 2ms mà không cần phép JOIN trên SQL
+Lưu trữ đối tượng (MinIO): Phụ trách dữ liệu phi cấu trúc, lưu trữ và truyền phát hơn 2000 tệp ảnh sản phẩm nhị phân, giải phóng hoàn toàn tải I/O cho cơ sở dữ liệu
+
+Để hai hệ thống PostgreSQL và MongoDB luôn nhất quán dữ liệu mà không làm nghẽn luồng xử lý chính, nhóm áp dụng mô hình Transactional Outbox Pattern:
+Khi người dùng tạo hoặc sửa sản phẩm trên PostgreSQL, trigger sẽ tự động chèn một bản ghi sự kiện vào bảng etl_outbox ngay trong cùng transaction ACID
+Chương trình Python ETL Worker chạy ngầm định kỳ đọc bảng etl_outbox, gom dữ liệu, chuyển đổi và nạp (Partial Upsert) vào MongoDB
+Cơ chế này đảm bảo tính nhất quán cuối cùng (Eventual Consistency), chống mất mát dữ liệu (at-least-once, idempotent). Kết quả kiểm tra đối soát trên hệ thống đạt 0 pending, 0 dead và 0 mismatch

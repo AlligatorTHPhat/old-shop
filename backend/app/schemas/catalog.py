@@ -42,8 +42,18 @@ class ProductImageResponse(ORMModel):
     image_id: int
     image_url: str
     alt_text: str | None = None
+    caption: str | None = None
+    description: str | None = None
     is_primary: bool = False
     display_order: int = 0
+
+
+class ImageMetadataInput(BaseModel):
+    model_config = {"extra": "forbid", "str_strip_whitespace": True}
+
+    image_id: int = Field(gt=0, strict=True)
+    caption: str | None = Field(None, max_length=255)
+    description: str | None = Field(None, max_length=4000)
 
 
 class ProductBase(BaseModel):
@@ -156,6 +166,7 @@ class ReviewResponse(ORMModel):
 
 
 class ProductDetailResponse(ProductResponse):
+    image_metadata_status: Literal["available", "missing", "unavailable"] = "missing"
     seller: UserResponse | None = None
     reviews: list[ProductReviewResponse] = []
     attributes: dict[str, JsonValue] = Field(default_factory=dict)

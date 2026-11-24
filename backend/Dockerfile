@@ -32,6 +32,7 @@ WORKDIR /app
 COPY backend/app ./app
 COPY backend/scripts ./scripts
 COPY backend/etl ./etl
+COPY backend/seeding ./seeding
 COPY --chmod=755 backend/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY database /opt/database
 

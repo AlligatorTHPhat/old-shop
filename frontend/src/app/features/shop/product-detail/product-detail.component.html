@@ -18,15 +18,17 @@
         <div class="sticky-top" style="top: 20px;">
           <div class="product-gallery">
             <div class="main-image-wrapper mb-3 shadow-sm rounded-4 overflow-hidden border bg-white position-relative">
-              <img [src]="getFullImageUrl(primaryImage?.image_url || '')" class="img-fluid w-100 main-image">
+              <img [src]="getFullImageUrl(primaryImage?.image_url || '')" class="img-fluid w-100 main-image" [alt]="primaryImage?.alt_text || primaryImage?.caption || product.title">
               <button class="btn report-badge" (click)="reportProduct()"><i class="bi bi-flag-fill"></i></button>
             </div>
             
+            <p *ngIf="primaryImage?.caption" class="fw-semibold mb-1">{{ primaryImage?.caption }}</p>
+            <p *ngIf="primaryImage?.description" class="text-muted" style="white-space:pre-wrap">{{ primaryImage?.description }}</p>
             <div class="thumbnail-list d-flex gap-2 mb-4 justify-content-start overflow-auto pb-2">
               <div *ngFor="let image of product.product_images" 
                    class="thumb-container rounded-3 border" 
                    [class.active]="image === primaryImage" (click)="setPrimaryImage(image)" tabindex="0" role="button" aria-label="Xem ảnh này" (keydown)="$event.key === 'Enter' && setPrimaryImage(image)">
-                <img [src]="getFullImageUrl(image.image_url)" class="w-100 h-100 object-fit-cover">
+                <img [src]="getFullImageUrl(image.image_url)" class="w-100 h-100 object-fit-cover" [alt]="image.alt_text || image.caption || product.title">
               </div>
             </div>
           </div>

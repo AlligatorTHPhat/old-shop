@@ -1,0 +1,151 @@
+
+name: oldshop-bucket-ab-a
+
+x-pg: &pg
+  image: postgres:16-alpine
+  command: [postgres, -c, shared_buffers=32MB, -c, max_connections=40, -c, timezone=UTC]
+  environment: &pg-env
+    POSTGRES_USER: bucket_admin
+    POSTGRES_PASSWORD: ${BUCKET_PG_PASSWORD:?Missing A password}
+  healthcheck:
+    test: [CMD-SHELL, 'pg_isready -U bucket_admin -d "$$POSTGRES_DB"']
+    interval: 3s
+    timeout: 3s
+    retries: 30
+  mem_limit: 256m
+  restart: unless-stopped
+
+services:
+  core:
+    <<: *pg
+    environment:
+      <<: *pg-env
+      POSTGRES_DB: oldshop_core
+    ports: ["127.0.0.1:57630:5432"]
+    volumes: [bucket_core:/var/lib/postgresql/data]
+
+  site-a:
+    <<: *pg
+    environment:
+      <<: *pg-env
+      POSTGRES_DB: oldshop_1
+    ports: ["127.0.0.1:57631:5432"]
+    volumes: [bucket_a:/var/lib/postgresql/data]
+
+  site-c:
+    <<: *pg
+    profiles: [expansion]
+    environment:
+      <<: *pg-env
+      POSTGRES_DB: oldshop_3
+    ports: ["127.0.0.1:57633:5432"]
+    volumes: [bucket_c:/var/lib/postgresql/data]
+
+  mongo:
+    image: mongo:8.0.32
+    command: [mongod, --wiredTigerCacheSizeGB, "0.25", --bind_ip_all]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: bucket_admin
+      MONGO_INITDB_ROOT_PASSWORD: ${BUCKET_MONGO_PASSWORD:?Missing Mongo password}
+    ports: ["127.0.0.1:57617:27017"]
+    volumes: [bucket_mongo:/data/db]
+    healthcheck:
+      test: [CMD, mongosh, --quiet, --eval, 'quit(db.adminCommand({ping:1}).ok === 1 ? 0 : 1)']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    mem_limit: 512m
+    restart: unless-stopped
+
+  neo4j:
+    image: neo4j:2026.10.2
+    environment:
+      NEO4J_AUTH: neo4j/${BUCKET_GRAPH_PASSWORD:?Missing graph password}
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 256m
+      NEO4J_server_memory_pagecache_size: 128m
+    ports: ["127.0.0.1:57687:7687", "127.0.0.1:57474:7474"]
+    volumes: [bucket_graph:/data]
+    healthcheck:
+      test: [CMD-SHELL, 'wget -q --spider http://localhost:7474 || exit 1']
+      interval: 5s
+      timeout: 3s
+      retries: 40
+      start_period: 30s
+    mem_limit: 768m
+    restart: unless-stopped
+
+  backend:
+    image: oldshop-bucket-backend:local
+    build: {context: .., dockerfile: backend/Dockerfile}
+    profiles: [app]
+    environment: &app-env
+      DATABASE_URL: postgresql://bucket_admin:${BUCKET_PG_PASSWORD}@core:5432/oldshop_core
+      BUCKET_SITE_URLS: '{"A":"postgresql://bucket_admin:${BUCKET_PG_PASSWORD}@site-a:5432/oldshop_1","B":"postgresql://bucket_admin:${BUCKET_SITE_B_PASSWORD}@${BUCKET_B_HOST}:${BUCKET_SITE_B_PORT:-57632}/oldshop_2","C":"postgresql://bucket_admin:${BUCKET_PG_PASSWORD}@site-c:5432/oldshop_3"}'
+      BUCKET_MODE: "true"
+      BUCKET_DATASET: ${BUCKET_DATASET:-demo-v2}
+      GRAPH_ENABLED: "true"
+      GRAPH_GENERATION: ${GRAPH_GENERATION:-1}
+      SKIP_DB_INIT: "true"
+      MONGO_URI: mongodb://bucket_admin:${BUCKET_MONGO_PASSWORD}@mongo:27017/?authSource=admin
+      MONGO_DB: oldshop_buckets
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_DATABASE: neo4j
+      NEO4J_PASSWORD: ${BUCKET_GRAPH_PASSWORD}
+      SECRET_KEY: ${BUCKET_SECRET_KEY:?Missing signing key}
+      DEBUG: "false"
+      LOG_FORMAT: json
+      WEB_CONCURRENCY: "1"
+      STORAGE_BACKEND: local
+      MEDIA_DIR: /data/media
+      DATABASE_SRC: /opt/database
+    ports: ["127.0.0.1:57680:8000"]
+    volumes: [bucket_media:/data/media]
+    depends_on:
+      core: {condition: service_healthy}
+      site-a: {condition: service_healthy}
+      mongo: {condition: service_healthy}
+      neo4j: {condition: service_healthy}
+    mem_limit: 512m
+    restart: unless-stopped
+
+  worker:
+    image: oldshop-bucket-backend:local
+    profiles: [app]
+    environment: *app-env
+    entrypoint: [python, -m, scripts.graph, worker]
+    healthcheck: {disable: true}
+    volumes: [bucket_media:/data/media]
+    mem_limit: 256m
+    restart: unless-stopped
+
+  frontend:
+    image: oldshop-bucket-frontend:local
+    build: {context: ../frontend, dockerfile: Dockerfile}
+    profiles: [app]
+    ports: ["127.0.0.1:57600:8080"]
+    depends_on: [backend]
+    mem_limit: 256m
+    restart: unless-stopped
+
+  tools:
+    image: oldshop-bucket-tools:local
+    build: {context: .., dockerfile: backend/Dockerfile.bucket-tests}
+    profiles: [tools]
+    environment:
+      <<: *app-env
+      DATABASE_SRC: /workspace/database
+      PYTHONPATH: /workspace/backend
+    healthcheck: {disable: true}
+    working_dir: /workspace/backend
+    volumes: ["..:/workspace:ro", "bucket_media:/data/media"]
+    mem_limit: 512m
+
+volumes:
+  bucket_core:
+  bucket_a:
+  bucket_c:
+  bucket_mongo:
+  bucket_graph:
+  bucket_media:

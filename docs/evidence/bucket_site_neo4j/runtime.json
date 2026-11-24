@@ -1,0 +1,194 @@
+{
+  "contract_digest": "8c9281e20cc6d111d9ca58fde66afd77cfa7526bc01360e1c45754bce6df37be",
+  "test_vectors": {
+    "3": 197,
+    "8": 94,
+    "12": 2,
+    "101": 37,
+    "202": 75
+  },
+  "neo4j_driver": "6.4.0",
+  "namespace": "demo-v2:g2",
+  "verification": {
+    "ok": true,
+    "errors": [],
+    "sites": {
+      "A": 335,
+      "B": 718,
+      "C": 0
+    },
+    "products": 1053,
+    "images": 2000,
+    "graph_products": 1053,
+    "run_id": null,
+    "id_checksum": "8c88a1d809a4673d924c0f57e9d4f9adc94795704756b2408e5b08c0f1653bf8"
+  },
+  "timings": {
+    "/health/ready": {
+      "samples": 10,
+      "p50_ms": 17.5,
+      "p95_ms": 246.83
+    },
+    "/api/v1/products?limit=20": {
+      "samples": 10,
+      "p50_ms": 279.61,
+      "p95_ms": 447.28
+    },
+    "/api/v1/images/search?q=alphaonly": {
+      "samples": 10,
+      "p50_ms": 33.08,
+      "p95_ms": 209.32
+    }
+  },
+  "seed_runs": [
+    {
+      "run_id": "96b9accd-2549-402b-aacf-5411b7894078",
+      "dataset_id": "demo-v2",
+      "dataset_hash": "317901cdd82e003a99b8e136928f863e5505f67a19166abe1bc2ad91223fecf4",
+      "state": "complete",
+      "phase": "complete"
+    }
+  ],
+  "seed_manifests": [
+    {
+      "counts": {
+        "users": 40,
+        "images": 2000,
+        "orders": 120,
+        "reviews": 56,
+        "products": 1000,
+        "order_details": 240
+      },
+      "sites": {
+        "A": 294,
+        "B": 706
+      }
+    }
+  ],
+  "moves": [
+    {
+      "bucket_id": 51,
+      "source_site": "A",
+      "target_site": "C",
+      "old_epoch": 1,
+      "state": "complete",
+      "checksum": "f94dba7e51eb93b1b3769359e629386dda86c9545aaaa6dbb6019e88339fd14a"
+    },
+    {
+      "bucket_id": 51,
+      "source_site": "C",
+      "target_site": "A",
+      "old_epoch": 2,
+      "state": "complete",
+      "checksum": "61ee4edd3f43825b51fa927ebfd16118f7402321a24e4babb5b7f9447909d43a"
+    },
+    {
+      "bucket_id": 51,
+      "source_site": "A",
+      "target_site": "C",
+      "old_epoch": 3,
+      "state": "complete",
+      "checksum": "bcbb64cc52f88a3a9086ba654b5b5fdd9a4f7b387401c85e13506c547d707c1f"
+    },
+    {
+      "bucket_id": 51,
+      "source_site": "C",
+      "target_site": "A",
+      "old_epoch": 4,
+      "state": "complete",
+      "checksum": "1e58cf8b4c7386a67444fc5c6ba5fa3459dcf3959a7e3301d3bec40b78682e49"
+    },
+    {
+      "bucket_id": 51,
+      "source_site": "A",
+      "target_site": "C",
+      "old_epoch": 5,
+      "state": "complete",
+      "checksum": "e7af7c9ab095b4d2be65fe072a91df171aece66bc9affeb5af12aa4438d6697b"
+    },
+    {
+      "bucket_id": 51,
+      "source_site": "C",
+      "target_site": "A",
+      "old_epoch": 6,
+      "state": "complete",
+      "checksum": "e7af7c9ab095b4d2be65fe072a91df171aece66bc9affeb5af12aa4438d6697b"
+    },
+    {
+      "bucket_id": 51,
+      "source_site": "A",
+      "target_site": "C",
+      "old_epoch": 7,
+      "state": "complete",
+      "checksum": "14cc9c7a3beec32f9ba494aba7beceb5ca6985ee0b064fa57d7ae16fa3607dad"
+    },
+    {
+      "bucket_id": 51,
+      "source_site": "C",
+      "target_site": "A",
+      "old_epoch": 8,
+      "state": "complete",
+      "checksum": "07084c05e0c64b8424af44b1965ce621b4c0a121318c8a3342b41899ef41b4cb"
+    },
+    {
+      "bucket_id": 51,
+      "source_site": "A",
+      "target_site": "C",
+      "old_epoch": 9,
+      "state": "complete",
+      "checksum": "4346be53dd6742fd88575cff64ad372b4e15cebe8cf91e0205cb96a7da35451b"
+    },
+    {
+      "bucket_id": 51,
+      "source_site": "C",
+      "target_site": "A",
+      "old_epoch": 10,
+      "state": "complete",
+      "checksum": "c6a2dd5b1042a9f45902863099387438b47e20bf4de336e43c88eef5f2a12229"
+    }
+  ],
+  "generation": {
+    "singleton": true,
+    "generation": 2,
+    "state": "active"
+  },
+  "graph_counts": [
+    {
+      "label": "Category",
+      "count": 8
+    },
+    {
+      "label": "Image",
+      "count": 2003
+    },
+    {
+      "label": "Order",
+      "count": 136
+    },
+    {
+      "label": "OrderItem",
+      "count": 255
+    },
+    {
+      "label": "Product",
+      "count": 1053
+    },
+    {
+      "label": "Review",
+      "count": 56
+    },
+    {
+      "label": "User",
+      "count": 38
+    }
+  ],
+  "mongo_products": 1053,
+  "image_query": {
+    "q": "alphaonly",
+    "image_ids": [
+      100008
+    ],
+    "consistency": "best_effort"
+  },
+  "scope": "Local 1000-product demo plus test fixtures; sequential HTTP samples, no production load claim"
+}

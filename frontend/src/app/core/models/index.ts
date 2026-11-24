@@ -29,6 +29,8 @@ export interface ProductImage {
   image_id: number;
   image_url: string;
   alt_text?: string;
+  caption?: string | null;
+  description?: string | null;
   is_primary: boolean;
   display_order: number;
 }

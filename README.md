@@ -42,6 +42,11 @@ For two physical hosts, see the [Tailscale guide for Windows and Linux](docs/HUO
 adds validated per-site product reads, seller routing, scoped index verification and an
 additive seller catalogue index (migration 008). Global catalogue reads still require both sites.
 
+**Bucket/site, seed phân tán và Neo4j:** [hướng dẫn chạy](docs/runbooks/bucket_site_neo4j.md), [báo cáo triển khai](docs/BAO_CAO_TRIEN_KHAI_BUCKET_SITE_NEO4J.md), [kế hoạch thiết kế](docs/KE_HOACH_TAI_CAU_TRUC_SEEDING_BUCKET_SITE_NEO4J.md).
+
+**Khởi động, triển khai hai máy A/B, reset/migration và demo đầy đủ:** [hướng dẫn thực hành tổng hợp](docs/HUONG_DAN_KHOI_DONG_TRIEN_KHAI_2_MAY_VA_DEMO_TOAN_BO.md).
+adds Mongo-owned image annotations, seller editing and keyword search through the main product API.
+
 **Day 7 handoff:** [report source](docs/report/07_report.md),
 [18-slide outline and speaker notes](docs/report/07_slides.md),
 [demo/rebuild instructions](docs/report/07_demo_script.md), [Q&A](docs/report/07_qa.md),

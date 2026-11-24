@@ -31,6 +31,12 @@ class ProductImageReference(ObjectReference):
     display_order: int = 0
 
 
+class ImageMetadata(DocumentModel):
+    image_id: Identifier
+    caption: str | None = Field(None, max_length=255)
+    description: str | None = Field(None, max_length=4000)
+
+
 class Dimensions(DocumentModel):
     length: float = Field(gt=0)
     width: float = Field(gt=0)
@@ -63,6 +69,10 @@ class ProductDetails(Document):
     attributes: dict[str, JsonValue] = Field(default_factory=dict)
     tags: list[str] = Field(default_factory=list)
     images: list[ProductImageReference] = Field(default_factory=list)
+    image_metadata: list[ImageMetadata] = Field(default_factory=list, max_length=1000)
+    metadata_revision: int = Field(default=0, ge=0)
+    graph_pending_revision: int | None = Field(default=None, ge=0)
+    metadata_seed_owner: str | None = None
     updated_at: AwareDatetime
     deleted: bool = False
     etl: ETLMetadata | None = None

@@ -17,6 +17,14 @@ export interface ModerationProductPage {
   limit: number;
 }
 
+export interface ImageSearchResult {
+  image_id: number;
+  product_id: number;
+  image_url: string;
+  caption?: string | null;
+  description?: string | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -32,6 +40,7 @@ export class ProductService {
     limit?: number;
     category_id?: number;
     search?: string;
+    image_search?: string;
     sort_by?: string;
     attributes?: Record<string, string | number | boolean>;
   }): Observable<Product[]> {
@@ -41,6 +50,7 @@ export class ProductService {
       if (params.skip !== undefined) httpParams = httpParams.set('skip', params.skip.toString());
       if (params.limit !== undefined) httpParams = httpParams.set('limit', params.limit.toString());
       if (params.category_id !== undefined) httpParams = httpParams.set('category_id', params.category_id.toString());
+      if (params.image_search) httpParams = httpParams.set('image_search', params.image_search);
       if (params.search) httpParams = httpParams.set('search', params.search);
       if (params.sort_by) httpParams = httpParams.set('sort_by', params.sort_by);
       if (params.attributes) httpParams = httpParams.set('attributes', JSON.stringify(params.attributes));
@@ -53,6 +63,12 @@ export class ProductService {
     }
 
     return this.http.get<Product[]>(this.apiUrl, { params: httpParams, headers });
+  }
+
+  searchImages(query: string, cursor?: string): Observable<{ items: ImageSearchResult[]; next_cursor: string | null }> {
+    let params = new HttpParams().set('q', query).set('limit', 20);
+    if (cursor) params = params.set('cursor', cursor);
+    return this.http.get<{ items: ImageSearchResult[]; next_cursor: string | null }>(`${environment.apiUrl}/images/search`, { params });
   }
 
   getProduct(id: number): Observable<Product> {
